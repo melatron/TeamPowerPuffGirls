@@ -1,4 +1,7 @@
-﻿#main{
+﻿body {
+    background-image: url("../source/forest.png");
+}
+#main{
 	width: 1024px;
 	height: 768px;
 	border: 2px solid black;
