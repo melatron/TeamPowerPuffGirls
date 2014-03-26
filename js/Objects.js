@@ -34,11 +34,11 @@ MoveableObject = Object.extend({
             height: null,
             image: null,
             frames: null,
-        },
-        drawSprite = function (s) {
-            //TO DO
-        }
+        };
     },
+    drawSprite: function (s) {
+    	//TO DO
+    }
 
 });
 
