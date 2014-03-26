@@ -12,6 +12,7 @@
 	width: 1020px;
 	height: 500px;
 	border: 9px solid green;
+    background-image:url(../source/background.png)
 }
 #gamePlot {
 	width : 800px;
