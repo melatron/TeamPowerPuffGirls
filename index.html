@@ -21,8 +21,10 @@
     	var context = canvas.getContext('2d');
     	var background = new Image();
     	background.src = 'source/background.png';
-    	
-    	context.drawImage(background, 0, 0);
+    	background.onload = function () {
+    	    context.drawImage(background, 0, 0);
+
+    	}
     }
     </script>
 </body>
