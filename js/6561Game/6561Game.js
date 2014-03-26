@@ -13,9 +13,11 @@
         var randomRowFirst = Math.floor((Math.random() * 4)),
             randomColFirst = Math.floor((Math.random() * 4)),
             randomDigitFirst = Math.random() < 0.9 ? 2 : 4,
+
             randomRowSecond = Math.floor((Math.random() * 4)),
             randomColSecond = Math.floor((Math.random() * 4)),
             randomDigitSecond = Math.random() < 0.9 ? 2 : 4;
+
         self.gameArray[randomRowFirst][randomColFirst] = randomDigitFirst;
         self.gameArray[randomRowSecond][randomColSecond] = randomDigitSecond;
     };
