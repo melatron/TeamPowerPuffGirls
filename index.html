@@ -16,14 +16,15 @@
     </div>
     
     <script>
-    window.onload = function(){
-    	var canvas = document.getElementById("canvas");
-    	var context = canvas.getContext('2d');
-    	var background = new Image();
-    	background.src = 'source/background.png';
+        window.onload = function () {
+            console.log("hello");
+    	    var canvas = document.getElementById("canvas");
+    	    var context = canvas.getContext('2d');
+    	    var background = new Image();
+    	    background.src = 'source/background.png';
     	
-    	context.drawImage(background, 0, 0);
-    }
+    	    context.drawImage(background, 0, 0);
+        }
     </script>
 </body>
 
