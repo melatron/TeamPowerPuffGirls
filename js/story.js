@@ -5,17 +5,55 @@ Story = Class.extend({
         this.interactableObjects = new Array();
         this.movableObjects = new Array();
         this.staticSpriteObjects = new Array();
-        this.mainCanvas;
+        this.mainCanvas = document.getElementById("canvas");
         // Hero have is not yet implemented!
-        this.hero = new Heroes();
+        this.hero = new Heroes(0, 256, 32, 32, "Gosho", 
+        		{
+        			context: this.mainCanvas.getContext('2d'),
+        			width: 96,
+        			height: 32,
+        			image: 'source/heroMoveUp.png',
+        			frames: 3
+        		},
+        		{
+        			context: this.mainCanvas.getContext('2d'),
+        			width: 96,
+        			height: 32,
+        			image: 'source/heroMoveDown.png',
+        			frames: 3
+        		},
+        		{
+        			context: this.mainCanvas.getContext('2d'),
+        			width: 96,
+        			height: 32,
+        			image: 'source/heroMoveLeft.png',
+        			frames: 3
+        		},
+        		{
+        			context: this.mainCanvas.getContext('2d'),
+        			width: 96,
+        			height: 32,
+        			image: 'source/heroMoveRight.png',
+        			frames: 3
+        		},
+        		{
+        			context: this.mainCanvas.getContext('2d'),
+        			width: 32,
+        			height: 32,
+        			image: 'source/heroMoveDown.png',
+        			frames: 1
+        		}
+        	);
     },
     clickEvent: function (ev) {
-        var rect = this.mainCanvas.getBoundingClientRect();
-        var mouseX=ev.clientX-rect.left,
-            mouseY=ev.clientY-rect.top;
-        for (var i = 0, len = this.interactableObjects.length; i < len; i++) {
-            if (this.interactableObjects[i].checkIfClicked(mouseX, mouseY)) {
-                //console.log(this.interactableObjects[i]);
+        var rect = this.mainCanvas.getBoundingClientRect(),
+        	mouseX=ev.clientX-rect.left,
+            mouseY=ev.clientY-rect.top,
+            currentObject;
+        for (var i = 0, len = this.interactableObjects.length; i < len; i++) {  // check if clicked
+        	currentObject = this.interactableObjects[i];
+            if (currentObject.checkIfClicked(mouseX, mouseY)) {                 
+                this.hero.setDestinaion(currentObject);         //set destination for hero
             }
         }
     },
@@ -47,13 +85,20 @@ Story = Class.extend({
     moveObjectToDirection: function (object, direction) {
 
     }
-})
+//    mainLoop : function() {
+//    	console.log(this.hero);
+//    	this.hero.checkDestination(this.hero.destination);
+//    }
+});
 
 
-var story = new Story(),
-    game = new Game,
-    humanCastle = new ClickPoint(160, 150, 10, 10, "humanCastle"),
-    dwarfCamp = new ClickPoint(650, 150, 10, 10, "dwarfCamp");
+var story,
+    game,
+    canvas,
+    context,
+    humanCastle,
+    dwarfCamp,
+    mainLoop;
 
 
 //  Everything after this paragraph have to be moved to story class.
@@ -61,14 +106,33 @@ function myfunction(e) {
     story.clickEvent(e);
 }
 
-window.onload = function () {
+function mainLoop(){
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	console.log(story.hero);
+	story.hero.checkDestination(story.hero.destination);
+}
 
+window.onload = function () {
+	
+	canvas = document.getElementById('canvas');
+	context = canvas.getContext('2d');
+    story  = new Story();
+    console.log(story.hero);
+    story.mainCanvas = document.getElementById("canvas");
+    game = new Game();
+    humanCastle = new ClickPoint(160, 150, 10, 10, "humanCastle");
+    dwarfCamp = new ClickPoint(650, 150, 10, 10, "dwarfCamp");
+    story.hero.destination = {
+    		x: 50,
+    		y: 238
+    };
+    
     story.interactableObjects.push(humanCastle);
     story.interactableObjects.push(dwarfCamp);
-    story.mainCanvas = document.getElementById("canvas");
     for (var i = 0, len = story.interactableObjects.length; i < len; i++) {
         story.interactableObjects[i].drawObj(story.mainCanvas);
     }
+    mainLoop = setInterval(mainLoop, 30);
     story.mainCanvas.addEventListener("click", myfunction, false);
 
     window.addEventListener('keydown', listenKeyEvents, false);
@@ -99,4 +163,5 @@ window.onload = function () {
         }
     }
 };
+
 

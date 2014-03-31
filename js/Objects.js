@@ -1,5 +1,5 @@
-//Main Object class hae size and position and draw method (undefined)
-Object = Class.extend({
+//Main Object class has size and position and draw method (undefined)
+GameObject = Class.extend({
     init: function (x, y, width, height, name) {
         this.name = name;
         this.width = width;
@@ -21,95 +21,99 @@ Object = Class.extend({
             height: that.height,
         };
     },
-    drawObj: function (canvas) {
-        var c = canvas.getContext("2d");
-    }
 });
 
 //
-MovableObject = Object.extend({
-    init: function (x, y, width, height, name) {
+MovableObject = GameObject.extend({
+    init: function (x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle) {
         this._super(x, y, width, height, name);
-        this.sprite = {
-            width: null,
-            height: null,
-            image: null,
-            frames: null,
-        };
+        this.speed = 2;
+        this.spriteUp = spriteUp;
+        this.spriteDown = spriteDown;
+        this.spriteLeft = spriteLeft;
+        this.spriteRight = spriteRight;
+        this.spriteIdle = spriteIdle;
+        this.frameCounter = 0;
     },
     drawSprite: function (sprite) {
+    	var img = new Image();
+    	img.src = sprite.image;
         sprite.context.drawImage (
-            sprite.image,
-            frameCounter * (sprite.width / sprite.frames),
+        	img,
+            this.frameCounter * (sprite.width / sprite.frames),
             0,
             sprite.width / sprite.frames,
             sprite.height,
-            this.destinationX,
-            characterY,
+            this.x,
+            this.y,
             sprite.width / sprite.frames,
             sprite.height
         );
-        frameCounter++;
+        this.frameCounter++;
 
-        if (frameCounter >= s.frames) {
-            frameCounter = 0;
+        if (this.frameCounter >= sprite.frames) {
+            this.frameCounter = 0;
         }
     },
-    move: function (direction, coordinate) {
-        switch (direction) {
-            case "up":
-
-                break;
-            case "right":
-
-                break;
-            case "down":
-
-                break;
-            case "left":
-
-                break;
-            default:
-                break;
-
-        }
-    },
-    moveHorizontal: function (x) {
-        if (x > 0 && x < canvasWidth) { // WE have to put the canvasWidth 
-            if (this.x < x) {
-                this.move("right", x);
-            }
-            else if (this.x > x) {
-                this.move("left", x);
-            }
-        }
-    },
-    moveVertical: function (y) {
-        if (y > 0 && y < canvasheight) { // WE have to put the canvasWidth 
-            if (this.y < y) {
-                this.move("down", y);
-            }
-            else if (this.y > y) {
-                this.move("up", x);
-            }
-        }
-    },
-    moveByDestination: function (destinationX, destinationY, roadY) {
-        if (this.y == roadY) {  // checks if the hero position is on the road
-            this.moveHorizontal(destinationX);
-            this.moveVertical(destinationY);
-        }
-        else {
-            this.moveVertical(roadY);
-            this.moveHorizontal(destinationX);
-            this.moveVertical(destinationY);
-        }
-    }
-
+	moveVertical: function(y){
+		if(this.y < y){
+		   	this.drawSprite(this.spriteDown);
+		   	this.y += this.speed;
+		    }
+		    else if(this.y > y){
+		   	this.drawSprite(this.spriteUp);
+		   	this.y -= this.speed;
+		}
+	},
+	
+	moveHorizontal: function(x){
+		if(this.x < x){
+			this.x += this.speed;
+			this.drawSprite(this.spriteRight);
+	    }
+	    else if(this.x > x){
+	    	this.drawSprite(this.spriteLeft);
+	    	this.x -= this.speed;
+	    }
+	},
+	
+	idle: function(){
+		this.drawSprite(this.spriteIdle);
+	},
+	
+	checkDestination: function (destination) {
+		var roadY = 238;
+		if (this.x == destination.x && this.y == destination.y){
+			this.idle();
+			return true;
+		}
+		else
+		{
+			if (this.y != roadY){
+				if(this.x != destination.x){
+					this.moveVertical(roadY);
+					
+				}
+				else if(this.x == destination.x){
+					this.moveVertical(destination.y);
+					return;
+				}
+			}
+			else if(this.y == roadY){
+				if(this.x != destination.x){
+					this.moveHorizontal(destination.x);				 
+				}
+				else if(this.y != destination.y){
+					this.moveVertical(destination.y);			 
+				}
+			}			
+			return false;
+		}
+	}
 });
 
 //Interactable object to do
-InteractableObject = Object.extend({
+InteractableObject = GameObject.extend({
     init: function (x, y, width, height, name) {
         this._super(x, y, width, height, name);
     },
@@ -130,17 +134,23 @@ ClickPoint = InteractableObject.extend({
         }
     },
     drawObj: function (canvas) {
-        var c = canvas.getContext("2d");
-        c.fillRect(this.x, this.y, this.width, this.height);//testing
+        var context = canvas.getContext("2d");
+        context.fillRect(this.x, this.y, this.width, this.height);//testing
     },
 
 
 });
-
+// not implemented
 Heroes = MovableObject.extend({
-    init: function (x,y,width,height,name) {
-        this._super(x, y, width, height, name);
+    init: function (x, y ,width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight,spriteIdle) {
+        this._super(x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle);
+        this.isInteracting = false;
+        this.destination = {};
     },
+    setDestinaion: function(intObject){
+    	this.destination.x = intObject.x;
+    	this.destination.y = intObject.y;
+    }
     
 });
 
