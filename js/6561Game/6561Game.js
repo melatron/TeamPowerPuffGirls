@@ -1,4 +1,4 @@
-﻿function Game() {
+function Game() {
     // Here we will implement the game
     var self = this,
         length = 4,
@@ -20,9 +20,10 @@
             randomDigitSecond = Math.random() < 0.9 ? 2 : 4;
 
         self.gameArray[randomRowFirst][randomColFirst] = new Node(randomColFirst, randomRowFirst, randomDigitFirst);
+        self.gameArray[randomRowFirst][randomColFirst].addToCell();
         self.gameArray[randomRowSecond][randomColSecond] = new Node(randomColSecond, randomRowSecond, randomDigitSecond);
+        self.gameArray[randomRowSecond][randomColSecond].addToCell();
     };
-    self.putFirstTwoRandomNumbers();
     self.countZeroes = function () {
         var zeroes = 0;
         for (var i = 0; i < 4; i++) {
@@ -32,24 +33,66 @@
         }
         return zeroes;
     };
+    self.checkIfBoxCanMove = function (row, col) {
+        var array = self.gameArray,
+            canMoveUp = false,
+            canMoveLeft = false,
+            canMoveRight = false,
+            canMoveDown = false;
+        if (array[row][col] != 0) {
+            var value = array[row][col].value;
+            if ((typeof array[row][col + 1] == "object" && array[row][col + 1].value == value) || array[row][col + 1] == 0) {
+                canMoveRight = true;
+            }
+            if ((typeof array[row][col - 1] == "object" && array[row][col - 1].value == value) || array[row][col - 1] == 0) {
+                canMoveLeft = true;
+            }
+            if (typeof array[row + 1] != "undefined") {
+                if ((typeof array[row + 1][col] == "object" && array[row + 1][col].value == value) || array[row + 1][col] == 0) {
+                    canMoveDown = true;
+                }
+            }
+            if (typeof array[row - 1] != "undefined") {
+                if ((typeof array[row - 1][col] == "object" && array[row - 1][col].value == value) || array[row - 1][col] == 0) {
+                    canMoveUp = true;
+                }
+            }
+            if (canMoveDown || canMoveLeft || canMoveRight || canMoveUp) {
+                return true;
+            }
+            return false;
+        }
+    };
     self.putRandomNumber = function () {
         var zeroes = self.countZeroes(),
             rand = Math.floor((Math.random() * zeroes)) + 1,
             zeroCounter = 0,
-            randomDigit = Math.random() < 0.9 ? 2 : 4;
+            randomDigit = Math.random() < 0.9 ? 2 : 4,
+            isOver = true;
         for (var i = 0; i < 4; i++) {
             for (var j = 0; j < 4; j++) {
                 if (self.gameArray[i][j] == 0) {
                     zeroCounter++;
                     if (zeroCounter == rand) {
                         self.gameArray[i][j] = new Node(j, i, randomDigit);
+                        self.gameArray[i][j].addToCell();
                     }
                 }
                 else {
+                    if (zeroes <= 0 && isOver) {
+                        console.log(zeroes);
+                        if (self.checkIfBoxCanMove(i, j)) {
+                            isOver = false;
+                        }
+                    }
                     self.gameArray[i][j].unitedOnTurn = false;
                 }
             }
         }
+        if (zeroes <= 0) {
+            gameLost = isOver;
+        }
+        
     };
     self.show = function () {
         var msg1 = "",
@@ -101,36 +144,45 @@
         console.log(msg3);
         console.log(msg4);
     };
+    self.endGame = function () {
+        console.log("GOOD GAME!");
+    };
     self.move = function (direction) {
-        switch (direction) {
-            case "left":
-                for (var i = 0; i < length; i++) {
-                    self.moveLeftByRowBETA(i);
-                };
-                break;
-            case "right":
-                for (var i = 0; i < length; i++) {
-                    self.moveRightByRowBETA(i);
-                };
-                break;
-            case "up":
-                for (var i = 0; i < length; i++) {
-                    self.moveUpByColBETA(i);
-                };
-                break;
-            case "down":
-                for (var i = 0; i < length; i++) {
-                    self.moveDownByColBETA(i);
-                };
-                break;
-            default:
-                break;
-
+        if (gameLost) {
+            self.endGame();
         }
-        self.show();
-        self.putRandomNumber();
-        console.log("-----------------");
-        self.show();
+        else {
+            switch (direction) {
+                case "left":
+                    for (var i = 0; i < length; i++) {
+                        self.moveLeftByRowBETA(i);
+                    };
+                    break;
+                case "right":
+                    for (var i = 0; i < length; i++) {
+                        self.moveRightByRowBETA(i);
+                    };
+                    break;
+                case "up":
+                    for (var i = 0; i < length; i++) {
+                        self.moveUpByColBETA(i);
+                    };
+                    break;
+                case "down":
+                    for (var i = 0; i < length; i++) {
+                        self.moveDownByColBETA(i);
+                    };
+                    break;
+                default:
+                    break;
+
+            }
+            self.show();
+            self.putRandomNumber();
+            console.log("-----------------");
+            self.show();
+            console.log("-----------------");
+        }
     };
      /*[[0, 0, 0, 0],
         [0, 0, 0, 0],
