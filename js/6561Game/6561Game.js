@@ -3,7 +3,8 @@ function Game() {
     var self = this,
         length = 4,
         multiplyBy = 2,
-        gameEnd = false;
+        gameEnd = false,
+        gameLost = false;
     self.gameArray = [[0, 0, 0, 0],
                       [0, 0, 0, 0],
                       [0, 0, 0, 0],
