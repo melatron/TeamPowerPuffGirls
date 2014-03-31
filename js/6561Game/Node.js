@@ -4,6 +4,10 @@ function Node (x, y, value) {
     this.value = value;
     this.unitedOnTurn = false;
     this.multuply = 2;
+    this.movingUp = false;
+    this.movingDown = false;
+    this.movingLeft = false;
+    this.movingRight = false;
     this.node = $("<div class = 'node'></div>");
     this.node.html(value);
 };
@@ -21,11 +25,7 @@ Node.prototype.changeUnite = function changeUnite() {
 };
 Node.prototype.moveUp = function () {
     if (this.row > 0) {
-        //this.node.animate({
-        //    "top": "57px"
-        //}, 'slow');
         this.removeFromCell();
-        //this.css("top", "0px");
         this.row--;
         this.addToCell();
     }

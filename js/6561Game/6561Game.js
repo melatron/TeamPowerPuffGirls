@@ -3,8 +3,7 @@ function Game() {
     var self = this,
         length = 4,
         multiplyBy = 2,
-        gameWon = false,
-        gameLost = false;
+        gameEnd = false;
     self.gameArray = [[0, 0, 0, 0],
                       [0, 0, 0, 0],
                       [0, 0, 0, 0],
@@ -145,6 +144,7 @@ function Game() {
         console.log(msg4);
     };
     self.endGame = function () {
+        this.endGame = true;
         console.log("GOOD GAME!");
     };
     self.move = function (direction) {
@@ -198,11 +198,9 @@ function Game() {
                 element.moveLeft();
                 break;
             case "right":
-                //console.log("row: " + row + "col: " + col);
                 self.gameArray[row][col] = 0;
                 self.gameArray[row][col + 1] = element;
                 element.moveRight();
-                //console.log(element);
                 break;
             case "up":
                 self.gameArray[row][col] = 0;
@@ -218,7 +216,7 @@ function Game() {
 
         }
     };
-    self.uniteElements = function (newNode, current) {
+    self.uniteElements = function (newNode, current, moving) {
         self.gameArray[current.row][current.col] = 0;
         self.gameArray[newNode.row][newNode.col] = newNode;
     };
@@ -247,7 +245,7 @@ function Game() {
                     else if (previous.value == currentNode.value && !previous.unitedOnTurn) {
                         
                         var newNode = currentNode.unite(previous);
-                        self.uniteElements(newNode, currentNode);
+                        self.uniteElements(newNode, currentNode, moving);
                     }
                     else {
                         flag = false;
@@ -282,7 +280,7 @@ function Game() {
                     }
                     else if (previous.value == currentNode.value && !previous.unitedOnTurn) {
                         var newNode = currentNode.unite(previous);
-                        self.uniteElements(newNode, currentNode);
+                        self.uniteElements(newNode, currentNode, moving);
                     }
                     else {
                         flag = false;
@@ -317,7 +315,7 @@ function Game() {
                     else if (previous.value == currentNode.value && !previous.unitedOnTurn) {
                         
                         var newNode = currentNode.unite(previous);
-                        self.uniteElements(newNode, currentNode);
+                        self.uniteElements(newNode, currentNode, moving);
                     }
                     else {
                         flag = false;
@@ -352,7 +350,7 @@ function Game() {
                     }
                     else if (previous.value == currentNode.value && !previous.unitedOnTurn) {
                         var newNode = currentNode.unite(previous);
-                        self.uniteElements(newNode, currentNode);
+                        self.uniteElements(newNode, currentNode, moving);
                     }
                     else {
                         flag = false;
