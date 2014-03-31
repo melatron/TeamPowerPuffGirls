@@ -36,10 +36,10 @@ MovableObject = GameObject.extend({
         this.frameCounter = 0;
     },
     drawSprite: function (sprite) {
-    	var img = new Image();
-    	img.src = sprite.image;
-        sprite.context.drawImage (
-        	img,
+        var img = new Image();
+        img.src = sprite.image;
+        sprite.context.drawImage(
+                img,
             this.frameCounter * (sprite.width / sprite.frames),
             0,
             sprite.width / sprite.frames,
@@ -55,61 +55,60 @@ MovableObject = GameObject.extend({
             this.frameCounter = 0;
         }
     },
-	moveVertical: function(y){
-		if(this.y < y){
-		   	this.drawSprite(this.spriteDown);
-		   	this.y += this.speed;
-		    }
-		    else if(this.y > y){
-		   	this.drawSprite(this.spriteUp);
-		   	this.y -= this.speed;
-		}
-	},
-	
-	moveHorizontal: function(x){
-		if(this.x < x){
-			this.x += this.speed;
-			this.drawSprite(this.spriteRight);
-	    }
-	    else if(this.x > x){
-	    	this.drawSprite(this.spriteLeft);
-	    	this.x -= this.speed;
-	    }
-	},
-	
-	idle: function(){
-		this.drawSprite(this.spriteIdle);
-	},
-	
-	checkDestination: function (destination) {
-		var roadY = 238;
-		if (this.x == destination.x && this.y == destination.y){
-			this.idle();
-			return true;
-		}
-		else
-		{
-			if (this.y != roadY){
-				if(this.x != destination.x){
-					this.moveVertical(roadY);
-					
-				}
-				else if(this.x == destination.x){
-					this.moveVertical(destination.y);
-					return;
-				}
-			}
-			else if(this.y == roadY){
-				if(this.x != destination.x){
-					this.moveHorizontal(destination.x);				 
-				}
-				else if(this.y != destination.y){
-					this.moveVertical(destination.y);			 
-				}
-			}			
-			return false;
-		}
-	}
+    moveVertical: function (y) {
+        if (this.y < y) {
+            this.drawSprite(this.spriteDown);
+            this.y += this.speed;
+        }
+        else if (this.y > y) {
+            this.drawSprite(this.spriteUp);
+            this.y -= this.speed;
+        }
+    },
+
+    moveHorizontal: function (x) {
+        if (this.x < x) {
+            this.x += this.speed;
+            this.drawSprite(this.spriteRight);
+        }
+        else if (this.x > x) {
+            this.drawSprite(this.spriteLeft);
+            this.x -= this.speed;
+        }
+    },
+
+    idle: function () {
+        this.drawSprite(this.spriteIdle);
+    },
+
+    checkDestination: function (destination) {
+        var roadY = 238;
+        if (this.x == destination.x && this.y == destination.y) {
+            this.idle();
+            return true;
+        }
+        else {
+            if (this.y != roadY) {
+                if (this.x != destination.x) {
+                    this.moveVertical(roadY);
+
+                }
+                else if (this.x == destination.x) {
+                    this.moveVertical(destination.y);
+                    return;
+                }
+            }
+            else if (this.y == roadY) {
+                if (this.x != destination.x) {
+                    this.moveHorizontal(destination.x);
+                }
+                else if (this.y != destination.y) {
+                    this.moveVertical(destination.y);
+                }
+            }
+            return false;
+        }
+    }
 });
 
 //Interactable object to do
@@ -142,16 +141,14 @@ ClickPoint = InteractableObject.extend({
 });
 // not implemented
 Heroes = MovableObject.extend({
-    init: function (x, y ,width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight,spriteIdle) {
+    init: function (x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle) {
         this._super(x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle);
         this.isInteracting = false;
         this.destination = {};
     },
-    setDestinaion: function(intObject){
-    	this.destination.x = intObject.x;
-    	this.destination.y = intObject.y;
+    setDestinaion: function (intObject) {
+        this.destination.x = intObject.x;
+        this.destination.y = intObject.y;
     }
-    
+
 });
-
-

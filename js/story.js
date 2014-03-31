@@ -1,58 +1,57 @@
-
 Story = Class.extend({
-    
+
     init: function () {
         this.interactableObjects = new Array();
         this.movableObjects = new Array();
         this.staticSpriteObjects = new Array();
         this.mainCanvas = document.getElementById("canvas");
         // Hero have is not yet implemented!
-        this.hero = new Heroes(0, 256, 32, 32, "Gosho", 
-        		{
-        			context: this.mainCanvas.getContext('2d'),
-        			width: 96,
-        			height: 32,
-        			image: 'source/heroMoveUp.png',
-        			frames: 3
-        		},
-        		{
-        			context: this.mainCanvas.getContext('2d'),
-        			width: 96,
-        			height: 32,
-        			image: 'source/heroMoveDown.png',
-        			frames: 3
-        		},
-        		{
-        			context: this.mainCanvas.getContext('2d'),
-        			width: 96,
-        			height: 32,
-        			image: 'source/heroMoveLeft.png',
-        			frames: 3
-        		},
-        		{
-        			context: this.mainCanvas.getContext('2d'),
-        			width: 96,
-        			height: 32,
-        			image: 'source/heroMoveRight.png',
-        			frames: 3
-        		},
-        		{
-        			context: this.mainCanvas.getContext('2d'),
-        			width: 32,
-        			height: 32,
-        			image: 'source/heroMoveDown.png',
-        			frames: 1
-        		}
-        	);
+        this.hero = new Heroes(0, 256, 32, 32, "Gosho",
+                        {
+                            context: this.mainCanvas.getContext('2d'),
+                            width: 96,
+                            height: 32,
+                            image: 'source/heroMoveUp.png',
+                            frames: 3
+                        },
+                        {
+                            context: this.mainCanvas.getContext('2d'),
+                            width: 96,
+                            height: 32,
+                            image: 'source/heroMoveDown.png',
+                            frames: 3
+                        },
+                        {
+                            context: this.mainCanvas.getContext('2d'),
+                            width: 96,
+                            height: 32,
+                            image: 'source/heroMoveLeft.png',
+                            frames: 3
+                        },
+                        {
+                            context: this.mainCanvas.getContext('2d'),
+                            width: 96,
+                            height: 32,
+                            image: 'source/heroMoveRight.png',
+                            frames: 3
+                        },
+                        {
+                            context: this.mainCanvas.getContext('2d'),
+                            width: 32,
+                            height: 32,
+                            image: 'source/heroMoveDown.png',
+                            frames: 1
+                        }
+                );
     },
     clickEvent: function (ev) {
         var rect = this.mainCanvas.getBoundingClientRect(),
-        	mouseX=ev.clientX-rect.left,
-            mouseY=ev.clientY-rect.top,
+                mouseX = ev.clientX - rect.left,
+            mouseY = ev.clientY - rect.top,
             currentObject;
         for (var i = 0, len = this.interactableObjects.length; i < len; i++) {  // check if clicked
-        	currentObject = this.interactableObjects[i];
-            if (currentObject.checkIfClicked(mouseX, mouseY)) {                 
+            currentObject = this.interactableObjects[i];
+            if (currentObject.checkIfClicked(mouseX, mouseY)) {
                 this.hero.setDestinaion(currentObject);         //set destination for hero
             }
         }
@@ -85,10 +84,10 @@ Story = Class.extend({
     moveObjectToDirection: function (object, direction) {
 
     }
-//    mainLoop : function() {
-//    	console.log(this.hero);
-//    	this.hero.checkDestination(this.hero.destination);
-//    }
+    //    mainLoop : function() {
+    //      console.log(this.hero);
+    //      this.hero.checkDestination(this.hero.destination);
+    //    }
 });
 
 
@@ -106,27 +105,30 @@ function myfunction(e) {
     story.clickEvent(e);
 }
 
-function mainLoop(){
-	context.clearRect(0, 0, canvas.width, canvas.height);
-	console.log(story.hero);
-	story.hero.checkDestination(story.hero.destination);
+function mainLoop() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    console.log(story.hero);
+    story.hero.checkDestination(story.hero.destination);
+    for (var i = 0, len = story.interactableObjects.length; i < len; i++) {
+        story.interactableObjects[i].drawObj(story.mainCanvas);
+    }
 }
 
 window.onload = function () {
-	
-	canvas = document.getElementById('canvas');
-	context = canvas.getContext('2d');
-    story  = new Story();
-    console.log(story.hero);
+
+    canvas = document.getElementById('canvas');
+    context = canvas.getContext('2d');
+    story = new Story();
+    console.log(story.mainCanvas);
     story.mainCanvas = document.getElementById("canvas");
     game = new Game();
     humanCastle = new ClickPoint(160, 150, 10, 10, "humanCastle");
     dwarfCamp = new ClickPoint(650, 150, 10, 10, "dwarfCamp");
     story.hero.destination = {
-    		x: 50,
-    		y: 238
+        x: 50,
+        y: 238
     };
-    
+
     story.interactableObjects.push(humanCastle);
     story.interactableObjects.push(dwarfCamp);
     for (var i = 0, len = story.interactableObjects.length; i < len; i++) {
@@ -163,5 +165,3 @@ window.onload = function () {
         }
     }
 };
-
-
