@@ -8,35 +8,30 @@ Story = Class.extend({
         // Hero have is not yet implemented!
         this.hero = new Heroes(0, 256, 32, 32, "Gosho",
                         {
-                            context: this.mainCanvas.getContext('2d'),
                             width: 96,
                             height: 32,
                             image: 'source/heroMoveUp.png',
                             frames: 3
                         },
                         {
-                            context: this.mainCanvas.getContext('2d'),
                             width: 96,
                             height: 32,
                             image: 'source/heroMoveDown.png',
                             frames: 3
                         },
                         {
-                            context: this.mainCanvas.getContext('2d'),
                             width: 96,
                             height: 32,
                             image: 'source/heroMoveLeft.png',
                             frames: 3
                         },
                         {
-                            context: this.mainCanvas.getContext('2d'),
                             width: 96,
                             height: 32,
                             image: 'source/heroMoveRight.png',
                             frames: 3
                         },
                         {
-                            context: this.mainCanvas.getContext('2d'),
                             width: 32,
                             height: 32,
                             image: 'source/heroMoveDown.png',
@@ -93,7 +88,6 @@ Story = Class.extend({
 
 var story,
     game,
-    canvas,
     context,
     humanCastle,
     dwarfCamp,
@@ -106,21 +100,17 @@ function myfunction(e) {
 }
 
 function mainLoop() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    console.log(story.hero);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     story.hero.checkDestination(story.hero.destination);
     for (var i = 0, len = story.interactableObjects.length; i < len; i++) {
-        story.interactableObjects[i].drawObj(story.mainCanvas);
+        story.interactableObjects[i].drawObj();
     }
 }
 
 window.onload = function () {
-
     canvas = document.getElementById('canvas');
-    context = canvas.getContext('2d');
+    ctx = canvas.getContext('2d');
     story = new Story();
-    console.log(story.mainCanvas);
-    story.mainCanvas = document.getElementById("canvas");
     game = new Game();
     humanCastle = new ClickPoint(160, 150, 10, 10, "humanCastle");
     dwarfCamp = new ClickPoint(650, 150, 10, 10, "dwarfCamp");
@@ -132,10 +122,11 @@ window.onload = function () {
     story.interactableObjects.push(humanCastle);
     story.interactableObjects.push(dwarfCamp);
     for (var i = 0, len = story.interactableObjects.length; i < len; i++) {
-        story.interactableObjects[i].drawObj(story.mainCanvas);
+        story.interactableObjects[i].drawObj();
+        //story.interactableObjects[i].speechBubbles(story.mainCanvas, 100, 100, 10, "ivan");
     }
-    mainLoop = setInterval(mainLoop, 30);
-    story.mainCanvas.addEventListener("click", myfunction, false);
+    mainLoop = setInterval(mainLoop, 100);
+    canvas.addEventListener("click", myfunction, false);
 
     window.addEventListener('keydown', listenKeyEvents, false);
     window.addEventListener('keyup', listenKeyEvents, false);

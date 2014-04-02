@@ -1,11 +1,14 @@
+var ctx,
+    cavnas;
 //Main Object class has size and position and draw method (undefined)
 GameObject = Class.extend({
-    init: function (x, y, width, height, name) {
+    init: function (x, y, width, height, name, image) {
         this.name = name;
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
+        this.image = image;
     },
     getPosition: function () {
         var that = this;
@@ -21,12 +24,49 @@ GameObject = Class.extend({
             height: that.height,
         };
     },
+    speechBubbles: function (w, h, radius, text) {
+        // Drawing the bubble >>>
+        var x = this.x,
+            y = this.y,
+            r = x + w,
+            b = y + h;
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.lineWidth = "3";
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + radius / 2, y - 10);
+        ctx.lineTo(x + radius * 2, y);
+        ctx.lineTo(r - radius, y);
+        ctx.quadraticCurveTo(r, y, r, y + radius);
+        ctx.lineTo(r, y + h - radius);
+        ctx.quadraticCurveTo(r, b, r - radius, b);
+        ctx.lineTo(x + radius, b);
+        ctx.quadraticCurveTo(x, b, x, b - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.fill();
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+        ctx.restore();
+        // Drawing the text inside the bubble >>>
+        ctx.fillStyle = "black";
+        ctx.font = "12px Georgia";
+        
+        for (var i = 0; i < text.length; i++) {
+            ctx.fillText(text[i], this.x + 15, this.y + radius + (i * 20), w - radius);
+        }
+        
+        // Drawing the image that speaks the quote >>>
+        //ctx.drawImage(img, x, y, width, height);
+            
+    }
 });
 
 //
 MovableObject = GameObject.extend({
-    init: function (x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle) {
-        this._super(x, y, width, height, name);
+    init: function (x, y, width, height, name,spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, image) {
+        this._super(x, y, width, height, name, image);
         this.speed = 2;
         this.spriteUp = spriteUp;
         this.spriteDown = spriteDown;
@@ -38,8 +78,8 @@ MovableObject = GameObject.extend({
     drawSprite: function (sprite) {
         var img = new Image();
         img.src = sprite.image;
-        sprite.context.drawImage(
-                img,
+        ctx.drawImage(
+            img,
             this.frameCounter * (sprite.width / sprite.frames),
             0,
             sprite.width / sprite.frames,
@@ -113,15 +153,15 @@ MovableObject = GameObject.extend({
 
 //Interactable object to do
 InteractableObject = GameObject.extend({
-    init: function (x, y, width, height, name) {
-        this._super(x, y, width, height, name);
+    init: function (x, y, width, height, name, image) {
+        this._super(x, y, width, height, name, image);
     },
 });
 
 //
 ClickPoint = InteractableObject.extend({
-    init: function (x, y, width, height, name) {
-        this._super(x, y, width, height, name);
+    init: function (x, y, width, height, name, image) {
+        this._super(x, y, width, height, name, image);
         this.isClicked = false;
     },
     checkIfClicked: function (mouseX, mouseY) {
@@ -132,17 +172,16 @@ ClickPoint = InteractableObject.extend({
             return true;
         }
     },
-    drawObj: function (canvas) {
-        var context = canvas.getContext("2d");
-        context.fillRect(this.x, this.y, this.width, this.height);//testing
+    drawObj: function () {
+        ctx.fillRect(this.x, this.y, this.width, this.height);//testing
     },
 
 
 });
 // not implemented
 Heroes = MovableObject.extend({
-    init: function (x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle) {
-        this._super(x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle);
+    init: function (x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, image) {
+        this._super(x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, image);
         this.isInteracting = false;
         this.destination = {};
     },
