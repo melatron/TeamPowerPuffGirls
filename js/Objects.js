@@ -8,7 +8,7 @@ GameObject = Class.extend({
         this.height = height;
         this.x = x;
         this.y = y;
-        this.image = image;
+        this.portrait = image;
     },
     getPosition: function () {
         var that = this;
@@ -24,7 +24,7 @@ GameObject = Class.extend({
             height: that.height,
         };
     },
-    speechBubbles: function (w, h, radius, text) {
+    drawSpeechBubble: function (w, h, radius, text) {
         // Drawing the bubble >>>
         var x = this.x,
             y = this.y,
@@ -53,13 +53,20 @@ GameObject = Class.extend({
         ctx.fillStyle = "black";
         ctx.font = "12px Georgia";
         
-        for (var i = 0; i < text.length; i++) {
-            ctx.fillText(text[i], this.x + 15, this.y + radius + (i * 20), w - radius);
-        }
+        
         
         // Drawing the image that speaks the quote >>>
         //ctx.drawImage(img, x, y, width, height);
             
+    },
+    drawSpeech: function (text) {
+        for (var i = 0; i < text.length; i++) {
+            ctx.fillText(text[i], this.x + 15, this.y + 20 + (i * 20), w - 20);
+        }
+    },
+    //
+    drawPortrait: function () {
+        ctx.drawImage(this.portrait, this.x, this.y, width, height);
     }
 });
 
