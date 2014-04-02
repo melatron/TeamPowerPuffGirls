@@ -1,14 +1,21 @@
 var ctx,
-    cavnas;
-//Main Object class has size and position and draw method (undefined)
+    canvas,
+    heroSpriteUp, 
+    heroSpriteDown,
+    heroSpriteLeft,
+    heroSpriteRight,
+    heroSpriteIdle;
+
+// ============== MAIN OBJECT CLASS ============//
+
 GameObject = Class.extend({
-    init: function (x, y, width, height, name, image) {
+    init: function (x, y, width, height, name, portrait) {
         this.name = name;
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
-        this.portrait = image;
+        this.portrait = portrait;
     },
     getPosition: function () {
         var that = this;
@@ -70,64 +77,53 @@ GameObject = Class.extend({
     }
 });
 
-//
-MovableObject = GameObject.extend({
-    init: function (x, y, width, height, name,spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, image) {
-        this._super(x, y, width, height, name, image);
-        this.speed = 2;
-        this.spriteUp = spriteUp;
-        this.spriteDown = spriteDown;
-        this.spriteLeft = spriteLeft;
-        this.spriteRight = spriteRight;
-        this.spriteIdle = spriteIdle;
-        this.frameCounter = 0;
-    },
-    drawSprite: function (sprite) {
-        var img = new Image();
-        img.src = sprite.image;
-        ctx.drawImage(
-            img,
-            this.frameCounter * (sprite.width / sprite.frames),
-            0,
-            sprite.width / sprite.frames,
-            sprite.height,
-            this.x,
-            this.y,
-            sprite.width / sprite.frames,
-            sprite.height
-        );
-        this.frameCounter++;
+// =============== MOVABLE OBJECT CLASS ===================== //
 
-        if (this.frameCounter >= sprite.frames) {
-            this.frameCounter = 0;
-        }
+MovableObject = GameObject.extend({
+    init: function (x, y, width, height, name, portrait) {
+        this._super(x, y, width, height, name, portrait);
+        this.speed = 2;
+        this.spriteUp = null;
+        this.spriteDown = null;
+        this.spriteLeft = null;
+        this.spriteRight = null;
+        this.spriteIdle = null;
     },
+    
+    //-- function for vertical movement --//
+    
     moveVertical: function (y) {
         if (this.y < y) {
-            this.drawSprite(this.spriteDown);
+            this.spriteDown.drawSprite();
             this.y += this.speed;
         }
         else if (this.y > y) {
-            this.drawSprite(this.spriteUp);
+        	this.spriteUp.drawSprite();
             this.y -= this.speed;
         }
     },
 
+    //-- function for horizontal movement --//
+    
     moveHorizontal: function (x) {
         if (this.x < x) {
+        	this.spriteRight.drawSprite();
             this.x += this.speed;
-            this.drawSprite(this.spriteRight);
         }
         else if (this.x > x) {
-            this.drawSprite(this.spriteLeft);
+        	this.spriteLeft.drawSprite();
             this.x -= this.speed;
         }
     },
-
+    
+    //-- function for sitting still --//
+    
     idle: function () {
-        this.drawSprite(this.spriteIdle);
+    	this.spriteIdle.drawSprite();
     },
 
+    //-- this function checks last clicked destination and moves the hero there --//
+    
     checkDestination: function (destination) {
         var roadY = 238;
         if (this.x == destination.x && this.y == destination.y) {
@@ -158,19 +154,25 @@ MovableObject = GameObject.extend({
     }
 });
 
-//Interactable object to do
+// ==== INTERACTABLE OBJECT CLASS ==== //
+
 InteractableObject = GameObject.extend({
     init: function (x, y, width, height, name, image) {
         this._super(x, y, width, height, name, image);
     },
 });
 
-//
+//=== Click point object ====//
+
 ClickPoint = InteractableObject.extend({
-    init: function (x, y, width, height, name, image) {
-        this._super(x, y, width, height, name, image);
+    init: function (x, y, width, height, name, arrivalPoint, image) {
+        this._super(x, y, width, height, name, arrivalPoint, image);
         this.isClicked = false;
+        this.arrivalPoint = arrivalPoint;  // Arrival point for Hero alignment
     },
+    
+    // --- function that checks if the point is clicked --- //
+    
     checkIfClicked: function (mouseX, mouseY) {
         console.log(mouseX + " " + mouseY);
         // if x between this x and this.x + this.width AND if y between this.y and this.y+this.height
@@ -180,24 +182,63 @@ ClickPoint = InteractableObject.extend({
         }
     },
     drawObj: function () {
+    	ctx.save();
+    	ctx.fillStyle = "rgba(20, 20, 20, 0.5)";   // Temporary bounding rect for click point
         ctx.fillRect(this.x, this.y, this.width, this.height);//testing
+        ctx.restore();
     },
 
 
 });
-// not implemented
+
+//=== Hero objects ====//
+
 Heroes = MovableObject.extend({
-    init: function (x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, image) {
-        this._super(x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, image);
+    init: function (x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, portrait) {
+        this._super(x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, portrait);
         this.isInteracting = false;
         this.destination = {
             x: 50,
             y: 238
         };
     },
+    //-- Sets initial destination for the main character --//
     setDestinaion: function (intObject) {
-        this.destination.x = intObject.x;
-        this.destination.y = intObject.y;
+        this.destination.x = intObject.arrivalPoint.x;
+        this.destination.y = intObject.arrivalPoint.y;
     }
 
+});
+
+//======== SPRITE OBJECTS ==========//
+
+Sprite = Class.extend({
+	init: function(width, height, frames, image, object){
+		this.width = width;
+		this.height = height;
+		this.frames = frames;
+		this.image = image;
+		this.object = object; // The object that is being animated
+		this.frameCounter = 0;
+	},
+	
+	//-- Function for drawing the sprite --//
+	drawSprite: function(){
+		ctx.drawImage(
+				this.image,
+				this.frameCounter * (this.width / this.frames),
+				0,
+				this.width / this.frames,
+				this.height,
+				this.object.x,
+				this.object.y,
+				this.width / this.frames,
+				this.height
+		);
+		this.frameCounter++;
+		
+		if(this.frameCounter >= this.frames){
+			this.frameCounter = 0;
+		}
+	}
 });
