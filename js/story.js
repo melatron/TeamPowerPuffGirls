@@ -2,6 +2,11 @@ Story = Class.extend({
 
     init: function () {
         this.interactableObjects = new Array();
+        var humanCastle = new ClickPoint(160, 150, 10, 10, "humanCastle"),
+            dwarfCamp = new ClickPoint(650, 150, 10, 10, "dwarfCamp");
+        this.interactableObjects.push(humanCastle);
+        this.interactableObjects.push(dwarfCamp);
+        //
         this.movableObjects = new Array();
         this.staticSpriteObjects = new Array();
         this.mainCanvas = document.getElementById("canvas");
@@ -76,8 +81,10 @@ Story = Class.extend({
             }
         }
     },
-    moveObjectToDirection: function (object, direction) {
-
+    drawInteractableObject: function () {
+        for (var i = 0, len = this.interactableObjects.length; i < len; i++) {
+            this.interactableObjects[i].drawObj();
+        }
     }
     //    mainLoop : function() {
     //      console.log(this.hero);
@@ -102,11 +109,32 @@ function myfunction(e) {
 function mainLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     story.hero.checkDestination(story.hero.destination);
-    for (var i = 0, len = story.interactableObjects.length; i < len; i++) {
-        story.interactableObjects[i].drawObj();
+    story.drawInteractableObject();
+}
+function listenKeyEvents(e) {
+    switch (e.keyCode) {
+        case 37:
+            if (e.type == 'keydown') {
+                game.move("left");
+            }
+            break;
+        case 38:
+            if (e.type == 'keydown') {
+                game.move("up");
+            }
+            break;
+        case 39:
+            if (e.type == 'keydown') {
+                game.move("right");
+            }
+            break;
+        case 40:
+            if (e.type == 'keydown') {
+                game.move("down");
+            }
+            break;
     }
 }
-
 window.onload = function () {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
@@ -114,45 +142,15 @@ window.onload = function () {
     game = new Game();
     humanCastle = new ClickPoint(160, 150, 10, 10, "humanCastle");
     dwarfCamp = new ClickPoint(650, 150, 10, 10, "dwarfCamp");
-    story.hero.destination = {
-        x: 50,
-        y: 238
-    };
 
     story.interactableObjects.push(humanCastle);
     story.interactableObjects.push(dwarfCamp);
-    for (var i = 0, len = story.interactableObjects.length; i < len; i++) {
-        story.interactableObjects[i].drawObj();
-        //story.interactableObjects[i].speechBubbles(story.mainCanvas, 100, 100, 10, "ivan");
-    }
+    story.drawInteractableObject();
     mainLoop = setInterval(mainLoop, 100);
     canvas.addEventListener("click", myfunction, false);
 
     window.addEventListener('keydown', listenKeyEvents, false);
     window.addEventListener('keyup', listenKeyEvents, false);
     game.putFirstTwoRandomNumbers();
-    function listenKeyEvents(e) {
-        switch (e.keyCode) {
-            case 37:
-                if (e.type == 'keydown') {
-                    game.move("left");
-                }
-                break;
-            case 38:
-                if (e.type == 'keydown') {
-                    game.move("up");
-                }
-                break;
-            case 39:
-                if (e.type == 'keydown') {
-                    game.move("right");
-                }
-                break;
-            case 40:
-                if (e.type == 'keydown') {
-                    game.move("down");
-                }
-                break;
-        }
-    }
+    
 };

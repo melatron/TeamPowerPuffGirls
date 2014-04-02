@@ -183,7 +183,10 @@ Heroes = MovableObject.extend({
     init: function (x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, image) {
         this._super(x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, image);
         this.isInteracting = false;
-        this.destination = {};
+        this.destination = {
+            x: 50,
+            y: 238
+        };
     },
     setDestinaion: function (intObject) {
         this.destination.x = intObject.x;
