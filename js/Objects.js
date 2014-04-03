@@ -9,13 +9,12 @@ var ctx,
 // ============== MAIN OBJECT CLASS ============//
 
 GameObject = Class.extend({
-    init: function (x, y, width, height, name, portrait) {
+    init: function (x, y, width, height, name) {
         this.name = name;
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
-        this.portrait = portrait;
     },
     getPosition: function () {
         var that = this;
@@ -30,58 +29,97 @@ GameObject = Class.extend({
             width: that.width,
             height: that.height,
         };
+    }   
+});
+
+// =============== SPEAKING OBJECT CLASS ===================== // ( object which can spawn speech bubbles )
+Portrait = Class.extend({
+    init: function (x, y, image) {
+        this.x = x;
+        this.y = y;
+        //this.width = image.width;
+        //this.height = image.height;
+        this.image = image;
     },
-    drawSpeechBubble: function (w, h, radius, text) {
+    drawPortrait: function () {
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    }
+});
+Speech = Class.extend({
+    init: function (x, y) {
+        this.x = x;
+        this.y = y;
+        this.maxWidth = 0;
+        this.wordsPixels = 0;
+        this.textArray = new Array();
+        this.indexOfSpokenSpeech = 0;
+    },
+    setMaxWidth: function (maxWidth) {
+        this.maxWidth = maxWidth;
+    },
+    setWordsPixels: function (wordsPixels) {
+        this.wordsPixels = wordsPixels;
+    },
+    addSpeech: function (sentence) {
+        this.textArray.push(sentence);
+    },
+    drawSpeech: function () {
+        ctx.fillStyle = "black";
+        ctx.font = "12px Georgia";
+        for (var i = this.indexOfSpokenSpeech; i < this.textArray.length; i++) {
+            ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), maxWidth);
+        }
+    }
+});
+SpeakingObject = GameObject.extend({
+    init: function (x, y, width, height, name, image) {
+        this._super(x, y, width, height, name);
+        this.radius = 20;
+        this.bubbleHeight = 120;
+        this.portraitX = x + width;
+        this.portraitY = y;
+        //this.speechX = x + width + image.width;
+        this.speechY = y + this.radius;
+        this.portrait = new Portrait(this.portraitX, this.portraitY, image);
+        this.speech = new Speech(this.speechX, this.speechY);
+        
+    },
+    drawSpeechBubble: function () {
         // Drawing the bubble >>>
         var x = this.x,
             y = this.y,
-            r = x + w,
-            b = y + h;
+            r = x + this.speech.maxWidth + 30,
+            b = y + this.bubbleHeight;
         ctx.save();
         ctx.beginPath();
         ctx.fillStyle = "white";
         ctx.lineWidth = "3";
-        ctx.moveTo(x + radius, y);
-        ctx.lineTo(x + radius / 2, y - 10);
-        ctx.lineTo(x + radius * 2, y);
-        ctx.lineTo(r - radius, y);
-        ctx.quadraticCurveTo(r, y, r, y + radius);
-        ctx.lineTo(r, y + h - radius);
-        ctx.quadraticCurveTo(r, b, r - radius, b);
-        ctx.lineTo(x + radius, b);
-        ctx.quadraticCurveTo(x, b, x, b - radius);
-        ctx.lineTo(x, y + radius);
-        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.moveTo(x + this.radius, y);
+        ctx.lineTo(x + this.radius / 2, y - 10);
+        ctx.lineTo(x + this.radius * 2, y);
+        ctx.lineTo(r - this.radius, y);
+        ctx.quadraticCurveTo(r, y, r, y + this.radius);
+        ctx.lineTo(r, y + h - this.radius);
+        ctx.quadraticCurveTo(r, b, r - this.radius, b);
+        ctx.lineTo(x + this.radius, b);
+        ctx.quadraticCurveTo(x, b, x, b - this.radius);
+        ctx.lineTo(x, y + this.radius);
+        ctx.quadraticCurveTo(x, y, x + this.radius, y);
         ctx.fill();
         ctx.strokeStyle = "black";
         ctx.stroke();
         ctx.restore();
         // Drawing the text inside the bubble >>>
-        ctx.fillStyle = "black";
-        ctx.font = "12px Georgia";
         
-        
-        
-        // Drawing the image that speaks the quote >>>
-        //ctx.drawImage(img, x, y, width, height);
             
-    },
-    drawSpeech: function (text) {
-        for (var i = 0; i < text.length; i++) {
-            ctx.fillText(text[i], this.x + 15, this.y + 20 + (i * 20), w - 20);
-        }
-    },
-    //
-    drawPortrait: function () {
-        ctx.drawImage(this.portrait, this.x, this.y, width, height);
     }
 });
 
 // =============== MOVABLE OBJECT CLASS ===================== //
 
-MovableObject = GameObject.extend({
-    init: function (x, y, width, height, name, portrait) {
-        this._super(x, y, width, height, name, portrait);
+MovableObject = SpeakingObject.extend({
+    init: function (x, y, width, height, name) {
+        this._super(x, y, width, height, name);
         this.speed = 2;
         this.spriteUp = null;
         this.spriteDown = null;
@@ -156,28 +194,27 @@ MovableObject = GameObject.extend({
 
 // ==== INTERACTABLE OBJECT CLASS ==== //
 
-InteractableObject = GameObject.extend({
-    init: function (x, y, width, height, name, image) {
-        this._super(x, y, width, height, name, image);
+InteractableObject = SpeakingObject.extend({
+    init: function (x, y, width, height, name) {
+        this._super(x, y, width, height, name);
+        // Arrival point for Hero alignment
+        this.interactedAtTheMoment = false;
     },
 });
 
 //=== Click point object ====//
 
 ClickPoint = InteractableObject.extend({
-    init: function (x, y, width, height, name, arrivalPoint, image) {
-        this._super(x, y, width, height, name, arrivalPoint, image);
-        this.isClicked = false;
-        this.arrivalPoint = arrivalPoint;  // Arrival point for Hero alignment
+    init: function (x, y, width, height, name, arrivalPoint) {
+        this._super(x, y, width, height, name);
+        this.arrivalPoint = arrivalPoint;
     },
     
     // --- function that checks if the point is clicked --- //
     
     checkIfClicked: function (mouseX, mouseY) {
-        console.log(mouseX + " " + mouseY);
         // if x between this x and this.x + this.width AND if y between this.y and this.y+this.height
         if ((mouseX > this.x && mouseX < (this.x + this.width)) && (mouseY > this.y && mouseY < (this.y + this.height))) {
-            console.log("hello");
             return true;
         }
     },
@@ -194,8 +231,8 @@ ClickPoint = InteractableObject.extend({
 //=== Hero objects ====//
 
 Heroes = MovableObject.extend({
-    init: function (x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, portrait) {
-        this._super(x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle, portrait);
+    init: function (x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle) {
+        this._super(x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle);
         this.isInteracting = false;
         this.destination = {
             x: 50,
