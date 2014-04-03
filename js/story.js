@@ -10,7 +10,7 @@ Story = Class.extend({
         	),
             dwarfCamp = new ClickPoint(622, 68, 100, 50, "dwarfCamp", 
             												{
-            													x: 650,
+            													x: 660,
             													y: 130
             												}
             ),
@@ -69,6 +69,8 @@ Story = Class.extend({
             mouseX = ev.clientX - rect.left,
             mouseY = ev.clientY - rect.top,
             currentObject;
+        
+        console.log("Mouse X: " + mouseX + " Mouse Y: " + mouseY);
         
         for (var i = 0, len = this.interactableObjects.length; i < len; i++) {  // check if clicked
             currentObject = this.interactableObjects[i];

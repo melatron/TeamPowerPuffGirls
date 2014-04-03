@@ -120,7 +120,7 @@ SpeakingObject = GameObject.extend({
 MovableObject = SpeakingObject.extend({
     init: function (x, y, width, height, name) {
         this._super(x, y, width, height, name);
-        this.speed = 2;
+        this.speed = 5;
         this.spriteUp = null;
         this.spriteDown = null;
         this.spriteLeft = null;
@@ -131,11 +131,11 @@ MovableObject = SpeakingObject.extend({
     //-- function for vertical movement --//
     
     moveVertical: function (y) {
-        if (this.y < y) {
+        if (this.y < y && !(this.y < y && y < this.y + 10)) {
             this.spriteDown.drawSprite();
             this.y += this.speed;
         }
-        else if (this.y > y) {
+        else if (this.y > y && !(this.y < y && y < this.y + 10)) {
         	this.spriteUp.drawSprite();
             this.y -= this.speed;
         }
@@ -163,28 +163,31 @@ MovableObject = SpeakingObject.extend({
     //-- this function checks last clicked destination and moves the hero there --//
     
     checkDestination: function (destination) {
-        var roadY = 238;
-        if (this.x == destination.x && this.y == destination.y) {
+        var roadY = 250;
+        if ((this.x <= destination.x && destination.x <= this.x + 10) && (this.y <= destination.y && destination.y <= this.y + 10)) {
             this.idle();
             return true;
         }
         else {
-            if (this.y != roadY) {
-                if (this.x != destination.x) {
+            if ((this.y < roadY && roadY > this.y + 10) || (this.y > roadY && roadY < this.y + 10)) {
+                if (!(this.x <= destination.x && destination.x <= this.x + 10)) {
                     this.moveVertical(roadY);
+                    return;
 
                 }
-                else if (this.x == destination.x) {
+                else if (this.x <= destination.x && destination.x <= this.x + 10) {
                     this.moveVertical(destination.y);
                     return;
                 }
             }
-            else if (this.y == roadY) {
-                if (this.x != destination.x) {
+            else if (this.y <= roadY && roadY <= this.y + 10) {
+                if (!(this.x <= destination.x && destination.x <= this.x + 10)) {
                     this.moveHorizontal(destination.x);
+                    return;
                 }
-                else if (this.y != destination.y) {
+                else if (!(this.y <= destination.y && destination.y <= this.y + 10)) {
                     this.moveVertical(destination.y);
+                    return;
                 }
             }
             return false;
@@ -236,7 +239,7 @@ Heroes = MovableObject.extend({
         this.isInteracting = false;
         this.destination = {
             x: 50,
-            y: 238
+            y: 250
         };
     },
     //-- Sets initial destination for the main character --//
@@ -257,6 +260,7 @@ Sprite = Class.extend({
 		this.image = image;
 		this.object = object; // The object that is being animated
 		this.frameCounter = 0;
+		this.tickCounter = 0;
 	},
 	
 	//-- Function for drawing the sprite --//
@@ -272,7 +276,10 @@ Sprite = Class.extend({
 				this.width / this.frames,
 				this.height
 		);
-		this.frameCounter++;
+		this.tickCounter++;
+		if(this.tickCounter % 2 != 0){
+			this.frameCounter++;			
+		}
 		
 		if(this.frameCounter >= this.frames){
 			this.frameCounter = 0;
