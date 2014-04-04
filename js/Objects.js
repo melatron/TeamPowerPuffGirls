@@ -121,9 +121,9 @@ SpeakingObject = GameObject.extend({
 // =============== MOVABLE OBJECT CLASS ===================== //
 
 MovableObject = SpeakingObject.extend({
-    init: function (x, y, width, height, name, image) {
-        this._super(x, y, width, height, name, image);
-        this.speed = 5;
+    init: function (x, y, width, height, name) {
+        this._super(x, y, width, height, name);
+        this.speed = 4;
         this.spriteUp = null;
         this.spriteDown = null;
         this.spriteLeft = null;
