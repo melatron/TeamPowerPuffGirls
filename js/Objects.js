@@ -52,7 +52,8 @@ Speech = Class.extend({
         this.maxWidth = 0;
         this.wordsPixels = 0;
         this.textArray = new Array();
-        this.indexOfSpokenSpeech = 0;
+        this.startSentence = 0;
+        this.endSentence = 0;
     },
     setMaxWidth: function (maxWidth) {
         this.maxWidth = maxWidth;
@@ -66,7 +67,7 @@ Speech = Class.extend({
     drawSpeech: function () {
         ctx.fillStyle = "black";
         ctx.font = "12px Georgia";
-        for (var i = this.indexOfSpokenSpeech; i < this.textArray.length; i++) {
+        for (var i = this.indexOfSpokenSpeech; i < this.endSentence; i++) {
             ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), maxWidth);
         }
     }
