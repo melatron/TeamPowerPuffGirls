@@ -19,43 +19,54 @@ Story = Class.extend({
             													x: 170,
             													y: 364
             												}
-            )
+            ),
+            mage = new ClickPoint(790, 200, 50, 50, 'mage',
+            												{
+            													x:830,
+            													y:250
+            												}
+            
+            
+            );
         this.interactableObjects.push(humanCastle);
         this.interactableObjects.push(dwarfCamp);
         this.interactableObjects.push(treeOfLife);
+        this.interactableObjects.push(mage);
         //
         this.movableObjects = new Array();
         this.staticSpriteObjects = new Array();
         this.mainCanvas = document.getElementById("canvas");
         
-        this.images = new Array();
+        this.sprites = new Array();
+        this.portraits = new Array();
         // Hero have is not yet implemented!
         this.hero = new Heroes(0, 256, 32, 32, "Gosho");
     },
     
-    // ---- Method for preloading images ---- //
+    // ---- Methods for preloading images ---- //
     
-    preloadImages: function() {
-    	var heroSpriteUpImage = null,    // define images
+    preloadSprites: function() {
+    	//define sprites
+    	var heroSpriteUpImage = null, 
     		heroSpriteDownImage = null,
     		heroSpriteLeftImage = null,
     		heroSpriteRightImage = null;
     	
-    	this.images.push(heroSpriteUpImage);   // put images in array
-    	this.images.push(heroSpriteDownImage);
-    	this.images.push(heroSpriteLeftImage);
-    	this.images.push(heroSpriteRightImage);
+    	this.sprites.push(heroSpriteUpImage);   // put images in array
+    	this.sprites.push(heroSpriteDownImage);
+    	this.sprites.push(heroSpriteLeftImage);
+    	this.sprites.push(heroSpriteRightImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
-			this.images[i] = new Image();
-			this.images[i].src = arguments[i];
+			this.sprites[i] = new Image();
+			this.sprites[i].src = arguments[i];
 		}
 		
-		heroSpriteUp = new Sprite(96, 32, 3, story.images[0], story.hero);  // create Sprites
-		heroSpriteDown = new Sprite(96, 32, 3, story.images[1], story.hero);
-		heroSpriteLeft = new Sprite(96, 32, 3, story.images[2], story.hero);
-		heroSpriteRight = new Sprite(96, 32, 3, story.images[3], story.hero);
-		heroSpriteIdle = new Sprite(32, 32, 1, story.images[1], story.hero);
+		heroSpriteUp = new Sprite(96, 32, 3, story.sprites[0], story.hero);  // create Sprites
+		heroSpriteDown = new Sprite(96, 32, 3, story.sprites[1], story.hero);
+		heroSpriteLeft = new Sprite(96, 32, 3, story.sprites[2], story.hero);
+		heroSpriteRight = new Sprite(96, 32, 3, story.sprites[3], story.hero);
+		heroSpriteIdle = new Sprite(32, 32, 1, story.sprites[1], story.hero);
 		
 		this.hero.spriteUp = heroSpriteUp; // define hero sprites
 		this.hero.spriteDown = heroSpriteDown;
@@ -64,6 +75,32 @@ Story = Class.extend({
 		this.hero.spriteIdle = heroSpriteIdle;
 	},
     
+	preloadPortraits: function(){
+		var heroPortrait = null,
+			elfPortrait = null,
+			elderPortrait = null,
+			kingPortrait = null,
+			dwarfPortrait = null;
+		
+		this.portraits.push(heroPortrait);
+		this.portraits.push(elderPortrait);
+		this.portraits.push(elfPortrait);
+		this.portraits.push(dwarfPortrait);
+		this.portraits.push(kingPortrait);
+		
+		for (var i = 0; i < arguments.length; i++){
+			this.portraits[i] = new Image();
+			this.portraits[i] = arguments[i];
+		}
+		
+		this.hero.image = this.portraits[0];
+		this.interactableObjects[3].image = this.portraits[1];
+		this.interactableObjects[2].image = this.portraits[2];
+		this.interactableObjects[1].image = this.portraits[3];
+		this.interactableObjects[0].image = this.portraits[4];
+		
+	},
+	
     clickEvent: function (ev) {
         var rect = this.mainCanvas.getBoundingClientRect(),
             mouseX = ev.clientX - rect.left,
@@ -165,11 +202,19 @@ window.onload = function () {
 	ctx = canvas.getContext('2d');
 	story = new Story();
 	
-	story.preloadImages(
+	story.preloadSprites(
 			"source/heroMoveUp.png",
 			"source/heroMoveDown.png",
 			"source/heroMoveLeft.png",
 			"source/heroMoveRight.png"
+	);
+	
+	story.preloadPortraits(
+			'source/heroPortrait.png',
+			'source/elderPortrait.png',
+			'source/elfPortrait.png',
+			'source/dwarfPortrait.png',
+			'source/kingnPortraint.png'
 	);
 		
     game = new Game();
