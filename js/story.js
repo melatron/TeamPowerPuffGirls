@@ -41,6 +41,8 @@ Story = Class.extend({
         this.portraits = new Array();
         // Hero have is not yet implemented!
         this.hero = new Heroes(0, 256, 32, 32, "Gosho");
+        
+        this.elder = new Elder(790, 200, 32, 32, "theMage");
     },
     
     // ---- Methods for preloading images ---- //
@@ -50,12 +52,21 @@ Story = Class.extend({
     	var heroSpriteUpImage = null, 
     		heroSpriteDownImage = null,
     		heroSpriteLeftImage = null,
-    		heroSpriteRightImage = null;
+    		heroSpriteRightImage = null,
+    		elderSpriteUpImage = null, 
+    		elderSpriteDownImage = null,
+    		elderSpriteLeftImage = null,
+    		elderSpriteRightImage = null;
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
     	this.sprites.push(heroSpriteDownImage);
     	this.sprites.push(heroSpriteLeftImage);
     	this.sprites.push(heroSpriteRightImage);
+    	
+    	this.sprites.push(elderSpriteUpImage);
+    	this.sprites.push(elderSpriteDownImage);
+    	this.sprites.push(elderSpriteLeftImage);
+    	this.sprites.push(elderSpriteRightImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -68,11 +79,24 @@ Story = Class.extend({
 		heroSpriteRight = new Sprite(96, 32, 3, story.sprites[3], story.hero);
 		heroSpriteIdle = new Sprite(32, 32, 1, story.sprites[1], story.hero);
 		
+		elderSpriteUp = new Sprite(96, 32, 3, story.sprites[4], story.elder);
+		elderSpriteDown = new Sprite(96, 32, 3, story.sprites[5], story.elder);
+		elderSpriteLeft = new Sprite(96, 32, 3, story.sprites[6], story.elder);
+		elderSpriteRight = new Sprite(96, 32, 3, story.sprites[7], story.elder);
+		elderSpriteIdle = new Sprite(32, 32, 1, story.sprites[5], story.elder);
+		elderSpriteIdle.startY = 0;
+		
 		this.hero.spriteUp = heroSpriteUp; // define hero sprites
 		this.hero.spriteDown = heroSpriteDown;
 		this.hero.spriteLeft = heroSpriteLeft;
 		this.hero.spriteRight = heroSpriteRight;
 		this.hero.spriteIdle = heroSpriteIdle;
+		
+		this.elder.spriteUp = elderSpriteUp;
+		this.elder.spriteDown = elderSpriteDown;
+		this.elder.spriteLeft = elderSpriteLeft;
+		this.elder.spriteRight = elderSpriteRight;
+		this.elder.spriteIdle = elderSpriteIdle;
 	},
     
 	preloadPortraits: function(){
@@ -169,7 +193,8 @@ function myfunction(e) {
 function mainLoop() {
 	ctx.save();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    story.hero.checkDestination(story.hero.destination);
+    story.hero.moveHeroToDestination(story.hero.destination);
+    story.elder.setRandomDestination(story.elder.destination);
     story.drawInteractableObject();
     ctx.restore();
     
@@ -207,7 +232,11 @@ window.onload = function () {
 			"source/heroMoveUp.png",
 			"source/heroMoveDown.png",
 			"source/heroMoveLeft.png",
-			"source/heroMoveRight.png"
+			"source/heroMoveRight.png",
+			"source/elderMoveUp.png",
+			"source/elderMoveDown.png",
+			"source/elderMoveLeft.png",
+			"source/elderMoveRight.png"
 	);
 	
 	story.preloadPortraits(

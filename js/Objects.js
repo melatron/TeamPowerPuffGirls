@@ -5,6 +5,10 @@ var ctx,
     heroSpriteLeft,
     heroSpriteRight,
     heroSpriteIdle,
+    elderSpriteUp,
+    elderSpriteDown,
+    elderSpriteLeft,
+    elderSpriteRight,
     soundtrack;
 // ============== MAIN OBJECT CLASS ============//
 
@@ -176,7 +180,7 @@ MovableObject = SpeakingObject.extend({
 
     //-- this function checks last clicked destination and moves the hero there --//
     
-    checkDestination: function (destination) {
+    moveHeroToDestination: function (destination) {
         var roadY = 250;
         if ((this.x <= destination.x && destination.x <= this.x + 10) && (this.y <= destination.y && destination.y <= this.y + 10)) {
             this.idle();
@@ -207,6 +211,23 @@ MovableObject = SpeakingObject.extend({
             }
             return false;
         }
+    },
+    
+    moveNPCToDestination: function(destination){
+        if ((this.x <= destination.x && destination.x <= this.x + 10) && (this.y <= destination.y && destination.y <= this.y + 10)) {
+            this.idle();
+            return true;
+        }
+        else{
+        	if (!(this.x <= destination.x && destination.x <= this.x + 10)) {
+                this.moveHorizontal(destination.x);
+                return;
+            }
+            else if (!(this.y <= destination.y && destination.y <= this.y + 10)) {
+                this.moveVertical(destination.y);
+                return;
+            }
+        }
     }
 });
 
@@ -216,7 +237,7 @@ InteractableObject = SpeakingObject.extend({
     init: function (x, y, width, height, name, image) {
         this._super(x, y, width, height, name, image);
         // Arrival point for Hero alignment
-        this.isInteracted = false;
+        this.isInteracting = false;
     },
 });
 
@@ -238,7 +259,7 @@ ClickPoint = InteractableObject.extend({
     },
     drawObj: function () {
     	ctx.save();
-    	ctx.fillStyle = "rgba(20, 20, 20, 0.5)";   // Temporary bounding rect for click point
+    	ctx.fillStyle = "rgba(20, 20, 20, 0.2)";   // Temporary bounding rect for click point
         ctx.fillRect(this.x, this.y, this.width, this.height);//testing
         ctx.restore();
     },
@@ -265,6 +286,29 @@ Heroes = MovableObject.extend({
 
 });
 
+Elder = MovableObject.extend({
+	init: function (x, y, width, height, name, image) {
+		this._super(x, y, height, name, image);
+		this.destination = {
+				x:820,
+				y:200
+		};
+		this.getDestinationDelay = 0;
+		this.speed = 1;
+	},
+	setRandomDestination: function(){
+		if(story.interactableObjects[3].isInteracting){
+			
+		}
+		else if(this.getDestinationDelay % 100 == 0){
+			this.destination.x = Math.floor(Math.random() * (840 - 780 + 1) + 780);
+			this.destination.y = Math.floor(Math.random() * (240 - 200 + 1) + 200);
+		}
+		this.getDestinationDelay ++;
+		this.moveNPCToDestination(this.destination);
+	}
+});
+
 //======== SPRITE OBJECTS ==========//
 
 Sprite = Class.extend({
@@ -276,6 +320,7 @@ Sprite = Class.extend({
 		this.object = object; // The object that is being animated
 		this.frameCounter = 0;
 		this.tickCounter = 0;
+		this.startY = 0;
 	},
 	
 	//-- Function for drawing the sprite --//
@@ -283,7 +328,7 @@ Sprite = Class.extend({
 		ctx.drawImage(
 				this.image,
 				this.frameCounter * (this.width / this.frames),
-				0,
+				this.startY,
 				this.width / this.frames,
 				this.height,
 				this.object.x,
