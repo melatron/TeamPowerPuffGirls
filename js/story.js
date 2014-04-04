@@ -172,6 +172,7 @@ function mainLoop() {
     story.hero.checkDestination(story.hero.destination);
     story.drawInteractableObject();
     ctx.restore();
+    
 }
 function listenKeyEvents(e) {
     switch (e.keyCode) {
@@ -216,13 +217,13 @@ window.onload = function () {
 			'source/dwarfPortrait.png',
 			'source/kingPortrait.png'
 	);
-	var soundtrack = new Audio();
+	soundtrack = new Audio();
 	soundtrack.src = 'source/mainSoundtrack.mp3';
 	soundtrack.load();
 	soundtrack.play();
     game = new Game();
 
-    //mainLoop = setInterval(mainLoop, 30);
+    mainLoop = setInterval(mainLoop, 30);
     canvas.addEventListener("click", myfunction, false);
 
     window.addEventListener('keydown', listenKeyEvents, false);

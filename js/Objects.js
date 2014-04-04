@@ -4,8 +4,8 @@ var ctx,
     heroSpriteDown,
     heroSpriteLeft,
     heroSpriteRight,
-    heroSpriteIdle;
-
+    heroSpriteIdle,
+    soundtrack;
 // ============== MAIN OBJECT CLASS ============//
 
 GameObject = Class.extend({
