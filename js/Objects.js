@@ -37,20 +37,18 @@ Portrait = Class.extend({
     init: function (x, y, image) {
         this.x = x;
         this.y = y;
-        //this.width = image.width;
-        //this.height = image.height;
         this.image = image;
     },
     drawPortrait: function () {
-        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        ctx.drawImage(this.image, this.x, this.y, this.image.width, this.image.height);
     }
 });
 Speech = Class.extend({
     init: function (x, y) {
         this.x = x;
         this.y = y;
-        this.maxWidth = 0;
-        this.wordsPixels = 0;
+        this.maxWidth = 150;
+        this.wordsPixels = 15;
         this.textArray = new Array();
         this.startSentence = 0;
         this.endSentence = 0;
@@ -68,27 +66,32 @@ Speech = Class.extend({
         ctx.fillStyle = "black";
         ctx.font = "12px Georgia";
         for (var i = this.indexOfSpokenSpeech; i < this.endSentence; i++) {
-            ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), maxWidth);
+            ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), this.maxWidth);
         }
     }
 });
 SpeakingObject = GameObject.extend({
-    init: function (x, y, width, height, name, image) {
+    init: function (x, y, width, height, name) {
         this._super(x, y, width, height, name);
+        this.image = null;
         this.radius = 20;
         this.bubbleHeight = 120;
         this.portraitX = x + width;
         this.portraitY = y;
-        //this.speechX = x + width + image.width;
+        this.speechX = this.portraitX + 130;
         this.speechY = y + this.radius;
-        this.portrait = new Portrait(this.portraitX, this.portraitY, image);
-        this.speech = new Speech(this.speechX, this.speechY);
+        this.portrait = new Portrait(this.portraitX, this.portraitY, this.image);
+        this.speech = new Speech(this.speechX , this.speechY);
         
     },
     drawSpeechBubble: function () {
+        var portrait = new Portrait(this.portraitX, this.portraitY, this.image),
+            speech = new Speech(this.speechX, this.speechY);
+        portrait.drawPortrait();
+        speech.drawSpeech();
         // Drawing the bubble >>>
-        var x = this.x,
-            y = this.y,
+        var x = this.speechX - 50,
+            y = this.y + 170,
             r = x + this.speech.maxWidth + 30,
             b = y + this.bubbleHeight;
         ctx.save();
@@ -100,7 +103,7 @@ SpeakingObject = GameObject.extend({
         ctx.lineTo(x + this.radius * 2, y);
         ctx.lineTo(r - this.radius, y);
         ctx.quadraticCurveTo(r, y, r, y + this.radius);
-        ctx.lineTo(r, y + h - this.radius);
+        ctx.lineTo(r, y + this.bubbleHeight - this.radius);
         ctx.quadraticCurveTo(r, b, r - this.radius, b);
         ctx.lineTo(x + this.radius, b);
         ctx.quadraticCurveTo(x, b, x, b - this.radius);
@@ -111,7 +114,6 @@ SpeakingObject = GameObject.extend({
         ctx.stroke();
         ctx.restore();
         // Drawing the text inside the bubble >>>
-        
             
     }
 });
@@ -119,8 +121,8 @@ SpeakingObject = GameObject.extend({
 // =============== MOVABLE OBJECT CLASS ===================== //
 
 MovableObject = SpeakingObject.extend({
-    init: function (x, y, width, height, name) {
-        this._super(x, y, width, height, name);
+    init: function (x, y, width, height, name, image) {
+        this._super(x, y, width, height, name, image);
         this.speed = 5;
         this.spriteUp = null;
         this.spriteDown = null;
@@ -199,8 +201,8 @@ MovableObject = SpeakingObject.extend({
 // ==== INTERACTABLE OBJECT CLASS ==== //
 
 InteractableObject = SpeakingObject.extend({
-    init: function (x, y, width, height, name) {
-        this._super(x, y, width, height, name);
+    init: function (x, y, width, height, name, image) {
+        this._super(x, y, width, height, name, image);
         // Arrival point for Hero alignment
         this.interactedAtTheMoment = false;
     },
@@ -235,8 +237,8 @@ ClickPoint = InteractableObject.extend({
 //=== Hero objects ====//
 
 Heroes = MovableObject.extend({
-    init: function (x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle) {
-        this._super(x, y, width, height, name, spriteUp, spriteDown, spriteLeft, spriteRight, spriteIdle);
+    init: function (x, y, width, height, name, image) {
+        this._super(x, y, width, height, name, image);
         this.isInteracting = false;
         this.destination = {
             x: 50,

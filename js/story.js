@@ -90,10 +90,10 @@ Story = Class.extend({
 		
 		for (var i = 0; i < arguments.length; i++){
 			this.portraits[i] = new Image();
-			this.portraits[i] = arguments[i];
+			this.portraits[i].src = arguments[i];
 		}
 		
-		this.hero.image = this.portraits[0];
+		this.hero.portrait.image = this.portraits[0];
 		this.interactableObjects[3].image = this.portraits[1];
 		this.interactableObjects[2].image = this.portraits[2];
 		this.interactableObjects[1].image = this.portraits[3];
@@ -214,12 +214,12 @@ window.onload = function () {
 			'source/elderPortrait.png',
 			'source/elfPortrait.png',
 			'source/dwarfPortrait.png',
-			'source/kingnPortraint.png'
+			'source/kingPortrait.png'
 	);
 		
     game = new Game();
 
-    mainLoop = setInterval(mainLoop, 30);
+    //mainLoop = setInterval(mainLoop, 30);
     canvas.addEventListener("click", myfunction, false);
 
     window.addEventListener('keydown', listenKeyEvents, false);
