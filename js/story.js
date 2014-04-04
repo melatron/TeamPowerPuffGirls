@@ -216,7 +216,10 @@ window.onload = function () {
 			'source/dwarfPortrait.png',
 			'source/kingPortrait.png'
 	);
-		
+	var soundtrack = new Audio();
+	soundtrack.src = 'source/mainSoundtrack.mp3';
+	soundtrack.load();
+	soundtrack.play();
     game = new Game();
 
     //mainLoop = setInterval(mainLoop, 30);
