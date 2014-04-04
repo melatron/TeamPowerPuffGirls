@@ -3,19 +3,20 @@ body {
 }
 
 #borderDiv{
-	width: 1132px;
-	height: 810px;
+	width: 1260px;
+	height: 880px;
 	background-image:url(../source/mainBorder.png);
 	margin-left: auto;
 	margin-right: auto;
-	padding-top:50px;
+	padding-top:120px;
 }
 
 #main{
+
 	width: 1024px;
 	height: 768px;
-	border: 5px solid grey;
-	margin-left: 54px;
+/*	border: 5px solid grey; */
+	margin-left: 120px;
 }
 #canvasDiv{
 	width: 1020px;
