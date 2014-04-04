@@ -68,6 +68,17 @@ Speech = Class.extend({
         for (var i = this.indexOfSpokenSpeech; i < this.endSentence; i++) {
             ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), this.maxWidth);
         }
+    },
+    getSpeech: function (questName) {
+        $.ajax({
+            url: "serverPart.php",
+            data: {
+                fileName: questName,
+            }
+        }).done(function (data) {
+            //console.log(data);
+            this.textArrey = data.split("|");
+        })
     }
 });
 SpeakingObject = GameObject.extend({
