@@ -169,6 +169,7 @@ MovableObject = SpeakingObject.extend({
         var roadY = 250;
         if ((this.x <= destination.x && destination.x <= this.x + 10) && (this.y <= destination.y && destination.y <= this.y + 10)) {
             this.idle();
+            destination.isInteracted = true;
             return true;
         }
         else {
@@ -204,7 +205,7 @@ InteractableObject = SpeakingObject.extend({
     init: function (x, y, width, height, name, image) {
         this._super(x, y, width, height, name, image);
         // Arrival point for Hero alignment
-        this.interactedAtTheMoment = false;
+        this.isInteracted = false;
     },
 });
 
