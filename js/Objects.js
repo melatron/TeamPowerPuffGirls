@@ -82,10 +82,10 @@ SpeakingObject = GameObject.extend({
         this.image = null;
         this.radius = 20;
         this.bubbleHeight = 120;
-        this.portraitX = x + width;
-        this.portraitY = y;
-        this.speechX = this.portraitX + 130;
-        this.speechY = y + this.radius;
+        this.portraitX = 675;
+        this.portraitY = 120;
+        this.speechX = this.portraitX - 80;
+        this.speechY = y + 230;
         this.portrait = new Portrait(this.portraitX, this.portraitY, this.image);
         this.speech = new Speech(this.speechX , this.speechY);
         
@@ -97,17 +97,20 @@ SpeakingObject = GameObject.extend({
         speech.drawSpeech();
         // Drawing the bubble >>>
         var x = this.speechX - 50,
-            y = this.y + 170,
-            r = x + this.speech.maxWidth + 30,
+            y = this.speechY,
+            r = x + speech.maxWidth + 30,
             b = y + this.bubbleHeight;
         ctx.save();
         ctx.beginPath();
         ctx.fillStyle = "white";
         ctx.lineWidth = "3";
+        
         ctx.moveTo(x + this.radius, y);
-        ctx.lineTo(x + this.radius / 2, y - 10);
-        ctx.lineTo(x + this.radius * 2, y);
-        ctx.lineTo(r - this.radius, y);
+        ctx.lineTo(r - this.radius * 2, y);
+        ctx.lineTo(r - this.radius / 2, y - 15);
+        ctx.lineTo(r - this.radius , y);
+        //ctx.lineTo(r - this.radius, y);
+        
         ctx.quadraticCurveTo(r, y, r, y + this.radius);
         ctx.lineTo(r, y + this.bubbleHeight - this.radius);
         ctx.quadraticCurveTo(r, b, r - this.radius, b);
