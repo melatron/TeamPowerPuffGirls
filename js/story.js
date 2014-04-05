@@ -4,34 +4,41 @@ Story = Class.extend({
         this.interactableObjects = new Array();
         var humanCastle = new ClickPoint(100, 50, 140, 100, "humanCastle",
         													{
-        														x: 170,
+        														x: 175,
         														y: 150
         													}
         	),
             dwarfCamp = new ClickPoint(622, 68, 100, 50, "dwarfCamp", 
             												{
-            													x: 660,
+            													x: 655,
             													y: 130
             												}
             ),
             treeOfLife = new ClickPoint(70, 377, 100, 100, "treeOfLife", 
             												{
-            													x: 170,
+            													x: 175,
             													y: 364
             												}
             ),
             mage = new ClickPoint(790, 200, 50, 50, 'mage',
             												{
-            													x:830,
-            													y:250
+            													x: 810,
+            													y: 250
             												}
             
             
+            ),
+            dragon = new ClickPoint(675, 300, 50, 50, 'dragon',
+                                                            {
+                                                                x: 660,
+                                                                y: 345
+                                                            }
             );
         this.interactableObjects.push(humanCastle);
         this.interactableObjects.push(dwarfCamp);
         this.interactableObjects.push(treeOfLife);
         this.interactableObjects.push(mage);
+        this.interactableObjects.push(dragon);
         //
         this.movableObjects = new Array();
         this.staticSpriteObjects = new Array();
@@ -42,7 +49,7 @@ Story = Class.extend({
         // Hero have is not yet implemented!
         this.hero = new Heroes(0, 256, 32, 32, "hero");
         
-        this.elder = new AIMovableObject(790, 200, 32, 32, "theMage", {
+        this.elder = new AIMovableObject(790, 200, 32, 32, "theMage", this.interactableObjects[3], {
             x:820,
             y:200
         }, {
@@ -51,7 +58,7 @@ Story = Class.extend({
             yMin: 200,
             yMax: 240
         });
-        this.dragon = new AIMovableObject(730, 420, 96, 96, "dragon", {
+        this.dragon = new AIMovableObject(730, 420, 96, 96, "dragon", this.interactableObjects[4], {
             x: 780,
             y: 420
         }, {
@@ -99,23 +106,24 @@ Story = Class.extend({
 			this.sprites[i].src = arguments[i];
 		}
 		
-		this.hero.spriteUp = new Sprite(96, 32, 3, story.sprites[0], story.hero);  // create Sprites
-		this.hero.spriteDown = new Sprite(96, 32, 3, story.sprites[1], story.hero);
-		this.hero.spriteLeft = new Sprite(96, 32, 3, story.sprites[2], story.hero);
-		this.hero.spriteRight = new Sprite(96, 32, 3, story.sprites[3], story.hero);
-		this.hero.spriteIdle = new Sprite(32, 32, 1, story.sprites[1], story.hero);
+		this.hero.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[0], story.hero);  // create Sprites
+		this.hero.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[1], story.hero);
+		this.hero.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[2], story.hero);
+		this.hero.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[3], story.hero);
+		this.hero.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[1], story.hero);
 		
-		this.elder.spriteUp = new Sprite(96, 32, 3, story.sprites[4], story.elder);
-		this.elder.spriteDown = new Sprite(96, 32, 3, story.sprites[5], story.elder);
-		this.elder.spriteLeft = new Sprite(96, 32, 3, story.sprites[6], story.elder);
-		this.elder.spriteRight = new Sprite(96, 32, 3, story.sprites[7], story.elder);
-		this.elder.spriteIdle = new Sprite(32, 32, 1, story.sprites[5], story.elder);
+		this.elder.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[4], story.elder);
+		this.elder.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[5], story.elder);
+		this.elder.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[6], story.elder);
+		this.elder.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[7], story.elder);
+		this.elder.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[5], story.elder);
 
-        this.dragon.spriteUp = new Sprite(288, 96, 3, story.sprites[8], story.dragon);
-        this.dragon.spriteDown = new Sprite(288, 96, 3, story.sprites[9], story.dragon);
-        this.dragon.spriteLeft = new Sprite(288, 96, 3, story.sprites[10], story.dragon);
-        this.dragon.spriteRight = new Sprite(288, 96, 3, story.sprites[11], story.dragon);
-        this.dragon.spriteIdle = new Sprite(96, 96, 1, story.sprites[9], story.dragon);
+        this.dragon.spriteUp = new Sprite(288, 96, 3, 4, story.sprites[8], story.dragon);
+        this.dragon.spriteDown = new Sprite(288, 96, 3, 4, story.sprites[9], story.dragon);
+        this.dragon.spriteLeft = new Sprite(288, 96, 3, 4, story.sprites[10], story.dragon);
+        this.dragon.spriteRight = new Sprite(288, 96, 3, 4, story.sprites[11], story.dragon);
+        this.dragon.spriteIdle = new Sprite(96, 96, 1, 4, story.sprites[9], story.dragon);
+        this.dragon.getDestinationDelay = 250;
 	},
     
 	preloadPortraits: function(){
@@ -156,6 +164,10 @@ Story = Class.extend({
             currentObject = this.interactableObjects[i];
             if (currentObject.checkIfClicked(mouseX, mouseY)) {
                 this.hero.setDestinaion(currentObject);         //set destination for hero
+
+                for (var j = 0; j < this.interactableObjects.length; j++){
+                    this.interactableObjects[j].isInteracting = false;
+                }
             }
         }
     },
@@ -212,8 +224,8 @@ function myfunction(e) {
 function mainLoop() {
 	ctx.save();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    story.elder.setRandomDestination()
     story.hero.moveHeroToDestination();
-    story.elder.setRandomDestination();
     story.dragon.setRandomDestination();
     story.drawInteractableObject();
     ctx.restore();
@@ -276,7 +288,7 @@ window.onload = function () {
 	soundtrack.play();
     game = new Game();
 
-    //mainLoop = setInterval(mainLoop, 30);
+    mainLoop = setInterval(mainLoop, 30);
     canvas.addEventListener("click", myfunction, false);
 
     window.addEventListener('keydown', listenKeyEvents, false);

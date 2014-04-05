@@ -148,6 +148,7 @@ MovableObject = SpeakingObject.extend({
         this.spriteRight = null;
         this.spriteIdle = null;
         this.destination = null;
+        this.destinationObject = null;
     },
     
     //-- function for vertical movement --//
@@ -188,7 +189,10 @@ MovableObject = SpeakingObject.extend({
         var roadY = 250;
         if ((this.x <= this.destination.x && this.destination.x <= this.x + 10) && (this.y <= this.destination.y && this.destination.y <= this.y + 10)) {
             this.idle();
-            this.destination.isInteracted = true;
+            if(this.destinationObject)
+            {
+                this.destinationObject.isInteracting = true;
+            }
             return true;
         }
         else {
@@ -265,6 +269,8 @@ ClickPoint = InteractableObject.extend({
     	ctx.save();
     	ctx.fillStyle = "rgba(20, 20, 20, 0.2)";   // Temporary bounding rect for click point
         ctx.fillRect(this.x, this.y, this.width, this.height);//testing
+        ctx.fillStyle = "rgba(20, 20, 20, 0.7";
+        ctx.fillRect(this.arrivalPoint.x, this.arrivalPoint.y, 10, 10);
         ctx.restore();
     },
 
@@ -290,6 +296,7 @@ Heroes = MovableObject.extend({
     setDestinaion: function (intObject) {
         this.destination.x = intObject.arrivalPoint.x;
         this.destination.y = intObject.arrivalPoint.y;
+        this.destinationObject = intObject;
     },
     drawSpeechBubble: function () {
         this.portrait.drawPortrait();
@@ -327,28 +334,30 @@ Heroes = MovableObject.extend({
         ctx.stroke();
         ctx.restore();
         // Drawing the text inside the bubble >>>
-        
+
     }
 
 });
 
 AIMovableObject = MovableObject.extend({
-    init: function (x, y, width, height, name, destination, limit) {
+    init: function (x, y, width, height, name, clickPoint, destination, limit) {
 		this._super(x, y, height, name);
 		this.destination = destination;
         this.limit = limit;
-		this.getDestinationDelay = 0;
+        this.clickPoint = clickPoint;
+		this.getDestinationCounter = 0;
+        this.getDestinationDelay = 100;
 		this.speed = 1;
 	},
 	setRandomDestination: function(){
-		if(story.interactableObjects[3].isInteracting){
+		if(this.clickPoint.isInteracting){
 			
 		}
-		else if(this.getDestinationDelay % 100 == 0){
+		else if(this.getDestinationCounter % this.getDestinationDelay == 0){
 			this.destination.x = Math.floor(Math.random() * (this.limit.xMax - this.limit.xMin + 1) + this.limit.xMin);
 			this.destination.y = Math.floor(Math.random() * (this.limit.yMax - this.limit.yMin + 1) + this.limit.yMin);
 		}
-		this.getDestinationDelay ++;
+		this.getDestinationCounter ++;
 		this.moveNPCToDestination(this.destination);
 	}
 });
@@ -356,10 +365,11 @@ AIMovableObject = MovableObject.extend({
 //======== SPRITE OBJECTS ==========//
 
 Sprite = Class.extend({
-	init: function(width, height, frames, image, object){
+	init: function(width, height, frames, renderSpeed, image, object){
 		this.width = width;
 		this.height = height;
 		this.frames = frames;
+        this.renderSpeed = renderSpeed;
 		this.image = image;
 		this.object = object; // The object that is being animated
 		this.frameCounter = 0;
@@ -381,7 +391,7 @@ Sprite = Class.extend({
 				this.height
 		);
 		this.tickCounter++;
-		if(this.tickCounter % 2 != 0){
+		if(this.tickCounter % this.renderSpeed == 0){
 			this.frameCounter++;			
 		}
 		
