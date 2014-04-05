@@ -40,11 +40,25 @@ Story = Class.extend({
         this.sprites = new Array();
         this.portraits = new Array();
         // Hero have is not yet implemented!
-        this.hero = new Heroes(0, 256, 32, 32, "Gosho");
+        this.hero = new Heroes(0, 256, 32, 32, "hero");
         
         this.elder = new AIMovableObject(790, 200, 32, 32, "theMage", {
             x:820,
             y:200
+        }, {
+            xMin: 780,
+            xMax: 820,
+            yMin: 200,
+            yMax: 240
+        });
+        this.dragon = new AIMovableObject(730, 420, 96, 96, "dragon", {
+            x: 780,
+            y: 420
+        }, {
+            xMin: 680,
+            xMax: 810,
+            yMin: 300,
+            yMax: 420
         });
     },
     
@@ -59,7 +73,11 @@ Story = Class.extend({
     		elderSpriteUpImage = null, 
     		elderSpriteDownImage = null,
     		elderSpriteLeftImage = null,
-    		elderSpriteRightImage = null;
+    		elderSpriteRightImage = null,
+            dragonSpriteUpImage = null,
+            dragonSpriteDownImage = null,
+            dragonSpriteLeftImage = null,
+            dragonSpriteRightImage = null;
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
     	this.sprites.push(heroSpriteDownImage);
@@ -70,36 +88,34 @@ Story = Class.extend({
     	this.sprites.push(elderSpriteDownImage);
     	this.sprites.push(elderSpriteLeftImage);
     	this.sprites.push(elderSpriteRightImage);
+
+        this.sprites.push(dragonSpriteUpImage);
+        this.sprites.push(dragonSpriteDownImage);
+        this.sprites.push(dragonSpriteLeftImage);
+        this.sprites.push(dragonSpriteRightImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
 			this.sprites[i].src = arguments[i];
 		}
 		
-		heroSpriteUp = new Sprite(96, 32, 3, story.sprites[0], story.hero);  // create Sprites
-		heroSpriteDown = new Sprite(96, 32, 3, story.sprites[1], story.hero);
-		heroSpriteLeft = new Sprite(96, 32, 3, story.sprites[2], story.hero);
-		heroSpriteRight = new Sprite(96, 32, 3, story.sprites[3], story.hero);
-		heroSpriteIdle = new Sprite(32, 32, 1, story.sprites[1], story.hero);
+		this.hero.spriteUp = new Sprite(96, 32, 3, story.sprites[0], story.hero);  // create Sprites
+		this.hero.spriteDown = new Sprite(96, 32, 3, story.sprites[1], story.hero);
+		this.hero.spriteLeft = new Sprite(96, 32, 3, story.sprites[2], story.hero);
+		this.hero.spriteRight = new Sprite(96, 32, 3, story.sprites[3], story.hero);
+		this.hero.spriteIdle = new Sprite(32, 32, 1, story.sprites[1], story.hero);
 		
-		elderSpriteUp = new Sprite(96, 32, 3, story.sprites[4], story.elder);
-		elderSpriteDown = new Sprite(96, 32, 3, story.sprites[5], story.elder);
-		elderSpriteLeft = new Sprite(96, 32, 3, story.sprites[6], story.elder);
-		elderSpriteRight = new Sprite(96, 32, 3, story.sprites[7], story.elder);
-		elderSpriteIdle = new Sprite(32, 32, 1, story.sprites[5], story.elder);
-		elderSpriteIdle.startY = 0;
-		
-		this.hero.spriteUp = heroSpriteUp; // define hero sprites
-		this.hero.spriteDown = heroSpriteDown;
-		this.hero.spriteLeft = heroSpriteLeft;
-		this.hero.spriteRight = heroSpriteRight;
-		this.hero.spriteIdle = heroSpriteIdle;
-		
-		this.elder.spriteUp = elderSpriteUp;
-		this.elder.spriteDown = elderSpriteDown;
-		this.elder.spriteLeft = elderSpriteLeft;
-		this.elder.spriteRight = elderSpriteRight;
-		this.elder.spriteIdle = elderSpriteIdle;
+		this.elder.spriteUp = new Sprite(96, 32, 3, story.sprites[4], story.elder);
+		this.elder.spriteDown = new Sprite(96, 32, 3, story.sprites[5], story.elder);
+		this.elder.spriteLeft = new Sprite(96, 32, 3, story.sprites[6], story.elder);
+		this.elder.spriteRight = new Sprite(96, 32, 3, story.sprites[7], story.elder);
+		this.elder.spriteIdle = new Sprite(32, 32, 1, story.sprites[5], story.elder);
+
+        this.dragon.spriteUp = new Sprite(288, 96, 3, story.sprites[8], story.dragon);
+        this.dragon.spriteDown = new Sprite(288, 96, 3, story.sprites[9], story.dragon);
+        this.dragon.spriteLeft = new Sprite(288, 96, 3, story.sprites[10], story.dragon);
+        this.dragon.spriteRight = new Sprite(288, 96, 3, story.sprites[11], story.dragon);
+        this.dragon.spriteIdle = new Sprite(96, 96, 1, story.sprites[9], story.dragon);
 	},
     
 	preloadPortraits: function(){
@@ -196,8 +212,9 @@ function myfunction(e) {
 function mainLoop() {
 	ctx.save();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    story.hero.moveHeroToDestination(story.hero.destination);
-    story.elder.setRandomDestination(story.elder.destination);
+    story.hero.moveHeroToDestination();
+    story.elder.setRandomDestination();
+    story.dragon.setRandomDestination();
     story.drawInteractableObject();
     ctx.restore();
     
@@ -239,7 +256,11 @@ window.onload = function () {
 			"source/elderMoveUp.png",
 			"source/elderMoveDown.png",
 			"source/elderMoveLeft.png",
-			"source/elderMoveRight.png"
+			"source/elderMoveRight.png",
+            "source/dragonMoveUp.png",
+            "source/dragonMoveDown.png",
+            "source/dragonMoveLeft.png",
+            "source/dragonMoveRight.png"
 	);
 	
 	story.preloadPortraits(

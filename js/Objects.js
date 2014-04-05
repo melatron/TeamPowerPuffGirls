@@ -1,14 +1,5 @@
 var ctx,
     canvas,
-    heroSpriteUp, 
-    heroSpriteDown,
-    heroSpriteLeft,
-    heroSpriteRight,
-    heroSpriteIdle,
-    elderSpriteUp,
-    elderSpriteDown,
-    elderSpriteLeft,
-    elderSpriteRight,
     soundtrack;
 // ============== MAIN OBJECT CLASS ============//
 
@@ -144,6 +135,7 @@ MovableObject = SpeakingObject.extend({
         this.spriteLeft = null;
         this.spriteRight = null;
         this.spriteIdle = null;
+        this.destination = null;
     },
     
     //-- function for vertical movement --//
@@ -180,32 +172,32 @@ MovableObject = SpeakingObject.extend({
 
     //-- this function checks last clicked destination and moves the hero there --//
     
-    moveHeroToDestination: function (destination) {
+    moveHeroToDestination: function () {
         var roadY = 250;
-        if ((this.x <= destination.x && destination.x <= this.x + 10) && (this.y <= destination.y && destination.y <= this.y + 10)) {
+        if ((this.x <= this.destination.x && this.destination.x <= this.x + 10) && (this.y <= this.destination.y && this.destination.y <= this.y + 10)) {
             this.idle();
-            destination.isInteracted = true;
+            this.destination.isInteracted = true;
             return true;
         }
         else {
             if ((this.y < roadY && roadY > this.y + 10) || (this.y > roadY && roadY < this.y + 10)) {
-                if (!(this.x <= destination.x && destination.x <= this.x + 10)) {
+                if (!(this.x <= this.destination.x && this.destination.x <= this.x + 10)) {
                     this.moveVertical(roadY);
                     return;
 
                 }
-                else if (this.x <= destination.x && destination.x <= this.x + 10) {
-                    this.moveVertical(destination.y);
+                else if (this.x <= this.destination.x && this.destination.x <= this.x + 10) {
+                    this.moveVertical(this.destination.y);
                     return;
                 }
             }
             else if (this.y <= roadY && roadY <= this.y + 10) {
-                if (!(this.x <= destination.x && destination.x <= this.x + 10)) {
-                    this.moveHorizontal(destination.x);
+                if (!(this.x <= this.destination.x && this.destination.x <= this.x + 10)) {
+                    this.moveHorizontal(this.destination.x);
                     return;
                 }
-                else if (!(this.y <= destination.y && destination.y <= this.y + 10)) {
-                    this.moveVertical(destination.y);
+                else if (!(this.y <= this.destination.y && this.destination.y <= this.y + 10)) {
+                    this.moveVertical(this.destination.y);
                     return;
                 }
             }
@@ -213,18 +205,18 @@ MovableObject = SpeakingObject.extend({
         }
     },
     
-    moveNPCToDestination: function(destination){
-        if ((this.x <= destination.x && destination.x <= this.x + 10) && (this.y <= destination.y && destination.y <= this.y + 10)) {
+    moveNPCToDestination: function(){
+        if ((this.x <= this.destination.x && this.destination.x <= this.x + 10) && (this.y <= this.destination.y && this.destination.y <= this.y + 10)) {
             this.idle();
             return true;
         }
         else{
-        	if (!(this.x <= destination.x && destination.x <= this.x + 10)) {
-                this.moveHorizontal(destination.x);
+        	if (!(this.x <= this.destination.x && this.destination.x <= this.x + 10)) {
+                this.moveHorizontal(this.destination.x);
                 return;
             }
-            else if (!(this.y <= destination.y && destination.y <= this.y + 10)) {
-                this.moveVertical(destination.y);
+            else if (!(this.y <= this.destination.y && this.destination.y <= this.y + 10)) {
+                this.moveVertical(this.destination.y);
                 return;
             }
         }
@@ -287,9 +279,10 @@ Heroes = MovableObject.extend({
 });
 
 AIMovableObject = MovableObject.extend({
-    init: function (x, y, width, height, name, destination) {
+    init: function (x, y, width, height, name, destination, limit) {
 		this._super(x, y, height, name);
 		this.destination = destination;
+        this.limit = limit;
 		this.getDestinationDelay = 0;
 		this.speed = 1;
 	},
@@ -298,8 +291,8 @@ AIMovableObject = MovableObject.extend({
 			
 		}
 		else if(this.getDestinationDelay % 100 == 0){
-			this.destination.x = Math.floor(Math.random() * (840 - 780 + 1) + 780);
-			this.destination.y = Math.floor(Math.random() * (240 - 200 + 1) + 200);
+			this.destination.x = Math.floor(Math.random() * (this.limit.xMax - this.limit.xMin + 1) + this.limit.xMin);
+			this.destination.y = Math.floor(Math.random() * (this.limit.yMax - this.limit.yMin + 1) + this.limit.yMin);
 		}
 		this.getDestinationDelay ++;
 		this.moveNPCToDestination(this.destination);
