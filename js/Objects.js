@@ -234,8 +234,8 @@ MovableObject = SpeakingObject.extend({
 // ==== INTERACTABLE OBJECT CLASS ==== //
 
 InteractableObject = SpeakingObject.extend({
-    init: function (x, y, width, height, name, image) {
-        this._super(x, y, width, height, name, image);
+    init: function (x, y, width, height, name) {
+        this._super(x, y, width, height, name);
         // Arrival point for Hero alignment
         this.isInteracting = false;
     },
@@ -270,8 +270,8 @@ ClickPoint = InteractableObject.extend({
 //=== Hero objects ====//
 
 Heroes = MovableObject.extend({
-    init: function (x, y, width, height, name, image) {
-        this._super(x, y, width, height, name, image);
+    init: function (x, y, width, height, name) {
+        this._super(x, y, width, height, name);
         this.isInteracting = false;
         this.destination = {
             x: 50,
@@ -286,13 +286,10 @@ Heroes = MovableObject.extend({
 
 });
 
-Elder = MovableObject.extend({
-	init: function (x, y, width, height, name, image) {
-		this._super(x, y, height, name, image);
-		this.destination = {
-				x:820,
-				y:200
-		};
+AIMovableObject = MovableObject.extend({
+    init: function (x, y, width, height, name, destination) {
+		this._super(x, y, height, name);
+		this.destination = destination;
 		this.getDestinationDelay = 0;
 		this.speed = 1;
 	},

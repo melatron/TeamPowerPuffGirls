@@ -42,7 +42,10 @@ Story = Class.extend({
         // Hero have is not yet implemented!
         this.hero = new Heroes(0, 256, 32, 32, "Gosho");
         
-        this.elder = new Elder(790, 200, 32, 32, "theMage");
+        this.elder = new AIMovableObject(790, 200, 32, 32, "theMage", {
+            x:820,
+            y:200
+        });
     },
     
     // ---- Methods for preloading images ---- //
