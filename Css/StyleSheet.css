@@ -1,5 +1,6 @@
 body {
     background-image: url("../source/forest.png");
+    cursor: url(../source/cursor.cur), auto;
 }
 
 #borderDiv{

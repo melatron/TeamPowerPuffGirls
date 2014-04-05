@@ -186,7 +186,7 @@ MovableObject = SpeakingObject.extend({
     //-- this function checks last clicked destination and moves the hero there --//
     
     moveHeroToDestination: function () {
-        var roadY = 250;
+        var roadY = 247;
         if ((this.x <= this.destination.x && this.destination.x <= this.x + 10) && (this.y <= this.destination.y && this.destination.y <= this.y + 10)) {
             this.idle();
             if(this.destinationObject)
@@ -344,6 +344,7 @@ AIMovableObject = MovableObject.extend({
 		this._super(x, y, height, name);
 		this.destination = destination;
         this.limit = limit;
+        this.name = name;
         this.clickPoint = clickPoint;
 		this.getDestinationCounter = 0;
         this.getDestinationDelay = 100;
@@ -351,6 +352,18 @@ AIMovableObject = MovableObject.extend({
 	},
 	setRandomDestination: function(){
 		if(this.clickPoint.isInteracting){
+            if (this.name == 'dragon'){
+                this.destination = {
+                    x: this.clickPoint.arrivalPoint.x + 30,
+                    y: this.clickPoint.arrivalPoint.y - 50
+                }
+            }
+            else{
+                this.destination = {
+                    x: this.clickPoint.arrivalPoint.x + 30,
+                    y: this.clickPoint.arrivalPoint.y + 4
+                }
+            }
 			
 		}
 		else if(this.getDestinationCounter % this.getDestinationDelay == 0){
