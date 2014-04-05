@@ -160,7 +160,7 @@ Story = Class.extend({
         
         console.log("Mouse X: " + mouseX + " Mouse Y: " + mouseY);
         
-        for (var i = 0, len = this.interactableObjects.length; i < len; i++) {  // check if clicked
+        for (var i = 0; i < this.interactableObjects.length; i++) {  // check if clicked
             currentObject = this.interactableObjects[i];
             if (currentObject.checkIfClicked(mouseX, mouseY)) {
                 this.hero.setDestinaion(currentObject);         //set destination for hero
@@ -168,6 +168,13 @@ Story = Class.extend({
                 for (var j = 0; j < this.interactableObjects.length; j++){
                     this.interactableObjects[j].isInteracting = false;
                 }
+            }
+        }
+    },
+    checkIfSpeaking: function () {
+        for (var i = 0; i < this.interactableObjects.length; i++) {
+            if (this.interactableObjects[i].isInteracting) {
+                this.interactableObjects[i].drawSpeechBubble();
             }
         }
     },
@@ -228,6 +235,7 @@ function mainLoop() {
     story.hero.moveHeroToDestination();
     story.dragon.setRandomDestination();
     story.drawInteractableObject();
+    story.checkIfSpeaking();
     ctx.restore();
     
 }
