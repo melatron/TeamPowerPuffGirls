@@ -136,11 +136,11 @@ Story = Class.extend({
 			this.portraits[i].src = arguments[i];
 		}
 		
-		this.hero.image = this.portraits[0];
-		this.interactableObjects[3].image = this.portraits[1];
-		this.interactableObjects[2].image = this.portraits[2];
-		this.interactableObjects[1].image = this.portraits[3];
-		this.interactableObjects[0].image = this.portraits[4];
+		this.hero.setImage(this.portraits[0]);
+		this.interactableObjects[3].setImage(this.portraits[1]);
+		this.interactableObjects[2].setImage(this.portraits[2]);
+		this.interactableObjects[1].setImage(this.portraits[3]);
+		this.interactableObjects[0].setImage(this.portraits[4]);
 		
 	},
 	

@@ -29,10 +29,10 @@ GameObject = Class.extend({
 
 // =============== SPEAKING OBJECT CLASS ===================== // ( object which can spawn speech bubbles )
 Portrait = Class.extend({
-    init: function (x, y, image) {
+    init: function (x, y) {
         this.x = x;
         this.y = y;
-        this.image = image;
+        this.image = null;
     },
     drawPortrait: function () {
         ctx.drawImage(this.image, this.x, this.y, this.image.width, this.image.height);
@@ -80,25 +80,34 @@ SpeakingObject = GameObject.extend({
     init: function (x, y, width, height, name) {
         this._super(x, y, width, height, name);
         this.image = null;
-        this.radius = 20;
+        this.radius = 30;
         this.bubbleHeight = 120;
         this.portraitX = 675;
         this.portraitY = 120;
         this.speechX = this.portraitX - 80;
-        this.speechY = y + 230;
-        this.portrait = new Portrait(this.portraitX, this.portraitY, this.image);
+        this.speechY = 280;
+        this.portrait = new Portrait(this.portraitX, this.portraitY);
         this.speech = new Speech(this.speechX , this.speechY);
         
     },
+    setImage: function (image) {
+        this.image = image;
+        this.portrait.image = image;
+    },
+    setCoordinates: function (portraitX, portraitY, speechX, speechY) {
+        this.portrait.x = portraitX;
+        this.portrait.y = portraitY;
+        this.speech.x = speechX;
+        this.speech.y = speechY;
+    },
     drawSpeechBubble: function () {
-        var portrait = new Portrait(this.portraitX, this.portraitY, this.image),
-            speech = new Speech(this.speechX, this.speechY);
-        portrait.drawPortrait();
-        speech.drawSpeech();
+        this.speech.getSpeech(name);
+        this.portrait.drawPortrait();
+        this.speech.drawSpeech();
         // Drawing the bubble >>>
         var x = this.speechX - 50,
             y = this.speechY,
-            r = x + speech.maxWidth + 30,
+            r = x + this.speech.maxWidth + 30,
             b = y + this.bubbleHeight;
         ctx.save();
         ctx.beginPath();
@@ -272,11 +281,53 @@ Heroes = MovableObject.extend({
             x: 50,
             y: 250
         };
+        this.portraitX = 235;
+        this.portraitY = 120;
+        this.speechX = this.portraitX + 150;
+        this.setCoordinates(this.portraitX, this.portraitY, this.speechX, this.speechY);
     },
     //-- Sets initial destination for the main character --//
     setDestinaion: function (intObject) {
         this.destination.x = intObject.arrivalPoint.x;
         this.destination.y = intObject.arrivalPoint.y;
+    },
+    drawSpeechBubble: function () {
+        this.portrait.drawPortrait();
+        this.speech.drawSpeech();
+        // Drawing the bubble >>>
+        var x = this.speechX - 50,
+            y = this.speechY,
+            r = x + this.speech.maxWidth + 30,
+            b = y + this.bubbleHeight;
+        ctx.save();
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.lineWidth = "3";
+        //
+        ctx.moveTo(x + this.radius, y);
+        ctx.lineTo(x + this.radius / 2, y - 15);
+        ctx.lineTo(x + this.radius * 2, y);
+        ctx.lineTo(r - this.radius, y);
+        //
+        //ctx.moveTo(x + this.radius, y);
+        //ctx.lineTo(r - this.radius * 2, y);
+        //ctx.lineTo(r - this.radius / 2, y - 15);
+        //ctx.lineTo(r - this.radius, y);
+        //ctx.lineTo(r - this.radius, y);
+
+        ctx.quadraticCurveTo(r, y, r, y + this.radius);
+        ctx.lineTo(r, y + this.bubbleHeight - this.radius);
+        ctx.quadraticCurveTo(r, b, r - this.radius, b);
+        ctx.lineTo(x + this.radius, b);
+        ctx.quadraticCurveTo(x, b, x, b - this.radius);
+        ctx.lineTo(x, y + this.radius);
+        ctx.quadraticCurveTo(x, y, x + this.radius, y);
+        ctx.fill();
+        ctx.strokeStyle = "black";
+        ctx.stroke();
+        ctx.restore();
+        // Drawing the text inside the bubble >>>
+        
     }
 
 });
