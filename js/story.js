@@ -235,7 +235,7 @@ function mainLoop() {
     story.hero.moveHeroToDestination();
     story.dragon.setRandomDestination();
     story.drawInteractableObject();
-    story.checkIfSpeaking();
+ //   story.checkIfSpeaking();
     ctx.restore();
     
 }
