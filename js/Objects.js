@@ -60,20 +60,12 @@ Speech = Class.extend({
     drawSpeech: function () {
         ctx.fillStyle = "black";
         ctx.font = "12px Georgia";
-        for (var i = this.indexOfSpokenSpeech; i < this.endSentence; i++) {
+        //for (var i = this.indexOfSpokenSpeech; i < this.endSentence; i++) {
+        //    ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), this.maxWidth);
+        //}
+        for (var i = 0, len = this.textArray.length; i < len; i++) {
             ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), this.maxWidth);
         }
-    },
-    getSpeech: function (questName) {
-        $.ajax({
-            url: "serverPart.php",
-            data: {
-                fileName: questName,
-            }
-        }).done(function (data) {
-            //console.log(data);
-            this.textArrey = data.split("|");
-        })
     }
 });
 SpeakingObject = GameObject.extend({
@@ -101,14 +93,14 @@ SpeakingObject = GameObject.extend({
         this.speech.y = speechY;
     },
     drawSpeechBubble: function () {
-        this.speech.getSpeech(name);
-        this.portrait.drawPortrait();
-        this.speech.drawSpeech();
-        // Drawing the bubble >>>
         var x = this.speechX - 50,
             y = this.speechY,
             r = x + this.speech.maxWidth + 30,
-            b = y + this.bubbleHeight;
+            b = y + this.bubbleHeight,
+            _that=this;
+        //this.speech.getSpeech(name);    this should NOT be in the main loop 
+        this.portrait.drawPortrait();
+        // Drawing the bubble >>>
         ctx.save();
         ctx.beginPath();
         ctx.fillStyle = "white";
@@ -132,7 +124,20 @@ SpeakingObject = GameObject.extend({
         ctx.stroke();
         ctx.restore();
         // Drawing the text inside the bubble >>>
+        this.speech.drawSpeech();
             
+    },
+    getSpeech: function (questName) {
+        var _that = this;
+        $.ajax({
+            url: "serverPart.php",
+            data: {
+                fileName: questName,
+            }
+        }).done(function (data) {
+            console.log(_that.speech);
+            _that.speech.textArray = data.split("|");
+        })
     }
 });
 
@@ -262,6 +267,7 @@ ClickPoint = InteractableObject.extend({
     checkIfClicked: function (mouseX, mouseY) {
         // if x between this x and this.x + this.width AND if y between this.y and this.y+this.height
         if ((mouseX > this.x && mouseX < (this.x + this.width)) && (mouseY > this.y && mouseY < (this.y + this.height))) {
+            this.getSpeech(this.name);
             return true;
         }
     },
