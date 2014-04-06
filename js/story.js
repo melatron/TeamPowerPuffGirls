@@ -304,7 +304,7 @@ window.onload = function () {
 	soundtrack = new Audio();
 	soundtrack.src = 'source/mainSoundtrack.mp3';
 	soundtrack.load();
-	soundtrack.play();
+//	soundtrack.play();
     game = new Game();
 
     mainLoop = setInterval(mainLoop, 30);

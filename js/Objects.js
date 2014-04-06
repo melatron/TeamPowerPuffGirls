@@ -28,6 +28,7 @@ GameObject = Class.extend({
 });
 
 // =============== SPEAKING OBJECT CLASS ===================== // ( object which can spawn speech bubbles )
+
 Portrait = Class.extend({
     init: function (x, y) {
         this.x = x;
@@ -226,7 +227,7 @@ MovableObject = SpeakingObject.extend({
         }
     },
     
-    // ==== Function for moving the NPCs === //
+    // ==== Function for moving the NPCs around === //
     
     moveNPCToDestination: function(){
         if ((this.x <= this.destination.x && this.destination.x <= this.x + 10) && (this.y <= this.destination.y && this.destination.y <= this.y + 10)) {

@@ -25,13 +25,14 @@ body {
     background-image:url(../source/background.png)
 }
 #gamePlot {
-	width : 800px;
-	height: 258px;
+	width : 796px;
+	height: 250px;
 	float: left;
+	border: px solid blue;
 }
 #inventory {
-	width: 208px;
-	height: 260px;
+	width: 224px;
+	height: 256px;
 	float: left;
 }
 
@@ -96,28 +97,31 @@ body {
 /*moar work to be done here*/
 
 #inventory-container {
-	width: 180px;
-    height: 260px;
+	background-image: url(../source/inventory.png);
+	width: 224px;
+    height: 250px;
+    margin-right: 3px;
     float: right;
-    border: 1px solid black;
-    background-size: 180px 260px;
+ /*   background-size: 180px 260px; */
     z-index:1;
 }
 
 #inventory {
-    margin: 30px 15px 0px 15px;
-    width: 150px;
-    height:230px;
-    border: 1px solid blue;
+    width: 222px;
+    height:250px;
+/*     border: 1px solid blue; */
+	padding-left:1px;
+    padding-top: 2px;
 }
 
 .inventory-slot {
-    width: 60px;
-    height: 60px;
-    margin: 10px 0px 0px 9px;
+    width: 55px;
+    height: 55px;
+    margin-left: 36px;
+    margin-top: 19px;
     float:left;
-    border-radius: 15px;
-    border: 1px solid white;
+    border-radius: 9px;
+/*     border: 1px solid white; */
     overflow:hidden;
 }
 
