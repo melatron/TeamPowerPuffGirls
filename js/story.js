@@ -220,10 +220,11 @@ var story,
     context,
     humanCastle,
     dwarfCamp,
-    mainLoop;
+    mainLoop,
+    squareGame;
 
 
-//  Everything after this paragraph have to be moved to story class.
+//  Everything after this paragraph has to be moved to the story class.
 function myfunction(e) {
     story.clickEvent(e);
 }
@@ -267,7 +268,15 @@ window.onload = function () {
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
 	story = new Story();
-	
+
+	squareGame = new SquareGame();
+	squareGame.populateMap();
+	squareGame.drawMaps();
+
+
+	Inventory = new Inventory();
+	Inventory.getItem('axe');
+
 	story.preloadSprites(
 			"source/heroMoveUp.png",
 			"source/heroMoveDown.png",

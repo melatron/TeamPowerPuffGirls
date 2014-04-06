@@ -413,3 +413,40 @@ Sprite = Class.extend({
 		}
 	}
 });
+
+//--basic inventory objects--//
+
+Inventory = Class.extend({
+    name: "inventory",
+    init: function () {
+
+        this.slots = [0, 0, 0, 0, 0, 0];
+
+        this.getItem = function (name) {
+            var temp = new Item(name);
+            for (var i = 0; i < this.slots.length; i++) {
+                if (this.slots[i] == 0) {
+                    $(temp.dom).appendTo($('.inventory-slot').eq(i))
+                    this.slots[i] = 1;
+                    break;
+                };
+            };
+        };
+
+        this.wasteItem = function (index) {
+            if (this.slots[index] == 1) {
+                $('.inventory-slot').eq(index).html(' ');
+                this.slots[index] = 0;
+            }
+        };
+    }
+});
+
+
+Item = Class.extend({
+    name: 'item',
+    init: function (name) {
+        this.name = name;
+        this.dom = $('<img class ="item" src="source/items/' + this.name + '.png">');
+    }
+});

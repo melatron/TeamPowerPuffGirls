@@ -1,6 +1,7 @@
 body {
     background-image: url("../source/forest.png");
     cursor: url(../source/cursor.cur), auto;
+
 }
 
 #borderDiv{
@@ -29,16 +30,11 @@ body {
 	height: 260px;
 	float: left;
 }
-#inventory {
-	width: 208px;
-	height: 260px;
-	float: left;
-}
 
 #Game6561{
     width: 380px;
     height: 255px;
-    display: block;
+    display: none;
     margin: auto;
     background-color: yellow;
 }
@@ -61,4 +57,67 @@ body {
     background: red;
     position:relative;
 }
+#square-game{
+    width:260px;
+    height:260px;
+    margin:auto;
+    display:block;
+    position:relative;
+    background-image: url(../source/square-game-backgorund.png);
+    background-size:260px 260px;
+}
+
+#square-game-map {
+    width:240px;
+    height:240px;
+    position:absolute;
+    margin:10px 0 0 10px;
+    background-color:grey;
+    opacity:0.3;
+    
+}
+
+.square {
+    opacity:0.8;
+    border-radius: 5px;
+    position: absolute;
+    width:26px;
+    height:26px;
+    border: 2px solid black;
+}
+
+
+/*moar work to be done here*/
+
+#inventory-container {
+	width: 180px;
+    height: 260px;
+    float: right;
+    border: 1px solid black;
+    background-size: 180px 260px;
+    z-index:1;
+}
+
+#inventory {
+    margin: 30px 15px 0px 15px;
+    width: 150px;
+    height:230px;
+    border: 1px solid blue;
+}
+
+.inventory-slot {
+    width: 60px;
+    height: 60px;
+    margin: 10px 0px 0px 9px;
+    float:left;
+    border-radius: 15px;
+    border: 1px solid white;
+    overflow:hidden;
+}
+
+ .item {
+    width:60px;
+    height:60px;
+ }
+
 
