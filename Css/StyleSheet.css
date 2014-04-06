@@ -25,10 +25,11 @@ body {
     background-image:url(../source/background.png)
 }
 #gamePlot {
-	width : 796px;
+	width : 797px;
 	height: 250px;
 	float: left;
-	border: px solid blue;
+	border:px solid blue;
+	background-image: url(../source/gamePlotBackground.png);
 }
 #inventory {
 	width: 224px;
@@ -72,6 +73,7 @@ body {
     position:relative;
     background-image: url(../source/square-game-backgorund.png);
     background-size:260px 260px;
+    display:none;
 }
 
 #square-game-map {
