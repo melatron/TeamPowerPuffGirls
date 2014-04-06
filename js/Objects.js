@@ -60,7 +60,7 @@ Speech = Class.extend({
     drawSpeech: function () {
         ctx.fillStyle = "black";
         ctx.font = "12px Georgia";
-        for (var i = this.indexOfSpokenSpeech; i < this.endSentence; i++) {
+        for (var i = this.startSentence; i < this.endSentence; i++) {
             ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), this.maxWidth);
         }
     },
