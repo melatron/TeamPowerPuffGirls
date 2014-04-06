@@ -126,6 +126,8 @@ Story = Class.extend({
         this.dragon.getDestinationDelay = 250;
 	},
     
+	// ==== Portrait preloader ==== //
+	
 	preloadPortraits: function(){
 		var heroPortrait = null,
 			elfPortrait = null,
@@ -166,7 +168,7 @@ Story = Class.extend({
                 this.hero.setDestinaion(currentObject);         //set destination for hero
 
                 for (var j = 0; j < this.interactableObjects.length; j++){
-                    this.interactableObjects[j].isInteracting = false;
+                    this.interactableObjects[j].isInteracting = false;      // set all other click points to "inactive"
                 }
             }
         }
@@ -264,7 +266,7 @@ function listenKeyEvents(e) {
     }
 }
 window.onload = function () {
-	canvas = document.getElementById('canvas');
+	canvas = $("#canvas")[0];
 	ctx = canvas.getContext('2d');
 	story = new Story();
 	
