@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head lang="en">
     <meta charset="utf-8">
@@ -17,14 +17,14 @@
     
     <script src="js/story.js"></script> 
     
-    
+    <script src="js/SquareGame/SquareGame.js"></script>
 
 </head>
 <body>
 <div id = "borderDiv">
    <div id="main">
         <div id="canvasDiv">
-        <canvas width = "1024" height = "512" id = "canvas"></canvas>
+        <canvas width = "1024" height = "512" id = "canvas">Your Browser Does Not Support Canvas :(</canvas>
         </div>
         <div id="gamePlot">
             <div id="Game6561">
@@ -53,8 +53,25 @@
                     <div class="cell"></div>
                 </div>
             </div>
+
+            <div id="square-game">
+                <div id="square-game-map"></div>
+            </div>
+
         </div>
-        <div id="inventory"> </div>
+
+       
+
+        <div id="inventory-container">
+            <div id='inventory'>
+                <div class='inventory-slot'> </div>
+                <div class='inventory-slot'> </div>
+                <div class='inventory-slot'> </div>
+                <div class='inventory-slot'> </div>
+                <div class='inventory-slot'> </div>
+                <div class='inventory-slot'> </div>
+            </div>
+        </div>
 
     </div>
     </div> 

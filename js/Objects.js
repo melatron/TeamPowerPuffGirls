@@ -196,7 +196,7 @@ MovableObject = SpeakingObject.extend({
             this.idle();
             if(this.destinationObject)
             {
-                this.destinationObject.isInteracting = true;
+                this.destinationObject.isInteracting = true;   //Makes the current click point active
             }
             return true;
         }
@@ -225,6 +225,8 @@ MovableObject = SpeakingObject.extend({
             return false;
         }
     },
+    
+    // ==== Function for moving the NPCs === //
     
     moveNPCToDestination: function(){
         if ((this.x <= this.destination.x && this.destination.x <= this.x + 10) && (this.y <= this.destination.y && this.destination.y <= this.y + 10)) {
@@ -345,6 +347,8 @@ Heroes = MovableObject.extend({
 
 });
 
+// ============== NPC Movable Object Class =============== //
+
 AIMovableObject = MovableObject.extend({
     init: function (x, y, width, height, name, clickPoint, destination, limit) {
 		this._super(x, y, height, name);
@@ -356,6 +360,9 @@ AIMovableObject = MovableObject.extend({
         this.getDestinationDelay = 100;
 		this.speed = 1;
 	},
+	
+	// -- Sets a random destination for "walking around" -- //
+	
 	setRandomDestination: function(){
 		if(this.clickPoint.isInteracting){
             if (this.name == 'dragon'){
@@ -388,12 +395,11 @@ Sprite = Class.extend({
 		this.width = width;
 		this.height = height;
 		this.frames = frames;
-        this.renderSpeed = renderSpeed;
+        this.renderSpeed = renderSpeed;  //The speed with which the frames are changed. Afects the speed of the animation.
 		this.image = image;
 		this.object = object; // The object that is being animated
 		this.frameCounter = 0;
 		this.tickCounter = 0;
-		this.startY = 0;
 	},
 	
 	//-- Function for drawing the sprite --//
@@ -401,7 +407,7 @@ Sprite = Class.extend({
 		ctx.drawImage(
 				this.image,
 				this.frameCounter * (this.width / this.frames),
-				this.startY,
+				0,
 				this.width / this.frames,
 				this.height,
 				this.object.x,
@@ -418,4 +424,41 @@ Sprite = Class.extend({
 			this.frameCounter = 0;
 		}
 	}
+});
+
+//--basic inventory objects--//
+
+Inventory = Class.extend({
+    name: "inventory",
+    init: function () {
+
+        this.slots = [0, 0, 0, 0, 0, 0];
+
+        this.getItem = function (name) {
+            var temp = new Item(name);
+            for (var i = 0; i < this.slots.length; i++) {
+                if (this.slots[i] == 0) {
+                    $(temp.dom).appendTo($('.inventory-slot').eq(i))
+                    this.slots[i] = 1;
+                    break;
+                };
+            };
+        };
+
+        this.wasteItem = function (index) {
+            if (this.slots[index] == 1) {
+                $('.inventory-slot').eq(index).html(' ');
+                this.slots[index] = 0;
+            }
+        };
+    }
+});
+
+
+Item = Class.extend({
+    name: 'item',
+    init: function (name) {
+        this.name = name;
+        this.dom = $('<img class ="item" src="source/items/' + this.name + '.png">');
+    }
 });

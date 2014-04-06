@@ -21,12 +21,12 @@ body {
 }
 #canvasDiv{
 	width: 1020px;
-	height: 500px;
+	height: 512px;
     background-image:url(../source/background.png)
 }
 #gamePlot {
 	width : 800px;
-	height: 260px;
+	height: 258px;
 	float: left;
 }
 #inventory {

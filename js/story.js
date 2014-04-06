@@ -118,14 +118,16 @@ Story = Class.extend({
 		this.elder.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[7], story.elder);
 		this.elder.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[5], story.elder);
 
-        this.dragon.spriteUp = new Sprite(288, 96, 3, 4, story.sprites[8], story.dragon);
-        this.dragon.spriteDown = new Sprite(288, 96, 3, 4, story.sprites[9], story.dragon);
-        this.dragon.spriteLeft = new Sprite(288, 96, 3, 4, story.sprites[10], story.dragon);
-        this.dragon.spriteRight = new Sprite(288, 96, 3, 4, story.sprites[11], story.dragon);
-        this.dragon.spriteIdle = new Sprite(96, 96, 1, 4, story.sprites[9], story.dragon);
+        this.dragon.spriteUp = new Sprite(384, 96, 4, 6, story.sprites[8], story.dragon);
+        this.dragon.spriteDown = new Sprite(384, 96, 4, 6, story.sprites[9], story.dragon);
+        this.dragon.spriteLeft = new Sprite(384, 96, 4, 6, story.sprites[10], story.dragon);
+        this.dragon.spriteRight = new Sprite(384, 96, 4, 6, story.sprites[11], story.dragon);
+        this.dragon.spriteIdle = new Sprite(96, 96, 1, 6, story.sprites[9], story.dragon);
         this.dragon.getDestinationDelay = 250;
 	},
     
+	// ==== Portrait preloader ==== //
+	
 	preloadPortraits: function(){
 		var heroPortrait = null,
 			elfPortrait = null,
@@ -166,7 +168,7 @@ Story = Class.extend({
                 this.hero.setDestinaion(currentObject);         //set destination for hero
 
                 for (var j = 0; j < this.interactableObjects.length; j++){
-                    this.interactableObjects[j].isInteracting = false;
+                    this.interactableObjects[j].isInteracting = false;      // set all other click points to "inactive"
                 }
             }
         }
@@ -220,10 +222,11 @@ var story,
     context,
     humanCastle,
     dwarfCamp,
-    mainLoop;
+    mainLoop,
+    squareGame;
 
 
-//  Everything after this paragraph have to be moved to story class.
+//  Everything after this paragraph has to be moved to the story class.
 function myfunction(e) {
     story.clickEvent(e);
 }
@@ -235,7 +238,7 @@ function mainLoop() {
     story.hero.moveHeroToDestination();
     story.dragon.setRandomDestination();
     story.drawInteractableObject();
-    story.checkIfSpeaking();
+ //   story.checkIfSpeaking();
     ctx.restore();
     
 }
@@ -264,10 +267,18 @@ function listenKeyEvents(e) {
     }
 }
 window.onload = function () {
-	canvas = document.getElementById('canvas');
+	canvas = $("#canvas")[0];
 	ctx = canvas.getContext('2d');
 	story = new Story();
-	
+
+	squareGame = new SquareGame();
+	squareGame.populateMap();
+	squareGame.drawMaps();
+
+
+	Inventory = new Inventory();
+	Inventory.getItem('axe');
+
 	story.preloadSprites(
 			"source/heroMoveUp.png",
 			"source/heroMoveDown.png",
