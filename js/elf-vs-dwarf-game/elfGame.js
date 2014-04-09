@@ -51,7 +51,7 @@ function ElfGame(){
 	};
 	
 	game.updateCharacter = function() {
-		console.log('Up: '+ mainCharacter.moveUp + ' Down: ' + mainCharacter.moveDown + ' Left: ' + mainCharacter.moveLeft + ' Right: ' + mainCharacter.moveRight + ' isMoving: ' + mainCharacter.isMoving);
+		//console.log('Up: '+ mainCharacter.moveUp + ' Down: ' + mainCharacter.moveDown + ' Left: ' + mainCharacter.moveLeft + ' Right: ' + mainCharacter.moveRight + ' isMoving: ' + mainCharacter.isMoving);
 		if(mainCharacter.moveUp == true){
 			if(mainCharacter.moveLeft == true){
 				mainCharacter.spriteLeft.drawSprite();
