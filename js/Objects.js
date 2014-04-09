@@ -45,7 +45,7 @@ Speech = Class.extend({
         this.y = y;
         this.maxWidth = 150;
         this.wordsPixels = 15;
-        this.textArray = new Array();
+        this.textArray = ["Hello there mister", "Im your comrad lalallalallalallalalalalalallalalal", "i want to carry your children !!!"];
         this.startSentence = 0;
         this.endSentence = 0;
     },
@@ -61,10 +61,11 @@ Speech = Class.extend({
     drawSpeech: function () {
         ctx.fillStyle = "black";
         ctx.font = "12px Georgia";
+        var i, len = this.textArray.length;
         //for (var i = this.indexOfSpokenSpeech; i < this.endSentence; i++) {
         //    ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), this.maxWidth);
         //}
-        for (var i = 0, len = this.textArray.length; i < len; i++) {
+        for (i = 0; i < len; i++) {
             ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), this.maxWidth);
         }
     }
@@ -77,10 +78,10 @@ SpeakingObject = GameObject.extend({
         this.bubbleHeight = 120;
         this.portraitX = 675;
         this.portraitY = 120;
-        this.speechX = this.portraitX - 80;
+        this.speechX = this.portraitX - 130;
         this.speechY = 280;
         this.portrait = new Portrait(this.portraitX, this.portraitY);
-        this.speech = new Speech(this.speechX , this.speechY);
+        this.speech = new Speech(this.speechX + 10   , this.speechY + 20);
         
     },
     setImage: function (image) {
@@ -94,7 +95,7 @@ SpeakingObject = GameObject.extend({
         this.speech.y = speechY;
     },
     drawSpeechBubble: function () {
-        var x = this.speechX - 50,
+        var x = this.speechX,
             y = this.speechY,
             r = x + this.speech.maxWidth + 30,
             b = y + this.bubbleHeight,
@@ -104,7 +105,7 @@ SpeakingObject = GameObject.extend({
         // Drawing the bubble >>>
         ctx.save();
         ctx.beginPath();
-        ctx.fillStyle = "white";
+        ctx.fillStyle = "rgb(215,199,147)";
         ctx.lineWidth = "3";
         
         ctx.moveTo(x + this.radius, y);
@@ -270,7 +271,7 @@ ClickPoint = InteractableObject.extend({
     checkIfClicked: function (mouseX, mouseY) {
         // if x between this x and this.x + this.width AND if y between this.y and this.y+this.height
         if ((mouseX > this.x && mouseX < (this.x + this.width)) && (mouseY > this.y && mouseY < (this.y + this.height))) {
-            this.getSpeech(this.name);
+            //this.getSpeech(this.name);
             return true;
         }
     },
@@ -298,8 +299,9 @@ Heroes = MovableObject.extend({
         };
         this.portraitX = 235;
         this.portraitY = 120;
-        this.speechX = this.portraitX + 150;
+        this.speechX = this.portraitX + 100;
         this.setCoordinates(this.portraitX, this.portraitY, this.speechX, this.speechY);
+        this.speech = new Speech(this.speechX + 10, this.speechY + 20);
     },
     //-- Sets initial destination for the main character --//
     setDestinaion: function (intObject) {
@@ -311,13 +313,13 @@ Heroes = MovableObject.extend({
         this.portrait.drawPortrait();
         this.speech.drawSpeech();
         // Drawing the bubble >>>
-        var x = this.speechX - 50,
+        var x = this.speechX,
             y = this.speechY,
             r = x + this.speech.maxWidth + 30,
             b = y + this.bubbleHeight;
         ctx.save();
         ctx.beginPath();
-        ctx.fillStyle = "white";
+        ctx.fillStyle = "rgb(215,199,147)";
         ctx.lineWidth = "3";
         //
         ctx.moveTo(x + this.radius, y);
@@ -343,6 +345,7 @@ Heroes = MovableObject.extend({
         ctx.stroke();
         ctx.restore();
         // Drawing the text inside the bubble >>>
+        this.speech.drawSpeech();
 
     }
 
@@ -447,7 +450,7 @@ Inventory = Class.extend({
             };
         };
 
-        this.wasteItem = function (index) {
+        this.removeItem = function (index) {
             if (this.slots[index] == 1) {
                 $('.inventory-slot').eq(index).html(' ');
                 this.slots[index] = 0;
@@ -464,3 +467,32 @@ Item = Class.extend({
         this.dom = $('<img class ="item" src="source/items/' + this.name + '.png">');
     }
 });
+
+//--basic soundtrack object--//
+
+function PlayList() {
+    var sounds = new Array();
+    this.startMusicByQuest = function (quest) {
+        switch (quest) {
+            case "castle":
+                this.portraits[0].play();
+                break;
+            case "dragon":
+                this.portraits[1].play();
+                break;
+            default:
+                break;
+        };
+    };
+    this.preloadSounds = function () {
+        for (var i = 0; i < sounds.length; i++) {
+            sounds[i] = new Audio();
+            sounds[i].src = arguments[i];
+        }
+    }
+}
+
+//soundtrack = new Audio();
+//soundtrack.src = 'source/mainSoundtrack.mp3';
+//soundtrack.load();
+//soundtrack.play();
