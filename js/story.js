@@ -184,20 +184,45 @@ Story = Class.extend({
             currentObject = ev.data.interactableObjects[i];
             if (currentObject.checkIfClicked(mouseX, mouseY)) {
                 ev.data.hero.setDestinaion(currentObject);         //set destination for hero
-
+                ev.data.hero.speakingTo = currentObject;           //set speaking to object
                 for (var j = 0; j < ev.data.interactableObjects.length; j++) {
                     ev.data.interactableObjects[j].isInteracting = false;      // set all other click points to "inactive"
                 }
             }
         }
     },
-    checkIfSpeaking: function () {
-        for (var i = 0; i < this.interactableObjects.length; i++) {
-            if (this.interactableObjects[i].isInteracting) {
-                this.interactableObjects[i].drawSpeechBubble();
-            }
-        }
-    },
+	checkIfSpeaking: function () {
+	    for (var i = 0; i < this.interactableObjects.length; i++) {
+	        if (this.interactableObjects[i].isInteracting) {
+	            if (this.interactableObjects[i].isSpeaking && !(this.interactableObjects[i].speech.conversetionEnded)) {
+	                this.interactableObjects[i].drawSpeechBubble();
+	            }
+	            else if (this.hero.isSpeaking && !(this.hero.speech.conversetionEnded)) {
+	                this.hero.drawSpeechBubble();
+	            }
+	        }
+	    }
+	},
+	changeSpeaker: function () {
+	    if (this.hero.speakingTo.isInteracting) {
+	        if (!(this.hero.speakingTo.speech.conversetionEnded && this.hero.speech.conversetionEnded)) {
+	            if (this.hero.isSpeaking) {
+	                this.hero.isSpeaking = false;
+	                this.hero.speakingTo.isSpeaking = true;
+	            }
+	            else {
+	                this.hero.speakingTo.isSpeaking = false;
+	                this.hero.isSpeaking = true;
+	                this.hero.speakingTo.speech.counter += 1;
+	                console.log(this.hero.speakingTo)
+	            }
+	        }
+	        else {
+	            this.hero.speakingTo.isSpeaking = false;
+	            this.hero.isSpeaking = false;
+	        }
+	    }
+	},
     addInteractableObject: function (iObject) {
         this.interactableObjects.push(iObject);
     },

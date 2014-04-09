@@ -41,6 +41,8 @@ Portrait = Class.extend({
 });
 Speech = Class.extend({
     init: function (x, y) {
+        this.counter = 0; 	 	
+        this.conversetionEnded = false; 
         this.x = x;
         this.y = y;
         this.maxWidth = 150;
@@ -61,18 +63,20 @@ Speech = Class.extend({
     drawSpeech: function () {
         ctx.fillStyle = "black";
         ctx.font = "12px Georgia";
-        var i, len = this.textArray.length;
-        //for (var i = this.indexOfSpokenSpeech; i < this.endSentence; i++) {
-        //    ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), this.maxWidth);
-        //}
+        var i, len = this.textArray[this.counter].length;
         for (i = 0; i < len; i++) {
-            ctx.fillText(this.textArray[i], this.x, this.y + (i * this.wordsPixels), this.maxWidth);
+            ctx.fillText(this.textArray[this.counter][i], this.x, this.y + (i * this.wordsPixels), this.maxWidth); //draws part of the dialog
+        }
+        if (this.counter == this.textArray.length - 1) {
+            this.conversetionEnded = true;
+            this.counter = 0;
         }
     }
 });
 SpeakingObject = GameObject.extend({
     init: function (x, y, width, height, name) {
         this._super(x, y, width, height, name);
+        this.isSpeaking = false;
         this.image = null;
         this.radius = 30;
         this.bubbleHeight = 120;
@@ -137,8 +141,12 @@ SpeakingObject = GameObject.extend({
                 fileName: questName,
             }
         }).done(function (data) {
-            console.log(_that.speech);
-            _that.speech.textArray = data.split("|");
+            var helper = new Array();
+            helper = data.split("|");
+            for (var i = 0; i < helper.length; i++) {                 
+                _that.speech.textArray[i] = helper[i].split("&");
+                console.log(_that.speech.textArray[i]);
+            }
         })
     }
 });
@@ -271,7 +279,9 @@ ClickPoint = InteractableObject.extend({
     checkIfClicked: function (mouseX, mouseY) {
         // if x between this x and this.x + this.width AND if y between this.y and this.y+this.height
         if ((mouseX > this.x && mouseX < (this.x + this.width)) && (mouseY > this.y && mouseY < (this.y + this.height))) {
-            //this.getSpeech(this.name);
+            this.getSpeech(this.name);
+            this.isSpeaking = true;
+            this.speech.conversetionEnded = false;
             return true;
         }
     },
@@ -293,6 +303,7 @@ Heroes = MovableObject.extend({
     init: function (x, y, width, height, name) {
         this._super(x, y, width, height, name);
         this.isInteracting = false;
+        this.speakingTo = null;
         this.destination = {
             x: 50,
             y: 250
