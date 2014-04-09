@@ -238,18 +238,6 @@ var story,
 
 //  Everything after this paragraph has to be moved to the story class.
 
-function mainLoop() {
-	ctx.save();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    story.elder.setRandomDestination()
-    story.hero.moveHeroToDestination();
-    story.dragon.setRandomDestination();
-    story.drawInteractableObject();
-    story.checkIfSpeaking();
-    story.hero.drawSpeechBubble();
-    ctx.restore();
-    
-}
 function listenKeyEvents(e) {
     switch (e.keyCode) {
         case 37:
@@ -315,7 +303,6 @@ window.onload = function () {
 	soundtrack.play();
     game = new Game();
     story.addEvent();
-    //mainLoop = setInterval(mainLoop, 30);
     mainLoop = setInterval(story.mainLoop, 30);
     
     window.addEventListener('keydown', listenKeyEvents, false);
