@@ -18,126 +18,152 @@
         });
 
 
-        this.defineDirection = (function () {
-            if (that.duty === 'leader') {
 
-                if (that.index == 0) {
 
-                    that.direction = 'positive';
 
-                } else {
+        if (this.duty === 'leader') {
 
-                    that.direction = 'negative';
+            if (this.index == 0) {
 
-                };
+                this.direction = 'positive';
+
+            } else {
+
+                this.direction = 'negative';
+
+            };
+        };
+
+
+
+       
+
+       
+
+        
+
+        
+
+        if (this.duty === 'leader') {
+            $(this.dom).on('click', this, this.pickLeader);
+        };
+
+        $(this.dom).appendTo($('#square-game'));
+    },
+
+
+
+    // defineDirection : (function () {
+    //         if (this.duty === 'leader') {
+
+    //             if (this.index == 0) {
+
+    //                 this.direction = 'positive';
+
+    //             } else {
+
+    //                 this.direction = 'negative';
+
+    //             };
+    //         };
+
+    // })(),
+
+    updatePosition : function () {
+        this.dom.animate({
+            width: '26px',
+            height: '26px',
+            left: (this.x) * 40 + 15 + 'px',
+            top: (this.y) * 40 + 15 + 'px',
+
+        }, 300);
+    },
+
+
+    pickLeader : function (e) {
+        console.log (e.data.direction)
+        //console.log('leader picked at ' + e.data.x + ' ' + e.data.y );
+            
+        e.data.dom.css({
+            width: '30px',
+            height: '30px',
+            left: (e.data.x) * 40 + 13 + 'px',
+            top: (e.data.y) * 40 + 13 + 'px',
+        });
+        $(e.data.dom).unbind();
+        $('#square-game').on('mousedown', e.data, e.data.placeLeader)
+
+    },
+
+
+
+     placeLeader : function (e) {
+            console.log (e.data.array.length)
+
+        var mouseX = Math.floor((e.pageX - squareGame.mapBoundaries.left) / squareGame.squareWidth),
+            mouseY = Math.floor((e.pageY - squareGame.mapBoundaries.top) / squareGame.squareWidth);
+            
+            
+            
+        if ( //(e.pageX > squareGame.mapBoundaries.left && e.pageX < squareGame.mapBoundaries.right) &&
+                //(e.pageY > squareGame.mapBoundaries.top && e.pageY < squareGame.mapBoundaries.bottom) &&
+            (mouseX !== e.data.x || mouseY !== e.data.y) && 
+            ((mouseX >= (e.data.x - 1) && mouseX <= (e.data.x + 1) && mouseY == e.data.y) ||
+            (mouseY >= (e.data.y - 1) && mouseY <= (e.data.y + 1) && mouseX == e.data.x)) &&
+            (squareGame.firstMap[mouseY][mouseX] == 1)) {
+                    
+
+                    e.data.followLeader(e.data);
+                    e.data.x = mouseX;
+                    e.data.y = mouseY;
+                    e.data.updatePosition();
+
+                    squareGame.firstMap[mouseY][mouseX] =2;
+                    //e.data.array.[e.data.array.length]
+                   // console.log('leader placed at ' + e.data.x + ' ' + e.data.y );
+            } else {
+                e.data.updatePosition();
             };
 
-        })();
+        $('#square-game').unbind();
+        $(e.data.dom).on( 'click', e.data, e.data.pickLeader);
+
+    },
 
 
-        this.updatePosition = function () {
-            this.dom.animate({
-                width: '26px',
-                height: '26px',
-                left: (this.x) * 40 + 15 + 'px',
-                top: (this.y) * 40 + 15 + 'px',
 
-            }, 300);
-        };
-
-
-        this.pickLeader = function () {
-            console.log('aa');
-            
-            that.dom.css({
-                width: '30px',
-                height: '30px',
-                left: (that.x) * 40 + 13 + 'px',
-                top: (that.y) * 40 + 13 + 'px',
-            });
-            $(that.dom).unbind();
-            $('#square-game').on('mousedown', that.placeLeader)
-
-        };
-
-        this.placeLeader = function (e) {
-            
-            var mouseX = Math.floor((e.pageX - squareGame.mapBoundaries.left) / squareGame.squareWidth),
-                mouseY = Math.floor((e.pageY - squareGame.mapBoundaries.top) / squareGame.squareWidth);
-
-            console.log(mouseX + ':x/mouse/y:' + mouseY);
-            console.log(that.x + ':x/y:' + that.y);
-            
-            if ( //(e.pageX > squareGame.mapBoundaries.left && e.pageX < squareGame.mapBoundaries.right) &&
-                //(e.pageY > squareGame.mapBoundaries.top && e.pageY < squareGame.mapBoundaries.bottom) &&
-                 (mouseX !== that.x || mouseY !== that.y) && 
-                 (mouseX >= (that.x - 1) && mouseX <= (that.x + 1)) && (mouseY >= (that.y - 1) && mouseY <= (that.y + 1)) &&
-                 (squareGame.firstMap[mouseY][mouseX] == 1)) {
-                    console.log('ok')
-                        that.followLeader();
-                        that.x = mouseX;
-                        that.y = mouseY;
-                        that.updatePosition();
-                } else {
-                    that.updatePosition();
-                };
-
-            $('#square-game').unbind();
-            $(that.dom).on('click', that.pickLeader);
-
-        };
-
-        this.followNext = function (nextObject) {
-            
-            this.x = nextObject.x;
-            this.y = nextObject.y;
-            this.updatePosition();
-
-        };
-
-        this.followLeader = function () {
-            console.log('ac');
+    followLeader : function (that) {
+            console.log(that.direction);
             if (that.direction === 'positive') {
+
+                squareGame.firstMap[that.array[that.array.length - 1].y][that.array[that.array.length -1].x] =1;
+
                 for (var i = (that.array.length - 1) ; i > 0; i--) {
+                    console.log('follow leader');
                     that.array[i].followNext(that.array[i - 1]);
                 };
             }
 
             if (that.direction === "negative") {
+
+                squareGame.firstMap[that.array[0].y][that.array[0].x] =1;
+
                 for (var i = 0; i < (that.array.length - 1) ; i++) {
                     that.array[i].followNext(that.array[i + 1]);
-                }
+                };
+                
             };
 
-
-
-            /* if (that.currentIndex <= that.maxIndex && that.direction === 'positive') {
-                 that.currentIndex++;
-                 object.followLeader(Game.greenSquares[that.currentIndex]);
-             } else {
-                 if (that.direction === 'positive' && that.currentIndex > that.maxIndex) {
-                     that.currentIndex = that.maxIndex;
-                 };
-             };
-
-             if (that.direction === 'negative' && that.currentIndex >= that.maxIndex) {
-                 that.currentIndex--;
-                 object.followLeader(Game.greenSquares[that.currentIndex]);
-             } else {
-                 if (that.direction === 'negative' && that.currentIndex < that.maxIndex) {
-                     that.currentIndex = that.maxIndex;
-                 };
-             }*/
-
-
-        };
-
-        if (this.duty === 'leader') {
-            $(this.dom).on('click', this.pickLeader);
-        };
-
-        $(this.dom).appendTo($('#square-game'));
     },
+
+    followNext : function (nextObject) {
+        
+
+        this.x = nextObject.x;
+        this.y = nextObject.y;
+        this.updatePosition();
+
+    }
 });
 
 var GreenSquare = Square.extend({
