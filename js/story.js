@@ -1,6 +1,18 @@
 Story = Class.extend({
 
     init: function () {
+        var self = this;
+        this.mainLoop = function () {
+            ctx.save();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            self.elder.setRandomDestination()
+            self.hero.moveHeroToDestination();
+            self.dragon.setRandomDestination();
+            self.drawInteractableObject();
+            self.checkIfSpeaking();
+            self.hero.drawSpeechBubble();
+            ctx.restore();
+        };
         this.interactableObjects = new Array();
         var humanCastle = new ClickPoint(100, 50, 140, 100, "humanCastle",
         													{
@@ -70,7 +82,9 @@ Story = Class.extend({
     },
     
     // ---- Methods for preloading images ---- //
-    
+    addEvent: function () {
+        $('canvas').on('click', this, this.clickEvent);
+    },
     preloadSprites: function() {
     	//define sprites
     	var heroSpriteUpImage = null, 
@@ -154,21 +168,21 @@ Story = Class.extend({
 		
 	},
 	
-    clickEvent: function (ev) {
-        var rect = this.mainCanvas.getBoundingClientRect(),
+	clickEvent: function (ev) {
+	    var rect = ev.data.mainCanvas.getBoundingClientRect(),
             mouseX = ev.clientX - rect.left,
             mouseY = ev.clientY - rect.top,
             currentObject;
         
         console.log("Mouse X: " + mouseX + " Mouse Y: " + mouseY);
         
-        for (var i = 0; i < this.interactableObjects.length; i++) {  // check if clicked
-            currentObject = this.interactableObjects[i];
+        for (var i = 0; i < ev.data.interactableObjects.length; i++) {  // check if clicked
+            currentObject = ev.data.interactableObjects[i];
             if (currentObject.checkIfClicked(mouseX, mouseY)) {
-                this.hero.setDestinaion(currentObject);         //set destination for hero
+                ev.data.hero.setDestinaion(currentObject);         //set destination for hero
 
-                for (var j = 0; j < this.interactableObjects.length; j++){
-                    this.interactableObjects[j].isInteracting = false;      // set all other click points to "inactive"
+                for (var j = 0; j < ev.data.interactableObjects.length; j++) {
+                    ev.data.interactableObjects[j].isInteracting = false;      // set all other click points to "inactive"
                 }
             }
         }
@@ -210,10 +224,6 @@ Story = Class.extend({
             this.interactableObjects[i].drawObj();
         }
     }
-    //    mainLoop : function() {
-    //      console.log(this.hero);
-    //      this.hero.checkDestination(this.hero.destination);
-    //    }
 });
 
 
@@ -227,21 +237,7 @@ var story,
 
 
 //  Everything after this paragraph has to be moved to the story class.
-function myfunction(e) {
-    story.clickEvent(e);
-}
 
-function mainLoop() {
-	ctx.save();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    story.elder.setRandomDestination()
-    story.hero.moveHeroToDestination();
-    story.dragon.setRandomDestination();
-    story.drawInteractableObject();
- //   story.checkIfSpeaking();
-    ctx.restore();
-    
-}
 function listenKeyEvents(e) {
     switch (e.keyCode) {
         case 37:
@@ -301,21 +297,16 @@ window.onload = function () {
 			'source/dwarfPortrait.png',
 			'source/kingPortrait.png'
 	);
-	soundtrack = new Audio(); 
-
-    soundtrack.src = 'source/mainSoundtrack.mp3'; 
-    soundtrack.load(); 
-    soundtrack.play(); 
-
-    game = new Game(); 
-
-    story.addEvent(); 
-
-    mainLoop = setInterval(mainLoop, 30); 
-    mainLoop = setInterval(story.mainLoop, 30); 
-
-    window.addEventListener('keydown', listenKeyEvents, false); 
-    window.addEventListener('keyup', listenKeyEvents, false); 
+	soundtrack = new Audio();
+	soundtrack.src = 'source/mainSoundtrack.mp3';
+	//soundtrack.load();
+	soundtrack.play();
+    game = new Game();
+    story.addEvent();
+    mainLoop = setInterval(story.mainLoop, 30);
+    
+    window.addEventListener('keydown', listenKeyEvents, false);
+    window.addEventListener('keyup', listenKeyEvents, false);
     game.putFirstTwoRandomNumbers();
 
     elfGame = new ElfGame(); 
