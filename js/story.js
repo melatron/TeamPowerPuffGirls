@@ -120,23 +120,23 @@ Story = Class.extend({
 			this.sprites[i].src = arguments[i];
 		}
 		
-		this.hero.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[0], story.hero);  // create Sprites
-		this.hero.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[1], story.hero);
-		this.hero.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[2], story.hero);
-		this.hero.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[3], story.hero);
-		this.hero.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[1], story.hero);
+		this.hero.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[0], story.hero, ctx);  // create Sprites
+		this.hero.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[1], story.hero, ctx);
+		this.hero.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[2], story.hero, ctx);
+		this.hero.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[3], story.hero, ctx);
+		this.hero.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[1], story.hero, ctx);
 		
-		this.elder.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[4], story.elder);
-		this.elder.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[5], story.elder);
-		this.elder.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[6], story.elder);
-		this.elder.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[7], story.elder);
-		this.elder.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[5], story.elder);
+		this.elder.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[4], story.elder, ctx);
+		this.elder.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[5], story.elder, ctx);
+		this.elder.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[6], story.elder, ctx);
+		this.elder.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[7], story.elder, ctx);
+		this.elder.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[5], story.elder, ctx);
 
-        this.dragon.spriteUp = new Sprite(384, 96, 4, 6, story.sprites[8], story.dragon);
-        this.dragon.spriteDown = new Sprite(384, 96, 4, 6, story.sprites[9], story.dragon);
-        this.dragon.spriteLeft = new Sprite(384, 96, 4, 6, story.sprites[10], story.dragon);
-        this.dragon.spriteRight = new Sprite(384, 96, 4, 6, story.sprites[11], story.dragon);
-        this.dragon.spriteIdle = new Sprite(96, 96, 1, 6, story.sprites[9], story.dragon);
+        this.dragon.spriteUp = new Sprite(384, 96, 4, 6, story.sprites[8], story.dragon, ctx);
+        this.dragon.spriteDown = new Sprite(384, 96, 4, 6, story.sprites[9], story.dragon, ctx);
+        this.dragon.spriteLeft = new Sprite(384, 96, 4, 6, story.sprites[10], story.dragon, ctx);
+        this.dragon.spriteRight = new Sprite(384, 96, 4, 6, story.sprites[11], story.dragon, ctx);
+        this.dragon.spriteIdle = new Sprite(96, 96, 1, 6, story.sprites[9], story.dragon, ctx);
         this.dragon.getDestinationDelay = 250;
 	},
     
@@ -283,7 +283,7 @@ window.onload = function () {
 	squareGame.populateMap();
 	squareGame.drawMaps();
 
-
+	
 	Inventory = new Inventory();
 	Inventory.getItem('axe');
 
@@ -309,6 +309,7 @@ window.onload = function () {
 			'source/dwarfPortrait.png',
 			'source/kingPortrait.png'
 	);
+<<<<<<< HEAD
 	soundtrack = new Audio();
 	soundtrack.src = 'source/mainSoundtrack.mp3';
 	//soundtrack.load();
@@ -320,6 +321,23 @@ window.onload = function () {
     
     window.addEventListener('keydown', listenKeyEvents, false);
     window.addEventListener('keyup', listenKeyEvents, false);
-    game.putFirstTwoRandomNumbers();
+=======
+	soundtrack = new Audio(); soundtrack.src = 'source/mainSoundtrack.mp3'; 
+    soundtrack.load(); 
+    soundtrack.play(); 
     
+    game = new Game(); 
+
+    story.addEvent(); 
+
+    mainLoop = setInterval(mainLoop, 30); 
+    mainLoop = setInterval(story.mainLoop, 30); 
+
+    window.addEventListener('keydown', listenKeyEvents, false); 
+    window.addEventListener('keyup', listenKeyEvents, false); 
+>>>>>>> 0fd40dfdfc7346e9f36dfba373f07cf59cd21c7e
+    game.putFirstTwoRandomNumbers();
+
+    elfGame = new ElfGame(); 
+    elfGame.start();
 };
