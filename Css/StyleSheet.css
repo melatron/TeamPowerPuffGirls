@@ -132,4 +132,11 @@ body {
     height:60px;
  }
 
+/* ELF GAME STYLEZ */
+
+#elf-vs-dwarf-game {
+	height:248px;
+	width:500px;
+	border: 1px solid red;
+}
 

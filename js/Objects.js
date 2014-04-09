@@ -392,20 +392,21 @@ AIMovableObject = MovableObject.extend({
 //======== SPRITE OBJECTS ==========//
 
 Sprite = Class.extend({
-	init: function(width, height, frames, renderSpeed, image, object){
+	init: function(width, height, frames, renderSpeed, image, object, context){
 		this.width = width;
 		this.height = height;
 		this.frames = frames;
-        this.renderSpeed = renderSpeed;  //The speed with which the frames are changed. Afects the speed of the animation.
+        this.renderSpeed = renderSpeed;  //The speed with which the frames are changed. Affects the speed of the animation.
 		this.image = image;
 		this.object = object; // The object that is being animated
 		this.frameCounter = 0;
 		this.tickCounter = 0;
+		this.context = context;
 	},
 	
 	//-- Function for drawing the sprite --//
 	drawSprite: function(){
-		ctx.drawImage(
+		this.context.drawImage(
 				this.image,
 				this.frameCounter * (this.width / this.frames),
 				0,
