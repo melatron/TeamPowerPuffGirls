@@ -471,28 +471,58 @@ Item = Class.extend({
 //--basic soundtrack object--//
 
 function PlayList() {
-    var sounds = new Array();
+    var questSounds = new Array(),
+        mainSounds = new Array(),
+        currentMainSongIndex = null;
+    
+    this.preloadQuestSounds = function () {
+        for (var i = 0; i < arguments.length; i++) {
+            questSounds[i] = new Audio();
+            questSounds[i].src = arguments[i];
+        }
+        console.log(questSounds[0]);
+    };
+    this.preloadMainSounds = function () {
+        for (var i = 0; i < arguments.length; i++) {
+            mainSounds[i] = new Audio();
+            mainSounds[i].src = arguments[i];
+        }
+        mainSounds[0].play();
+        currentMainSongIndex = 0;
+    };
     this.startMusicByQuest = function (quest) {
+        mainSounds[currentMainSongIndex].pause();
         switch (quest) {
             case "castle":
-                this.portraits[0].play();
+                questSounds[0].load();
+                questSounds[0].loop = true;
+                questSounds[0].play();
                 break;
             case "dragon":
-                this.portraits[1].play();
+                questSounds[0].load();
+                questSounds[1].loop = true;
+                questSounds[1].play();
                 break;
             default:
                 break;
         };
     };
-    this.preloadSounds = function () {
-        for (var i = 0; i < sounds.length; i++) {
-            sounds[i] = new Audio();
-            sounds[i].src = arguments[i];
+    this.resumeMainMusic = function () {
+        for (var i = 0; i < questSounds.length; i++) {
+            if (!questSounds[i].ended) {
+                questSounds[i].pause();
+            }
         }
-    }
+        mainSounds[currentMainSongIndex].play();
+    };
+    this.startNextSong = function () {
+        if (mainSounds[currentMainSongIndex].ended && currentMainSongIndex + 1 < mainSounds.length ) {
+            currentMainSongIndex++;
+            mainSounds[currentMainSongIndex].play();
+        }
+        else if (mainSounds[currentMainSongIndex].ended) {
+            currentMainSongIndex = 0;
+            mainSounds[currentMainSongIndex].play();
+        }
+    };
 }
-
-//soundtrack = new Audio();
-//soundtrack.src = 'source/mainSoundtrack.mp3';
-//soundtrack.load();
-//soundtrack.play();

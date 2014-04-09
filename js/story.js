@@ -10,8 +10,10 @@ Story = Class.extend({
             self.dragon.setRandomDestination();
             self.drawInteractableObject();
             self.checkIfSpeaking();
-            self.hero.drawSpeechBubble();
+            //self.hero.drawSpeechBubble();
+            self.soundTrack.startNextSong();
             ctx.restore();
+            //console.log(soundtrack.ended);
         };
         this.interactableObjects = new Array();
         var humanCastle = new ClickPoint(100, 50, 140, 100, "humanCastle",
@@ -79,6 +81,8 @@ Story = Class.extend({
             yMin: 300,
             yMax: 420
         });
+
+        this.soundTrack = new PlayList();
     },
     
     // ---- Methods for preloading images ---- //
@@ -297,10 +301,9 @@ window.onload = function () {
 			'source/dwarfPortrait.png',
 			'source/kingPortrait.png'
 	);
-	soundtrack = new Audio();
-	soundtrack.src = 'source/mainSoundtrack.mp3';
-	//soundtrack.load();
-	soundtrack.play();
+	story.soundTrack.preloadMainSounds('source/mainSoundtrack.mp3',
+                                        'source/DaniS.mp3');
+	story.soundTrack.preloadQuestSounds('source/rada.mp3');
     game = new Game();
     story.addEvent();
     mainLoop = setInterval(story.mainLoop, 30);
