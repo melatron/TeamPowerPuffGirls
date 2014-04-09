@@ -1,19 +1,18 @@
-/**
- * 
- */
+
+var a = 10;
+
 function ElfGame(){
 	var game = this;
 	var canvas = $('#elf-game-canvas')[0];
 	var gameContext = null;
 	var mainCharacter = null;
 	var moveDir = null;
-	var characterSpeed = 3;
 	
 	game.level = [];
 	
 	game.getContext = function(){
 		gameContext = canvas.getContext('2d');
-	}
+	};
 	
 	game.drawLevelBlock = function(x, y, width, height, isFinish){
 		var block = {
@@ -21,8 +20,9 @@ function ElfGame(){
 				y: y,
 				width: width,
 				height: height,
+				speed: 3,
 				isFinish: isFinish
-		}
+		};
 		gameContext.save();
 		gameContext.fillStyle = 'black';
 		gameContext.strokeStyle = 'red';
@@ -36,7 +36,12 @@ function ElfGame(){
 				x: x,
 				y: y,
 				width: 32,
-				height: 32
+				height: 32,
+				moveUp: false,
+				moveDown: false,
+				moveLeft: false,
+				moveRight: false,
+				isMoving: false
 		};
 		mainCharacter.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[0], mainCharacter, gameContext);  // create Sprites
 		mainCharacter.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[1], mainCharacter, gameContext);
@@ -45,49 +50,116 @@ function ElfGame(){
 		mainCharacter.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[1], mainCharacter, gameContext);
 	};
 	
-	game.updateCharacter = function(){
-		if(moveDir){
-			if(moveDir == 'up'){
-				mainCharacter.spriteUp.drawSprite();
-				mainCharacter.y -= characterSpeed;
-			}
-			if(moveDir == 'down'){
-				mainCharacter.spriteDown.drawSprite();
-				mainCharacter.y += characterSpeed;
-			}
-			if(moveDir == 'left'){
+	game.updateCharacter = function() {
+		console.log('Up: '+ mainCharacter.moveUp + ' Down: ' + mainCharacter.moveDown + ' Left: ' + mainCharacter.moveLeft + ' Right: ' + mainCharacter.moveRight + ' isMoving: ' + mainCharacter.isMoving);
+		if(mainCharacter.moveUp == true){
+			if(mainCharacter.moveLeft == true){
 				mainCharacter.spriteLeft.drawSprite();
-				mainCharacter.x -= characterSpeed;
+				mainCharacter.x -= mainCharacter.speed;
+				mainCharacter.y -= mainCharacter.speed;
+				return;
 			}
-			if(moveDir == 'right'){
+			if(mainCharacter.moveRight == true){
 				mainCharacter.spriteRight.drawSprite();
-				mainCharacter.x += characterSpeed;
+				mainCharacter.y -= mainCharacter.speed;
+				mainCharacter.x += mainCharacter.speed;
+				return;
 			}
-		}else{
+		}
+		if(mainCharacter.moveDown == true){
+			if(mainCharacter.moveLeft == true){
+				mainCharacter.spriteLeft.drawSprite();
+				mainCharacter.x -= mainCharacter.speed;
+				mainCharacter.y += mainCharacter.speed;
+				return;
+			}
+			if(mainCharacter.moveRight == true){
+				mainCharacter.spriteRight.drawSprite();
+				mainCharacter.x += mainCharacter.speed;
+				mainCharacter.y += mainCharacter.speed;
+				return;
+			}
+		}
+		if(mainCharacter.moveLeft == true){
+			if(mainCharacter.moveUp == true){
+				mainCharacter.spriteLeft.drawSprite();
+				mainCharacter.x -= mainCharacter.speed;
+				mainCharacter.y -= mainCharacter.speed;
+				return;
+			}
+			if(mainCharacter.moveDown == true){
+				mainCharacter.spriteLeft.drawSprite();
+				mainCharacter.x -= mainCharacter.speed;
+				mainCharacter.y += mainCharacter.speed;
+				return;
+			}
+		}
+		if(mainCharacter.moveRight == true){
+			if(mainCharacter.moveUp == true){
+				mainCharacter.spriteRight.drawSprite();
+				mainCharacter.x += mainCharacter.speed;
+				mainCharacter.y -= mainCharacter.speed;
+				return;
+			}
+			if(mainCharacter.moveDown == true){
+				mainCharacter.spriteRight.drawSprite();
+				mainCharacter.x += mainCharacter.speed;
+				mainCharacter.y += mainCharacter.speed;
+				return;
+			}
+
+			mainCharacter.spriteRight.drawSprite();
+			mainCharacter.x += mainCharacter.speed;
+			return;
+		}
+		if(!mainCharacter.isMoving){
 			mainCharacter.spriteIdle.drawSprite();
 		}
 	};
 	
 	game.onKeyDown = function(e){
-		if(e.keycode == 38){
-			moveDir = 'up';
-			console.log('moved');
+		e.preventDefault();
+		if(e.keyCode == 38){
+			mainCharacter.moveUp = true;
+			mainCharacter.isMoving = true;
 		}
-		if(e.keycode == 40){
-			moveDir = 'down';
+		if(e.keyCode == 40){
+			mainCharacter.moveDown = true;
+			mainCharacter.isMoving = true;
 		}
-		if(e.keycode == 37){
-			moveDir = 'left';
+		if(e.keyCode == 37){
+			mainCharacter.moveLeft = true;
+			mainCharacter.isMoving = true;
 		}
-		if(e.keycode == 39){
-			moveDir = 'right';
+		if(e.keyCode == 39){
+			mainCharacter.moveRight = true;
+			mainCharacter.isMoving = true;
 		}
 	};
 	
 	game.onKeyUp = function(e){
-		moveDir = null;
+		e.preventDefault();
+		if(e.keyCode == 38){
+			mainCharacter.isMoving = false;
+			mainCharacter.moveUp = false;
+		}
+		if(e.keyCode == 40){
+			mainCharacter.isMoving = false;
+			mainCharacter.moveDown = false;
+		}
+		if(e.keyCode == 37){
+			mainCharacter.isMoving = false;
+			mainCharacter.moveLeft = false;
+		}
+		if(e.keyCode == 39){
+			mainCharacter.isMoving = false;
+			mainCharacter.moveRight = false;
+		}
 	};
-	
+	game.addEventListeners = function(){
+		window.addEventListener('keydown', game.onKeyDown, false);
+		window.addEventListener('keyup', game.onKeyUp, false);
+	}
 	game.removeEventListeners = function(){
 		// to do 
 	};
@@ -118,7 +190,7 @@ function ElfGame(){
 	
 	game.mainLoop = function(){
 		gameContext.save();
-//		gameContext.clearRect(0, 0, canvas.width, canvas.height);
+		gameContext.clearRect(0, 0, canvas.width, canvas.height);
 		game.updateCharacter();
 		gameContext.restore();
 	};
