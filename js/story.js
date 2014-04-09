@@ -309,6 +309,6 @@ window.onload = function () {
     window.addEventListener('keyup', listenKeyEvents, false);
     game.putFirstTwoRandomNumbers();
 
-    elfGame = new ElfGame(); 
-    elfGame.start();
+    //elfGame = new ElfGame(); 
+    //elfGame.start();
 };

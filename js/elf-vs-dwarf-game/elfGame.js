@@ -118,7 +118,7 @@ function ElfGame(){
 	};
 	
 	game.onKeyDown = function(e){
-		e.preventDefault();
+		//e.preventDefault();
 		if(e.keyCode == 38){
 			mainCharacter.moveUp = true;
 			mainCharacter.isMoving = true;
