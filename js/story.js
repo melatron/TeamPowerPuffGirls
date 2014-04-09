@@ -309,7 +309,6 @@ window.onload = function () {
 			'source/dwarfPortrait.png',
 			'source/kingPortrait.png'
 	);
-<<<<<<< HEAD
 	soundtrack = new Audio();
 	soundtrack.src = 'source/mainSoundtrack.mp3';
 	//soundtrack.load();
@@ -321,21 +320,6 @@ window.onload = function () {
     
     window.addEventListener('keydown', listenKeyEvents, false);
     window.addEventListener('keyup', listenKeyEvents, false);
-=======
-	soundtrack = new Audio(); soundtrack.src = 'source/mainSoundtrack.mp3'; 
-    soundtrack.load(); 
-    soundtrack.play(); 
-    
-    game = new Game(); 
-
-    story.addEvent(); 
-
-    mainLoop = setInterval(mainLoop, 30); 
-    mainLoop = setInterval(story.mainLoop, 30); 
-
-    window.addEventListener('keydown', listenKeyEvents, false); 
-    window.addEventListener('keyup', listenKeyEvents, false); 
->>>>>>> 0fd40dfdfc7346e9f36dfba373f07cf59cd21c7e
     game.putFirstTwoRandomNumbers();
 
     elfGame = new ElfGame(); 
