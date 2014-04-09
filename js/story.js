@@ -301,10 +301,12 @@ window.onload = function () {
 			'source/dwarfPortrait.png',
 			'source/kingPortrait.png'
 	);
-	soundtrack = new Audio(); soundtrack.src = 'source/mainSoundtrack.mp3'; 
+	soundtrack = new Audio(); 
+
+    soundtrack.src = 'source/mainSoundtrack.mp3'; 
     soundtrack.load(); 
     soundtrack.play(); 
-    
+
     game = new Game(); 
 
     story.addEvent(); 
