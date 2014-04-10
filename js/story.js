@@ -88,6 +88,7 @@ Story = Class.extend({
     // ---- Methods for preloading images ---- //
     addEvent: function () {
         $('canvas').on('click', this, this.clickEvent);
+        $(document).on('keyup', this, this.handleKeyPressed);
     },
     preloadSprites: function() {
     	//define sprites
@@ -171,7 +172,18 @@ Story = Class.extend({
 		this.interactableObjects[0].setImage(this.portraits[4]);
 		
 	},
-	
+	handleKeyPressed: function (ev) {
+	    ev.preventDefault();
+	    switch (ev.keyCode) {
+	        case 13:
+	            console.log(ev);
+	            if (ev.type == 'keyup') {
+	                ev.data.changeSpeaker();
+	            }
+	            break;
+
+	    }
+	},
 	clickEvent: function (ev) {
 	    var rect = ev.data.mainCanvas.getBoundingClientRect(),
             mouseX = ev.clientX - rect.left,
@@ -183,21 +195,52 @@ Story = Class.extend({
         for (var i = 0; i < ev.data.interactableObjects.length; i++) {  // check if clicked
             currentObject = ev.data.interactableObjects[i];
             if (currentObject.checkIfClicked(mouseX, mouseY)) {
-                ev.data.hero.setDestinaion(currentObject);         //set destination for hero
-
+                //ev.data.hero.setDestinaion(currentObject);                          //set destination for hero
+               // ev.data.hero.speakingTo = currentObject;                            //set currentObject in hero as speakingTo
+               // ev.data.hero.getSpeech("hero" + currentObject.name);                // get hero speach for the currentObject
+                // ev.data.hero.speech.conversetionEnded = false;                      // set conversationEnded to false for a new dialog
+                ev.data.hero.prepareObjectForSpeaking(currentObject);
                 for (var j = 0; j < ev.data.interactableObjects.length; j++) {
-                    ev.data.interactableObjects[j].isInteracting = false;      // set all other click points to "inactive"
+                    ev.data.interactableObjects[j].isInteracting = false;           // set all other click points to "inactive"
                 }
             }
         }
     },
-    checkIfSpeaking: function () {
-        for (var i = 0; i < this.interactableObjects.length; i++) {
-            if (this.interactableObjects[i].isInteracting) {
-                this.interactableObjects[i].drawSpeechBubble();
-            }
-        }
-    },
+	checkIfSpeaking: function () {
+	    for (var i = 0; i < this.interactableObjects.length; i++) {
+	        if (this.interactableObjects[i].isInteracting) {
+	            this.hero.portrait.drawPortrait();
+	            this.interactableObjects[i].portrait.drawPortrait();
+	            if (this.interactableObjects[i].isSpeaking && !(this.interactableObjects[i].speech.conversetionEnded)) {
+	                this.interactableObjects[i].drawSpeechBubble();
+	            }
+	            else if (this.hero.isSpeaking && !(this.hero.speech.conversetionEnded)) {
+	                this.hero.drawSpeechBubble();
+	            }
+	        }
+	    }
+	},
+	changeSpeaker: function () {
+	    if (this.hero.speakingTo.isInteracting) {
+	        if (!(this.hero.speakingTo.speech.conversetionEnded && this.hero.speech.conversetionEnded)) {
+	            if (this.hero.isSpeaking) {
+	                this.hero.isSpeaking = false;
+	                this.hero.speakingTo.isSpeaking = true;
+	                this.hero.speech.counter += 1;
+	            }
+	            else {
+	                this.hero.speakingTo.isSpeaking = false;
+	                this.hero.isSpeaking = true;
+	                this.hero.speakingTo.speech.counter += 1;
+	                console.log(this.hero.speakingTo)
+	            }
+	        }
+	        else {
+	            this.hero.speakingTo.isSpeaking = false;
+	            this.hero.isSpeaking = false;
+	        }
+	    }
+	},
     addInteractableObject: function (iObject) {
         this.interactableObjects.push(iObject);
     },
