@@ -195,10 +195,6 @@ Story = Class.extend({
         for (var i = 0; i < ev.data.interactableObjects.length; i++) {  // check if clicked
             currentObject = ev.data.interactableObjects[i];
             if (currentObject.checkIfClicked(mouseX, mouseY)) {
-                //ev.data.hero.setDestinaion(currentObject);                          //set destination for hero
-               // ev.data.hero.speakingTo = currentObject;                            //set currentObject in hero as speakingTo
-               // ev.data.hero.getSpeech("hero" + currentObject.name);                // get hero speach for the currentObject
-                // ev.data.hero.speech.conversetionEnded = false;                      // set conversationEnded to false for a new dialog
                 ev.data.hero.prepareObjectForSpeaking(currentObject);
                 for (var j = 0; j < ev.data.interactableObjects.length; j++) {
                     ev.data.interactableObjects[j].isInteracting = false;           // set all other click points to "inactive"
