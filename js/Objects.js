@@ -67,10 +67,6 @@ Speech = Class.extend({
         for (i = 0; i < len; i++) {
             ctx.fillText(this.textArray[this.counter][i], this.x, this.y + (i * this.wordsPixels), this.maxWidth); //draws part of the dialog
         }
-        if (this.counter == this.textArray.length - 1) {
-            this.conversetionEnded = true;
-            this.counter = 0;
-        }
     }
 });
 SpeakingObject = GameObject.extend({
@@ -99,39 +95,43 @@ SpeakingObject = GameObject.extend({
         this.speech.y = speechY;
     },
     drawSpeechBubble: function () {
-        var x = this.speechX,
-            y = this.speechY,
-            r = x + this.speech.maxWidth + 30,
-            b = y + this.bubbleHeight,
-            _that=this;
-        //this.speech.getSpeech(name);    this should NOT be in the main loop 
-        this.portrait.drawPortrait();
-        // Drawing the bubble >>>
-        ctx.save();
-        ctx.beginPath();
-        ctx.fillStyle = "rgb(215,199,147)";
-        ctx.lineWidth = "3";
+        if (this.speech.counter == this.speech.textArray.length-1) {
+            this.speech.conversetionEnded = true;
+        } else {
+            var x = this.speechX,
+                y = this.speechY,
+                r = x + this.speech.maxWidth + 30,
+                b = y + this.bubbleHeight,
+                _that=this;
+            //this.speech.getSpeech(name);    this should NOT be in the main loop 
+            //this.portrait.drawPortrait();
+            // Drawing the bubble >>>
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = "rgb(215,199,147)";
+            ctx.lineWidth = "3";
         
-        ctx.moveTo(x + this.radius, y);
-        ctx.lineTo(r - this.radius * 2, y);
-        ctx.lineTo(r - this.radius / 2, y - 15);
-        ctx.lineTo(r - this.radius , y);
-        //ctx.lineTo(r - this.radius, y);
+            ctx.moveTo(x + this.radius, y);
+            ctx.lineTo(r - this.radius * 2, y);
+            ctx.lineTo(r - this.radius / 2, y - 15);
+            ctx.lineTo(r - this.radius , y);
+            //ctx.lineTo(r - this.radius, y);
         
-        ctx.quadraticCurveTo(r, y, r, y + this.radius);
-        ctx.lineTo(r, y + this.bubbleHeight - this.radius);
-        ctx.quadraticCurveTo(r, b, r - this.radius, b);
-        ctx.lineTo(x + this.radius, b);
-        ctx.quadraticCurveTo(x, b, x, b - this.radius);
-        ctx.lineTo(x, y + this.radius);
-        ctx.quadraticCurveTo(x, y, x + this.radius, y);
-        ctx.fill();
-        ctx.strokeStyle = "black";
-        ctx.stroke();
-        ctx.restore();
-        // Drawing the text inside the bubble >>>
-        this.speech.drawSpeech();
+            ctx.quadraticCurveTo(r, y, r, y + this.radius);
+            ctx.lineTo(r, y + this.bubbleHeight - this.radius);
+            ctx.quadraticCurveTo(r, b, r - this.radius, b);
+            ctx.lineTo(x + this.radius, b);
+            ctx.quadraticCurveTo(x, b, x, b - this.radius);
+            ctx.lineTo(x, y + this.radius);
+            ctx.quadraticCurveTo(x, y, x + this.radius, y);
+            ctx.fill();
+            ctx.strokeStyle = "black";
+            ctx.stroke();
+            ctx.restore();
+            // Drawing the text inside the bubble >>>
+            this.speech.drawSpeech();
             
+        }
     },
     getSpeech: function (questName) {
         var _that = this;
@@ -332,42 +332,46 @@ Heroes = MovableObject.extend({
         this.destinationObject = intObject;
     },
     drawSpeechBubble: function () {
-        this.speech.drawSpeech();
-        // Drawing the bubble >>>
-        var x = this.speechX,
-            y = this.speechY,
-            r = x + this.speech.maxWidth + 30,
-            b = y + this.bubbleHeight;
-        ctx.save();
-        ctx.beginPath();
-        ctx.fillStyle = "rgb(215,199,147)";
-        ctx.lineWidth = "3";
-        //
-        ctx.moveTo(x + this.radius, y);
-        ctx.lineTo(x + this.radius / 2, y - 15);
-        ctx.lineTo(x + this.radius * 2, y);
-        ctx.lineTo(r - this.radius, y);
-        //
-        //ctx.moveTo(x + this.radius, y);
-        //ctx.lineTo(r - this.radius * 2, y);
-        //ctx.lineTo(r - this.radius / 2, y - 15);
-        //ctx.lineTo(r - this.radius, y);
-        //ctx.lineTo(r - this.radius, y);
+        if (this.speech.counter == this.speech.textArray.length - 1) {
+            this.speech.conversetionEnded = true;
+        } else {
+            this.speech.drawSpeech();
+            // Drawing the bubble >>>
+            var x = this.speechX,
+                y = this.speechY,
+                r = x + this.speech.maxWidth + 30,
+                b = y + this.bubbleHeight;
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = "rgb(215,199,147)";
+            ctx.lineWidth = "3";
+            //
+            ctx.moveTo(x + this.radius, y);
+            ctx.lineTo(x + this.radius / 2, y - 15);
+            ctx.lineTo(x + this.radius * 2, y);
+            ctx.lineTo(r - this.radius, y);
+            //
+            //ctx.moveTo(x + this.radius, y);
+            //ctx.lineTo(r - this.radius * 2, y);
+            //ctx.lineTo(r - this.radius / 2, y - 15);
+            //ctx.lineTo(r - this.radius, y);
+            //ctx.lineTo(r - this.radius, y);
 
-        ctx.quadraticCurveTo(r, y, r, y + this.radius);
-        ctx.lineTo(r, y + this.bubbleHeight - this.radius);
-        ctx.quadraticCurveTo(r, b, r - this.radius, b);
-        ctx.lineTo(x + this.radius, b);
-        ctx.quadraticCurveTo(x, b, x, b - this.radius);
-        ctx.lineTo(x, y + this.radius);
-        ctx.quadraticCurveTo(x, y, x + this.radius, y);
-        ctx.fill();
-        ctx.strokeStyle = "black";
-        ctx.stroke();
-        ctx.restore();
-        // Drawing the text inside the bubble >>>
-        this.speech.drawSpeech();
+            ctx.quadraticCurveTo(r, y, r, y + this.radius);
+            ctx.lineTo(r, y + this.bubbleHeight - this.radius);
+            ctx.quadraticCurveTo(r, b, r - this.radius, b);
+            ctx.lineTo(x + this.radius, b);
+            ctx.quadraticCurveTo(x, b, x, b - this.radius);
+            ctx.lineTo(x, y + this.radius);
+            ctx.quadraticCurveTo(x, y, x + this.radius, y);
+            ctx.fill();
+            ctx.strokeStyle = "black";
+            ctx.stroke();
+            ctx.restore();
+            // Drawing the text inside the bubble >>>
+            this.speech.drawSpeech();
 
+        }
     }
 
 });
