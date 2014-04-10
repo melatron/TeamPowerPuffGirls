@@ -503,20 +503,22 @@ function PlayList() {
     };
     this.startMusicByQuest = function (quest) {
         mainSounds[currentMainSongIndex].pause();
-        switch (quest) {
-            case "castle":
-                questSounds[0].load();
-                questSounds[0].loop = true;
-                questSounds[0].play();
-                break;
-            case "dragon":
-                questSounds[0].load();
-                questSounds[1].loop = true;
-                questSounds[1].play();
-                break;
-            default:
-                break;
-        };
+        setTimeout(function () {
+            switch (quest) {
+                case "castle":
+                    questSounds[0].load();
+                    questSounds[0].loop = true;
+                    questSounds[0].play();
+                    break;
+                case "dragon":
+                    questSounds[0].load();
+                    questSounds[1].loop = true;
+                    questSounds[1].play();
+                    break;
+                default:
+                    break;
+            };
+        }, 1000);
     };
     this.resumeMainMusic = function () {
         for (var i = 0; i < questSounds.length; i++) {
@@ -524,7 +526,10 @@ function PlayList() {
                 questSounds[i].pause();
             }
         }
-        mainSounds[currentMainSongIndex].play();
+        setTimeout(function () {
+            mainSounds[currentMainSongIndex].load();
+            mainSounds[currentMainSongIndex].play();
+        }, 1000);
     };
     this.startNextSong = function () {
         if (mainSounds[currentMainSongIndex].ended && currentMainSongIndex + 1 < mainSounds.length ) {
