@@ -480,7 +480,6 @@ Inventory = Class.extend({
     }
 });
 
-
 Item = Class.extend({
     name: 'item',
     init: function (name) {
@@ -521,7 +520,7 @@ function PlayList() {
                     questSounds[0].play();
                     break;
                 case "dragon":
-                    questSounds[0].load();
+                    questSounds[1].load();
                     questSounds[1].loop = true;
                     questSounds[1].play();
                     break;
@@ -551,4 +550,19 @@ function PlayList() {
             mainSounds[currentMainSongIndex].play();
         }
     };
+    this.pauseMainMusic = function () {
+        mainSounds[currentMainSongIndex].pause();
+    }
+    this.pauseQuestMusic = function (quest) {
+        switch (quest) {
+            case "castle":
+                questSounds[0].pause();
+                break;
+            case "dragon":
+                questSounds[1].pause();
+                break;
+            default:
+                break;
+        }
+    }
 }
