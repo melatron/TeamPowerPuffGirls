@@ -343,14 +343,14 @@ window.onload = function () {
 	story.soundTrack.preloadMainSounds('source/mainSoundtrack.mp3',
                                         'source/DaniS.mp3');
 	story.soundTrack.preloadQuestSounds('source/rada.mp3');
-    game = new Game();
+//    game = new Game();
     story.addEvent();
     mainLoop = setInterval(story.mainLoop, 30);
     
-    window.addEventListener('keydown', listenKeyEvents, false);
-    window.addEventListener('keyup', listenKeyEvents, false);
-    game.putFirstTwoRandomNumbers();
+//    window.addEventListener('keydown', listenKeyEvents, false);
+ //   window.addEventListener('keyup', listenKeyEvents, false);
+ //   game.putFirstTwoRandomNumbers();
 
-    //elfGame = new ElfGame(); 
-    //elfGame.start();
+    elfGame = new ElfGame(); 
+    elfGame.start();
 };
