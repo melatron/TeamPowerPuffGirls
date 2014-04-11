@@ -284,30 +284,7 @@ var story,
 
 //  Everything after this paragraph has to be moved to the story class.
 
-function listenKeyEvents(e) {
-    switch (e.keyCode) {
-        case 37:
-            if (e.type == 'keydown') {
-                game.move("left");
-            }
-            break;
-        case 38:
-            if (e.type == 'keydown') {
-                game.move("up");
-            }
-            break;
-        case 39:
-            if (e.type == 'keydown') {
-                game.move("right");
-            }
-            break;
-        case 40:
-            if (e.type == 'keydown') {
-                game.move("down");
-            }
-            break;
-    }
-}
+
 window.onload = function () {
 	canvas = $("#canvas")[0];
 	ctx = canvas.getContext('2d');
@@ -337,24 +314,34 @@ window.onload = function () {
 	);
 	
 	story.preloadPortraits(
-			'source/heroPortrait.png',
-			'source/elderPortrait.png',
-			'source/elfPortrait.png',
-			'source/dwarfPortrait.png',
-			'source/kingPortrait.png'
+		'source/heroPortrait.png',
+		'source/elderPortrait.png',
+		'source/elfPortrait.png',
+		'source/dwarfPortrait.png',
+		'source/kingPortrait.png'
 	);
-	story.soundTrack.preloadMainSounds('source/mainSoundtrack.mp3',
-                                        'source/DaniS.mp3');
+	story.soundTrack.preloadMainSounds(
+        'music/Dirt.mp3',
+        'music/Grass.mp3',
+        'music/Rough.mp3',
+        'music/Swamp.mp3',
+        'music/Water.mp3',
+        'music/Snow.mp3',
+        'music/ElementalMetropolis.mp3'
+    );
 	story.soundTrack.preloadQuestSounds('source/rada.mp3');
- //   game = new Gamez();
+    //game = new Gamez();
     story.addEvent();
     mainLoop = setInterval(story.mainLoop, 30);
     
-    // window.addEventListener('keydown', listenKeyEvents, false);
-    // window.addEventListener('keyup', listenKeyEvents, false);
-    // game.putFirstTwoRandomNumbers();
+
+    game = new TonyGame();
+    game.start();
+     //window.addEventListener('keydown', listenKeyEvents, false);
+     //window.addEventListener('keyup', listenKeyEvents, false);
+     //game.putFirstTwoRandomNumbers();
 
     //elfGame = new ElfGame(); 
-    var elfGame = new RadoGame();
-    elfGame.start();
+    //var elfGame = new RadoGame();
+    //elfGame.start();
 };

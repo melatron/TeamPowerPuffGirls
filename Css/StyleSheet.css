@@ -28,7 +28,6 @@ body {
 	width : 797px;
 	height: 250px;
 	float: left;
-	border:px solid blue;
 	background-image: url(../source/gamePlotBackground.png);
 }
 #inventory {
@@ -40,7 +39,7 @@ body {
 #Game6561{
     width: 380px;
     height: 255px;
-    display: none;
+    display: block;
     margin: auto;
     background-color: yellow;
 }
@@ -139,6 +138,6 @@ body {
 	width:500px;
 	border: 1px solid red;
     position: absolute;
-    display: block;
+    display: none;
 }
 

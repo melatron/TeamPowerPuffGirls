@@ -519,8 +519,8 @@ function PlayList() {
             mainSounds[i] = new Audio();
             mainSounds[i].src = arguments[i];
         }
-        mainSounds[0].play();
-        currentMainSongIndex = 0;
+        currentMainSongIndex = Math.floor((Math.random() * (mainSounds.length - 1)));
+        mainSounds[currentMainSongIndex].play();
     };
     this.startMusicByQuest = function (quest) {
         mainSounds[currentMainSongIndex].pause();
@@ -599,10 +599,10 @@ Game = Class.extend({
 
     },
     addGameToPlot: function () {
-        plot.show();
+        this.plot.show();
     },
     removeGameFromPlot: function () {
-        plot.hide();
+        this.plot.hide();
     }
 
 

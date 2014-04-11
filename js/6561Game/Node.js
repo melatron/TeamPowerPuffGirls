@@ -13,7 +13,10 @@ Node.prototype.removeFromCell = function() {
     $(".row").eq(this.row).find(".cell").eq(this.col).find(".node").remove();
 };
 Node.prototype.addToCell = function () {
-    $(".row").eq(this.row).find(".cell").eq(this.col).append(this.node);
+    console.log(this.col);
+    console.log(this.row);
+    $(".row").eq(this.row).find(".cell").eq(this.col).empty()
+                                                     .append(this.node);
 };
 Node.prototype.transferToCell = function (row, col) {
     $(".row").eq(row).find(".cell").eq(col).append(this.node);
@@ -23,6 +26,36 @@ Node.prototype.changeUnite = function changeUnite() {
 };
 Node.prototype.powerUpValue = function () {
     this.value *= this.multuply;
+};
+Node.prototype.proceed = function () {
+    var self = this;
+    if (this.movedTo != null) {
+        console.log(this.movedTo);
+        this.node.animate({
+            //left: "+=100"
+        }, 1000, function () {
+            console.log(self.movedTo);
+            self.removeFromCell();
+            self.col = self.movedTo.col;
+            self.row = self.movedTo.row;
+            self.addToCell();
+            this.movedTo = null;
+            this.mergedTo = null;
+        });
+    }
+    else if (this.mergedTo != null) {
+        this.node.animate({
+            //left: "+=100"
+        }, 1000, function () {
+            self.removeFromCell();
+            self.col = self.mergedTo.col;
+            self.row = self.mergedTo.row;
+            self.addToCell();
+            this.movedTo = null;
+            this.mergedTo = null;
+        });
+    }
+    this.unitedOnTurn = false;
 };
 Node.prototype.moveUp = function () {
     if (this.row > 0) {
