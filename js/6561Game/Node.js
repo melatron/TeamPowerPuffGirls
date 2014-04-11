@@ -4,10 +4,8 @@ function Node (x, y, value) {
     this.value = value;
     this.unitedOnTurn = false;
     this.multuply = 2;
-    this.movingUp = false;
-    this.movingDown = false;
-    this.movingLeft = false;
-    this.movingRight = false;
+    this.movedTo = null;
+    this.mergedTo = null;
     this.node = $("<div class = 'node'></div>");
     this.node.html(value);
 };
@@ -22,6 +20,9 @@ Node.prototype.transferToCell = function (row, col) {
 };
 Node.prototype.changeUnite = function changeUnite() {
     this.unitedOnTurn = false;
+};
+Node.prototype.powerUpValue = function () {
+    this.value *= this.multuply;
 };
 Node.prototype.moveUp = function () {
     if (this.row > 0) {

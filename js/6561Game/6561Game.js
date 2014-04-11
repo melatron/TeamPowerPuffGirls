@@ -332,10 +332,12 @@ function Gamez() {
         var col = 0,
             moving = "left",
             currentNode = -1,
+            lastZeroIndex = -1,
             i = 0,
             previous = 0,
             flag = true;
         for (col; col < length; col++) {
+            lastZeroIndex = -1;
             flag = true;
             currentNode = self.gameArray[row][col];
             if (currentNode != 0) {
@@ -343,19 +345,46 @@ function Gamez() {
                 i = col - 1;
                 while (flag) {
                     if (i < 0) {
+                        //////////////////// move to different method //////////////////////////////
+                        if (lastZeroIndex != -1) {
+                            currentNode.movedTo = {
+                                row: row,
+                                col: i
+                            };
+                            self.gameArray[row][i] = currentNode;
+                            self.gameArray[row][col] = 0;
+                        }
+                        //////////////////// move to different method //////////////////////////////
                         flag = false;
                         break;
                     }
                     previous = self.gameArray[row][i];
                     if (previous == 0) {
-                        self.moveElement(currentNode, moving);
+                        lastZeroIndex = i;
                     }
                     else if (previous.value == currentNode.value && !previous.unitedOnTurn) {
-
-                        var newNode = currentNode.unite(previous);
-                        self.uniteElements(newNode, currentNode, moving);
+                        //////////////////// move to different method //////////////////////////////
+                        self.gameArray[row][i] = currentNode;
+                        self.gameArray[row][col] = 0;
+                        currentNode.powerUpValue();
+                        currentNode.mergedTo = {
+                            row: row,
+                            col: i
+                        };
+                        //////////////////// move to different method //////////////////////////////
+                        flag = false;
                     }
                     else {
+                        //////////////////// move to different method //////////////////////////////
+                        if (lastZeroIndex != -1) {
+                            currentNode.movedTo = {
+                                row: row,
+                                col: i
+                            };
+                            self.gameArray[row][i] = currentNode;
+                            self.gameArray[row][col] = 0;
+                        }
+                        //////////////////// move to different method //////////////////////////////
                         flag = false;
                     }
                     i--;
