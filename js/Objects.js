@@ -466,28 +466,48 @@ Sprite = Class.extend({
 
 //--basic inventory objects--//
 
+ItemAttributes = {
+    axe: {
+        name: 'Battle Axe of Epic Fail',
+        bonuses: '<p>Additional moves : ..... </p> '+
+                 '<p>Additional time: ..... </p>'   +
+                 '<p>Movement speed: ..... </p>'
+    },
+
+    bow: {
+        name: 'Useless Bow',
+        bonuses: '<p> Not worth a damn.. </p>'
+    },
+
+    sword: {
+        name: 'Plain Dagger',
+        bonuses: '<p> asdasdasd </p>'
+    }
+};
+
 Inventory = Class.extend({
     name: "inventory",
     init: function () {
 
         this.slots = [0, 0, 0, 0, 0, 0];
 
-        this.getItem = function (name) {
-            var temp = new Item(name);
-            for (var i = 0; i < this.slots.length; i++) {
-                if (this.slots[i] == 0) {
-                    $(temp.dom).appendTo($('.inventory-slot').eq(i))
-                    this.slots[i] = 1;
-                    break;
-                };
-            };
-        };
+    },
 
-        this.removeItem = function (index) {
-            if (this.slots[index] == 1) {
-                $('.inventory-slot').eq(index).html(' ');
-                this.slots[index] = 0;
-            }
+    removeItem : function (index) {
+        if (this.slots[index] == 1) {
+            $('.inventory-slot').eq(index).html(' ');
+            this.slots[index] = 0;
+        }
+    },
+
+    getItem : function (name) {
+        var temp = new Item(name);
+        for (var i = 0; i < this.slots.length; i++) {
+            if (this.slots[i] == 0) {
+                $(temp.dom).appendTo($('.inventory-slot').eq(i))
+                this.slots[i] = 1;
+                break;
+            };
         };
     }
 });
@@ -497,7 +517,21 @@ Item = Class.extend({
     init: function (name) {
         this.name = name;
         this.dom = $('<img class ="item" src="source/items/' + this.name + '.png">');
-    }
+        this.dom.on('mouseenter', this, this.showAttributes)
+        this.dom.on('mouseleave', this, this.hideAttributes)
+    },
+
+    showAttributes: function (e) {
+        console.log('asd');
+        $('#item-attributes').css({display: 'block'});
+        $('#item-name').html(ItemAttributes[e.data.name].name);
+        $('#item-bonuses').html(ItemAttributes[e.data.name].bonuses);
+
+    },
+
+    hideAttributes: function () {
+        $('#item-attributes').css({ display: 'none'});
+    },
 });
 
 //======== PLAYLIST OBJECT ==========//

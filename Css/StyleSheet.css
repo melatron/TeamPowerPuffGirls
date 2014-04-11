@@ -16,7 +16,6 @@ body {
 
 	width: 1024px;
 	height: 768px;
-/*	border: 5px solid grey; */
 	margin-left: 120px;
 }
 #canvasDiv{
@@ -110,7 +109,6 @@ body {
 #inventory {
     width: 222px;
     height:250px;
-/*     border: 1px solid blue; */
 	padding-left:1px;
     padding-top: 2px;
 }
@@ -122,7 +120,6 @@ body {
     margin-top: 19px;
     float:left;
     border-radius: 9px;
-/*     border: 1px solid white; */
     overflow:hidden;
 }
 
@@ -141,3 +138,39 @@ body {
     display: none;
 }
 
+/* item attributes */
+
+@font-face {
+    font-family: Morpheus;
+    src : url(../source/MORPHEUS.TTF);
+}
+
+#item-attributes {
+    
+    width:200px;
+    height:250px;
+    float:right;
+    background-color: #131313;
+    opacity:0.7;
+    overflow:hidden;   
+}
+
+#item-name {
+    color: white;
+    font-family:Morpheus;
+    font-size:14px;
+    line-height:60px;
+	padding-left:30px;
+    margin-right:auto;
+}
+
+#item-bonuses{
+    color: white;
+    font-family:Morpheus;
+    font-size:14px;
+    line-height:30px;
+
+    width:200px;
+    height:190px;
+    padding:0px 20px 20px 10px;
+}

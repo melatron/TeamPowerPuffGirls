@@ -297,6 +297,9 @@ window.onload = function () {
 	
 	Inventory = new Inventory();
 	Inventory.getItem('axe');
+	Inventory.getItem('bow');
+	Inventory.getItem('sword');
+
 
 	story.preloadSprites(
 			"source/heroMoveUp.png",
