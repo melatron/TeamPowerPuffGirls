@@ -47,9 +47,13 @@ RadoGame = Game.extend({
 				width: 32,
 				height: 32,
 				moveUp: false,
+				isKeyUpPressed: false,
 				moveDown: false,
+				isKeyDownPressed: false,
 				moveLeft: false,
+				isKeyLeftPressed: false,
 				moveRight: false,
+				isKeyRightPressed: false,
 				speed: 3,
 				moveDir: null,
 				isMoving: false
@@ -62,90 +66,98 @@ RadoGame = Game.extend({
 	},
 
 	updateCharacter: function(){
-		var isBlocked = this.detectCollision();
+		var collision = this.detectCollision();
 		var char = this.mainCharacter;
 
 		if(char.moveUp == true){
 			if(char.moveLeft == true){
 				char.spriteLeft.drawSprite();
-				char.x -= char.speed;
-				char.y -= char.speed;
-				return;
+				if(!collision.fromRight){
+					char.x -= char.speed;
+				}	
 			}
 
 			if(char.moveRight == true){
 				char.spriteRight.drawSprite();
-				char.y -= char.speed;
-				char.x += char.speed;
-				return;
+				if(!collision.fromLeft){
+					char.x += char.speed;
+				}				
 			}
-
-			char.spriteUp.drawSprite();
-			char.y -= char.speed;
+			if(!char.moveLeft && !char.moveRight){
+				char.spriteUp.drawSprite();
+			}
+			if(!collision.fromDown){
+				char.y -= char.speed;
+				return;
+			}			
+			//char.spriteIdle.drawSprite();
 			return;
 		}
 
 		if(char.moveDown == true){
 			if(char.moveLeft == true){
 				char.spriteLeft.drawSprite();
-				char.x -= char.speed;
-				char.y += char.speed;
-				return;
+				if(!collision.fromRight){
+					char.x -= char.speed;
+				}
 			}
 
 			if(char.moveRight == true){
 				char.spriteRight.drawSprite();
-				char.x += char.speed;
-				char.y += char.speed;
-				return;
+				if(!collision.fromLeft){
+					char.x += char.speed;
+				}
 			}
-
-			char.spriteDown.drawSprite();
-			char.y += char.speed;
+			if(!char.moveLeft && !char.moveRight){
+				char.spriteDown.drawSprite()
+			}
+			if(!collision.fromUp){
+				char.y += char.speed;
+			}
 			return;
 		}
 
 		if(char.moveLeft == true){
 			if(char.moveUp == true){
-				char.spriteLeft.drawSprite();
-				char.x -= char.speed;
-				char.y -= char.speed;
-				return;
+				if(!collision.fromDown){
+					char.y -= char.speed;
+				}
 			}
 
 			if(char.moveDown == true){
-				char.spriteLeft.drawSprite();
-				char.x -= char.speed;
-				char.y += char.speed;
-				return;
+				if(!collision.fromUp){
+					char.y += char.speed;
+				}
 			}
 
 			char.spriteLeft.drawSprite();
-			char.x -= char.speed;
+			if(!collision.fromRight){
+				char.x -= char.speed;
+			}
 			return;
 		}
 
 		if(char.moveRight == true){
 			if(char.moveUp == true){
-				char.spriteRight.drawSprite();
-				char.x += char.speed;
-				char.y -= char.speed;
-				return;
+				if(!collision.fromDown){
+					char.y -= char.speed;
+				}
 			}
 
 			if(char.moveDown == true){
-				char.spriteRight.drawSprite();
-				char.x += char.speed;
-				char.y += char.speed;
-				return;
+				if(!collision.fromUp){
+					char.y += char.speed;
+				}
 			}
 
 			char.spriteRight.drawSprite();
-			char.x += char.speed;
+			if(!collision.fromLeft){
+				char.x += char.speed;
+			}
 			return;
 		}
 
-		if(!char.isMoving || isBlocked == true){
+		if(!char.isMoving){
 			char.spriteIdle.drawSprite();
 		}
 	},
@@ -155,21 +167,25 @@ RadoGame = Game.extend({
 		if(e.keyCode == 38){
 			char.moveUp = true;
 			char.isMoving = true;
+			char.isKeyUpPressed = true;
 			e.preventDefault();
 		}
 		if(e.keyCode == 40){
 			char.moveDown = true;
 			char.isMoving = true;
+			char.isKeyDownPressed = true;
 			e.preventDefault();
 		}
 		if(e.keyCode == 37){
 			char.moveLeft = true;
 			char.isMoving = true;
+			char.isKeyLeftPressed = true;
 			e.preventDefault();
 		}
 		if(e.keyCode == 39){
 			char.moveRight = true;
 			char.isMoving = true;
+			char.isKeyRightPressed = true;
 			e.preventDefault();
 		}
 	},
@@ -180,18 +196,22 @@ RadoGame = Game.extend({
 		if(e.keyCode == 38){
 			char.isMoving = false;
 			char.moveUp = false;
+			char.isKeyUpPressed = false;
 		}
 		if(e.keyCode == 40){
 			char.isMoving = false;
 			char.moveDown = false;
+			char.isKeyDownPressed = false;
 		}
 		if(e.keyCode == 37){
 			char.isMoving = false;
 			char.moveLeft = false;
+			char.isKeyLeftPressed = false;
 		}
 		if(e.keyCode == 39){
 			char.isMoving = false;
 			char.moveRight = false;
+			char.isKeyRightPressed = false;
 		}
 	},
 
@@ -207,19 +227,22 @@ RadoGame = Game.extend({
 	detectCollision: function(){
 		var char = this.mainCharacter;
 		var collision = false;
-		var position = null;
+		var collisionFromUp = false,
+			collisionFromDown = false,
+			collisionFromLeft = false,
+			collisionFromRight = false;
 
 		if(char.x < 0){
-			char.moveLeft = false;
-			collision = true;
+			collisionFromDown = true;
+			if(char.x > 0){
+				collisionFromRight = false;
+			}
 		}
 		if(char.y < 0){
-			char.moveUp = false;
-			collision = true;
+			collisionFromDown = true;
 		}
 		if(char.x + 32 > this.canvas.width){
-			char.moveRight = false;
-			collision = true;
+			collisionFromDown = true;
 		}
 		if(char.y + 32 > this.canvas.height){
 			char.moveDown = false;
@@ -228,48 +251,84 @@ RadoGame = Game.extend({
 		for(var i = 0; i < this.currentLevel.length; i++){
 			var temp = this.currentLevel[i];
 			if(char.x > temp.x + temp.width){
-				if(char.y + 32 < temp.y){
-					temp.charPos = 'toUpperRight';
-
-				}
-				if(char.y > temp.y && char.y + 32 < temp.y + temp.height){
+				if((char.y + 4 > temp.y && char.y + 4 < temp.y + temp.height) || (char.y + 28 > temp.y && char.y + 28 < temp.y + temp.height)){
 					temp.charPos = 'toRight';
 					
 				}
-				if(char.y > temp.y + temp.height){
-					temp.charPos = 'toLowerRight';
-					
-				}
 			}
-			if(char.x + 32 < temp.x){
-				if(char.y + 32 < temp.y){
-					temp.charPos = 'toUpperLeft';
-				}
-				if(char.y > temp.y && char.y + 32 < temp.y + temp.height){
+			if(char.x + 28 < temp.x){
+				if((char.y + 4 > temp.y && char.y + 4 < temp.y + temp.height) || (char.y + 28 > temp.y && char.y + 28 < temp.y + temp.height)){
 					temp.charPos = 'toLeft';
 				}
-				if(char.y > temp.y + temp.height){
-					temp.charPos = 'toLowerLeft';
-				}
 			}
-			if(char.x > temp.x && char.x + 32 < temp.x + temp.width){
-				if(char.y + 32 < temp.y){
+			if(char.y + 32< temp.y){
+				if((char.x + 4 > temp.x && char.x + 4 < temp.x + temp.width) || (char.x + 28 > temp.x && char.x + 28 < temp.x + temp.width)){
 					temp.charPos = 'toUp';
 				}
-				if(char.y > temp.y + 32){
+			}
+			if(char.y > temp.y + temp.height){
+				if((char.x + 4 > temp.x && char.x + 4 < temp.x + temp.width) || (char.x + 28 > temp.x && char.x + 28 < temp.x + temp.width)){
 					temp.charPos = 'toDown';
 				}
 			}
-			console.log(temp.charPos);
-		}
 
-		return collision;
+			switch (temp.charPos){
+				case 'toUp':
+					if(char.y + 32 > temp.y){
+						//char.moveDown = false;
+						collision = true;
+						collisionFromUp = true;
+						if((char.x > temp.x + temp.width || char.x + 28 < temp.x)  && char.isKeyDownPressed){
+							collisionFromUp = false;
+						}
+					}
+					break;
+				case 'toDown':
+					if(char.y < temp.y + temp.height){
+						//char.moveUp = false;
+						collision = true;
+						collisionFromDown = true;
+						if((char.x + 4 > temp.x + temp.width || char.x + 28 < temp.x) && char.isKeyUpPressed){
+							collisionFromDown = false;
+						}
+					}
+					break;
+				case 'toLeft':
+					if(char.x + 32 > temp.x){
+						//char.moveRight = false;
+						collision = true;
+						collisionFromLeft = true;
+						if((char.y > temp.y + temp.height || char.y + 28 < temp.y) && char.isKeyRightPressed){
+							collisionFromLeft = false;
+						}
+					}
+					break;
+				case 'toRight':
+					if(char.x < temp.x + temp.width){
+						//char.moveLeft = false;
+						collision = true;
+						collisionFromRight = true;
+						if((char.y > temp.y + temp.height || char.y + 28 < temp.y) && char.isKeyLeftPressed){
+							collisionFromRight = false;
+						}
+					}
+					break;
+			}
+		}
+	 	return {
+	 		isColiding: collision,
+	 		fromLeft: collisionFromLeft,
+	 		fromRight: collisionFromRight,
+	 		fromUp: collisionFromUp,
+	 		fromDown: collisionFromDown
+	 	};
 	},
 
 	createLevelOne: function(){
 		var level = [];
 
 		level.push(this.createLevelBlock(50, 50, 100, 50, false));
+		level.push(this.createLevelBlock(100, 51, 50, 100, false));
 
 		return level;
 	},
