@@ -1,4 +1,111 @@
-function Game() {
+/*Game = Class.extend({
+    init: function () {
+        this.gameOver = false;
+        this.objectives = null;
+        this.score = null;
+        this.plot = null;
+
+    },
+    start: function () {
+
+    },
+    endGame: function () {
+
+    },
+    addBonuses: function (bonuses) {
+
+    },
+    addGameToPlot: function () {
+        plot.show();
+    },
+    removeGameFromPlot: function () {
+        plot.hide();
+    }
+
+
+});*/
+TonyGame = Game.extend({
+    init: function () {
+        this.plot = $("#Game6561");
+        this.multiplyBy = 2;
+        this.gameArray = [[0, 0, 0, 0],
+                          [0, 0, 0, 0],
+                          [0, 0, 0, 0],
+                          [0, 0, 0, 0]];
+    },
+    start: function () {
+        this.addGameToPlot();
+        this.putStartingNumbers();
+    },
+    endGame: function () {
+
+    },
+    addBonuses: function (bonuses) {
+
+    },
+    checkIfBoxCanMove: function (row, col) {
+        var array = this.gameArray,
+            canMoveUp = false,
+            canMoveLeft = false,
+            canMoveRight = false,
+            canMoveDown = false;
+        if (array[row][col] != 0) {
+            var value = array[row][col].value;
+            if ((typeof array[row][col + 1] == "object" && array[row][col + 1].value == value) || array[row][col + 1] == 0) {
+                canMoveRight = true;
+            }
+            if ((typeof array[row][col - 1] == "object" && array[row][col - 1].value == value) || array[row][col - 1] == 0) {
+                canMoveLeft = true;
+            }
+            if (typeof array[row + 1] != "undefined") {
+                if ((typeof array[row + 1][col] == "object" && array[row + 1][col].value == value) || array[row + 1][col] == 0) {
+                    canMoveDown = true;
+                }
+            }
+            if (typeof array[row - 1] != "undefined") {
+                if ((typeof array[row - 1][col] == "object" && array[row - 1][col].value == value) || array[row - 1][col] == 0) {
+                    canMoveUp = true;
+                }
+            }
+            if (canMoveDown || canMoveLeft || canMoveRight || canMoveUp) {
+                return true;
+            }
+            return false;
+        }
+    },
+    putStartingNumbers: function () {
+        var randomRowFirst = Math.floor((Math.random() * 4)),
+            randomColFirst = Math.floor((Math.random() * 4)),
+            randomDigitFirst = Math.random() < 0.9 ? 2 : 4,
+            randomRowSecond = Math.floor((Math.random() * 4)),
+            randomColSecond = Math.floor((Math.random() * 4)),
+            randomDigitSecond = Math.random() < 0.9 ? 2 : 4;
+        while (randomRowSecond == randomRowFirst && randomColSecond == randomColFirst) {
+            randomRowSecond = Math.floor((Math.random() * 4));
+            randomColSecond = Math.floor((Math.random() * 4));
+        };
+
+        self.gameArray[randomRowFirst][randomColFirst] = new Node(randomColFirst, randomRowFirst, randomDigitFirst);
+        self.gameArray[randomRowFirst][randomColFirst].addToCell();
+        self.gameArray[randomRowSecond][randomColSecond] = new Node(randomColSecond, randomRowSecond, randomDigitSecond);
+        self.gameArray[randomRowSecond][randomColSecond].addToCell();
+    },
+    countZeroes: function () {
+        var zeroes = 0;
+        for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 4; j++) {
+                if (self.gameArray[i][j] == 0) { zeroes++; };
+            }
+        }
+        return zeroes;
+    }
+
+
+
+    });
+
+///////////////////////////////////////////
+function Gamez() {
     // Here we will implement the game
     var self = this,
         length = 4,
@@ -221,6 +328,42 @@ function Game() {
         self.gameArray[current.row][current.col] = 0;
         self.gameArray[newNode.row][newNode.col] = newNode;
     };
+    self.moveLeftByRowBETAaaaa = function (row) {
+        var col = 0,
+            moving = "left",
+            currentNode = -1,
+            i = 0,
+            previous = 0,
+            flag = true;
+        for (col; col < length; col++) {
+            flag = true;
+            currentNode = self.gameArray[row][col];
+            if (currentNode != 0) {
+                // [2,0,0,2]
+                i = col - 1;
+                while (flag) {
+                    if (i < 0) {
+                        flag = false;
+                        break;
+                    }
+                    previous = self.gameArray[row][i];
+                    if (previous == 0) {
+                        self.moveElement(currentNode, moving);
+                    }
+                    else if (previous.value == currentNode.value && !previous.unitedOnTurn) {
+
+                        var newNode = currentNode.unite(previous);
+                        self.uniteElements(newNode, currentNode, moving);
+                    }
+                    else {
+                        flag = false;
+                    }
+                    i--;
+                };
+            }
+        }
+    };
+
     self.moveLeftByRowBETA = function (row) {
         var col = 0,
             moving = "left",

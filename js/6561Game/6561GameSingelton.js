@@ -1,7 +1,7 @@
 ﻿var GameSingleton = (function () {
 
     var instance;
-    var game = new Game();
+    var game = new Gamez();
     function createInstance() {
         // Here we will put the public methods which will be needed for the game
         var object = {

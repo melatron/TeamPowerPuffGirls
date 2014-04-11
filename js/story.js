@@ -1,20 +1,8 @@
 Story = Class.extend({
 
     init: function () {
-        var self = this;
-        this.mainLoop = function () {
-            ctx.save();
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            self.elder.setRandomDestination()
-            self.hero.moveHeroToDestination();
-            self.dragon.setRandomDestination();
-            self.drawInteractableObject();
-            self.checkIfSpeaking();
-            //self.hero.drawSpeechBubble();
-            self.soundTrack.startNextSong();
-            ctx.restore();
-            //console.log(soundtrack.ended);
-        };
+        var self = this,
+            elfGame = new ElfGame();
         this.interactableObjects = new Array();
         var humanCastle = new ClickPoint(100, 50, 140, 100, "humanCastle",
         													{
@@ -33,6 +21,7 @@ Story = Class.extend({
             													x: 175,
             													y: 364
             												}
+
             ),
             mage = new ClickPoint(790, 200, 50, 50, 'mage',
             												{
@@ -83,6 +72,20 @@ Story = Class.extend({
         });
 
         this.soundTrack = new PlayList();
+
+        this.mainLoop = function () {
+            ctx.save();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            self.elder.setRandomDestination()
+            self.hero.moveHeroToDestination();
+            self.dragon.setRandomDestination();
+            self.drawInteractableObject();
+            self.checkIfSpeaking();
+            //self.hero.drawSpeechBubble();
+            self.soundTrack.startNextSong();
+            ctx.restore();
+            //console.log(soundtrack.ended);
+        };
     },
     
     // ---- Methods for preloading images ---- //
@@ -343,7 +346,7 @@ window.onload = function () {
 	story.soundTrack.preloadMainSounds('source/mainSoundtrack.mp3',
                                         'source/DaniS.mp3');
 	story.soundTrack.preloadQuestSounds('source/rada.mp3');
-    game = new Game();
+    game = new Gamez();
     story.addEvent();
     mainLoop = setInterval(story.mainLoop, 30);
     

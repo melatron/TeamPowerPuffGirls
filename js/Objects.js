@@ -163,7 +163,25 @@ SpeakingObject = GameObject.extend({
         this.speech.counter = 0;
     }
 });
+// ==== INTERACTABLE OBJECT CLASS ==== //
 
+InteractableObject = SpeakingObject.extend({
+    init: function (x, y, width, height, name, game) {
+        this._super(x, y, width, height, name);
+        // Arrival point for Hero alignment
+        this.isInteracting = false;
+        this.game = game;
+    },
+    startGame: function (bonuses) {
+        if (this.game) {
+            this.calculateItemBonuses(bonuses);
+            this.game.start();
+        }
+    },
+    calculateItemBonuses: function (bonuses) {
+        this.game.addBonuses(bonuses);
+    }
+});
 // =============== MOVABLE OBJECT CLASS ===================== //
 
 MovableObject = SpeakingObject.extend({
@@ -267,16 +285,6 @@ MovableObject = SpeakingObject.extend({
             }
         }
     }
-});
-
-// ==== INTERACTABLE OBJECT CLASS ==== //
-
-InteractableObject = SpeakingObject.extend({
-    init: function (x, y, width, height, name) {
-        this._super(x, y, width, height, name);
-        // Arrival point for Hero alignment
-        this.isInteracting = false;
-    },
 });
 
 //=== Click point object ====//
@@ -492,7 +500,7 @@ Item = Class.extend({
     }
 });
 
-//--basic soundtrack object--//
+//======== PLAYLIST OBJECT ==========//
 
 function PlayList() {
     var questSounds = new Array(),
@@ -570,3 +578,32 @@ function PlayList() {
         }
     }
 }
+
+//======== GAME OBJECTS ==========//
+
+Game = Class.extend({
+    init: function () {
+        this.gameOver = false;
+        this.objectives = null;
+        this.score = null;
+        this.plot = null;
+
+    },
+    start: function () {
+
+    },
+    endGame: function () {
+
+    },
+    addBonuses: function (bonuses) {
+
+    },
+    addGameToPlot: function () {
+        plot.show();
+    },
+    removeGameFromPlot: function () {
+        plot.hide();
+    }
+
+
+});
