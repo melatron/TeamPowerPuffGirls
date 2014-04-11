@@ -2,7 +2,7 @@ Story = Class.extend({
 
     init: function () {
         var self = this,
-            elfGame = new ElfGame();
+            elfGame = new RadoGame();
         this.interactableObjects = new Array();
         var humanCastle = new ClickPoint(100, 50, 140, 100, "humanCastle",
         													{
@@ -313,9 +313,9 @@ window.onload = function () {
 	ctx = canvas.getContext('2d');
 	story = new Story();
 
-	squareGame = new SquareGame();
-	squareGame.populateMap();
-	squareGame.drawMaps();
+	// squareGame = new SquareGame();
+	// squareGame.populateMap();
+	// squareGame.drawMaps();
 
 	
 	Inventory = new Inventory();
@@ -346,14 +346,15 @@ window.onload = function () {
 	story.soundTrack.preloadMainSounds('source/mainSoundtrack.mp3',
                                         'source/DaniS.mp3');
 	story.soundTrack.preloadQuestSounds('source/rada.mp3');
-    game = new Gamez();
+ //   game = new Gamez();
     story.addEvent();
     mainLoop = setInterval(story.mainLoop, 30);
     
-    window.addEventListener('keydown', listenKeyEvents, false);
-    window.addEventListener('keyup', listenKeyEvents, false);
-    game.putFirstTwoRandomNumbers();
+    // window.addEventListener('keydown', listenKeyEvents, false);
+    // window.addEventListener('keyup', listenKeyEvents, false);
+    // game.putFirstTwoRandomNumbers();
 
     //elfGame = new ElfGame(); 
-    //elfGame.start();
+    var elfGame = new RadoGame();
+    elfGame.start();
 };

@@ -2,22 +2,23 @@
 
 RadoGame = Game.extend({
 	init: function(){
+		var game = this;
 		this.plot = $("#elf-vs-dwarf-game");
 		this.canvas = $('#elf-game-canvas')[0];		
-		this.gameContext = null;
+		this.gameContext = $('#elf-game-canvas')[0].getContext('2d');
 		this.mainCharacter = {};
 
 		this.mainLoop = function(){
-			this.gameContext.save();
-			this.gameContext.clearRect(0, 0, canvas.width, canvas.height);
-			this.drawLevelOne();
-			this.updateCharacter();
-			this.gameContext.restore();
+			game.gameContext.save();
+			game.gameContext.clearRect(0, 0, canvas.width, canvas.height);
+			game.drawLevel();
+			game.updateCharacter();
+			game.gameContext.restore();
 		}
 	},
 	start: function(){
 		this.getContext();
-		this.currentLevel = game.createLevelOne();
+		this.currentLevel = this.createLevelOne();
 		this.createMainCharacter(10, 10);
 		this.addEventListeners();
 		setInterval(this.mainLoop, 30);
@@ -33,7 +34,8 @@ RadoGame = Game.extend({
 				y: y,
 				width: width,
 				height: height,
-				isFinish: isFinish
+				isFinish: isFinish,
+				charPos: null
 		};
 		return block;
 	},
@@ -205,6 +207,7 @@ RadoGame = Game.extend({
 	detectCollision: function(){
 		var char = this.mainCharacter;
 		var collision = false;
+		var position = null;
 
 		if(char.x < 0){
 			char.moveLeft = false;
@@ -214,23 +217,56 @@ RadoGame = Game.extend({
 			char.moveUp = false;
 			collision = true;
 		}
-		if(char.x + 32 > canvas.width){
+		if(char.x + 32 > this.canvas.width){
 			char.moveRight = false;
 			collision = true;
 		}
-		if(char.y + 32 > canvas.height){
+		if(char.y + 32 > this.canvas.height){
 			char.moveDown = false;
 			collision = true;
 		}
 		for(var i = 0; i < this.currentLevel.length; i++){
-			var temp = currentLevel[i];
-			if()
+			var temp = this.currentLevel[i];
+			if(char.x > temp.x + temp.width){
+				if(char.y + 32 < temp.y){
+					temp.charPos = 'toUpperRight';
+
+				}
+				if(char.y > temp.y && char.y + 32 < temp.y + temp.height){
+					temp.charPos = 'toRight';
+					
+				}
+				if(char.y > temp.y + temp.height){
+					temp.charPos = 'toLowerRight';
+					
+				}
+			}
+			if(char.x + 32 < temp.x){
+				if(char.y + 32 < temp.y){
+					temp.charPos = 'toUpperLeft';
+				}
+				if(char.y > temp.y && char.y + 32 < temp.y + temp.height){
+					temp.charPos = 'toLeft';
+				}
+				if(char.y > temp.y + temp.height){
+					temp.charPos = 'toLowerLeft';
+				}
+			}
+			if(char.x > temp.x && char.x + 32 < temp.x + temp.width){
+				if(char.y + 32 < temp.y){
+					temp.charPos = 'toUp';
+				}
+				if(char.y > temp.y + 32){
+					temp.charPos = 'toDown';
+				}
+			}
+			console.log(temp.charPos);
 		}
 
 		return collision;
 	},
 
-	createLevel: function(){
+	createLevelOne: function(){
 		var level = [];
 
 		level.push(this.createLevelBlock(50, 50, 100, 50, false));
