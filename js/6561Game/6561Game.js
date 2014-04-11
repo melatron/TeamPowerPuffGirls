@@ -153,15 +153,19 @@ TonyGame = Game.extend({
         console.log("aa");
         switch (e.keyCode) {
           case 37:
+        	  e.preventDefault();
               e.data.move("left");
               break;
           case 38:
+        	  e.preventDefault();
               e.data.move("up");
               break;
           case 39:
+        	  e.preventDefault();
               e.data.move("right");
               break;
           case 40:
+        	  e.preventDefault();
               e.data.move("down");
               break;
         }
