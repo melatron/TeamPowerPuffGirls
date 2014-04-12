@@ -38,9 +38,9 @@ body {
 #Game6561{
     width: 380px;
     height: 255px;
-    display: block;
     margin: auto;
     background-color: yellow;
+    display: block;
 }
 .row {
     width: 380px;
@@ -67,7 +67,6 @@ body {
     width:260px;
     height:260px;
     margin:auto;
-    display:block;
     position:relative;
     background-image: url(../source/square-game-backgorund.png);
     background-size:260px 260px;
@@ -146,10 +145,12 @@ body {
 }
 
 #item-attributes {
-    
+    display:none;
     width:200px;
-    height:250px;
-    float:right;
+    height:160px;
+    position:fixed;
+    left:0;
+    top:0;
     background-color: #131313;
     opacity:0.7;
     overflow:hidden;   
@@ -159,7 +160,7 @@ body {
     color: white;
     font-family:Morpheus;
     font-size:14px;
-    line-height:60px;
+    line-height:40px;
 	padding-left:30px;
     margin-right:auto;
 }
@@ -168,7 +169,7 @@ body {
     color: white;
     font-family:Morpheus;
     font-size:14px;
-    line-height:30px;
+    line-height:20px;
 
     width:200px;
     height:190px;

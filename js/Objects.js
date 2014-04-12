@@ -469,7 +469,7 @@ Sprite = Class.extend({
 ItemAttributes = {
     axe: {
         name: 'Battle Axe of Epic Fail',
-        bonuses: '<p>Additional moves : ..... </p> '+
+        bonuses: '<p>Additional moves : ..... </p>' +
                  '<p>Additional time: ..... </p>'   +
                  '<p>Movement speed: ..... </p>'
     },
@@ -481,7 +481,9 @@ ItemAttributes = {
 
     sword: {
         name: 'Plain Dagger',
-        bonuses: '<p> asdasdasd </p>'
+        bonuses: '<p> asdasdasd </p>' +
+                 '<p> asdasdasd </p>' +
+                 '<p> asdasdasd </p>'
     }
 };
 
@@ -504,12 +506,14 @@ Inventory = Class.extend({
         var temp = new Item(name);
         for (var i = 0; i < this.slots.length; i++) {
             if (this.slots[i] == 0) {
-                $(temp.dom).appendTo($('.inventory-slot').eq(i))
-                this.slots[i] = 1;
+                temp.dom.appendTo($('.inventory-slot').eq(i))
+                this.slots[i] = temp.dom;
                 break;
             };
         };
-    }
+    },
+
+
 });
 
 Item = Class.extend({
@@ -517,13 +521,18 @@ Item = Class.extend({
     init: function (name) {
         this.name = name;
         this.dom = $('<img class ="item" src="source/items/' + this.name + '.png">');
-        this.dom.on('mouseenter', this, this.showAttributes)
-        this.dom.on('mouseleave', this, this.hideAttributes)
+        this.dom.on('mouseenter', this, this.showAttributes);
+        this.dom.on('mouseleave', this, this.hideAttributes);
+        this.dom.on('click', this, this.pickItem);        
     },
 
     showAttributes: function (e) {
-        console.log('asd');
-        $('#item-attributes').css({display: 'block'});
+
+        $('#item-attributes').css({
+            display: 'block',
+            left: e.clientX - 150 + 'px',
+            top:e.clientY - 250 + 'px'
+        });
         $('#item-name').html(ItemAttributes[e.data.name].name);
         $('#item-bonuses').html(ItemAttributes[e.data.name].bonuses);
 
@@ -532,6 +541,19 @@ Item = Class.extend({
     hideAttributes: function () {
         $('#item-attributes').css({ display: 'none'});
     },
+
+    pickItem: function (e) {
+        console.log('a')
+
+
+    },
+
+    placeItem: function (e) {
+        console.log('b')
+
+
+    }
+
 });
 
 //======== PLAYLIST OBJECT ==========//
