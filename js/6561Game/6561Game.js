@@ -164,7 +164,7 @@ TonyGame = Game.extend({
         setInterval(function () {
             self.removeNodes();
             self.addNodes();
-        }, 1500);
+        }, 200);
         if (zeroes <= 0) {
             this.gameOver = isOver;
         }
@@ -235,6 +235,7 @@ TonyGame = Game.extend({
                 if (this.matrix[i][j] != 0) {
                     this.matrix[i][j].removeFromCell();
                 }
+                $(".row").eq(i).find(".cell").eq(j).empty();
             }
         }
     },

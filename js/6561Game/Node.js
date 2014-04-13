@@ -82,22 +82,22 @@ Node.prototype.calculateAnimation = function () {
             a = this.row - row;
             switch (a) {
                 case -1:
-                    moveBy = 56;
+                    moveBy = 57;
                     break;
                 case -2:
-                    moveBy = 112;
+                    moveBy = 114;
                     break;
                 case -3:
-                    moveBy = 168;
+                    moveBy = 171;
                     break;
                 case 1:
-                    moveBy = -56;
+                    moveBy = -57;
                     break;
                 case 2:
-                    moveBy = -112;
+                    moveBy = -114;
                     break;
                 case 3:
-                    moveBy = -168;
+                    moveBy = -171;
                     break;
                 default:
                     break;
@@ -114,7 +114,7 @@ Node.prototype.proceed = function () {
     var self = this;
     
     if (this.movedTo != null) {
-        this.node.animate(this.calculateAnimation(), 1000, function () {
+        this.node.animate(this.calculateAnimation(), 100, function () {
             self.col = self.movedTo.col;
             self.row = self.movedTo.row;
             self.movedTo = null;
@@ -122,7 +122,7 @@ Node.prototype.proceed = function () {
         });
     }
     else if (this.mergedTo != null) {
-        this.node.animate(this.calculateAnimation(), 1000, function () {
+        this.node.animate(this.calculateAnimation(), 400, function () {
             self.col = self.mergedTo.col;
             self.row = self.mergedTo.row;
             self.movedTo = null;
