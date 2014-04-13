@@ -279,7 +279,8 @@ var story,
     humanCastle,
     dwarfCamp,
     mainLoop,
-    squareGame;
+    squareGame,
+    elfGame;
 
 
 //  Everything after this paragraph has to be moved to the story class.
@@ -338,13 +339,12 @@ window.onload = function () {
     mainLoop = setInterval(story.mainLoop, 30);
     
 
-    game = new TonyGame();
-    game.start();
+//    game = new TonyGame();
+//    game.start();
      //window.addEventListener('keydown', listenKeyEvents, false);
      //window.addEventListener('keyup', listenKeyEvents, false);
      //game.putFirstTwoRandomNumbers();
 
-    //elfGame = new ElfGame(); 
-    //var elfGame = new RadoGame();
-    //elfGame.start();
+    elfGame = new RadoGame();
+    elfGame.start();
 };
