@@ -3,6 +3,7 @@ function Node (x, y, value) {
     this.row = y;
     this.value = value;
     this.unitedOnTurn = false;
+    this.animateNew = true;
     this.multuply = 2;
     this.movedTo = null;
     this.mergedTo = null;
@@ -13,16 +14,46 @@ Node.prototype.removeFromCell = function() {
     $(".row").eq(this.row).find(".cell").eq(this.col).find(".node").remove();
 };
 Node.prototype.addToCell = function () {
-    var styles = {
-        left: "0px",
-        top: "0px",
-        right: "0px",
-        down: "0px"
-    };
-    this.node.css(styles);
-    this.node.html(this.value);
-    $(".row").eq(this.row).find(".cell").eq(this.col).empty()
-                                                     .append(this.node);
+    if (this.animateNew) {
+        var styles = {
+            left: "0px",
+            top: "0px",
+            right: "0px",
+            down: "0px",
+            margin: "auto auto auto auto",
+            width: "0px",
+            height: "0px"
+        },
+            self = this;
+        this.node.html(this.value);
+        this.node.css(styles);
+        $(".row").eq(this.row).find(".cell").eq(this.col).empty()
+                                                        .append(this.node);
+        this.node.animate({
+            width: "89px",
+            height: "55px"
+        }, 100, function myfunction() {
+            self.animateNew = false;
+        });
+    }
+    else {
+        var styles = {
+            left: "0px",
+            top: "0px",
+            right: "0px",
+            down: "0px",
+            margin: "auto",
+            width: "89px",
+            height: "55px"
+        };
+        this.node.html(this.value);
+        this.node.css(styles);
+        $(".row").eq(this.row).find(".cell").eq(this.col).empty()
+                                                        .append(this.node);
+    }
+    
+    
+   
 };
 Node.prototype.transferToCell = function (row, col) {
     $(".row").eq(row).find(".cell").eq(col).append(this.node);
@@ -122,7 +153,7 @@ Node.prototype.proceed = function () {
         });
     }
     else if (this.mergedTo != null) {
-        this.node.animate(this.calculateAnimation(), 400, function () {
+        this.node.animate(this.calculateAnimation(), 100, function () {
             self.col = self.mergedTo.col;
             self.row = self.mergedTo.row;
             self.movedTo = null;

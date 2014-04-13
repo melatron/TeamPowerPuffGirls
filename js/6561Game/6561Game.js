@@ -120,6 +120,7 @@ TonyGame = Game.extend({
             this.matrix[from.row][from.col] = 0;
             from.powerUpValue();
             from.unitedOnTurn = true;
+            from.animateNew = true;
         }
         else {
             from.mergedTo = {
@@ -161,7 +162,7 @@ TonyGame = Game.extend({
             }
         }
         var self = this;
-        setInterval(function () {
+        setTimeout(function () {
             self.removeNodes();
             self.addNodes();
         }, 200);
@@ -227,6 +228,42 @@ TonyGame = Game.extend({
             console.log("-----------------");
             this.show();
             console.log("-----------------");
+        }
+    },
+    goLeft: function () {
+        for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 4; j++) {
+                if (this.matrix[i][j] != 0) {
+                    this.matrix[i][j].proceed();
+                }
+            }
+        }
+    },
+    goRight: function () {
+        for (var i = 0; i < 4; i++) {
+            for (var j = 3; j >= 0; j--) {
+                if (this.matrix[i][j] != 0) {
+                    this.matrix[i][j].proceed();
+                }
+            }
+        }
+    },
+    goUp: function () {
+        for (var j = 0; j < 4; j++) {
+            for (var i = 0; i < 4; i++) {
+                if (this.matrix[i][j] != 0) {
+                    this.matrix[i][j].proceed();
+                }
+            }
+        }
+    },
+    goDown: function () {
+        for (var j = 0; j < 4; j++) {
+            for (var i = 3; i >= 0; i--) {
+                if (this.matrix[i][j] != 0) {
+                    this.matrix[i][j].proceed();
+                }
+            }
         }
     },
     removeNodes: function () {
