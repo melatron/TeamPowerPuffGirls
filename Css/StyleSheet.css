@@ -40,7 +40,7 @@ body {
     height: 255px;
     margin: auto;
     background-color: yellow;
-    display: block;
+    display: none;
 }
 .row {
     width: 380px;
@@ -70,7 +70,7 @@ body {
     position:relative;
     background-image: url(../source/square-game-backgorund.png);
     background-size:260px 260px;
-    display:none;
+    display:block;
 }
 
 #square-game-map {

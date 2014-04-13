@@ -290,8 +290,8 @@ window.onload = function () {
 	ctx = canvas.getContext('2d');
 	story = new Story();
 
-	squareGame = new SquareGame();
-	squareGame.populateFirstMap();
+	//squareGame = new SquareGame();
+	//squareGame.populateFirstMap();
 	
 
 	

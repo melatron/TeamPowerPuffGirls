@@ -101,7 +101,7 @@ TonyGame = Game.extend({
         }
         return zeroes;
     },
-    moveNode: function(node, row, col) {
+    moveNode: function (node, row, col) {
         node.movedTo = {
             row: row,
             col: col
@@ -109,15 +109,30 @@ TonyGame = Game.extend({
         this.matrix[row][col] = node;
         this.matrix[node.row][node.col] = 0;
     },
-    mergeNode: function (node, row, col) {
-        node.mergedTo = {
-            row: row,
-            col: col
-        };
-        this.matrix[row][col] = node;
-        this.matrix[node.row][node.col] = 0;
-        node.powerUpValue();
-        node.unitedOnTurn = true;
+    mergeNode: function (from, to) {
+        if (to.movedTo == null) {
+            from.mergedTo = {
+                row: to.row,
+                col: to.col,
+                node: to
+            };
+            this.matrix[to.row][to.col] = from;
+            this.matrix[from.row][from.col] = 0;
+            from.powerUpValue();
+            from.unitedOnTurn = true;
+        }
+        else {
+            from.mergedTo = {
+                row: to.movedTo.row,
+                col: to.movedTo.col,
+                node: to
+            };
+            this.matrix[to.movedTo.row][to.movedTo.col] = from;
+            this.matrix[from.row][from.col] = 0;
+            from.powerUpValue();
+            from.unitedOnTurn = true;
+        }
+        
     },
     proceedToNextTurn: function () {
         var zeroes = this.countZeroes(),
@@ -131,7 +146,7 @@ TonyGame = Game.extend({
                     zeroCounter++;
                     if (zeroCounter == rand) {
                         this.matrix[i][j] = new Node(j, i, randomDigit);
-                        this.matrix[i][j].addToCell();
+                        //this.matrix[i][j].addToCell();
                     }
                 }
                 else {
@@ -145,6 +160,11 @@ TonyGame = Game.extend({
                 }
             }
         }
+        var self = this;
+        setInterval(function () {
+            self.removeNodes();
+            self.addNodes();
+        }, 1500);
         if (zeroes <= 0) {
             this.gameOver = isOver;
         }
@@ -209,6 +229,24 @@ TonyGame = Game.extend({
             console.log("-----------------");
         }
     },
+    removeNodes: function () {
+        for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 4; j++) {
+                if (this.matrix[i][j] != 0) {
+                    this.matrix[i][j].removeFromCell();
+                }
+            }
+        }
+    },
+    addNodes: function () {
+        for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 4; j++) {
+                if (this.matrix[i][j] != 0) {
+                    this.matrix[i][j].addToCell();
+                }
+            }
+        }
+    },
     moveLeftByRow: function (row) {
         var col = 0,
             currentNode = -1,
@@ -235,7 +273,7 @@ TonyGame = Game.extend({
                         lastZeroIndex = i;
                     }
                     else if (previous.value == currentNode.value && !previous.unitedOnTurn) {
-                        this.mergeNode(currentNode, row, i);
+                        this.mergeNode(currentNode, previous);
                         flag = false;
                     }
                     else {
@@ -276,7 +314,7 @@ TonyGame = Game.extend({
                         lastZeroIndex = i;
                     }
                     else if (previous.value == currentNode.value && !previous.unitedOnTurn) {
-                        this.mergeNode(currentNode, i, col);
+                        this.mergeNode(currentNode, previous);
                         flag = false;
                     }
                     else {
@@ -317,7 +355,7 @@ TonyGame = Game.extend({
                         lastZeroIndex = i;
                     }
                     else if (previous.value == currentNode.value && !previous.unitedOnTurn) {
-                        this.mergeNode(currentNode, row, i);
+                        this.mergeNode(currentNode, previous);
                         flag = false;
                     }
                     else {
@@ -358,7 +396,7 @@ TonyGame = Game.extend({
                         lastZeroIndex = i;
                     }
                     else if (previous.value == currentNode.value && !previous.unitedOnTurn) {
-                        this.mergeNode(currentNode, i, col);
+                        this.mergeNode(currentNode, previous);
                         flag = false;
                     }
                     else {

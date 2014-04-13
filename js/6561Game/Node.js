@@ -13,8 +13,14 @@ Node.prototype.removeFromCell = function() {
     $(".row").eq(this.row).find(".cell").eq(this.col).find(".node").remove();
 };
 Node.prototype.addToCell = function () {
-    console.log(this.col);
-    console.log(this.row);
+    var styles = {
+        left: "0px",
+        top: "0px",
+        right: "0px",
+        down: "0px"
+    };
+    this.node.css(styles);
+    this.node.html(this.value);
     $(".row").eq(this.row).find(".cell").eq(this.col).empty()
                                                      .append(this.node);
 };
@@ -27,32 +33,100 @@ Node.prototype.changeUnite = function changeUnite() {
 Node.prototype.powerUpValue = function () {
     this.value *= this.multuply;
 };
+Node.prototype.calculateAnimation = function () {
+    var moveBy = 0,
+        a = 0,
+        row = 0,
+        col = 0,
+        flag = false;
+    if (this.movedTo != null) {
+        flag = true;
+        row = this.movedTo.row;
+        col = this.movedTo.col;
+    }
+    else {
+        flag = true;
+        row = this.mergedTo.row;
+        col = this.mergedTo.col;
+    }
+    if (flag) {
+        if (row == this.row) {
+            a = this.col - col;
+            switch (a) {
+                case -1:
+                    moveBy = 90
+                    break;
+                case -2:
+                    moveBy = 180
+                    break;
+                case -3:
+                    moveBy = 270
+                    break;
+                case 1:
+                    moveBy = -90;
+                    break;
+                case 2:
+                    moveBy = -180;
+                    break;
+                case 3:
+                    moveBy = -270;
+                    break;
+                default:
+                    break;
+            }
+            return {
+                left: "+=" + moveBy
+            }
+        }
+        else {
+            a = this.row - row;
+            switch (a) {
+                case -1:
+                    moveBy = 56;
+                    break;
+                case -2:
+                    moveBy = 112;
+                    break;
+                case -3:
+                    moveBy = 168;
+                    break;
+                case 1:
+                    moveBy = -56;
+                    break;
+                case 2:
+                    moveBy = -112;
+                    break;
+                case 3:
+                    moveBy = -168;
+                    break;
+                default:
+                    break;
+            }
+            return {
+                top: "+=" + moveBy
+            }
+        }
+    }
+    
+    
+};
 Node.prototype.proceed = function () {
     var self = this;
+    
     if (this.movedTo != null) {
-        console.log(this.movedTo);
-        this.node.animate({
-            //left: "+=100"
-        }, 1000, function () {
-            console.log(self.movedTo);
-            self.removeFromCell();
+        this.node.animate(this.calculateAnimation(), 1000, function () {
             self.col = self.movedTo.col;
             self.row = self.movedTo.row;
-            self.addToCell();
-            this.movedTo = null;
-            this.mergedTo = null;
+            self.movedTo = null;
+            self.mergedTo = null;
         });
     }
     else if (this.mergedTo != null) {
-        this.node.animate({
-            //left: "+=100"
-        }, 1000, function () {
-            self.removeFromCell();
+        this.node.animate(this.calculateAnimation(), 1000, function () {
             self.col = self.mergedTo.col;
             self.row = self.mergedTo.row;
-            self.addToCell();
-            this.movedTo = null;
-            this.mergedTo = null;
+            self.movedTo = null;
+            self.mergedTo = null;
         });
     }
     this.unitedOnTurn = false;
