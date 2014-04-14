@@ -263,7 +263,8 @@ Story = Class.extend({
 	        else {
 	            this.hero.speakingTo.isSpeaking = false;
 	            this.hero.isSpeaking = false;
-	            $('body').off();
+	            $('*').off();
+	            $(document).off();
 	            this.hero.speakingTo.startGame();
 	        }
 	    }
