@@ -400,11 +400,7 @@ window.onload = function () {
 	canvas = $("#canvas")[0];
 	ctx = canvas.getContext('2d');
 	story = new Story();
-
-	//squareGame = new SquareGame();
-	//squareGame.populateFirstMap();
 	
-
 	
 	Inventory = new Inventory();
 	Inventory.getItem('axe');
