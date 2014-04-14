@@ -68,6 +68,8 @@ SwapPuzzle = Game.extend({
         _self = this;
         this.canvas = null;       //$("#swapPuzzleCanvas");
         this.context = null;      //canvas.getContext("2d");
+        this.background;
+        this.reverseButton;
         this.reverseParameters = {
             position: new Array(),
             lastPosition: new Array,
@@ -79,8 +81,10 @@ SwapPuzzle = Game.extend({
         this.context = this.canvas.getContext("2d");
         this.createMoveableBoxes();
         this.preloadImages(
-            "source/left.png",
-            "source/right.png"
+            "source/leftGem.png",
+            "source/rightGem.png",
+            "source/puzzleBackground.png",
+            "source/reverse_button.png"
             );
         $("#swapPuzzleCanvas").on('click', this, this.checkIfClicked);
         swapPuzzleLoop = setInterval(this.puzzleswapPuzzleLoop, 30);
@@ -173,19 +177,26 @@ SwapPuzzle = Game.extend({
         this.reverseParameters.position.splice(0, 1);
         this.reverseParameters.lastPosition.splice(0, 1);
     },
-    preloadImages: function (left, right) {
+    preloadImages: function (left, right,background,reverseButton) {
         for (var i = 0; i < this.moveableBoxes.length; i++) {
             if (i < 4) {
-                this.moveableBoxes[i].image = new Image;
+                this.moveableBoxes[i].image = new Image();
                 this.moveableBoxes[i].image.src = left;
             } else if (i > 4) {
-                this.moveableBoxes[i].image = new Image;
+                this.moveableBoxes[i].image = new Image();
                 this.moveableBoxes[i].image.src = right;
             }
         }
+        this.background = new Image();
+        this.background.src = background;
+        this.reverseButton = new Image();
+        this.reverseButton.src = reverseButton;
     },
     drawBoxes: function () {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        //this.context.drawImage(this.background, 0, 0, this.canvas.width, this.canvas.height);
+        this.context.drawImage(this.reverseButton, 0, 0,20,20);
+
         for (var i = 0; i < this.moveableBoxes.length; i++) {
             this.moveableBoxes[i].drawBox(this.context);
         }
