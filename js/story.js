@@ -350,8 +350,8 @@ Story = Class.extend({
 	        if (this.hero.speakingTo.game.gameOver) {
 	            //console.log("laaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaa");
 	            this.addEvents();
+	            this.hero.speakingTo.game.gameOver = false;
 	            this.hero.speakingTo = null;
-	            this.hero.speakingTo.game.gameOver = true;
 	        }
 	    }
 	},
