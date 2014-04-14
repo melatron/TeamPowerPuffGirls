@@ -46,7 +46,7 @@
 
 
     pickLeader : function (e) {
-        console.log (e.data.direction)
+        console.log (e.data.direction);
             
         e.data.dom.css({
             width: '30px',

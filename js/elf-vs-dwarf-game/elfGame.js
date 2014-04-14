@@ -13,8 +13,8 @@ RadoGame = Game.extend({
 		this.finishBlocks = [];		//array of all finish blocks
 		this.startingBlock = null;	//the hero starting point
 		
-		this.plot = $("#elf-vs-dwarf-game");
-		this.canvas = $('#elf-game-canvas')[0];		
+		this.plot = $("#elf-game");
+		this.canvas = $('#elf-game-canvas')[0];	
 		this.gameContext = $('#elf-game-canvas')[0].getContext('2d');
 		this.mainCharacter = {};
 		
@@ -33,6 +33,7 @@ RadoGame = Game.extend({
 	// ===== START METHOD ====== //
 	start: function(){
 		this.getContext();
+		this.addGameToPlot();
 		this.createLevels();
 		this.currentLevel = this.levels[this.levelIndex];
 		this.populateLevel(this.currentLevel);
@@ -49,7 +50,14 @@ RadoGame = Game.extend({
 		this.populateLevel(this.currentLevel);
 		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
 	},
+	
+	gameOver: function(){
+		clearInterval(myLoop);
+		this.removeGameFromPlot();
+	},
+	
 	// ===== GET CONTEXT ====== //
+	
 	getContext: function(){
 		this.gameContext = this.canvas.getContext('2d');
 	},
@@ -288,6 +296,7 @@ RadoGame = Game.extend({
 		
 		for (var i = 0; i < len; i++){
 			var temp = activeBlocks[i],
+				layout = this.currentLevel.layout,
 				offsetX = null,
 				offsetY = null,
 				upper = null,
@@ -301,21 +310,21 @@ RadoGame = Game.extend({
 			
 			// ---- determine adjacent blocks (8) ------ //
 			
-			if(temp.row != 0)  upper = this.currentLevel.layout[temp.row - 1][temp.col];
+			if(temp.row != 0)  upper = layout[temp.row - 1][temp.col];
 			
-			if(temp.row < this.currentLevel.layout.length - 1) lower = this.currentLevel.layout[temp.row + 1][temp.col];
+			if(temp.row < layout.length - 1) lower = layout[temp.row + 1][temp.col];
 			
-			if(temp.col != 0) left = this.currentLevel.layout[temp.row][temp.col - 1];
+			if(temp.col != 0) left = layout[temp.row][temp.col - 1];
 			
-			if(temp.row < this.currentLevel.layout[0].length - 1) right = this.currentLevel.layout[temp.row][temp.col + 1];
+			if(temp.col < layout[0].length - 1) right = layout[temp.row][temp.col + 1];
 			
-			if(temp.row != 0 && temp.col != 0) upperLeft = this.currentLevel.layout[temp.row - 1][temp.col - 1];
+			if(temp.row != 0 && temp.col != 0) upperLeft = layout[temp.row - 1][temp.col - 1];
 			
-			if(temp.col != 0 && temp.col < this.currentLevel.layout[0].length - 1) upperRight = this.currentLevel.layout[temp.row - 1][temp.col + 1];
+			if(temp.col != 0 && temp.col < layout[0].length - 1) upperRight = layout[temp.row - 1][temp.col + 1];
 			
-			if(temp.col != 0 && temp.row < this.currentLevel.layout.length - 1) lowerLeft = this.currentLevel.layout[temp.row + 1][temp.col - 1];
+			if(temp.col != 0 && temp.row < layout.length - 1) lowerLeft = layout[temp.row + 1][temp.col - 1];
 			
-			if(temp.col < this.currentLevel.layout[0].length - 1 && temp.row < this.currentLevel.layout.length - 1) lowerRight = this.currentLevel.layout[temp.row + 1][temp.col + 1];
+			if(temp.col < layout[0].length - 1 && temp.row < layout.length - 1) lowerRight = layout[temp.row + 1][temp.col + 1];
 			
 			// ----- linear collision detection ----- //
 			
@@ -630,280 +639,3 @@ RadoGame = Game.extend({
 
 	}
 });
-
-
-
-
-
-
-
-
-
-
-
-	
-	
-
-
-
-// function ElfGame(){
-// 	var game = this;
-// 	var canvas = $('#elf-game-canvas')[0];
-// 	var gameContext = null;
-// 	var mainCharacter = null;
-// 	var moveDir = null;
-// 	var currentLevel = null;
-	
-// 	game.level = [];
-	
-// 	game.getContext = function(){
-// 		gameContext = canvas.getContext('2d');
-// 	};
-	
-// 	game.createLevelBlock = function(x, y, width, height, isFinish){
-// 		var block = {
-// 				x: x,
-// 				y: y,
-// 				width: width,
-// 				height: height,
-// 				isFinish: isFinish
-// 		};
-// 		return block;
-// 	};
-
-// 	game.createLevelOne = function(){
-// 		var level = [];
-
-// 		level.push(game.createLevelBlock(50, 50, 100, 50, false));
-
-// 		return level;
-// 	}
-
-// 	game.createMainCharacter = function(x, y){
-// 		mainCharacter = {
-// 				x: x,
-// 				y: y,
-// 				width: 32,
-// 				height: 32,
-// 				moveUp: false,
-// 				moveDown: false,
-// 				moveLeft: false,
-// 				moveRight: false,
-// 				speed: 3,
-// 				isMoving: false
-// 		};
-// 		mainCharacter.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[0], mainCharacter, gameContext);  // create Sprites
-// 		mainCharacter.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[1], mainCharacter, gameContext);
-// 		mainCharacter.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[2], mainCharacter, gameContext);
-// 		mainCharacter.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[3], mainCharacter, gameContext);
-// 		mainCharacter.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[1], mainCharacter, gameContext);
-// 	};
-	
-// 	game.updateCharacter = function() {
-
-// 		var isBlocked = game.detectCollision();
-
-// 		if(mainCharacter.moveUp == true){
-// 			if(mainCharacter.moveLeft == true){
-// 				mainCharacter.spriteLeft.drawSprite();
-// 				mainCharacter.x -= mainCharacter.speed;
-// 				mainCharacter.y -= mainCharacter.speed;
-// 				return;
-// 			}
-// 			if(mainCharacter.moveRight == true){
-// 				mainCharacter.spriteRight.drawSprite();
-// 				mainCharacter.y -= mainCharacter.speed;
-// 				mainCharacter.x += mainCharacter.speed;
-// 				return;
-// 			}
-
-// 			mainCharacter.spriteUp.drawSprite();
-// 			mainCharacter.y -= mainCharacter.speed;
-// 			return;
-// 		}
-// 		if(mainCharacter.moveDown == true){
-// 			if(mainCharacter.moveLeft == true){
-// 				mainCharacter.spriteLeft.drawSprite();
-// 				mainCharacter.x -= mainCharacter.speed;
-// 				mainCharacter.y += mainCharacter.speed;
-// 				return;
-// 			}
-// 			if(mainCharacter.moveRight == true){
-// 				mainCharacter.spriteRight.drawSprite();
-// 				mainCharacter.x += mainCharacter.speed;
-// 				mainCharacter.y += mainCharacter.speed;
-// 				return;
-// 			}
-
-// 			mainCharacter.spriteDown.drawSprite();
-// 			mainCharacter.y += mainCharacter.speed;
-// 			return;
-// 		}
-// 		if(mainCharacter.moveLeft == true){
-// 			if(mainCharacter.moveUp == true){
-// 				mainCharacter.spriteLeft.drawSprite();
-// 				mainCharacter.x -= mainCharacter.speed;
-// 				mainCharacter.y -= mainCharacter.speed;
-// 				return;
-// 			}
-// 			if(mainCharacter.moveDown == true){
-// 				mainCharacter.spriteLeft.drawSprite();
-// 				mainCharacter.x -= mainCharacter.speed;
-// 				mainCharacter.y += mainCharacter.speed;
-// 				return;
-// 			}
-
-// 			mainCharacter.spriteLeft.drawSprite();
-// 			mainCharacter.x -= mainCharacter.speed;
-// 			return;
-// 		}
-// 		if(mainCharacter.moveRight == true){
-// 			if(mainCharacter.moveUp == true){
-// 				mainCharacter.spriteRight.drawSprite();
-// 				mainCharacter.x += mainCharacter.speed;
-// 				mainCharacter.y -= mainCharacter.speed;
-// 				return;
-// 			}
-// 			if(mainCharacter.moveDown == true){
-// 				mainCharacter.spriteRight.drawSprite();
-// 				mainCharacter.x += mainCharacter.speed;
-// 				mainCharacter.y += mainCharacter.speed;
-// 				return;
-// 			}
-
-// 			mainCharacter.spriteRight.drawSprite();
-// 			mainCharacter.x += mainCharacter.speed;
-// 			return;
-// 		}
-// 		if(!mainCharacter.isMoving || isBlocked == true){
-// 			mainCharacter.spriteIdle.drawSprite();
-// 		}
-// 	};
-	
-// 	game.stopCharacter = function(){
-// 		mainCharacter.moveUp = false;
-// 		mainCharacter.moveDown = false;
-// 		mainCharacter.moveLeft = false;
-// 		mainCharacter.moveRight = false;
-// 		mainCharacter.isMoving = false;
-// 	}
-
-// 	game.onKeyDown = function(e){
-// 		if(e.keyCode == 38){
-// 			mainCharacter.moveUp = true;
-// 			mainCharacter.isMoving = true;
-// 			e.preventDefault();
-// 		}
-// 		if(e.keyCode == 40){
-// 			mainCharacter.moveDown = true;
-// 			mainCharacter.isMoving = true;
-// 			e.preventDefault();
-// 		}
-// 		if(e.keyCode == 37){
-// 			mainCharacter.moveLeft = true;
-// 			mainCharacter.isMoving = true;
-// 			e.preventDefault();
-// 		}
-// 		if(e.keyCode == 39){
-// 			mainCharacter.moveRight = true;
-// 			mainCharacter.isMoving = true;
-// 			e.preventDefault();
-// 		}
-// 	};
-	
-// 	game.onKeyUp = function(e){
-// 		e.preventDefault();
-// 		if(e.keyCode == 38){
-// 			mainCharacter.isMoving = false;
-// 			mainCharacter.moveUp = false;
-// 		}
-// 		if(e.keyCode == 40){
-// 			mainCharacter.isMoving = false;
-// 			mainCharacter.moveDown = false;
-// 		}
-// 		if(e.keyCode == 37){
-// 			mainCharacter.isMoving = false;
-// 			mainCharacter.moveLeft = false;
-// 		}
-// 		if(e.keyCode == 39){
-// 			mainCharacter.isMoving = false;
-// 			mainCharacter.moveRight = false;
-// 		}
-// 	};
-// 	game.addEventListeners = function(){
-// 		window.addEventListener('keydown', game.onKeyDown, false);
-// 		window.addEventListener('keyup', game.onKeyUp, false);
-// 	}
-// 	game.removeEventListeners = function(){
-// 		// to do 
-// 	};
-	
-// 	game.drawLevelOne = function(){
-// 		for(var i = 0; i < currentLevel.length; i++){
-// 			var temp = currentLevel[i];
-// 			gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
-// 		}
-// 	};
-	
-// 	game.drawLevelTwo = function(){
-// 		//to do
-// 	};
-	
-// 	game.drawLevelThree = function(){
-// 		//to do
-// 	};
-	
-// 	game.detectCollision = function(){
-// 		var char = mainCharacter;
-// 		var collision = false;
-
-// 		if(char.x < 0){
-// 			char.moveLeft = false;
-// 			collision = true;
-// 		}
-// 		if(char.y < 0){
-// 			char.moveUp = false;
-// 			collision = true;
-// 		}
-// 		if(char.x + 32 > canvas.width){
-// 			char.moveRight = false;
-// 			collision = true;
-// 		}
-// 		if(char.y + 32 > canvas.height){
-// 			char.moveDown = false;
-// 			collision = true;
-// 		}
-// 		for(var i = 0; i < currentLevel.length; i++){
-// 			var temp = currentLevel[i];
-// 			if()
-// 		}
-
-
-// 		return collision;
-// 	};
-	
-// 	game.addPickup = function(){
-// 		//to do
-// 	};
-	
-// 	game.removePickup = function(){
-// 		//to do
-// 	};
-	
-// 	game.mainLoop = function(){
-// 		gameContext.save();
-// 		gameContext.clearRect(0, 0, canvas.width, canvas.height);
-// 		game.drawLevelOne();
-// 		game.updateCharacter();
-// 		gameContext.restore();
-// 	};
-	
-// 	game.start = function(){
-// 		game.getContext();
-// 		currentLevel = game.createLevelOne();
-// 		game.createMainCharacter(10, 10);
-// 		window.addEventListener('keydown', game.onKeyDown, false);
-// 		window.addEventListener('keyup', game.onKeyUp, false);
-// 		setInterval(game.mainLoop, 30);
-// 	};
-// }

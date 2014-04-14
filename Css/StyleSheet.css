@@ -21,7 +21,7 @@ body {
 #canvasDiv{
 	width: 1020px;
 	height: 512px;
-    background-image:url(../source/background.png)
+    background-image:url(../source/background.png);
 }
 #gamePlot {
 	width : 797px;
@@ -129,7 +129,7 @@ body {
 
 /* ELF GAME STYLEZ */
 
-#elf-vs-dwarf-game {
+#elf-game {
 	height:224px;
 	width:640px;
 	border: 1px solid red;

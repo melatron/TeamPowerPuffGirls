@@ -351,6 +351,6 @@ window.onload = function () {
      //window.addEventListener('keyup', listenKeyEvents, false);
      //game.putFirstTwoRandomNumbers();
 
-//    elfGame = new RadoGame();
-//    elfGame.start();
+    elfGame = new RadoGame();
+    elfGame.start();
 };
