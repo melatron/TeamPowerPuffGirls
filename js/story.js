@@ -2,25 +2,26 @@ Story = Class.extend({
 
     init: function () {
         var self = this,
-            elfGame = new RadoGame();
+            elfGame = new RadoGame(),
+            digitGame = new TonyGame(),
+            squareGame = new SquareGame();
         this.interactableObjects = new Array();
         var humanCastle = new ClickPoint(100, 50, 140, 100, "humanCastle",
         													{
         														x: 175,
         														y: 150
-        													}
+        													}, squareGame
         	),
             dwarfCamp = new ClickPoint(622, 68, 100, 50, "dwarfCamp", 
             												{
             													x: 655,
             													y: 130
-            												}
+            												}, digitGame
             ),
-            treeOfLife = new ClickPoint(70, 377, 100, 100, "treeOfLife", 
-            												{
+            treeOfLife = new ClickPoint(70, 377, 100, 100, "treeOfLife",{
             													x: 175,
             													y: 364
-            												}
+            												}, elfGame
 
             ),
             mage = new ClickPoint(790, 200, 50, 50, 'mage',
@@ -274,13 +275,8 @@ Story = Class.extend({
 
 
 var story,
-    game,
     context,
-    humanCastle,
-    dwarfCamp,
-    mainLoop,
-    squareGame,
-    elfGame;
+    mainLoop;
 
 
 //  Everything after this paragraph has to be moved to the story class.
@@ -351,6 +347,6 @@ window.onload = function () {
      //window.addEventListener('keyup', listenKeyEvents, false);
      //game.putFirstTwoRandomNumbers();
 
-//    elfGame = new RadoGame();
-//    elfGame.start();
+    //elfGame = new RadoGame();
+    //elfGame.start();
 };

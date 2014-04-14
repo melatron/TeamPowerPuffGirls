@@ -62,19 +62,19 @@
 
      placeLeader : function (e) {           
 
-        var mouseX = Math.floor((e.pageX - squareGame.mapBoundaries.left) / squareGame.squareWidth),
-            mouseY = Math.floor((e.pageY - squareGame.mapBoundaries.top) / squareGame.squareWidth);           
+        var mouseX = Math.floor((e.pageX - SquareGame.mapBoundaries.left) / SquareGame.squareWidth),
+            mouseY = Math.floor((e.pageY - SquareGame.mapBoundaries.top) / SquareGame.squareWidth);           
             
         if ((mouseX !== e.data.x || mouseY !== e.data.y) && 
             ((mouseX >= (e.data.x - 1) && mouseX <= (e.data.x + 1) && mouseY == e.data.y) ||
             (mouseY >= (e.data.y - 1) && mouseY <= (e.data.y + 1) && mouseX == e.data.x)) &&
-            (squareGame.firstMap[mouseY][mouseX] == 1)) {                    
+            (SquareGame.firstMap[mouseY][mouseX] == 1)) {                    
 
                     e.data.followLeader(e.data);
                     e.data.x = mouseX;
                     e.data.y = mouseY;
                     e.data.updatePosition();
-                    squareGame.firstMap[mouseY][mouseX] =2;                   
+                    SquareGame.firstMap[mouseY][mouseX] =2;                   
             } else {
                 e.data.updatePosition();
             };
@@ -90,7 +90,7 @@
             console.log(that.direction);
             if (that.direction === 'positive') {
 
-                squareGame.firstMap[that.array[that.array.length - 1].y][that.array[that.array.length -1].x] =1;
+                SquareGame.firstMap[that.array[that.array.length - 1].y][that.array[that.array.length -1].x] =1;
 
                 for (var i = (that.array.length - 1) ; i > 0; i--) {
                     console.log('follow leader');
@@ -100,7 +100,7 @@
 
             if (that.direction === "negative") {
 
-                squareGame.firstMap[that.array[0].y][that.array[0].x] =1;
+                SquareGame.firstMap[that.array[0].y][that.array[0].x] =1;
 
                 for (var i = 0; i < (that.array.length - 1) ; i++) {
                     that.array[i].followNext(that.array[i + 1]);
@@ -118,28 +118,28 @@
     }
 });
 
-var GreenSquare = Square.extend({
+GreenSquare = Square.extend({
 
     init: function (x, y, color, duty, index) {
         this._super(x, y, color, duty, index);
-        this.array = squareGame.greenSquares;
+        this.array = SquareGame.greenSquares;
     }
 });
 
-var RedSquare = GreenSquare.extend({
+RedSquare = Square.extend({
 
     init: function (x, y, color, duty, index) {
         this._super(x, y, color, duty, index);
-        this.array = squareGame.redSquares;
+        this.array = SquareGame.redSquares;
     },
 });
 
 
-var YellowSquare = GreenSquare.extend({
+YellowSquare = Square.extend({
 
     init: function (x, y, color, duty, index) {
         this._super(x, y, color, duty, index);
-        this.array = squareGame.yellowSquares;
+        this.array = SquareGame.yellowSquares;
     },
 
 });
@@ -147,7 +147,7 @@ var YellowSquare = GreenSquare.extend({
 
 
 
-var SquareGame = Class.extend({
+SquareGame = Game.extend({
 
     squareWidth: 40,
     greenSquares: [],
@@ -156,6 +156,7 @@ var SquareGame = Class.extend({
     firstMap: [],
 
     init: function () {
+        this.plot = $('#square-game');
 
         this.firstMap = [[0, 0, 2, 2, 2, 2],
                          [2, 2, 2, 0, 0, 2],
@@ -175,7 +176,7 @@ var SquareGame = Class.extend({
             right: $('#square-game-map').offset().left + 260,
             bottom: $('#square-game-map').offset().top + 260
         };
-
+        this.populateFirstMap();
     }, 
 
     createSquare: function ( x, y, color, duty, index) {
@@ -193,7 +194,13 @@ var SquareGame = Class.extend({
             this.yellowSquares.push(temp);
         }
     },
+    start: function () {
+        this.addGameToPlot();
+        //this.populateFirstMap();
+    },
+    endGame: function () {
 
+    },
     populateFirstMap : function () {
             
         this.createSquare(0, 1, 'green', 'leader', 0);
