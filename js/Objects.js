@@ -408,13 +408,19 @@ AIMovableObject = MovableObject.extend({
                 this.destination = {
                     x: this.clickPoint.arrivalPoint.x + 30,
                     y: this.clickPoint.arrivalPoint.y - 50
-                }
+                };
+            }
+            else if (this.name == 'elf'){
+            	this.destination = {
+            		x: this.clickPoint.arrivalPoint.x + 15,
+            		y: this.clickPoint.arrivalPoint.y - 20            			
+            	};
             }
             else{
                 this.destination = {
                     x: this.clickPoint.arrivalPoint.x + 30,
                     y: this.clickPoint.arrivalPoint.y + 4
-                }
+                };
             }
 			
 		}

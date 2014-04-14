@@ -21,7 +21,7 @@ Story = Class.extend({
             ),
             treeOfLife = new ClickPoint(70, 377, 100, 100, "treeOfLife",{
             													x: 175,
-            													y: 364
+            													y: 350
             												}, elfGame
 
             ),
@@ -70,15 +70,25 @@ Story = Class.extend({
             yMin: 300,
             yMax: 420
         });
+        this.elf = new AIMovableObject(210, 300, 32, 32, "elf", this.interactableObjects[2],{
+        	x: 210,
+        	y: 300
+        }, {
+        	xMin: 200,
+        	xMax: 220,
+        	yMin: 300,
+        	yMax: 340
+        });
 
         this.soundTrack = new PlayList();
 
         this.mainLoop = function () {
             ctx.save();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            self.elder.setRandomDestination()
-            self.hero.moveHeroToDestination();
+            self.elder.setRandomDestination();
             self.dragon.setRandomDestination();
+            self.elf.setRandomDestination();
+            self.hero.moveHeroToDestination();
             self.drawInteractableObject();
             self.checkIfSpeaking();
             //self.hero.drawSpeechBubble();
@@ -106,7 +116,11 @@ Story = Class.extend({
             dragonSpriteUpImage = null,
             dragonSpriteDownImage = null,
             dragonSpriteLeftImage = null,
-            dragonSpriteRightImage = null;
+            dragonSpriteRightImage = null,
+            elfSpriteUpImage = null,
+            elfSpriteDownImage = null,
+            elfSpriteLeftImage = null,
+            elfSpriteRightImage = null;
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
     	this.sprites.push(heroSpriteDownImage);
@@ -122,6 +136,11 @@ Story = Class.extend({
         this.sprites.push(dragonSpriteDownImage);
         this.sprites.push(dragonSpriteLeftImage);
         this.sprites.push(dragonSpriteRightImage);
+        
+        this.sprites.push(elfSpriteUpImage);
+        this.sprites.push(elfSpriteDownImage);
+        this.sprites.push(elfSpriteLeftImage);
+        this.sprites.push(elfSpriteRightImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -146,6 +165,13 @@ Story = Class.extend({
         this.dragon.spriteRight = new Sprite(384, 96, 4, 6, story.sprites[11], story.dragon, ctx);
         this.dragon.spriteIdle = new Sprite(96, 96, 1, 6, story.sprites[9], story.dragon, ctx);
         this.dragon.getDestinationDelay = 250;
+        
+        this.elf.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[12], story.elf, ctx);
+        this.elf.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[13], story.elf, ctx);
+        this.elf.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[14], story.elf, ctx);
+        this.elf.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[15], story.elf, ctx);
+        this.elf.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[13], story.elf, ctx);
+        this.elf.getDestinationDelay = 150;
 	},
     
 	// ==== Portrait preloader ==== //
@@ -307,18 +333,25 @@ window.onload = function () {
 
 
 	story.preloadSprites(
-			"source/heroMoveUp.png",
-			"source/heroMoveDown.png",
-			"source/heroMoveLeft.png",
-			"source/heroMoveRight.png",
-			"source/elderMoveUp.png",
-			"source/elderMoveDown.png",
-			"source/elderMoveLeft.png",
-			"source/elderMoveRight.png",
-            "source/dragonMoveUp.png",
-            "source/dragonMoveDown.png",
-            "source/dragonMoveLeft.png",
-            "source/dragonMoveRight.png"
+			'source/heroMoveUp.png',
+			'source/heroMoveDown.png',
+			'source/heroMoveLeft.png',
+			'source/heroMoveRight.png',
+			
+			'source/elderMoveUp.png',
+			'source/elderMoveDown.png',
+			'source/elderMoveLeft.png',
+			'source/elderMoveRight.png',
+			
+            'source/dragonMoveUp.png',
+            'source/dragonMoveDown.png',
+            'source/dragonMoveLeft.png',
+            'source/dragonMoveRight.png',
+            
+            'source/elfMoveUp.png',
+            'source/elfMoveDown.png',
+            'source/elfMoveLeft.png',
+            'source/elfMoveRight.png'
 	);
 	
 	story.preloadPortraits(
