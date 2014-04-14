@@ -70,6 +70,7 @@ SwapPuzzle = Game.extend({
         this.context = null;      //canvas.getContext("2d");
         this.background;
         this.reverseButton;
+        this.swapPuzzleLoop;
         this.reverseParameters = {
             position: new Array(),
             lastPosition: new Array,
@@ -87,10 +88,14 @@ SwapPuzzle = Game.extend({
             "source/reverse_button.png"
             );
         $("#swapPuzzleCanvas").on('click', this, this.checkIfClicked);
-        swapPuzzleLoop = setInterval(this.puzzleswapPuzzleLoop, 30);
+        this.swapPuzzleLoop = setInterval(this.puzzleswapPuzzleLoop, 30);
     },
     endGame: function () {
+        this.removeGameFromPlot();
+        clearInterval(this.swapPuzzleLoop);
+        $("#swapPuzzleCanvas").off();
 
+        return Math.floor(100 / this.reverseParameters.reversesDone);
     },
     addBonuses: function (bonuses) {
 
@@ -203,28 +208,15 @@ SwapPuzzle = Game.extend({
     },
     isGameOver: function () {
         if (this.moveableBoxes[3].position == 8 && this.moveableBoxes[5].position == 0) {
-            return true;
+            this.gameOver = true;
+            this.endGame();
         }
     },
 
     puzzleswapPuzzleLoop: function () {
         _self.drawBoxes();
-        if (_self.isGameOver()) {
-            alert("well played you won !!")
-            clearInterval(swapPuzzleLoop);
-        }
+        _self.isGameOver();
     },
 
 })
-var swapPuzzleLoop,
-    swapPuzzle;
-
-//$(document).ready(function () {
-//    canvas = $("#swapPuzzleCanvas")[0];
-//    ctx = canvas.getContext("2d");
-
-//    
-    
-
-//})
 
