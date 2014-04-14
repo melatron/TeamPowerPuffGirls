@@ -42,6 +42,12 @@ Story = Class.extend({
             													x: 430,
             													y: 355
             												}
+            ),
+            orcCamp = new ClickPoint(365, 5, 100, 100, 'orcCamp', 
+            												{
+            													x: 430,
+            													y: 140
+            												}
             );
         this.interactableObjects.push(humanCastle);
         this.interactableObjects.push(dwarfCamp);
@@ -49,6 +55,7 @@ Story = Class.extend({
         this.interactableObjects.push(mage);
         this.interactableObjects.push(dragon);
         this.interactableObjects.push(bandit);
+        this.interactableObjects.push(orcCamp);
         //
         this.movableObjects = new Array();
         this.staticSpriteObjects = new Array();
@@ -68,16 +75,16 @@ Story = Class.extend({
             yMin: 200,
             yMax: 240
         });
-        this.dragon = new AIMovableObject(730, 420, 96, 96, "dragon", this.interactableObjects[4], {
+        this.dragon = new AIMovableObject(730, 330, 96, 96, "dragon", this.interactableObjects[4], {
             x: 780,
-            y: 420
+            y: 300
         }, {
             xMin: 680,
             xMax: 810,
-            yMin: 300,
-            yMax: 420
+            yMin: 260,
+            yMax: 330
         });
-        this.elf = new AIMovableObject(210, 300, 32, 32, "elf", this.interactableObjects[2],{
+        this.elf = new AIMovableObject(210, 300, 32, 32, "elf", this.interactableObjects[2], {
         	x: 210,
         	y: 300
         }, {
@@ -86,7 +93,7 @@ Story = Class.extend({
         	yMin: 300,
         	yMax: 340
         });
-        this.bandit = new AIMovableObject(400, 400, 32, 32, 'bandit', this.interactableObjects[5],{
+        this.bandit = new AIMovableObject(400, 400, 32, 32, 'bandit', this.interactableObjects[5], {
         	x: 400,
         	y: 400
         }, {
@@ -94,6 +101,15 @@ Story = Class.extend({
         	xMax: 410,
         	yMin: 390,
         	yMax: 410
+        });
+        this.orc = new AIMovableObject(370, 80, 32, 32, 'orc', this.interactableObjects[6], {
+        	x: 370,
+        	y: 75
+        }, {
+        	xMin: 360,
+        	xMax: 410,
+        	yMin: 75,
+        	yMax: 100
         });
 
         this.soundTrack = new PlayList();
@@ -105,6 +121,7 @@ Story = Class.extend({
             self.dragon.setRandomDestination();
             self.elf.setRandomDestination();
             self.bandit.setRandomDestination();
+            self.orc.setRandomDestination();
             self.hero.moveHeroToDestination();
             self.drawInteractableObject();
             self.checkIfSpeaking();
@@ -127,22 +144,31 @@ Story = Class.extend({
     		heroSpriteDownImage = null,
     		heroSpriteLeftImage = null,
     		heroSpriteRightImage = null,
+    		
     		elderSpriteUpImage = null, 
     		elderSpriteDownImage = null,
     		elderSpriteLeftImage = null,
     		elderSpriteRightImage = null,
+    		
             dragonSpriteUpImage = null,
             dragonSpriteDownImage = null,
             dragonSpriteLeftImage = null,
             dragonSpriteRightImage = null,
+            
             elfSpriteUpImage = null,
             elfSpriteDownImage = null,
             elfSpriteLeftImage = null,
             elfSpriteRightImage = null,
+            
             banditSpriteUpImage = null,
             banditSpriteDownImage = null,
             banditSpriteLeftImage = null,
-            banditSpriteRightImage = null;
+            banditSpriteRightImage = null,
+            
+            orcSpriteUpImage = null,
+            orcSpriteDownImage = null,
+            orcSpriteLeftImage = null,
+            orcSpriteRightImage = null;
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
     	this.sprites.push(heroSpriteDownImage);
@@ -168,6 +194,11 @@ Story = Class.extend({
         this.sprites.push(banditSpriteDownImage);
         this.sprites.push(banditSpriteLeftImage);
         this.sprites.push(banditSpriteRightImage);
+        
+        this.sprites.push(orcSpriteUpImage);
+        this.sprites.push(orcSpriteDownImage);
+        this.sprites.push(orcSpriteLeftImage);
+        this.sprites.push(orcSpriteRightImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -206,6 +237,13 @@ Story = Class.extend({
         this.bandit.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[19], story.bandit, ctx);
         this.bandit.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[17], story.bandit, ctx);
         this.bandit.getDestinationDelay = 80;
+        
+        this.orc.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[20], story.orc, ctx);
+        this.orc.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[21], story.orc, ctx);
+        this.orc.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[22], story.orc, ctx);
+        this.orc.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[23], story.orc, ctx);
+        this.orc.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[21], story.orc, ctx);
+        this.orc.getDestinationDelay = 124;
 	},
     
 	// ==== Portrait preloader ==== //
@@ -397,7 +435,12 @@ window.onload = function () {
             'source/banditMoveUp.png',
             'source/banditMoveDown.png',
             'source/banditMoveLeft.png',
-            'source/banditMoveRight.png'
+            'source/banditMoveRight.png',
+            
+            'source/orcMoveUp.png',
+            'source/orcMoveDown.png',
+            'source/orcMoveLeft.png',
+            'source/orcMoveRight.png'
 	);
 	
 	story.preloadPortraits(
