@@ -7,21 +7,24 @@ RadoGame = Game.extend({
 		this.levelOne = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
 		                 [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-		                 [0, 1, 0, 0, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0],
-		                 [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+		                 [0, 1, 1, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0],
+		                 [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
 		                 [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
 		                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]];
-		this.currentLevel = null;
-		this.passableBlocks = [];
-		this.impassableBlocks = [];
-		this.finishBlocks = [];
-		this.startingBlock = null;
+		this.levels = [];            //array of levels
+		this.currentLevel = null;	//current level
+		this.passableBlocks = [];	//array of all passable blocks
+		this.impassableBlocks = [];	//array of all impassable blocks
+		this.finishBlocks = [];		//array of all finish blocks
+		this.startingBlock = null;	//the hero starting point
 		
 		this.plot = $("#elf-vs-dwarf-game");
 		this.canvas = $('#elf-game-canvas')[0];		
 		this.gameContext = $('#elf-game-canvas')[0].getContext('2d');
 		this.mainCharacter = {};
-
+		
+		// -- MAIN LOOP -- //
+		
 		this.mainLoop = function(){
 			game.gameContext.save();
 			game.gameContext.clearRect(0, 0, canvas.width, canvas.height);
@@ -30,6 +33,8 @@ RadoGame = Game.extend({
 			game.gameContext.restore();
 		};
 	},
+	
+	// ===== START METHOD ====== //
 	start: function(){
 		this.getContext();
 		this.currentLevel = this.levelOne;
@@ -38,11 +43,13 @@ RadoGame = Game.extend({
 		this.addEventListeners();
 		setInterval(this.mainLoop, 30);
 	},
-
+	// ===== GET CONTEXT ====== //
 	getContext: function(){
 		this.gameContext = this.canvas.getContext('2d');
 	},
-
+	
+	// ===== LEVEL BLOCK CONSTRUCTOR ===== //
+	
 	createLevelBlock: function(row, col, type){
 		var block = {
 				row: row,
@@ -56,6 +63,59 @@ RadoGame = Game.extend({
 		};
 		return block;
 	},
+	
+	// ======== LEVEL CONSTRUCTOR ======= //
+	
+	createLevel: function(number, layout){
+		var level = {
+				layout: layout,
+				number: number
+		};
+		
+		return level;
+	},
+	
+	// ======= CREATING THE LEVELS ======== //
+	
+	createLevels: function(){
+		this.levels.push(this.createLevel(
+				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],		// 0 - impassable,
+                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],		// 1 - passable,
+                 [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],		// 2 - finish,
+                 [0, 1, 1, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0],		// 3 - starting 
+                 [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+                 
+                 1)
+		);
+		
+		this.levels.push(this.createLevel(
+				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                 [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 1, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0],
+                 [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+                 
+                 2)
+		);
+		
+		this.levels.push(this.createLevel(
+				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                 [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 1, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0],
+                 [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
+                 
+                 3)
+		);
+	},
+	
+	// ====== INSERTING BLOCKS IN MATRIX ======= //
 	
 	populateLevel: function(level){
 		for(var row = 0; row < level.length; row++){
@@ -83,6 +143,8 @@ RadoGame = Game.extend({
 		}
 	},
 	
+	// ====== DETERMINE HERO LOCATION ======= //
+	
 	characterLocation: function(){
 		var activeBlocks = new Array(),
 			charBox = this.mainCharacterBoundingRect,
@@ -102,6 +164,8 @@ RadoGame = Game.extend({
 		
 		return activeBlocks;
 	},
+	
+	// ====== DRAWING THE LEVEL (TEST) ===== //
 	
 	drawLevel: function(){
 		
@@ -129,6 +193,8 @@ RadoGame = Game.extend({
 		}
 	},
 	
+	// ====== MAIN CHARACTER CONSTRUCTOR ===== //
+	
 	createMainCharacter: function(x, y){
 		this.mainCharacter = {
 				x: x,
@@ -136,15 +202,10 @@ RadoGame = Game.extend({
 				width: 32,
 				height: 32,
 				moveUp: false,
-				isKeyUpPressed: false,
 				moveDown: false,
-				isKeyDownPressed: false,
 				moveLeft: false,
-				isKeyLeftPressed: false,
 				moveRight: false,
-				isKeyRightPressed: false,
 				speed: 3,
-				moveDir: null,
 				isMoving: false
 		};
 		
@@ -162,6 +223,8 @@ RadoGame = Game.extend({
 		this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[1], this.mainCharacter, this.gameContext);
 	},
 	
+	// =========================== COLLISION DETECTION METHOD ============================== //
+	
 	detectCollision: function(){
 		var collision = {
 				top: false,
@@ -169,10 +232,12 @@ RadoGame = Game.extend({
 				left: false,
 				right: false
 		},
-			char = this.mainCharacter,
-			charBox = this.mainCharacterBoundingRect,
-			activeBlocks = this.characterLocation(),
+			char = this.mainCharacter,						// main character
+			charBox = this.mainCharacterBoundingRect,		// main character bounding rect
+			activeBlocks = this.characterLocation(),		// determine 'active' blocks
 			len = activeBlocks.length;
+		
+		// --- determine collision with edges of canvas ---- //
 		
 		if(char.x < 0){
 			collision.left = true;
@@ -187,6 +252,8 @@ RadoGame = Game.extend({
 			collision.bottom = true;
 		}
 		
+		// ---- determine adjacent blocks and check if colliding ----- //
+		
 		for (var i = 0; i < len; i++){
 			var temp = activeBlocks[i],
 				offsetX = null,
@@ -200,123 +267,55 @@ RadoGame = Game.extend({
 				lowerRight = null,
 				lowerLeft = null;
 			
-			if(temp.row != 0){
-				upper = this.currentLevel[temp.row - 1][temp.col];
-			}
-			if(temp.row < this.currentLevel.length - 1){
-				lower = this.currentLevel[temp.row + 1][temp.col];
-			}
-			if(temp.col != 0){
-				left = this.currentLevel[temp.row][temp.col - 1];
-			}
-			if(temp.row < this.currentLevel[0].length - 1){
-				right = this.currentLevel[temp.row][temp.col + 1];
-			}
-			if(temp.row != 0 && temp.col != 0){
-				upperLeft = this.currentLevel[temp.row - 1][temp.col - 1];
-			}
-			if(temp.col != 0 && temp.col < this.currentLevel[0].length - 1){
-				upperRight = this.currentLevel[temp.row - 1][temp.col + 1];
-			}
-			if(temp.col != 0 && temp.row < this.currentLevel.length - 1){
-				lowerLeft = this.currentLevel[temp.row + 1][temp.col - 1];
-			}
-			if(temp.col < this.currentLevel[0].length - 1 && temp.row < this.currentLevel.length - 1){
-				lowerRight = this.currentLevel[temp.row + 1][temp.col + 1];
-			}
+			// ---- determine adjacent blocks (8) ------ //
 			
+			if(temp.row != 0)  upper = this.currentLevel[temp.row - 1][temp.col];
+			
+			if(temp.row < this.currentLevel.length - 1) lower = this.currentLevel[temp.row + 1][temp.col];
+			
+			if(temp.col != 0) left = this.currentLevel[temp.row][temp.col - 1];
+			
+			if(temp.row < this.currentLevel[0].length - 1) right = this.currentLevel[temp.row][temp.col + 1];
+			
+			if(temp.row != 0 && temp.col != 0) upperLeft = this.currentLevel[temp.row - 1][temp.col - 1];
+			
+			if(temp.col != 0 && temp.col < this.currentLevel[0].length - 1) upperRight = this.currentLevel[temp.row - 1][temp.col + 1];
+			
+			if(temp.col != 0 && temp.row < this.currentLevel.length - 1) lowerLeft = this.currentLevel[temp.row + 1][temp.col - 1];
+			
+			if(temp.col < this.currentLevel[0].length - 1 && temp.row < this.currentLevel.length - 1) lowerRight = this.currentLevel[temp.row + 1][temp.col + 1];
+			
+			// ----- linear collision detection ----- //
 			
 			if(right && right.type == 0){
 				if(charBox.x + charBox.width > temp.x + temp.width){
 					collision.right = true;
-					/*if(char.moveRight == true && len == 3){
-						if(upper.isActive){
-							if(char.moveDown == false){
-								char.y -= 1;
-								charBox.y -= 1;
-								break;
-							}
-						}
-						if(lower.isActive){
-							if(char.moveUp == false){
-								char.y += 1;
-								charBox.y += 1;
-								break;
-							}
-						}
-					}*/
 				}
 			}
 			if(lower && lower.type == 0){
 				if(charBox.y + charBox.height > temp.y + temp.height){
-					collision.bottom = true;
-					/*if(char.moveDown == true && len == 3){
-						if(right.isActive){
-							offset = right.x - charBox.x;
-							if(offset < normalOffset){
-								char.x += 1;
-								charBox.x += 1;
-								break;															
-							}
-						}
-						if(left.isActive){
-							offset = (charBox.x + charBox.width) - (left.width + left.x);
-							if(offset < normalOffset){
-								char.x -= 1;
-								charBox.x -= 1;	
-								break;								
-							}
-						}
-					}*/					
+					collision.bottom = true;		
 				}
 			}
 			if(left && left.type == 0){
 				if(charBox.x < temp.x){
 					collision.left = true;
-					/*if(char.moveLeft == true && len == 3){
-						if(upper.isActive){
-							if(char.moveDown == false){
-								char.y -= 1;
-								charBox.y -= 1;
-								break;
-							}							
-						}
-						if(lower.isActive){
-							if(char.moveUp == false){
-								char.y += 1;
-								charBox.y += 1;
-								break;							
-							}
-						}
-					}*/
 				}
 			}
 			if(upper && upper.type == 0){
 				if(charBox.y < temp.y){
 					collision.top = true;
-					/*if(char.moveUp == true && len == 3){
-						if(right.isActive){
-							char.x += 1;
-							charBox.x += 1;
-							break;
-							
-						}
-						if(left.isActive){
-							char.x -= 5;
-							charBox.x -= 5;
-							break;
-						}
-					}*/
 				}
 			}
 			
+			// ==== diagonal collision detection ==== //
+			
 			if(upperLeft && upperLeft.type == 0){
-				if(((charBox.x > upperLeft.x && charBox.x < upperLeft.x + upperLeft.width) || (charBox.x + charBox.width > upperLeft.x && charBox.x + charBox.width < upperLeft.x + upperLeft.width)) && ((charBox.y > upperLeft.y && charBox.y < upperLeft.y + upperLeft.height) || (charBox.y + charBox.height > upperLeft.y && charBox.y + charBox.height < upperLeft.y + upperLeft.height))){
-					if(len == 3){
-						console.log('hello');
-						offsetX = (upperLeft.x + upperLeft.width) - charBox.x;
+				if(this.areOverlapping(charBox, upperLeft)){
+					if(len == 3){	// determine whether we are on an edge
+						offsetX = (upperLeft.x + upperLeft.width) - charBox.x;	//calculate offsets
 						offsetY = (upperLeft.y + upperLeft.height) - charBox.y;
-						console.log("Y: " + offsetY + " X: " + offsetX);
+						
 						if(offsetX > offsetY){
 							char.y += offsetY;
 							charBox.y += offsetY;
@@ -335,40 +334,88 @@ RadoGame = Game.extend({
 					}
 				}         
 			}
+			
 			if(upperRight && upperRight.type == 0){
-				if(((charBox.x > upperRight.x && charBox.x < upperRight.x + upperRight.width) || (charBox.x + charBox.width > upperRight.x && charBox.x + charBox.width < upperRight.x + upperRight.width)) && ((charBox.y > upperRight.y && charBox.y < upperRight.y + upperRight.height) || (charBox.y + charBox.height > upperRight.y && charBox.y + charBox.height < upperRight.y + upperRight.height))){
+				if(this.areOverlapping(charBox, upperRight)){
 					if(len == 3){
 						offsetX = (charBox.x + charBox.width) - upperRight.x;
 						offsetY = (upperRight.y + upperRight.height) - charBox.y;
-						console.log("Y: " + offsetY + " X: " + offsetX);
 						
 						if(offsetX > offsetY){
-							char.y += offsetY;
-							charBox.y += offsetY;
+							char.y += offsetY + char.speed;
+							charBox.y += offsetY + char.speed;
+							break;
 						}
 						if(offsetY > offsetX){
 							char.x -= offsetX;
 							charBox.x -= offsetX;
+							break;
 						}
 						if(offsetY == offsetX){
-							char.x -= offsetX;
-							charBox.x -= offsetX;
+							char.y -= offsetY;
+							charBox.y -= offsetY;
+							break;
 						}
 					}
 				}
 			}
+			
 			if(lowerLeft && lowerLeft.type == 0){
-				
-			}
-			if(lowerRight && lowerRight.type == 0){
-				
+				if(this.areOverlapping(charBox, lowerLeft)){
+					if(len == 3){
+						offsetX = (lowerLeft.x + lowerLeft.width) - charBox.x;
+						offsetY = (charBox.y + charBox.height) - lowerLeft.y;
+						
+						if(offsetX > offsetY){
+							char.y -= offsetY;
+							charBox.y -= offsetY;
+							break;
+						}
+						if(offsetY > offsetX){
+							char.x += offsetX + char.speed;
+							charBox.x += offsetX + char.speed;
+							break;
+						}
+						if(offsetX == offsetY){
+							char.x += offsetX + char.speed;
+							charBox.x += offsetX + char.speed;
+							break;
+						}
+					}
+				}
 			}
 			
+			if(lowerRight && lowerRight.type == 0){
+				if(this.areOverlapping(charBox, lowerRight)){
+					if(len == 3){
+						offsetX = (charBox.x + charBox.width) - lowerRight.x;
+						offsetY = (charBox.y + charBox.height) - lowerRight.y;
+						
+						if(offsetX > offsetY){
+							char.y -= offsetY;
+							charBox.y -= offsetY;
+							break;
+						}
+						if(offsetY > offsetX){
+							char.x -= offsetX + char.speed;
+							charBox.x -= offsetX + char.speed;
+							break;
+						}
+						if(offsetX == offsetY){
+							char.x -= offsetX + char.speed;
+							charBox.x -= offsetX + char.speed;
+							break;
+						}
+					}
+				}
+			}		
 		}
 		
 		return collision;
 	},
 
+	// ===== UPDATE CHARACTER LOCATION ========== //
+	
 	updateCharacter: function(){
 		var collision = this.detectCollision();
 		var char = this.mainCharacter,
@@ -398,7 +445,6 @@ RadoGame = Game.extend({
 				charBox.y -= char.speed;				
 			}
 			return;
-			//char.spriteIdle.drawSprite();
 		}
 
 		if(char.moveDown == true){
@@ -477,7 +523,17 @@ RadoGame = Game.extend({
 			char.spriteIdle.drawSprite();
 		}
 	},
-
+	
+	// ======== CHECK IF OVERLAPPING METHOD =========== //
+	
+	areOverlapping: function(obj1, obj2){
+		if(((obj1.x > obj2.x && obj1.x < obj2.x + obj2.width) || (obj1.x + obj1.width > obj2.x && obj1.x + obj1.width < obj2.x + obj2.width)) && ((obj1.y > obj2.y && obj1.y < obj2.y + obj2.height) || (obj1.y + obj1.height > obj2.y && obj1.y + obj1.height < obj2.y + obj2.height))){
+			return true;
+		}
+	},
+	
+	// ============ EVENT HANDLERS ============ //
+	
 	onKeyDown:function(e){
 		var char = e.data.mainCharacter;
 		if(e.keyCode == 38){
@@ -539,24 +595,6 @@ RadoGame = Game.extend({
 	removeEventListeners: function(){
 
 	}
-
-	
-
-/*	createLevelOne: function(){
-		var level = [];
-
-		level.push(this.createLevelBlock(50, 50, 100, 50, false));
-		level.push(this.createLevelBlock(100, 54, 50, 100, false));
-
-		return level;
-	},
-
-	drawLevel: function(){
-		for(var i = 0; i < this.currentLevel.length; i++){
-			var temp = this.currentLevel[i];
-			this.gameContext.strokeRect(temp.x, temp.y, temp.width, temp.height);
-		}
-	}*/
 });
 
 

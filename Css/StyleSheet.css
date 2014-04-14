@@ -70,7 +70,7 @@ body {
     position:relative;
     background-image: url(../source/square-game-backgorund.png);
     background-size:260px 260px;
-    display:block;
+    display:none;
 }
 
 #square-game-map {
