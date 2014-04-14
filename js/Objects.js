@@ -173,8 +173,8 @@ InteractableObject = SpeakingObject.extend({
         this.game = game;
     },
     startGame: function (bonuses) {
-        if (this.game) {
-            this.calculateItemBonuses(bonuses);
+        if (!this.game.gameOver) {
+            //this.calculateItemBonuses(bonuses);
             this.game.start();
         }
     },
@@ -290,8 +290,8 @@ MovableObject = SpeakingObject.extend({
 //=== Click point object ====//
 
 ClickPoint = InteractableObject.extend({
-    init: function (x, y, width, height, name, arrivalPoint) {
-        this._super(x, y, width, height, name);
+    init: function (x, y, width, height, name, arrivalPoint, game) {
+        this._super(x, y, width, height, name, game);
         this.arrivalPoint = arrivalPoint;
     },
     
