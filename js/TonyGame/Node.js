@@ -8,7 +8,7 @@ function Node (x, y, value) {
     this.movedTo = null;
     this.mergedTo = null;
     this.node = $("<div class = 'node'></div>");
-    //this.node.css({ backgroundImage: 'url"(' + this.value + '.png) no-repeat;"' });
+    //this.node.css('background-image', 'url(source/TonyGame/2.png)');
     //this.node.style.backgroundImage = 'url("../../source/TonyGame/' + this.value + '.png) no-repeat;"';
 };
 Node.prototype.removeFromCell = function() {
@@ -25,13 +25,13 @@ Node.prototype.addToCell = function () {
             margin: "0 auto",
             width: "0px",
             height: "0px",
-            //backgroundImage: 'url(../source/TonyGame/' + self.value + '.png);'
+           // backgroundImage: 'url(source/TonyGame/' + self.value + '.png);'
             //backgroundImage: 'url"(a.png) no-repeat;"'
         },
             self = this;
         console.log('url(../source/TonyGame/' + self.value + '.png);');
         this.node.css(styles);
-        this.node.css('background-image', 'url(../source/TonyGame/2.png);');
+        this.node.css('background-image', 'url(source/TonyGame/'+ self.value +'.png)');
         //this.node.style.backgroundImage = 'url("../../source/TonyGame/' + this.value + '.png) no-repeat;"';
         $(".row").eq(this.row).find(".cell").eq(this.col).empty()
                                                         .append(this.node);
@@ -51,11 +51,11 @@ Node.prototype.addToCell = function () {
             margin: "auto",
             width: "89px",
             height: "55px",
-            //backgroundImage: 'url(../source/TonyGame/' + self.value + '.png);'
+            //backgroundImage: 'url(source/TonyGame/' + self.value + '.png);'
             //backgroundImage: 'url"(a.png) no-repeat;"'
         };
         this.node.css(styles);
-        this.node.css('background-image', 'url(../source/TonyGame/2.png);');
+        this.node.css('background-image', 'url(source/TonyGame/' + self.value + '.png)');
         //this.node.style.backgroundImage = 'url("../../source/TonyGame/' + this.value + '.png) no-repeat;"';
         $(".row").eq(this.row).find(".cell").eq(this.col).empty()
                                                         .append(this.node);

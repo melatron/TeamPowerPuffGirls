@@ -391,7 +391,8 @@ Story = Class.extend({
 
 var story,
     context,
-    mainLoop;
+    mainLoop,
+    yolo;
 
 
 //  Everything after this paragraph has to be moved to the story class.
@@ -401,6 +402,7 @@ window.onload = function () {
 	canvas = $("#canvas")[0];
 	ctx = canvas.getContext('2d');
 	story = new Story();
+	yolo = 'url(source/TonyGame/2.png)';
 	
 	
 	Inventory = new Inventory();
