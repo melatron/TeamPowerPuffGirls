@@ -331,7 +331,14 @@ window.onload = function () {
         'music/Swamp.mp3',
         'music/Water.mp3',
         'music/Snow.mp3',
-        'music/ElementalMetropolis.mp3'
+        'music/ElementalMetropolis.mp3',
+        'music/Sand.mp3',
+        'music/Volcanic.mp3',
+        'music/Wizards.mp3',
+        'music/ElvesTown.mp3',
+        'music/Necropolis.mp3',
+        'music/KnightsFortress.mp3',
+        'music/ChaosCity.mp3'
     );
 	story.soundTrack.preloadQuestSounds('source/rada.mp3');
     //game = new Gamez();
@@ -339,12 +346,12 @@ window.onload = function () {
     mainLoop = setInterval(story.mainLoop, 30);
     
 
-//    game = new TonyGame();
-//    game.start();
+    game = new TonyGame();
+    game.start();
      //window.addEventListener('keydown', listenKeyEvents, false);
      //window.addEventListener('keyup', listenKeyEvents, false);
      //game.putFirstTwoRandomNumbers();
 
-    elfGame = new RadoGame();
-    elfGame.start();
+//    elfGame = new RadoGame();
+//    elfGame.start();
 };
