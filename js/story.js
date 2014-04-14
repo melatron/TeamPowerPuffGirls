@@ -307,8 +307,12 @@ Story = Class.extend({
 
     // Dani have to write some logic about the conversation after the game is finished.
 	checkIfGamePlayed: function () {
-	    if (this.hero.speakingTo.game.gameOver) {
-	        this.addEvents();
+	    if (this.hero.speakingTo) {
+	        if (this.hero.speakingTo.game.gameOver) {
+	            console.log("laaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaa");
+	            this.addEvents();
+	            this.hero.speakingTo = null;
+	        }
 	    }
 	},
     addInteractableObject: function (iObject) {

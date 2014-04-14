@@ -76,6 +76,7 @@ SwapPuzzle = Game.extend({
             lastPosition: new Array,
             reversesDone: 0
         }
+        this.plot = $('#swapPuzzle');
     },
     start: function () {
         this.canvas = $("#swapPuzzleCanvas")[0];
@@ -91,6 +92,8 @@ SwapPuzzle = Game.extend({
         this.swapPuzzleLoop = setInterval(this.puzzleswapPuzzleLoop, 30);
     },
     endGame: function () {
+        this.gameOver = true;
+        console.log("hello");
         this.removeGameFromPlot();
         clearInterval(this.swapPuzzleLoop);
         $("#swapPuzzleCanvas").off();
@@ -99,12 +102,6 @@ SwapPuzzle = Game.extend({
     },
     addBonuses: function (bonuses) {
 
-    },
-    addGameToPlot: function () {
-        this.plot.show();
-    },
-    removeGameFromPlot: function () {
-        this.plot.hide();
     },
     createMoveableBoxes: function () {
         var x = 0,
@@ -208,7 +205,6 @@ SwapPuzzle = Game.extend({
     },
     isGameOver: function () {
         if (this.moveableBoxes[3].position == 8 && this.moveableBoxes[5].position == 0) {
-            this.gameOver = true;
             this.endGame();
         }
     },
