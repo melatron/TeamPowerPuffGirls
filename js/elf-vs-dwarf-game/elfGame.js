@@ -12,6 +12,7 @@ RadoGame = Game.extend({
 		                 [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
 		                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]];
 		this.levels = [];            //array of levels
+		this.levelIndex = 0;
 		this.currentLevel = null;	//current level
 		this.passableBlocks = [];	//array of all passable blocks
 		this.impassableBlocks = [];	//array of all impassable blocks
@@ -37,7 +38,8 @@ RadoGame = Game.extend({
 	// ===== START METHOD ====== //
 	start: function(){
 		this.getContext();
-		this.currentLevel = this.levelOne;
+		this.createLevels();
+		this.currentLevel = this.levels[this.levelIndex];
 		this.populateLevel(this.currentLevel);
 		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
 		this.addEventListeners();
@@ -69,7 +71,8 @@ RadoGame = Game.extend({
 	createLevel: function(number, layout){
 		var level = {
 				layout: layout,
-				number: number
+				number: number,
+				isFinished: false
 		};
 		
 		return level;
@@ -79,48 +82,48 @@ RadoGame = Game.extend({
 	
 	createLevels: function(){
 		this.levels.push(this.createLevel(
+				1,
 				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],		// 0 - impassable,
                  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],		// 1 - passable,
                  [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],		// 2 - finish,
                  [0, 1, 1, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0],		// 3 - starting 
                  [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
-                 
-                 1)
+                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]]
+				)
 		);
 		
 		this.levels.push(this.createLevel(
+				2,
+				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                 [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 1, 0, 2, 2, 0, 0],
+                 [0, 1, 1, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 1, 0, 1, 2, 0, 0],
+                 [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0],
+                 [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]]
+                 )
+		);
+		
+		this.levels.push(this.createLevel(
+				3,
 				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
                  [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 1, 1, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0],
                  [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
-                 
-                 2)
-		);
-		
-		this.levels.push(this.createLevel(
-				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                 [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 1, 1, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0],
-                 [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]],
-                 
-                 3)
+                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0]]
+                 )
 		);
 	},
 	
 	// ====== INSERTING BLOCKS IN MATRIX ======= //
 	
 	populateLevel: function(level){
-		for(var row = 0; row < level.length; row++){
-			for(var col = 0; col < level[row].length; col++){
-				var type = level[row][col],
+		for(var row = 0; row < level.layout.length; row++){
+			for(var col = 0; col < level.layout[row].length; col++){
+				var type = level.layout[row][col],
 					block = this.createLevelBlock(row, col, type);
 				
 				if (type == 0){
@@ -138,9 +141,28 @@ RadoGame = Game.extend({
 					this.passableBlocks.push(block);
 				}
 				
-				level[row][col] = block;
+				level.layout[row][col] = block;
 			}
 		}
+	},
+	
+	checkLevelProgress: function(){
+		var i,
+			len = this.finishBlocks.length;
+		
+		for(i = 0; i < len; i ++){
+			var temp = this.finishBlocks[i];
+			if(temp.isActive == true){
+				this.currentLevel.isFinished = true;
+			}
+		}
+		if(this.currentLevel.isFinished){
+	//		if()
+		}
+	},
+	
+	checkIfGameOver: function(){
+		
 	},
 	
 	// ====== DETERMINE HERO LOCATION ======= //
@@ -269,21 +291,21 @@ RadoGame = Game.extend({
 			
 			// ---- determine adjacent blocks (8) ------ //
 			
-			if(temp.row != 0)  upper = this.currentLevel[temp.row - 1][temp.col];
+			if(temp.row != 0)  upper = this.currentLevel.layout[temp.row - 1][temp.col];
 			
-			if(temp.row < this.currentLevel.length - 1) lower = this.currentLevel[temp.row + 1][temp.col];
+			if(temp.row < this.currentLevel.layout.length - 1) lower = this.currentLevel.layout[temp.row + 1][temp.col];
 			
-			if(temp.col != 0) left = this.currentLevel[temp.row][temp.col - 1];
+			if(temp.col != 0) left = this.currentLevel.layout[temp.row][temp.col - 1];
 			
-			if(temp.row < this.currentLevel[0].length - 1) right = this.currentLevel[temp.row][temp.col + 1];
+			if(temp.row < this.currentLevel.layout[0].length - 1) right = this.currentLevel.layout[temp.row][temp.col + 1];
 			
-			if(temp.row != 0 && temp.col != 0) upperLeft = this.currentLevel[temp.row - 1][temp.col - 1];
+			if(temp.row != 0 && temp.col != 0) upperLeft = this.currentLevel.layout[temp.row - 1][temp.col - 1];
 			
-			if(temp.col != 0 && temp.col < this.currentLevel[0].length - 1) upperRight = this.currentLevel[temp.row - 1][temp.col + 1];
+			if(temp.col != 0 && temp.col < this.currentLevel.layout[0].length - 1) upperRight = this.currentLevel.layout[temp.row - 1][temp.col + 1];
 			
-			if(temp.col != 0 && temp.row < this.currentLevel.length - 1) lowerLeft = this.currentLevel[temp.row + 1][temp.col - 1];
+			if(temp.col != 0 && temp.row < this.currentLevel.layout.length - 1) lowerLeft = this.currentLevel.layout[temp.row + 1][temp.col - 1];
 			
-			if(temp.col < this.currentLevel[0].length - 1 && temp.row < this.currentLevel.length - 1) lowerRight = this.currentLevel[temp.row + 1][temp.col + 1];
+			if(temp.col < this.currentLevel.layout[0].length - 1 && temp.row < this.currentLevel.layout.length - 1) lowerRight = this.currentLevel.layout[temp.row + 1][temp.col + 1];
 			
 			// ----- linear collision detection ----- //
 			
@@ -366,6 +388,7 @@ RadoGame = Game.extend({
 						offsetX = (lowerLeft.x + lowerLeft.width) - charBox.x;
 						offsetY = (charBox.y + charBox.height) - lowerLeft.y;
 						
+						console.log("X: " + offsetX + " Y: " + offsetY);						
 						if(offsetX > offsetY){
 							char.y -= offsetY;
 							charBox.y -= offsetY;
