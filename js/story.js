@@ -36,12 +36,19 @@ Story = Class.extend({
                                                                 x: 660,
                                                                 y: 345
                                                             }
+            ),
+            bandit = new ClickPoint(460, 355, 50, 50, 'banditTavern',
+            												{
+            													x: 430,
+            													y: 355
+            												}
             );
         this.interactableObjects.push(humanCastle);
         this.interactableObjects.push(dwarfCamp);
         this.interactableObjects.push(treeOfLife);
         this.interactableObjects.push(mage);
         this.interactableObjects.push(dragon);
+        this.interactableObjects.push(bandit);
         //
         this.movableObjects = new Array();
         this.staticSpriteObjects = new Array();
@@ -79,6 +86,15 @@ Story = Class.extend({
         	yMin: 300,
         	yMax: 340
         });
+        this.bandit = new AIMovableObject(400, 400, 32, 32, 'bandit', this.interactableObjects[5],{
+        	x: 400,
+        	y: 400
+        }, {
+        	xMin: 390,
+        	xMax: 410,
+        	yMin: 390,
+        	yMax: 410
+        });
 
         this.soundTrack = new PlayList();
 
@@ -88,6 +104,7 @@ Story = Class.extend({
             self.elder.setRandomDestination();
             self.dragon.setRandomDestination();
             self.elf.setRandomDestination();
+            self.bandit.setRandomDestination();
             self.hero.moveHeroToDestination();
             self.drawInteractableObject();
             self.checkIfSpeaking();
@@ -120,7 +137,11 @@ Story = Class.extend({
             elfSpriteUpImage = null,
             elfSpriteDownImage = null,
             elfSpriteLeftImage = null,
-            elfSpriteRightImage = null;
+            elfSpriteRightImage = null,
+            banditSpriteUpImage = null,
+            banditSpriteDownImage = null,
+            banditSpriteLeftImage = null,
+            banditSpriteRightImage = null;
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
     	this.sprites.push(heroSpriteDownImage);
@@ -141,6 +162,11 @@ Story = Class.extend({
         this.sprites.push(elfSpriteDownImage);
         this.sprites.push(elfSpriteLeftImage);
         this.sprites.push(elfSpriteRightImage);
+        
+        this.sprites.push(banditSpriteUpImage);
+        this.sprites.push(banditSpriteDownImage);
+        this.sprites.push(banditSpriteLeftImage);
+        this.sprites.push(banditSpriteRightImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -172,6 +198,13 @@ Story = Class.extend({
         this.elf.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[15], story.elf, ctx);
         this.elf.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[13], story.elf, ctx);
         this.elf.getDestinationDelay = 150;
+        
+        this.bandit.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[16], story.bandit, ctx);
+        this.bandit.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[17], story.bandit, ctx);
+        this.bandit.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[18], story.bandit, ctx);
+        this.bandit.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[19], story.bandit, ctx);
+        this.bandit.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[17], story.bandit, ctx);
+        this.bandit.getDestinationDelay = 80;
 	},
     
 	// ==== Portrait preloader ==== //
@@ -352,7 +385,12 @@ window.onload = function () {
             'source/elfMoveUp.png',
             'source/elfMoveDown.png',
             'source/elfMoveLeft.png',
-            'source/elfMoveRight.png'
+            'source/elfMoveRight.png',
+            
+            'source/banditMoveUp.png',
+            'source/banditMoveDown.png',
+            'source/banditMoveLeft.png',
+            'source/banditMoveRight.png'
 	);
 	
 	story.preloadPortraits(

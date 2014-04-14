@@ -416,13 +416,18 @@ AIMovableObject = MovableObject.extend({
             		y: this.clickPoint.arrivalPoint.y - 20            			
             	};
             }
+            else if (this.name == 'bandit'){
+            	this.destination = {
+            		x: this.clickPoint.arrivalPoint.x,
+            		y: this.clickPoint.arrivalPoint.y + 30
+            	};
+            }
             else{
                 this.destination = {
                     x: this.clickPoint.arrivalPoint.x + 30,
                     y: this.clickPoint.arrivalPoint.y + 4
                 };
             }
-			
 		}
 		else if(this.getDestinationCounter % this.getDestinationDelay == 0){
 			this.destination.x = Math.floor(Math.random() * (this.limit.xMax - this.limit.xMin + 1) + this.limit.xMin);
