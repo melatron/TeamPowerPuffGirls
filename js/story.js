@@ -110,6 +110,7 @@ Story = Class.extend({
             self.checkIfSpeaking();
             //self.hero.drawSpeechBubble();
             self.soundTrack.startNextSong();
+            self.checkIfGamePlayed();
             ctx.restore();
             //console.log(soundtrack.ended);
         };
@@ -294,6 +295,7 @@ Story = Class.extend({
 	            }
 	        }
 	        else {
+                // Startimg the game after the speech
 	            this.hero.speakingTo.isSpeaking = false;
 	            this.hero.isSpeaking = false;
 	            $('*').off();
