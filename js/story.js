@@ -4,7 +4,8 @@ Story = Class.extend({
         var self = this,
             elfGame = new RadoGame(),
             digitGame = new TonyGame(),
-            squareGame = new SquareGame();
+            squareGame = new SquareGame(),
+            swapPuzzle = new SwapPuzzle();
         this.interactableObjects = new Array();
         var humanCastle = new ClickPoint(100, 50, 140, 100, "humanCastle",
         													{
@@ -28,9 +29,7 @@ Story = Class.extend({
             												{
             													x: 810,
             													y: 250
-            												}
-            
-            
+            												}, swapPuzzle
             ),
             dragon = new ClickPoint(675, 300, 50, 50, 'dragon',
                                                             {
