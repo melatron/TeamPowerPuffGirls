@@ -137,8 +137,14 @@ body {
     display: none;
 }
 
-/* item attributes */
+#swapPuzzle {
+	height:224px;
+	width:640px;
+    position: absolute;
+    display: none;
+}
 
+/* item attributes */
 @font-face {
     font-family: Morpheus;
     src : url(../source/MORPHEUS.TTF);

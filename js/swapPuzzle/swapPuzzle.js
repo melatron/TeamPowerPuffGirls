@@ -104,7 +104,7 @@ SwapPuzzle = Game.extend({
 
     },
     createMoveableBoxes: function () {
-        var x = 0,
+        var x = 5,
             y = 70,
             w = 65,
             h = 100;
