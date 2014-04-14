@@ -20,7 +20,7 @@ Node.prototype.addToCell = function () {
             top: "0px",
             right: "0px",
             down: "0px",
-            margin: "auto auto auto auto",
+            margin: "0 auto",
             width: "0px",
             height: "0px"
         },
