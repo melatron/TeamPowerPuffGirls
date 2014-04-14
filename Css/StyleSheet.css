@@ -134,6 +134,16 @@ body {
 	width:640px;
 	border: 1px solid red;
     position: absolute;
+    display: none;
+}
+
+/* Swap Gems Puzzle*/
+
+#swapPuzzle {
+	height:224px;
+	width:640px;
+	border: 1px solid red;
+    position: relative;
     display: block;
 }
 

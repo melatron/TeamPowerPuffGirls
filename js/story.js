@@ -280,7 +280,8 @@ var story,
     dwarfCamp,
     mainLoop,
     squareGame,
-    elfGame;
+    elfGame,
+    swapGame;
 
 
 //  Everything after this paragraph has to be moved to the story class.
@@ -345,6 +346,9 @@ window.onload = function () {
      //window.addEventListener('keyup', listenKeyEvents, false);
      //game.putFirstTwoRandomNumbers();
 
-    elfGame = new RadoGame();
-    elfGame.start();
+//    elfGame = new RadoGame();
+//    elfGame.start();
+
+    swapPuzzle = new SwapPuzzle();
+    swapPuzzle.start();
 };
