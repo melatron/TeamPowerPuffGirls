@@ -51,7 +51,7 @@ RadoGame = Game.extend({
 		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
 	},
 	
-	gameOver: function(){
+	endGame: function(){
 		clearInterval(myLoop);
 		this.removeGameFromPlot();
 	},
