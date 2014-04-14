@@ -11,19 +11,19 @@
             h: h,
         }
     },
-    swapBox: function (position, nextPosition) {
+    swapBox: function (position, nextPosition,that) {
         var position = position,
         nextPosition = nextPosition,
         swap;
 
         if (position >= 0 && position <=8) {
-            swap = swapPuzzle.moveableBoxes[position];
-            swapPuzzle.moveableBoxes[position] = swapPuzzle.moveableBoxes[nextPosition];
-            swapPuzzle.moveableBoxes[nextPosition] = swap;
+            swap = that.moveableBoxes[position];
+            that.moveableBoxes[position] = that.moveableBoxes[nextPosition];
+            that.moveableBoxes[nextPosition] = swap;
 
-            swap = swapPuzzle.moveableBoxes[position].coordinates;
-            swapPuzzle.moveableBoxes[position].coordinates = swapPuzzle.moveableBoxes[nextPosition].coordinates;
-            swapPuzzle.moveableBoxes[nextPosition].coordinates = swap;
+            swap = that.moveableBoxes[position].coordinates;
+            that.moveableBoxes[position].coordinates = that.moveableBoxes[nextPosition].coordinates;
+            that.moveableBoxes[nextPosition].coordinates = swap;
         }
     },
     drawBox: function (ctx) {
@@ -133,13 +133,13 @@ SwapPuzzle = Game.extend({
         }
         //get the directionection of my clicked box and oposite type
         if (this.moveableBoxes[position + direction] instanceof MoveableEmptyBox) {                                      /*next element is empty*/
-            this.moveableBoxes[position].swapBox(position,position + direction);                                         //object move one time
+            this.moveableBoxes[position].swapBox(position,position + direction,this);                                         //object move one time
             this.reverseParameters.position.unshift(position + direction);
             this.reverseParameters.lastPosition.unshift(position);
         }
         else if (this.moveableBoxes[position + direction] instanceof OpType) {
             if (this.moveableBoxes[position + direction + direction] instanceof MoveableEmptyBox) {                            /*element after oposite element is empty*/
-                this.moveableBoxes[position].swapBox(position,position + 2*direction);                                  //object move two times
+                this.moveableBoxes[position].swapBox(position,position + 2*direction,this);                                  //object move two times
                 this.reverseParameters.position.unshift(position + 2*direction);
                 this.reverseParameters.lastPosition.unshift(position);
             }
@@ -172,7 +172,7 @@ SwapPuzzle = Game.extend({
             i = this.reverseParameters.position[0],
             j = this.reverseParameters.lastPosition[0];
 
-        this.moveableBoxes[i].swapBox(i, j);
+        this.moveableBoxes[i].swapBox(i, j,this);
         this.reverseParameters.reversesDone += 1;
         this.reverseParameters.position.splice(0, 1);
         this.reverseParameters.lastPosition.splice(0, 1);
