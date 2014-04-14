@@ -80,12 +80,14 @@ RadoGame = Game.extend({
 	
 	// ======== LEVEL CONSTRUCTOR ======= //
 	
-	createLevel: function(number, layout){
+	createLevel: function(number, image, layout){
 		var level = {
-				layout: layout,
 				number: number,
+				image: new Image(),
+				layout: layout,
 				isFinished: false
 		};
+		level.image.src = image;
 		return level;
 	},
 	
@@ -94,13 +96,14 @@ RadoGame = Game.extend({
 	createLevels: function(){
 		this.levels.push(this.createLevel(
 				1,
-				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],		// 0 - impassable,
+				'source/elf game/level1.png',
+				[[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],		// 0 - impassable,
                  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],		// 1 - passable,
-                 [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],		// 2 - finish,
-                 [0, 1, 1, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0],		// 3 - starting 
-                 [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]]
+                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],		// 2 - finish,
+                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],		// 3 - starting 
+                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                 [0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0]]
 				)
 		);
 		
@@ -209,7 +212,9 @@ RadoGame = Game.extend({
 	
 	drawLevel: function(){
 		
-		for(var i = 0; i < this.passableBlocks.length; i++){
+		this.gameContext.drawImage(this.currentLevel.image, 0, 0);
+		
+/*		for(var i = 0; i < this.passableBlocks.length; i++){
 			var temp = this.passableBlocks[i];
 			
 			if (temp.isActive){
@@ -225,7 +230,7 @@ RadoGame = Game.extend({
 		for(var j = 0; j < this.impassableBlocks.length; j++){
 			var temp = this.impassableBlocks[j];
 			this.gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
-		}
+		}*/
 		for(var k = 0; k < this.finishBlocks.length; k++){
 			var temp = this.finishBlocks[k];
 			this.gameContext.fillStyle = 'rgba(89, 49, 143, 0.3)';
