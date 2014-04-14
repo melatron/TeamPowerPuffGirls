@@ -339,7 +339,7 @@ Story = Class.extend({
 	            $('*').off();
 	            $(document).off();
 	            this.hero.speakingTo.startGame();
-	            console.log("hello");
+	            //this.soundTrack.startMusicByQuest(this.hero.speakingTo.name);
 	        }
 	    }
 	},
@@ -351,6 +351,7 @@ Story = Class.extend({
 	            //console.log("laaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaa");
 	            this.addEvents();
 	            this.hero.speakingTo.game.gameOver = false;
+	            //this.soundTrack.resumeMainMusic();
 	            this.hero.speakingTo = null;
 	        }
 	    }

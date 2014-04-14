@@ -34,34 +34,31 @@ body {
 	height: 256px;
 	float: left;
 }
-
+/*-----------------TONY GAME CSS--------------------*/
 #Game6561{
     width: 380px;
     height: 255px;
     margin: auto;
-    background-color: yellow;
     display: none;
 }
 .row {
     width: 380px;
     height: 60px;
-    border: 1px solid green;
     margin-bottom: 2px;
 }
 .cell {
     width: 90px;
     height: 56px;
-    border: 1px solid red;
     float: left;
     margin-left: 2px;
 }
 .node {
     width: 89px;
     height: 55px;
-    background: red;
     position:relative;
+    /*background-image: url(../source/TonyGame/2.png);*/
 }
-
+/*-----------------SQUARE GAME CSS--------------------*/
 
 #square-game{
     width:260px;
