@@ -285,12 +285,14 @@ var SquareGame = Game.extend({
         this.createSquare(1, 5, 'yellow', 'leader', 5);
     },
 
-    populateSecondMap: function() {
+    populateSecondMap: function () {
+        this.plot.css('background-image', 'url(source/square-game-background2.png)')
         this.currentMap = this.secondMap;
         this.greenSquares = [];
         this.redSquares = [];
         this.yellowSquares = [];
         this.blueSquares = [];
+
 
         this.createSquare(4, 0, 'red', 'leader', 0);
         this.createSquare(4, 1, 'red', 'filler', 1);
@@ -309,6 +311,7 @@ var SquareGame = Game.extend({
     },
 
     endGame: function () {
+        this.gameOver = true;
         this.plot.html(' ');
         this.removeGameFromPlot();
     },
