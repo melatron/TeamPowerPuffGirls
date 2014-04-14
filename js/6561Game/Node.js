@@ -106,7 +106,10 @@ Node.prototype.calculateAnimation = function () {
                     break;
             }
             return {
-                left: "+=" + moveBy
+                css: {
+                    left: "+=" + moveBy
+                },
+                diff: a
             }
         }
         else {
@@ -134,7 +137,10 @@ Node.prototype.calculateAnimation = function () {
                     break;
             }
             return {
-                top: "+=" + moveBy
+                css:{
+                        top: "+=" + moveBy
+                },
+                diff: a
             }
         }
     }
@@ -142,10 +148,26 @@ Node.prototype.calculateAnimation = function () {
     
 };
 Node.prototype.proceed = function () {
-    var self = this;
+    var self = this,
+        time = 100,
+        result;
     
     if (this.movedTo != null) {
-        this.node.animate(this.calculateAnimation(), 100, function () {
+        result = this.calculateAnimation();
+        switch (this.calculateAnimation().diff) {
+            case 1:
+                time = 100;
+                break;
+            case 2:
+                time = 50;
+                break;
+            case 3:
+                time = 25;
+                break;
+            default:
+                break;
+        }
+        this.node.animate(result.css, time, function () {
             self.col = self.movedTo.col;
             self.row = self.movedTo.row;
             self.movedTo = null;
@@ -153,7 +175,21 @@ Node.prototype.proceed = function () {
         });
     }
     else if (this.mergedTo != null) {
-        this.node.animate(this.calculateAnimation(), 100, function () {
+        result = this.calculateAnimation();
+        switch (this.calculateAnimation().diff) {
+            case 1:
+                time = 25;
+                break;
+            case 2:
+                time = 50;
+                break;
+            case 3:
+                time = 100;
+                break;
+            default:
+                break;
+        }
+        this.node.animate(result.css, time, function () {
             self.col = self.mergedTo.col;
             self.row = self.mergedTo.row;
             self.movedTo = null;

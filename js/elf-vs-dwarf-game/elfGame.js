@@ -2,15 +2,9 @@
 
 RadoGame = Game.extend({
 	init: function(){
-		var game = this;
-		
-		this.levelOne = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-		                 [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-		                 [0, 1, 1, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0],
-		                 [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-		                 [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-		                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]];
+		var game = this,
+			mainLoop = null;
+
 		this.levels = [];            //array of levels
 		this.levelIndex = 0;
 		this.currentLevel = null;	//current level
@@ -31,6 +25,7 @@ RadoGame = Game.extend({
 			game.gameContext.clearRect(0, 0, canvas.width, canvas.height);
 			game.drawLevel();
 			game.updateCharacter();
+			game.checkLevelProgress();
 			game.gameContext.restore();
 		};
 	},
@@ -43,7 +38,16 @@ RadoGame = Game.extend({
 		this.populateLevel(this.currentLevel);
 		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
 		this.addEventListeners();
-		setInterval(this.mainLoop, 30);
+		mainLoop = setInterval(this.mainLoop, 30);
+	},
+	
+	startNewLevel: function(){
+		this.passableBlocks = [];
+		this.impassableBlocks = [];
+		this.finishBlocks = [];
+		this.startingBlock = null;
+		this.populateLevel(this.currentLevel);
+		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
 	},
 	// ===== GET CONTEXT ====== //
 	getContext: function(){
@@ -74,7 +78,6 @@ RadoGame = Game.extend({
 				number: number,
 				isFinished: false
 		};
-		
 		return level;
 	},
 	
@@ -157,7 +160,14 @@ RadoGame = Game.extend({
 			}
 		}
 		if(this.currentLevel.isFinished){
-	//		if()
+			if(this.levelIndex < this.levels.length - 1){
+				this.levelIndex++;
+				this.currentLevel = this.levels[this.levelIndex];
+				this.startNewLevel();
+			}
+			else{
+//				this.gameOver();
+			}
 		}
 	},
 	
@@ -491,7 +501,7 @@ RadoGame = Game.extend({
 			}
 			if(!collision.bottom){
 				char.y += char.speed;
-				charBox.y += char.speed;			
+				charBox.y += char.speed;		
 			}
 			return;
 		}
@@ -550,7 +560,8 @@ RadoGame = Game.extend({
 	// ======== CHECK IF OVERLAPPING METHOD =========== //
 	
 	areOverlapping: function(obj1, obj2){
-		if(((obj1.x > obj2.x && obj1.x < obj2.x + obj2.width) || (obj1.x + obj1.width > obj2.x && obj1.x + obj1.width < obj2.x + obj2.width)) && ((obj1.y > obj2.y && obj1.y < obj2.y + obj2.height) || (obj1.y + obj1.height > obj2.y && obj1.y + obj1.height < obj2.y + obj2.height))){
+		if(((obj1.x > obj2.x && obj1.x < obj2.x + obj2.width) || (obj1.x + obj1.width > obj2.x && obj1.x + obj1.width < obj2.x + obj2.width)) && 
+				((obj1.y > obj2.y && obj1.y < obj2.y + obj2.height) || (obj1.y + obj1.height > obj2.y && obj1.y + obj1.height < obj2.y + obj2.height))){
 			return true;
 		}
 	},

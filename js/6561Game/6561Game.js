@@ -165,7 +165,7 @@ TonyGame = Game.extend({
         setTimeout(function () {
             self.removeNodes();
             self.addNodes();
-        }, 200);
+        }, 180);
         if (zeroes <= 0) {
             this.gameOver = isOver;
         }
