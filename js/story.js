@@ -341,13 +341,12 @@ window.onload = function () {
         'music/ChaosCity.mp3'
     );
 	story.soundTrack.preloadQuestSounds('source/rada.mp3');
-    //game = new Gamez();
     story.addEvent();
     mainLoop = setInterval(story.mainLoop, 30);
     
 
-    game = new TonyGame();
-    game.start();
+    //game = new TonyGame();
+    //game.start();
      //window.addEventListener('keydown', listenKeyEvents, false);
      //window.addEventListener('keyup', listenKeyEvents, false);
      //game.putFirstTwoRandomNumbers();
