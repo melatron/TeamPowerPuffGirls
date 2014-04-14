@@ -249,17 +249,23 @@ Story = Class.extend({
 	// ==== Portrait preloader ==== //
 	
 	preloadPortraits: function(){
-		var heroPortrait = null,
+	    var heroPortrait = null,
 			elfPortrait = null,
 			elderPortrait = null,
 			kingPortrait = null,
-			dwarfPortrait = null;
+			dwarfPortrait = null,
+            banditPortrait = null,
+            dragonPortrait = null,
+            orcPortrait = null;
 		
 		this.portraits.push(heroPortrait);
 		this.portraits.push(elderPortrait);
 		this.portraits.push(elfPortrait);
 		this.portraits.push(dwarfPortrait);
 		this.portraits.push(kingPortrait);
+		this.portraits.push(banditPortrait);
+		this.portraits.push(dragonPortrait);
+		this.portraits.push(orcPortrait);
 		
 		for (var i = 0; i < arguments.length; i++){
 			this.portraits[i] = new Image();
@@ -271,6 +277,9 @@ Story = Class.extend({
 		this.interactableObjects[2].setImage(this.portraits[2]);
 		this.interactableObjects[1].setImage(this.portraits[3]);
 		this.interactableObjects[0].setImage(this.portraits[4]);
+		this.interactableObjects[5].setImage(this.portraits[5]);
+		this.interactableObjects[4].setImage(this.portraits[6]);
+		this.interactableObjects[6].setImage(this.portraits[7]);
 		
 	},
 	handleKeyPressed: function (ev) {
@@ -448,7 +457,10 @@ window.onload = function () {
 		'source/elderPortrait.png',
 		'source/elfPortrait.png',
 		'source/dwarfPortrait.png',
-		'source/kingPortrait.png'
+		'source/kingPortrait.png',
+        'source/banditPortrait.png',
+        'source/dragonPortrait.png',
+        'source/orcPortrait.png'
 	);
 	story.soundTrack.preloadMainSounds(
         'music/Dirt.mp3',
