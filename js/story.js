@@ -339,13 +339,14 @@ Story = Class.extend({
 	            $('*').off();
 	            $(document).off();
 	            this.hero.speakingTo.startGame();
+	            console.log("hello");
 	        }
 	    }
 	},
 
     // Dani have to write some logic about the conversation after the game is finished.
 	checkIfGamePlayed: function () {
-	    if (this.hero.speakingTo) {
+	    if (this.hero.speakingTo && this.hero.speakingTo != null) {
 	        if (this.hero.speakingTo.game.gameOver) {
 	            //console.log("laaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaa");
 	            this.addEvents();
