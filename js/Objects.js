@@ -171,6 +171,8 @@ InteractableObject = SpeakingObject.extend({
         // Arrival point for Hero alignment
         this.isInteracting = false;
         this.game = game;
+        this.isGamePlayed = false;
+
     },
     startGame: function (bonuses) {
         if (!this.game.gameOver) {

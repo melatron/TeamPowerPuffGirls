@@ -89,7 +89,7 @@ Story = Class.extend({
     },
     
     // ---- Methods for preloading images ---- //
-    addEvent: function () {
+    addEvents: function () {
         $('canvas').on('click', this, this.clickEvent);
         $(document).on('keyup', this, this.handleKeyPressed);
     },
@@ -237,7 +237,16 @@ Story = Class.extend({
 	        else {
 	            this.hero.speakingTo.isSpeaking = false;
 	            this.hero.isSpeaking = false;
+	            $('body').off();
+	            this.hero.speakingTo.startGame();
 	        }
+	    }
+	},
+
+    // Dani have to write some logic about the conversation after the game is finished.
+	checkIfGamePlayed: function () {
+	    if (this.hero.speakingTo.game.gameOver) {
+	        this.addEvents();
 	    }
 	},
     addInteractableObject: function (iObject) {
@@ -336,14 +345,14 @@ window.onload = function () {
         'music/ChaosCity.mp3'
     );
 	story.soundTrack.preloadQuestSounds('source/rada.mp3');
-    story.addEvent();
+    story.addEvents();
     mainLoop = setInterval(story.mainLoop, 30);
     
 
     //game = new TonyGame();
     //game.start();
-     //window.addEventListener('keydown', listenKeyEvents, false);
-     //window.addEventListener('keyup', listenKeyEvents, false);
+     //window.addEventsListener('keydown', listenKeyEvents, false);
+     //window.addEventsListener('keyup', listenKeyEvents, false);
      //game.putFirstTwoRandomNumbers();
 
 
