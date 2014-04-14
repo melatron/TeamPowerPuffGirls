@@ -309,9 +309,10 @@ Story = Class.extend({
 	checkIfGamePlayed: function () {
 	    if (this.hero.speakingTo) {
 	        if (this.hero.speakingTo.game.gameOver) {
-	            console.log("laaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaa");
+	            //console.log("laaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaa");
 	            this.addEvents();
 	            this.hero.speakingTo = null;
+	            this.hero.speakingTo.game.gameOver = true;
 	        }
 	    }
 	},
