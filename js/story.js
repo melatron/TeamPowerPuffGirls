@@ -329,7 +329,7 @@ Story = Class.extend({
 	                this.hero.speakingTo.isSpeaking = false;
 	                this.hero.isSpeaking = true;
 	                this.hero.speakingTo.speech.counter += 1;
-	                console.log(this.hero.speakingTo)
+	                console.log(this.hero.speakingTo);
 	            }
 	        }
 	        else {
