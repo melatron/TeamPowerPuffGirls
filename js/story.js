@@ -259,6 +259,7 @@ Story = Class.extend({
             currentObject = ev.data.interactableObjects[i];
             if (currentObject.checkIfClicked(mouseX, mouseY)) {
                 ev.data.hero.prepareObjectForSpeaking(currentObject);
+                currentObject.prepareObjectForSpeaking('');
                 for (var j = 0; j < ev.data.interactableObjects.length; j++) {
                     ev.data.interactableObjects[j].isInteracting = false;           // set all other click points to "inactive"
                 }
@@ -268,12 +269,14 @@ Story = Class.extend({
 	checkIfSpeaking: function () {
 	    for (var i = 0; i < this.interactableObjects.length; i++) {
 	        if (this.interactableObjects[i].isInteracting) {
-	            this.hero.portrait.drawPortrait();
-	            this.interactableObjects[i].portrait.drawPortrait();
 	            if (this.interactableObjects[i].isSpeaking && !(this.interactableObjects[i].speech.conversetionEnded)) {
+	                this.hero.portrait.drawPortrait();
+	                this.interactableObjects[i].portrait.drawPortrait();
 	                this.interactableObjects[i].drawSpeechBubble();
 	            }
 	            else if (this.hero.isSpeaking && !(this.hero.speech.conversetionEnded)) {
+	                this.hero.portrait.drawPortrait();
+	                this.interactableObjects[i].portrait.drawPortrait();
 	                this.hero.drawSpeechBubble();
 	            }
 	        }
@@ -281,7 +284,9 @@ Story = Class.extend({
 	},
 	changeSpeaker: function () {
 	    if (this.hero.speakingTo.isInteracting) {
-	        if (!(this.hero.speakingTo.speech.conversetionEnded && this.hero.speech.conversetionEnded)) {
+            if (this.hero.speech.counter < this.hero.speech.textArray.length-1 ||
+                this.hero.speakingTo.speech.counter < this.hero.speakingTo.speech.textArray.length-1) {
+
 	            if (this.hero.isSpeaking) {
 	                this.hero.isSpeaking = false;
 	                this.hero.speakingTo.isSpeaking = true;
@@ -294,13 +299,35 @@ Story = Class.extend({
 	                console.log(this.hero.speakingTo)
 	            }
 	        }
-	        else {
-                // Startimg the game after the speech
-	            this.hero.speakingTo.isSpeaking = false;
-	            this.hero.isSpeaking = false;
-	            $('*').off();
-	            $(document).off();
-	            this.hero.speakingTo.startGame();
+            else {
+                
+                //Startimg the game after the speech
+
+                if(this.hero.speakingTo.progress.before){
+	                $('*').off();
+	                $(document).off();
+
+	                this.hero.speakingTo.isSpeaking = false;
+	                this.hero.isSpeaking = false;
+	                this.hero.speakingTo.startGame();
+
+	                this.hero.speech.counter = 0;
+	                this.hero.speakingTo.speech.counter = 0;
+                }
+                else if(this.hero.speakingTo.progress.after){
+                    this.hero.speakingTo.isSpeaking = false;
+                    this.hero.isSpeaking = false;
+                    this.hero.speakingTo.progress.after = false;
+                }
+                else if (this.hero.speakingTo.progress.done) {
+                    $('*').off();
+                    $(document).off();
+                    
+                    this.hero.speakingTo.isSpeaking = false;
+                    this.hero.isSpeaking = false;
+                    this.hero.speakingTo.startGame();
+
+                }
 	        }
 	    }
 	},
@@ -309,9 +336,16 @@ Story = Class.extend({
 	checkIfGamePlayed: function () {
 	    if (this.hero.speakingTo) {
 	        if (this.hero.speakingTo.game.gameOver) {
-	            console.log("laaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaa");
 	            this.addEvents();
-	            this.hero.speakingTo = null;
+	            if (this.hero.speakingTo.progress.before) {
+	                this.hero.speakingTo.progress.before = false;
+	                this.hero.speakingTo.progress.after = true;
+	                this.hero.speakingTo.prepareObjectForSpeaking('');
+	                this.hero.prepareObjectForSpeaking(this.hero.speakingTo);
+	            } else {
+	                $(document).off();
+	            }
+	            this.hero.speakingTo.game.gameOver = false;
 	        }
 	    }
 	},
