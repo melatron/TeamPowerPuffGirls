@@ -240,7 +240,7 @@ InteractableObject = SpeakingObject.extend({
 MovableObject = SpeakingObject.extend({
     init: function (x, y, width, height, name) {
         this._super(x, y, width, height, name);
-        this.speed = 4;
+        this.speed = 2;
         this.spriteUp = null;
         this.spriteDown = null;
         this.spriteLeft = null;
