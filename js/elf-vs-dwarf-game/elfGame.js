@@ -271,6 +271,71 @@ RadoGame = Game.extend({
 		this.mainCharacter.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[3], this.mainCharacter, this.gameContext);
 		this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[1], this.mainCharacter, this.gameContext);
 	},
+
+	createElf: function(x, y, width, height, bRectX, bRectY, bRectWidth, bRectHeight, movePatternType, direction, startBlock, endBlock){
+		var elf = {
+			x: x,
+			y: y,
+			width: width,
+			height: height,
+			boundingRect: {
+				x: bRectX,
+				y: bRectY,
+				width: bRectWidth,
+				height: bRectHeight
+			},
+			movePattern: this.createMovePattern(movePatternType, startBlock, endBlock);
+		};
+
+		elf.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[12], elf, this.gameContext);
+		elf.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[13], elf, this.gameContext);
+		elf.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[14], elf, this.gameContext);
+		elf.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[15], elf, this.gameContext);
+		elf.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[13], elf, this.gameContext);
+
+		return elf;
+	},
+
+	createMovePattern: function(type, direction, startBlock, endBlock){
+		var pattern = {
+			type: type,
+			direction: direction,
+			startBlock: startBlock,
+			endBlock: endBlock
+		};
+
+		return pattern;
+	},
+
+	updateElf: function(elf){
+		var type = elf.movePattern.type,
+			start = elf.movePattern.startBlock,
+			end = elf.movePattern.endBlock,
+			direction = elf.movePattern.direction;
+
+		switch(elf.movePattern.type){
+			case 'linear':
+				if(direction == 'horizontal'){
+
+				}
+				else if(direction == 'vertical'){
+
+				}
+
+				break;
+			case 'circular':
+				if(direction == 'clockwise'){
+
+				}
+				else if(direction == 'counterClockwise'){
+
+				}
+
+				break;
+			default:
+				break;
+		}
+	},
 	
 	// =========================== COLLISION DETECTION METHOD ============================== //
 	
