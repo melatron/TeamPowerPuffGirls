@@ -8,12 +8,14 @@ function Node (x, y, value) {
     this.movedTo = null;
     this.mergedTo = null;
     this.node = $("<div class = 'node'></div>");
-    this.node.html(value);
+    //this.node.css('background-image', 'url(source/TonyGame/2.png)');
+    //this.node.style.backgroundImage = 'url("../../source/TonyGame/' + this.value + '.png) no-repeat;"';
 };
 Node.prototype.removeFromCell = function() {
     $(".row").eq(this.row).find(".cell").eq(this.col).find(".node").remove();
 };
 Node.prototype.addToCell = function () {
+    var self = this;
     if (this.animateNew) {
         var styles = {
             left: "0px",
@@ -22,11 +24,15 @@ Node.prototype.addToCell = function () {
             down: "0px",
             margin: "0 auto",
             width: "0px",
-            height: "0px"
+            height: "0px",
+           // backgroundImage: 'url(source/TonyGame/' + self.value + '.png);'
+            //backgroundImage: 'url"(a.png) no-repeat;"'
         },
             self = this;
-        this.node.html(this.value);
+        console.log('url(../source/TonyGame/' + self.value + '.png);');
         this.node.css(styles);
+        this.node.css('background-image', 'url(source/TonyGame/'+ self.value +'.png)');
+        //this.node.style.backgroundImage = 'url("../../source/TonyGame/' + this.value + '.png) no-repeat;"';
         $(".row").eq(this.row).find(".cell").eq(this.col).empty()
                                                         .append(this.node);
         this.node.animate({
@@ -44,10 +50,13 @@ Node.prototype.addToCell = function () {
             down: "0px",
             margin: "auto",
             width: "89px",
-            height: "55px"
+            height: "55px",
+            //backgroundImage: 'url(source/TonyGame/' + self.value + '.png);'
+            //backgroundImage: 'url"(a.png) no-repeat;"'
         };
-        this.node.html(this.value);
         this.node.css(styles);
+        this.node.css('background-image', 'url(source/TonyGame/' + self.value + '.png)');
+        //this.node.style.backgroundImage = 'url("../../source/TonyGame/' + this.value + '.png) no-repeat;"';
         $(".row").eq(this.row).find(".cell").eq(this.col).empty()
                                                         .append(this.node);
     }

@@ -79,6 +79,7 @@ SwapPuzzle = Game.extend({
         this.plot = $('#swapPuzzle');
     },
     start: function () {
+        this.addGameToPlot();
         this.canvas = $("#swapPuzzleCanvas")[0];
         this.context = this.canvas.getContext("2d");
         this.createMoveableBoxes();
