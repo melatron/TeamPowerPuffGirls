@@ -97,13 +97,13 @@ RadoGame = Game.extend({
 		this.levels.push(this.createLevel(
 				1,
 				'source/elf game/level1.png',
-				[[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],		// 0 - impassable,
+				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],		// 0 - impassable,
                  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],		// 1 - passable,
-                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],		// 2 - finish,
-                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],		// 3 - starting 
-                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                 [0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0]]
+                 [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0],		// 2 - finish,
+                 [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0],		// 3 - starting 
+                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0],
+                 [0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 				)
 		);
 		
@@ -214,7 +214,7 @@ RadoGame = Game.extend({
 		
 		this.gameContext.drawImage(this.currentLevel.image, 0, 0);
 		
-/*		for(var i = 0; i < this.passableBlocks.length; i++){
+		for(var i = 0; i < this.passableBlocks.length; i++){
 			var temp = this.passableBlocks[i];
 			
 			if (temp.isActive){
@@ -230,12 +230,13 @@ RadoGame = Game.extend({
 		for(var j = 0; j < this.impassableBlocks.length; j++){
 			var temp = this.impassableBlocks[j];
 			this.gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
-		}*/
+		}
 		for(var k = 0; k < this.finishBlocks.length; k++){
 			var temp = this.finishBlocks[k];
 			this.gameContext.fillStyle = 'rgba(89, 49, 143, 0.3)';
 			this.gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
 		}
+		
 	},
 	
 	// ====== MAIN CHARACTER CONSTRUCTOR ===== //
@@ -255,7 +256,7 @@ RadoGame = Game.extend({
 		};
 		
 		this.mainCharacterBoundingRect = {
-				x: this.mainCharacter.x + 4,
+				x: this.mainCharacter.x + 6,
 				y: this.mainCharacter.y + 28,
 				width: 20,
 				height: 8
@@ -333,25 +334,27 @@ RadoGame = Game.extend({
 			
 			// ----- linear collision detection ----- //
 			
-			if(right && right.type == 0){
-				if(charBox.x + charBox.width > temp.x + temp.width){
-					collision.right = true;
+			if(len != 3){
+				if(right && right.type == 0){
+					if(charBox.x + charBox.width > temp.x + temp.width){
+						collision.right = true;
+					}
 				}
-			}
-			if(lower && lower.type == 0){
-				if(charBox.y + charBox.height > temp.y + temp.height){
-					collision.bottom = true;		
+				if(lower && lower.type == 0){
+					if(charBox.y + charBox.height > temp.y + temp.height){
+						collision.bottom = true;		
+					}
 				}
-			}
-			if(left && left.type == 0){
-				if(charBox.x < temp.x){
-					collision.left = true;
+				if(left && left.type == 0){
+					if(charBox.x < temp.x){
+						collision.left = true;
+					}
 				}
-			}
-			if(upper && upper.type == 0){
-				if(charBox.y < temp.y){
-					collision.top = true;
-				}
+				if(upper && upper.type == 0){
+					if(charBox.y < temp.y){
+						collision.top = true;
+					}
+				}				
 			}
 			
 			// ==== diagonal collision detection ==== //
@@ -367,15 +370,20 @@ RadoGame = Game.extend({
 							charBox.y += offsetY;
 							break;
 						}
-						if(offsetY > offsetX){
+						else if(offsetY > offsetX){
 							char.x += offsetX;
 							charBox.x += offsetX;
 							break;
 						}
-						if(offsetY == offsetX){
-							char.x += offsetX;
-							charBox.x += offsetX;
-							break;
+						else if(offsetY == offsetX){
+							if(char.moveLeft == true){
+								char.y += offsetY;
+								charBox.y += offsetY;
+							}
+							else if(char.moveUp == true){
+								char.x += offsetX;
+								charBox.x += offsetX;
+							}
 						}
 					}
 				}         
@@ -388,19 +396,24 @@ RadoGame = Game.extend({
 						offsetY = (upperRight.y + upperRight.height) - charBox.y;
 						
 						if(offsetX > offsetY){
-							char.y += offsetY + char.speed;
-							charBox.y += offsetY + char.speed;
+							char.y += offsetY;
+							charBox.y += offsetY;
 							break;
 						}
-						if(offsetY > offsetX){
+						else if(offsetY > offsetX){
 							char.x -= offsetX;
 							charBox.x -= offsetX;
 							break;
 						}
-						if(offsetY == offsetX){
-							char.y -= offsetY;
-							charBox.y -= offsetY;
-							break;
+						else if(offsetY == offsetX){
+							if(char.moveRight == true){
+								char.y += offsetY;
+								charBox.y += offsetY;
+							}
+							else if(char.moveUp == true){
+								char.x -= offsetX;
+								charBox.x -= offsetX;
+							}
 						}
 					}
 				}
@@ -411,22 +424,26 @@ RadoGame = Game.extend({
 					if(len == 3){
 						offsetX = (lowerLeft.x + lowerLeft.width) - charBox.x;
 						offsetY = (charBox.y + charBox.height) - lowerLeft.y;
-						
-						console.log("X: " + offsetX + " Y: " + offsetY);						
+												
 						if(offsetX > offsetY){
 							char.y -= offsetY;
 							charBox.y -= offsetY;
 							break;
 						}
 						if(offsetY > offsetX){
-							char.x += offsetX + char.speed;
-							charBox.x += offsetX + char.speed;
+							char.x += offsetX;
+							charBox.x += offsetX;
 							break;
 						}
 						if(offsetX == offsetY){
-							char.x += offsetX + char.speed;
-							charBox.x += offsetX + char.speed;
-							break;
+							if(char.moveLeft == true){
+								char.y -= offsetY;
+								charBox.y -= offsetY;
+							}
+							else if(char.moveDown == true){
+								char.x += offsetX;
+								charBox.x += offsetX;
+							}
 						}
 					}
 				}
@@ -444,14 +461,19 @@ RadoGame = Game.extend({
 							break;
 						}
 						if(offsetY > offsetX){
-							char.x -= offsetX + char.speed;
-							charBox.x -= offsetX + char.speed;
+							char.x -= offsetX;
+							charBox.x -= offsetX;
 							break;
 						}
 						if(offsetX == offsetY){
-							char.x -= offsetX + char.speed;
-							charBox.x -= offsetX + char.speed;
-							break;
+							if(char.moveRight == true){
+								char.y -= offsetY;
+								charBox.y -= offsetY;
+							}
+							else if(char.moveDown == true){
+								char.x -= offsetX;
+								charBox.x -= offsetX;
+							}
 						}
 					}
 				}
@@ -468,6 +490,8 @@ RadoGame = Game.extend({
 		var char = this.mainCharacter,
 			charBox = this.mainCharacterBoundingRect;
 
+		//this.gameContext.fillRect(this.mainCharacterBoundingRect.x, this.mainCharacterBoundingRect.y, this.mainCharacterBoundingRect.width, this.mainCharacterBoundingRect.height);
+		
 		if(char.moveUp == true){
 			if(char.moveLeft == true){
 				char.spriteLeft.drawSprite();
@@ -569,6 +593,7 @@ RadoGame = Game.extend({
 		if(!char.isMoving){
 			char.spriteIdle.drawSprite();
 		}
+		
 	},
 	
 	// ======== CHECK IF OVERLAPPING METHOD =========== //
