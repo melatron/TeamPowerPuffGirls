@@ -114,6 +114,8 @@ Story = Class.extend({
 
         this.soundTrack = new PlayList();
 
+        this.animation = null;
+
         this.mainLoop = function () {
             ctx.save();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -130,6 +132,7 @@ Story = Class.extend({
             self.checkIfGamePlayed();
             ctx.restore();
             //console.log(soundtrack.ended);
+            this.animation = requestAnimationFrame(story.mainLoop);
         };
     },
     
@@ -425,6 +428,25 @@ Story = Class.extend({
         for (var i = 0, len = this.interactableObjects.length; i < len; i++) {
             this.interactableObjects[i].drawObj();
         }
+    },
+    checkRequestAnimationFrame: function(){
+        if (!window.requestAnimationFrame) {
+
+            window.requestAnimationFrame = (function() {
+
+            return window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame || // comment out if FF4 is slow (it caps framerate at ~30fps: https://bugzilla.mozilla.org/show_bug.cgi?id=630127)
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
+
+                window.setTimeout(callback, 1000 / 60);
+
+                };
+
+            })();
+
+        }
     }
 });
 
@@ -511,7 +533,8 @@ window.onload = function () {
     );
 	story.soundTrack.preloadQuestSounds('source/rada.mp3');
     story.addEvents();
-    mainLoop = setInterval(story.mainLoop, 30);
+ //   mainLoop = setInterval(story.mainLoop, 30);
+    story.mainLoop();
     
 
     //game = new TonyGame();

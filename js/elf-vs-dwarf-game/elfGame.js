@@ -52,8 +52,9 @@ RadoGame = Game.extend({
 	},
 	
 	endGame: function(){
-		clearInterval(myLoop);
+		clearInterval(mainLoop);
 		this.removeGameFromPlot();
+		this.removeEventListeners
 	},
 	
 	// ===== GET CONTEXT ====== //
@@ -109,6 +110,7 @@ RadoGame = Game.extend({
 		
 		this.levels.push(this.createLevel(
 				2,
+				'source/elf game/level2.png',
 				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
                  [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 1, 0, 2, 2, 0, 0],
@@ -121,6 +123,7 @@ RadoGame = Game.extend({
 		
 		this.levels.push(this.createLevel(
 				3,
+				'source/elf game/level3.png',
 				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
                  [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -666,6 +669,7 @@ RadoGame = Game.extend({
 	},
 
 	removeEventListeners: function(){
-
+		$(window).off('keydown', this.onKeyDown);
+		$(window).off('keyup', this.onKeyUp);
 	}
 });
