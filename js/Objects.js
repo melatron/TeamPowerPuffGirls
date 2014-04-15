@@ -47,10 +47,7 @@ Speech = Class.extend({
         this.y = y;
         this.maxWidth = 150;
         this.wordsPixels = 15;
-        this.textArray = null;
-        this.textBefore = new Array();
-        this.textAfter = new Array();
-        this.textDone = new Array();
+        this.textArray = ["Hello there mister", "Im your comrad lalallalallalallalalalalalallalalal", "i want to carry your children !!!"];
         this.startSentence = 0;
         this.endSentence = 0;
     },
@@ -98,41 +95,44 @@ SpeakingObject = GameObject.extend({
         this.speech.y = speechY;
     },
     drawSpeechBubble: function () {
-        var x = this.speechX,
-            y = this.speechY,
-            r = x + this.speech.maxWidth + 30,
-            b = y + this.bubbleHeight,
-            _that=this;
-        //this.speech.getSpeech(name);    this should NOT be in the main loop 
-        //this.portrait.drawPortrait();
-        // Drawing the bubble >>>
-        ctx.save();
-        ctx.beginPath();
-        ctx.fillStyle = "rgb(215,199,147)";
-        ctx.lineWidth = "3";
+        if (this.speech.counter == this.speech.textArray.length-1) {
+            this.speech.conversetionEnded = true;
+        } else {
+            var x = this.speechX,
+                y = this.speechY,
+                r = x + this.speech.maxWidth + 30,
+                b = y + this.bubbleHeight,
+                _that=this;
+            //this.speech.getSpeech(name);    this should NOT be in the main loop 
+            //this.portrait.drawPortrait();
+            // Drawing the bubble >>>
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = "rgb(215,199,147)";
+            ctx.lineWidth = "3";
         
-        ctx.moveTo(x + this.radius, y);
-        ctx.lineTo(r - this.radius * 2, y);
-        ctx.lineTo(r - this.radius / 2, y - 15);
-        ctx.lineTo(r - this.radius , y);
-        //ctx.lineTo(r - this.radius, y);
+            ctx.moveTo(x + this.radius, y);
+            ctx.lineTo(r - this.radius * 2, y);
+            ctx.lineTo(r - this.radius / 2, y - 15);
+            ctx.lineTo(r - this.radius , y);
+            //ctx.lineTo(r - this.radius, y);
         
-        ctx.quadraticCurveTo(r, y, r, y + this.radius);
-        ctx.lineTo(r, y + this.bubbleHeight - this.radius);
-        ctx.quadraticCurveTo(r, b, r - this.radius, b);
-        ctx.lineTo(x + this.radius, b);
-        ctx.quadraticCurveTo(x, b, x, b - this.radius);
-        ctx.lineTo(x, y + this.radius);
-        ctx.quadraticCurveTo(x, y, x + this.radius, y);
-        ctx.fill();
-        ctx.strokeStyle = "black";
-        ctx.stroke();
-        ctx.restore();
-        // Drawing the text inside the bubble >>>
-        this.speech.drawSpeech();
-        
-},
-
+            ctx.quadraticCurveTo(r, y, r, y + this.radius);
+            ctx.lineTo(r, y + this.bubbleHeight - this.radius);
+            ctx.quadraticCurveTo(r, b, r - this.radius, b);
+            ctx.lineTo(x + this.radius, b);
+            ctx.quadraticCurveTo(x, b, x, b - this.radius);
+            ctx.lineTo(x, y + this.radius);
+            ctx.quadraticCurveTo(x, y, x + this.radius, y);
+            ctx.fill();
+            ctx.strokeStyle = "black";
+            ctx.stroke();
+            ctx.restore();
+            // Drawing the text inside the bubble >>>
+            this.speech.drawSpeech();
+            
+        }
+    },
     getSpeech: function (questName) {
         var _that = this;
         $.ajax({
@@ -141,77 +141,26 @@ SpeakingObject = GameObject.extend({
                 fileName: questName,
             }
         }).done(function (data) {
-            var jsn = data;
-            var helper = {
-                before: new Array(),
-                after: new Array(),
-                done: new Array(),
+            var helper = new Array();
+            helper = data.split("|");
+            for (var i = 0; i < helper.length; i++) {                 
+                _that.speech.textArray[i] = helper[i].split("&");
+                console.log(_that.speech.textArray[i]);
             }
-
-            console.log(jsn);
-            
-            if (_that.name == 'hero') {
-                helper.before = jsn.hero_before.split("|");
-                helper.after = jsn.hero_after.split("|");
-                helper.done = jsn.hero_done.split("|");
-            }
-            else {
-                helper.before = jsn.quest_before.split("|");
-                helper.after = jsn.quest_after.split("|");
-                helper.done = jsn.quest_done.split("|");
-            }
-
-            for (var i = 0; i < helper.before.length; i++) {
-                _that.speech.textBefore[i] = helper.before[i].split("$");
-                console.log(_that.speech.textBefore[i]);
-            }
-            for (var i = 0; i < helper.after.length; i++) {
-                _that.speech.textAfter[i] = helper.after[i].split("$");
-            }
-            for (var i = 0; i < helper.done.length; i++) {
-                _that.speech.textDone[i] = helper.done[i].split("$");
-            }
-        }).fail(function(){
-            alert("sorry");
         })
     },
-
     prepareObjectForSpeaking: function (questObject) {
         if (this.name == "hero") {
-            this.getSpeech(questObject.name);
+            this.getSpeech(this.name + questObject.name);
             this.speakingTo = questObject;
             this.setDestinaion(questObject);
-
-            if (questObject.progress.before) {
-                this.speech.textArray = this.speech.textBefore;
-            }
-            else if (questObject.progress.after) {
-                this.speech.textArray = this.speech.textAfter;
-            }
-            else {
-                questObject.progress.done=true;
-                this.speech.textArray = this.speech.textDone;
-            }
         }
         else {
             this.getSpeech(this.name);
             this.isSpeaking = true;
-
-            if (this.progress.before) {
-                this.speech.textArray = this.speech.textBefore;
-            }
-            else if (this.progress.after) {
-                this.speech.textArray = this.speech.textAfter;
-            }
-            else {
-                this.progress.done = true;
-                this.speech.textArray = this.speech.textDone;
-            }
         }
-
         this.speech.conversetionEnded = false;
         this.speech.counter = 0;
-
     }
 });
 // ==== INTERACTABLE OBJECT CLASS ==== //
@@ -346,11 +295,6 @@ ClickPoint = InteractableObject.extend({
     init: function (x, y, width, height, name, arrivalPoint, game) {
         this._super(x, y, width, height, name, game);
         this.arrivalPoint = arrivalPoint;
-        this.progress={
-            before: true,
-            after: false,
-            done:false,
-        }
     },
     
     // --- function that checks if the point is clicked --- //
@@ -358,6 +302,7 @@ ClickPoint = InteractableObject.extend({
     checkIfClicked: function (mouseX, mouseY) {
         // if x between this x and this.x + this.width AND if y between this.y and this.y+this.height
         if ((mouseX > this.x && mouseX < (this.x + this.width)) && (mouseY > this.y && mouseY < (this.y + this.height))) {
+            this.prepareObjectForSpeaking("");
             return true;
         }
     },
@@ -397,43 +342,46 @@ Heroes = MovableObject.extend({
         this.destinationObject = intObject;
     },
     drawSpeechBubble: function () {
-        this.speech.drawSpeech();
-        // Drawing the bubble >>>
-        var x = this.speechX,
-            y = this.speechY,
-            r = x + this.speech.maxWidth + 30,
-            b = y + this.bubbleHeight;
-        ctx.save();
-        ctx.beginPath();
-        ctx.fillStyle = "rgb(215,199,147)";
-        ctx.lineWidth = "3";
-        //
-        ctx.moveTo(x + this.radius, y);
-        ctx.lineTo(x + this.radius / 2, y - 15);
-        ctx.lineTo(x + this.radius * 2, y);
-        ctx.lineTo(r - this.radius, y);
-        //
-        //ctx.moveTo(x + this.radius, y);
-        //ctx.lineTo(r - this.radius * 2, y);
-        //ctx.lineTo(r - this.radius / 2, y - 15);
-        //ctx.lineTo(r - this.radius, y);
-        //ctx.lineTo(r - this.radius, y);
+        if (this.speech.counter == this.speech.textArray.length - 1) {
+            this.speech.conversetionEnded = true;
+        } else {
+            this.speech.drawSpeech();
+            // Drawing the bubble >>>
+            var x = this.speechX,
+                y = this.speechY,
+                r = x + this.speech.maxWidth + 30,
+                b = y + this.bubbleHeight;
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = "rgb(215,199,147)";
+            ctx.lineWidth = "3";
+            //
+            ctx.moveTo(x + this.radius, y);
+            ctx.lineTo(x + this.radius / 2, y - 15);
+            ctx.lineTo(x + this.radius * 2, y);
+            ctx.lineTo(r - this.radius, y);
+            //
+            //ctx.moveTo(x + this.radius, y);
+            //ctx.lineTo(r - this.radius * 2, y);
+            //ctx.lineTo(r - this.radius / 2, y - 15);
+            //ctx.lineTo(r - this.radius, y);
+            //ctx.lineTo(r - this.radius, y);
 
-        ctx.quadraticCurveTo(r, y, r, y + this.radius);
-        ctx.lineTo(r, y + this.bubbleHeight - this.radius);
-        ctx.quadraticCurveTo(r, b, r - this.radius, b);
-        ctx.lineTo(x + this.radius, b);
-        ctx.quadraticCurveTo(x, b, x, b - this.radius);
-        ctx.lineTo(x, y + this.radius);
-        ctx.quadraticCurveTo(x, y, x + this.radius, y);
-        ctx.fill();
-        ctx.strokeStyle = "black";
-        ctx.stroke();
-        ctx.restore();
-        // Drawing the text inside the bubble >>>
-        this.speech.drawSpeech();
+            ctx.quadraticCurveTo(r, y, r, y + this.radius);
+            ctx.lineTo(r, y + this.bubbleHeight - this.radius);
+            ctx.quadraticCurveTo(r, b, r - this.radius, b);
+            ctx.lineTo(x + this.radius, b);
+            ctx.quadraticCurveTo(x, b, x, b - this.radius);
+            ctx.lineTo(x, y + this.radius);
+            ctx.quadraticCurveTo(x, y, x + this.radius, y);
+            ctx.fill();
+            ctx.strokeStyle = "black";
+            ctx.stroke();
+            ctx.restore();
+            // Drawing the text inside the bubble >>>
+            this.speech.drawSpeech();
 
-        
+        }
     }
 
 });
