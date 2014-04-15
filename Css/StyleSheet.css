@@ -75,19 +75,34 @@ body {
     height:240px;
     position:absolute;
     margin:10px 0 0 10px;
-    background-color:grey;
-    opacity:0.5;
+    opacity:0.9;
     
 }
 
 .square {
     opacity:0.8;
-    border-radius: 5px;
+    border-radius: 14px;
     position: absolute;
     width:26px;
     height:26px;
     border: 2px solid black;
+
 }
+
+/* images of crystals will be placed here*/
+.square.green{
+	background-image: linear-gradient(to left bottom, #0F4D19 37%, #80BD8E 100%);
+}
+.square.red {
+	background-image: linear-gradient(to left bottom, #451001 29%, #D65D45 100%);
+}
+.square.yellow{
+background-image: linear-gradient(to left bottom, #232402 13%, #F7FA5A 81%);
+}
+.square.blue{
+	background-image: linear-gradient(to left bottom, #5A607A 44%, #BEB5FF 100%);
+}
+
 
 
 /*moar work to be done here*/

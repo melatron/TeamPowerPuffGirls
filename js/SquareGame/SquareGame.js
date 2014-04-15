@@ -12,7 +12,7 @@
         this.dom.css({
             left: (this.x) * 40 + 15 + 'px',
             top: (this.y) * 40 + 15 + 'px',
-            backgroundColor: this.color,
+           //backgroundColor: this.color,
         });
 
         if (this.duty === 'leader') {
@@ -49,6 +49,7 @@ var GreenSquare = Square.extend({
 
     init: function (x, y, color, duty, index) { 
         this._super(x, y, color, duty, index);
+        this.dom.addClass('green');
     }
 
 });
@@ -57,6 +58,7 @@ var RedSquare = Square.extend({
 
     init: function (x, y, color, duty, index) {        
         this._super(x, y, color, duty, index);
+        this.dom.addClass('red');
     },
 
 });
@@ -66,6 +68,7 @@ var YellowSquare = Square.extend({
 
     init: function (x, y, color, duty, index) {        
         this._super(x, y, color, duty, index);
+        this.dom.addClass('yellow');
     }
 
 });
@@ -74,6 +77,7 @@ var BlueSquare = Square.extend({
 
     init: function (x, y, color, duty, index) {
         this._super(x, y, color, duty, index);
+        this.dom.addClass('blue');
     }
 
 });
@@ -143,7 +147,7 @@ var SquareGame = Game.extend({
 
         $(e.data.objectContext.dom).unbind();
         e.data.gameContext.plot.on('mousedown', e.data, e.data.gameContext.placeLeader);
-
+        e.data.gameContext.drawPossibleMoves(e.data.objectContext);
     },
 
 
@@ -254,6 +258,17 @@ var SquareGame = Game.extend({
             temp.dom.on('click', { gameContext: this, objectContext: temp }, this.pickLeader);
         };
     },
+    // working test
+    drawPossibleMoves : function (objectContext) {
+        
+        var ctx = $('#square-game-map')[0].getContext('2d');
+        ctx.beginPath();
+        //ctx.strokeStyle = 'red';
+        ctx.moveTo(objectContext.x*40+20 , (objectContext.y*40 + 20));
+        ctx.lineTo((objectContext.x+1)*40+20, objectContext.y*40 + 20);
+        ctx.stroke();
+        console.log(objectContext.x);
+    },
 
 
 
@@ -324,6 +339,6 @@ var SquareGame = Game.extend({
 
 
 
-/*  linear-gradient(to left bottom, #0F4D19 37%, #80BD8E 100%);
+/*  
     linear-gradient(to left bottom, #5A607A 44%, #BEB5FF 100%);
-    linear-gradient(to right top, #DBDB7B 20%, #9C9024 70%);*/
+    */
