@@ -208,45 +208,45 @@ Story = Class.extend({
 			this.sprites[i].src = arguments[i];
 		}
 		
-		this.hero.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[0], story.hero, ctx);  // create Sprites
-		this.hero.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[1], story.hero, ctx);
-		this.hero.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[2], story.hero, ctx);
-		this.hero.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[3], story.hero, ctx);
-		this.hero.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[1], story.hero, ctx);
+		this.hero.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[0], story.hero, ctx);  // create Sprites
+		this.hero.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[1], story.hero, ctx);
+		this.hero.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], story.hero, ctx);
+		this.hero.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], story.hero, ctx);
+		this.hero.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], story.hero, ctx);
 		
-		this.elder.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[4], story.elder, ctx);
-		this.elder.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[5], story.elder, ctx);
-		this.elder.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[6], story.elder, ctx);
-		this.elder.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[7], story.elder, ctx);
-		this.elder.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[5], story.elder, ctx);
+		this.elder.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[4], story.elder, ctx);
+		this.elder.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[5], story.elder, ctx);
+		this.elder.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[6], story.elder, ctx);
+		this.elder.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[7], story.elder, ctx);
+		this.elder.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[5], story.elder, ctx);
 
-        this.dragon.spriteUp = new Sprite(384, 96, 4, 6, story.sprites[8], story.dragon, ctx);
-        this.dragon.spriteDown = new Sprite(384, 96, 4, 6, story.sprites[9], story.dragon, ctx);
-        this.dragon.spriteLeft = new Sprite(384, 96, 4, 6, story.sprites[10], story.dragon, ctx);
-        this.dragon.spriteRight = new Sprite(384, 96, 4, 6, story.sprites[11], story.dragon, ctx);
-        this.dragon.spriteIdle = new Sprite(96, 96, 1, 6, story.sprites[9], story.dragon, ctx);
-        this.dragon.getDestinationDelay = 250;
+        this.dragon.spriteUp = new Sprite(384, 96, 4, 12, story.sprites[8], story.dragon, ctx);
+        this.dragon.spriteDown = new Sprite(384, 96, 4, 12, story.sprites[9], story.dragon, ctx);
+        this.dragon.spriteLeft = new Sprite(384, 96, 4, 12, story.sprites[10], story.dragon, ctx);
+        this.dragon.spriteRight = new Sprite(384, 96, 4, 12, story.sprites[11], story.dragon, ctx);
+        this.dragon.spriteIdle = new Sprite(96, 96, 1, 12, story.sprites[9], story.dragon, ctx);
+        this.dragon.getDestinationDelay = 500;
         
-        this.elf.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[12], story.elf, ctx);
-        this.elf.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[13], story.elf, ctx);
-        this.elf.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[14], story.elf, ctx);
-        this.elf.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[15], story.elf, ctx);
-        this.elf.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[13], story.elf, ctx);
-        this.elf.getDestinationDelay = 150;
+        this.elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[12], story.elf, ctx);
+        this.elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[13], story.elf, ctx);
+        this.elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[14], story.elf, ctx);
+        this.elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[15], story.elf, ctx);
+        this.elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[13], story.elf, ctx);
+        this.elf.getDestinationDelay = 300;
         
-        this.bandit.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[16], story.bandit, ctx);
-        this.bandit.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[17], story.bandit, ctx);
-        this.bandit.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[18], story.bandit, ctx);
-        this.bandit.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[19], story.bandit, ctx);
-        this.bandit.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[17], story.bandit, ctx);
-        this.bandit.getDestinationDelay = 80;
+        this.bandit.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[16], story.bandit, ctx);
+        this.bandit.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[17], story.bandit, ctx);
+        this.bandit.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[18], story.bandit, ctx);
+        this.bandit.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[19], story.bandit, ctx);
+        this.bandit.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[17], story.bandit, ctx);
+        this.bandit.getDestinationDelay = 160;
         
-        this.orc.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[20], story.orc, ctx);
-        this.orc.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[21], story.orc, ctx);
-        this.orc.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[22], story.orc, ctx);
-        this.orc.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[23], story.orc, ctx);
-        this.orc.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[21], story.orc, ctx);
-        this.orc.getDestinationDelay = 124;
+        this.orc.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[20], story.orc, ctx);
+        this.orc.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[21], story.orc, ctx);
+        this.orc.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[22], story.orc, ctx);
+        this.orc.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[23], story.orc, ctx);
+        this.orc.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[21], story.orc, ctx);
+        this.orc.getDestinationDelay = 248;
 	},
     
 	// ==== Portrait preloader ==== //
@@ -423,8 +423,7 @@ Story = Class.extend({
 
 var story,
     context,
-    mainLoop,
-    yolo;
+    mainLoop;
 
 
 //  Everything after this paragraph has to be moved to the story class.
@@ -434,7 +433,7 @@ window.onload = function () {
 	canvas = $("#canvas")[0];
 	ctx = canvas.getContext('2d');
 	story = new Story();
-	yolo = 'url(source/TonyGame/2.png)';
+	story.checkRequestAnimationFrame();
 	
 	
 	Inventory = new Inventory();
