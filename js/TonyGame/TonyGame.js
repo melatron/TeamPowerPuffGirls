@@ -136,6 +136,7 @@ TonyGame = Game.extend({
         
     },
     proceedToNextTurn: function () {
+        
         var zeroes = this.countZeroes(),
             rand = Math.floor((Math.random() * zeroes)) + 1,
             zeroCounter = 0,
@@ -165,12 +166,14 @@ TonyGame = Game.extend({
         setTimeout(function () {
             self.removeNodes();
             self.addNodes();
+            self.addEvents();
         }, 180);
         if (zeroes <= 0) {
             this.gameOver = isOver;
         }
     },
     listenKeyEvents: function (e) {
+        $(document).off();
         console.log("aa");
         switch (e.keyCode) {
           case 37:
@@ -192,7 +195,7 @@ TonyGame = Game.extend({
         }
     },
     addEvents: function () {
-        $(window).on("keydown", this, this.listenKeyEvents);
+        $(document).on("keydown", this, this.listenKeyEvents);
     },
     move: function (direction) {
         if (this.gameOver) {
