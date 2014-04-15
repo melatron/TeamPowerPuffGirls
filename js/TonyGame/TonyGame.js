@@ -35,12 +35,15 @@ TonyGame = Game.extend({
                           [0, 0, 0, 0]];
     },
     start: function () {
+        console.log('hello');
         this.addGameToPlot();
         this.putStartingNumbers();
         this.addEvents();
     },
     endGame: function () {
-
+        this.gameOver = true;
+        this.removeGameFromPlot();
+        $(document).off();
     },
     addBonuses: function (bonuses) {
 
@@ -173,24 +176,24 @@ TonyGame = Game.extend({
         }
     },
     listenKeyEvents: function (e) {
-        $(document).off();
+        
         console.log("aa");
         switch (e.keyCode) {
           case 37:
         	  e.preventDefault();
-              e.data.move("left");
+        	  e.data.move("left");
               break;
           case 38:
         	  e.preventDefault();
-              e.data.move("up");
+        	  e.data.move("up");
               break;
           case 39:
         	  e.preventDefault();
-              e.data.move("right");
+        	  e.data.move("right");
               break;
           case 40:
         	  e.preventDefault();
-              e.data.move("down");
+        	  e.data.move("down");
               break;
         }
     },
@@ -198,6 +201,7 @@ TonyGame = Game.extend({
         $(document).on("keydown", this, this.listenKeyEvents);
     },
     move: function (direction) {
+        $(document).off();
         if (this.gameOver) {
             this.endGame();
         }

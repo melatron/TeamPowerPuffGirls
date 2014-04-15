@@ -132,7 +132,7 @@ Story = Class.extend({
             self.checkIfGamePlayed();
             ctx.restore();
             //console.log(soundtrack.ended);
-            this.animation = requestAnimationFrame(story.mainLoop);
+            this.animation = requestAnimationFrame(self.mainLoop);
         };
     },
     
@@ -348,18 +348,22 @@ Story = Class.extend({
                 // Startimg the game after the speech
 	            this.hero.speakingTo.isSpeaking = false;
 	            this.hero.isSpeaking = false;
-	            $('*').off();
-	            $(document).off();
-	            this.hero.speakingTo.startGame();
+	            
+
+	            if (this.hero.speakingTo.game) {
+	                $('*').off();
+	                $(document).off();
+	                this.hero.speakingTo.startGame();
+	            }
 	        }
 	    }
 	},
 
     // Dani have to write some logic about the conversation after the game is finished.
 	checkIfGamePlayed: function () {
-	    if (this.hero.speakingTo && this.hero.speakingTo != null) {
+	    if (this.hero.speakingTo && this.hero.speakingTo != null && this.hero.speakingTo.game) {
 	        if (this.hero.speakingTo.game.gameOver) {
-	            console.log("laaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaa");
+	            //console.log("laaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaa");
 	            this.addEvents();
 	            this.hero.speakingTo = null;
 	        }
