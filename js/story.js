@@ -436,8 +436,7 @@ window.onload = function () {
 	story = new Story();
 
 
-	yolo = new PathFinder();
-	yolo.startGame();
+	
 	
 	
 	Inventory = new Inventory();
@@ -519,4 +518,6 @@ window.onload = function () {
 
     //elfGame = new RadoGame();
     //elfGame.start();
+    yolo = new PathFinder();
+    yolo.startGame();
 };

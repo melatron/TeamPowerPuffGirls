@@ -26,6 +26,7 @@
 });*/
 TonyGame = Game.extend({
     init: function () {
+        this.keyPressed = false;
         this.length = 4;
         this.plot = $("#Game6561");
         this.multiplyBy = 2;
