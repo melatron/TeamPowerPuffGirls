@@ -207,8 +207,7 @@ RadoGame = Game.extend({
 		for(i = 0; i < len; i++){
 			var temp = this.passableBlocks[i];
 			
-			if(((charBox.x > temp.x && charBox.x < temp.x + temp.width) || (charBox.x + charBox.width > temp.x && charBox.x + charBox.width < temp.x + temp.width)) && 
-	((charBox.y > temp.y && charBox.y < temp.y + temp.height) || (charBox.y + charBox.height > temp.y && charBox.y + charBox.height < temp.y + temp.height))){
+			if(this.areOverlapping(charBox, temp)){
 				temp.isActive = true;
 				activeBlocks.push(temp);
 			}
@@ -226,28 +225,28 @@ RadoGame = Game.extend({
 		
 		this.gameContext.drawImage(this.currentLevel.image, 0, 0);
 		
-		for(var i = 0; i < this.passableBlocks.length; i++){
-			var temp = this.passableBlocks[i];
-			
-			if (temp.isActive){
-				this.gameContext.save();
-				this.gameContext.strokeStyle = 'red';
-				this.gameContext.strokeRect(temp.x, temp.y, temp.width, temp.height);
-				this.gameContext.restore();
-			}
-			else{
-				this.gameContext.strokeRect(temp.x, temp.y, temp.width, temp.height);				
-			}
-		}
-		for(var j = 0; j < this.impassableBlocks.length; j++){
-			var temp = this.impassableBlocks[j];
-			this.gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
-		}
-		for(var k = 0; k < this.finishBlocks.length; k++){
-			var temp = this.finishBlocks[k];
-			this.gameContext.fillStyle = 'rgba(89, 49, 143, 0.3)';
-			this.gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
-		}
+//		for(var i = 0; i < this.passableBlocks.length; i++){
+//			var temp = this.passableBlocks[i];
+//			
+//			if (temp.isActive){
+//				this.gameContext.save();
+//				this.gameContext.strokeStyle = 'red';
+//				this.gameContext.strokeRect(temp.x, temp.y, temp.width, temp.height);
+//				this.gameContext.restore();
+//			}
+//			else{
+//				this.gameContext.strokeRect(temp.x, temp.y, temp.width, temp.height);				
+//			}
+//		}
+//		for(var j = 0; j < this.impassableBlocks.length; j++){
+//			var temp = this.impassableBlocks[j];
+//			this.gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
+//		}
+//		for(var k = 0; k < this.finishBlocks.length; k++){
+//			var temp = this.finishBlocks[k];
+//			this.gameContext.fillStyle = 'rgba(89, 49, 143, 0.3)';
+//			this.gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
+//		}
 		
 	},
 	
@@ -263,6 +262,12 @@ RadoGame = Game.extend({
 				moveDown: false,
 				moveLeft: false,
 				moveRight: false,
+				boundingRect: {
+					x: x + 6,
+					y: y + 28,
+					width:20,
+					height: 8
+				},
 				speed: 2,
 				isMoving: false,
 				isCaught: false
@@ -362,7 +367,7 @@ RadoGame = Game.extend({
 				32,
 				32,
 				'circular',
-				'counterClockwise',
+				'clockwise',
 				level1.layout[1][4],
 				level1.layout[4][7],
 				3
@@ -497,11 +502,12 @@ RadoGame = Game.extend({
 		
 		for(i = 0; i < len; i++){
 			this.updateElf(this.currentLevel.elves[i]);
-			if(this.areOverlapping(this.currentLevel.elves[i], this.mainCharacter)){
+			if(this.areOverlapping(this.currentLevel.elves[i], this.mainCharacter, 8, 4, 8, 4)){
 				this.mainCharacter.isCaught = true;
 			}
 		}
 	},
+
 	
 	// =========================== COLLISION DETECTION METHOD ============================== //
 	
@@ -839,9 +845,14 @@ RadoGame = Game.extend({
 	
 	// ======== CHECK IF OVERLAPPING METHOD =========== //
 	
-	areOverlapping: function(obj1, obj2){
-		if(((obj1.x > obj2.x && obj1.x < obj2.x + obj2.width) || (obj1.x + obj1.width > obj2.x && obj1.x + obj1.width < obj2.x + obj2.width)) && 
-				((obj1.y > obj2.y && obj1.y < obj2.y + obj2.height) || (obj1.y + obj1.height > obj2.y && obj1.y + obj1.height < obj2.y + obj2.height))){
+	areOverlapping: function(obj1, obj2, offsetX1, offsetY1, offsetX2, offsetY2){
+		var oX1 = offsetX1 || 0,
+			oY1 = offsetY1 || 0,
+			oX2 = offsetX2 || 0,
+			oY2 = offsetY2 || 0;
+		
+		if(((obj1.x + oX1 > obj2.x + oX2 && obj1.x + oX1 < obj2.x + oX2 + (obj2.width - 2 * oX2)) || (obj1.x + oX1 + (obj1.width - 2 * oX1) > obj2.x + oX2 && obj1.x + oX1 + (obj1.width - 2 * oX1) < obj2.x + oX2 + (obj2.width - 2 * oX2))) && 
+				((obj1.y + oY1 > obj2.y + oY2 && obj1.y + oY1 < obj2.y + oY2 + (obj2.height - 2 * oY2)) || (obj1.y + oY1 + (obj1.height - 2 * oY1) > obj2.y + oY2 && obj1.y + oY1 + (obj1.height - 2 * oY1) < obj2.y + oY2 + (obj2.height - 2 * oY2)))){
 			return true;
 		}
 		return false;
