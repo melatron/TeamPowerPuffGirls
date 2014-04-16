@@ -58,6 +58,11 @@ body {
     position:relative;
     /*background-image: url(../source/TonyGame/2.png);*/
 }
+
+/*--------------------PATH FINDER GAME-------------------*/
+#pathFinder {
+    border:1px solid #000;
+}
 /*-----------------SQUARE GAME CSS--------------------*/
 
 #square-game{

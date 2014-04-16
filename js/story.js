@@ -434,7 +434,10 @@ window.onload = function () {
 	canvas = $("#canvas")[0];
 	ctx = canvas.getContext('2d');
 	story = new Story();
-	yolo = 'url(source/TonyGame/2.png)';
+
+
+	yolo = new PathFinder();
+	yolo.startGame();
 	
 	
 	Inventory = new Inventory();

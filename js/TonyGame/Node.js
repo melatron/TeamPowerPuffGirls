@@ -165,13 +165,13 @@ Node.prototype.proceed = function () {
         result = this.calculateAnimation();
         switch (this.calculateAnimation().diff) {
             case 1:
-                time = 100;
+                time = 80;
                 break;
             case 2:
-                time = 50;
+                time = 40;
                 break;
             case 3:
-                time = 25;
+                time = 20;
                 break;
             default:
                 break;
@@ -181,19 +181,20 @@ Node.prototype.proceed = function () {
             self.row = self.movedTo.row;
             self.movedTo = null;
             self.mergedTo = null;
+            console.log('ANIMACIQ');
         });
     }
     else if (this.mergedTo != null) {
         result = this.calculateAnimation();
         switch (this.calculateAnimation().diff) {
             case 1:
-                time = 25;
+                time = 80;
                 break;
             case 2:
-                time = 50;
+                time = 40;
                 break;
             case 3:
-                time = 100;
+                time = 20;
                 break;
             default:
                 break;
@@ -203,6 +204,7 @@ Node.prototype.proceed = function () {
             self.row = self.mergedTo.row;
             self.movedTo = null;
             self.mergedTo = null;
+            console.log('ANIMACIQ');
         });
     }
     this.unitedOnTurn = false;

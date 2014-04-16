@@ -170,7 +170,8 @@ TonyGame = Game.extend({
             self.removeNodes();
             self.addNodes();
             self.addEvents();
-        }, 180);
+            console.log('ADDVANETOOOO');
+        }, 200);
         if (zeroes <= 0) {
             this.gameOver = isOver;
         }
