@@ -344,6 +344,39 @@ RadoGame = Game.extend({
 				level1.layout[4][18],
 				3
 		);
+		level1.elves[3] = this.createElf(
+				level1.layout[1][1].x,
+				level1.layout[1][1].y,
+				32,
+				32,
+				'circular',
+				'clockwise',
+				level1.layout[1][1],
+				level1.layout[4][4],
+				3
+			);
+		level1.elves[4] = this.createElf(
+				level1.layout[1][4].x,
+				level1.layout[1][4].y,
+				32,
+				32,
+				'circular',
+				'clockwise',
+				level1.layout[1][4],
+				level1.layout[4][7],
+				3
+			);
+		level1.elves[5] = this.createElf(
+				level1.layout[1][7].x,
+				level1.layout[1][7].y,
+				32,
+				32,
+				'circular',
+				'clockwise',
+				level1.layout[1][7],
+				level1.layout[4][10],
+				3
+			);
 	},
 	
 	createMovePattern: function(type, direction, startBlock, endBlock){
@@ -389,8 +422,26 @@ RadoGame = Game.extend({
 
 			break;
 		case 'circular':
+			var start1 = this.currentLevel.layout[start.row][end.col],
+				end1 = this.currentLevel.layout[end.row][start.col],
+				horizontal = true;
 			if(direction == 'clockwise'){
-
+				if(elf.x <= start.x && elf.y <= start.y - 10){
+					elf.moveRight = true;
+					elf.moveUp = false;
+				}
+				else if(elf.x >= start1.x && elf.y <= start.y - 10){
+					elf.moveDown = true;
+					elf.moveRight = false;
+				}
+				else if(elf.x >= start1.x && elf.y >= end.y - 10){
+					elf.moveLeft = true;
+					elf.moveDown = false;
+				}
+				else if(elf.x <= end1.x && elf.y >= end1.y - 10){
+					elf.moveUp = true;
+					elf.moveLeft = false;
+				}
 			}
 			else if(direction == 'counterClockwise'){
 
