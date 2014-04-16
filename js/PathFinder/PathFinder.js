@@ -65,7 +65,7 @@ PathFinder = Game.extend({
             x: 100,
             y: 100,
             width: 50,
-            height: 50
+            height: 20
         });
 
         //this.mapBoxes.push({
@@ -115,6 +115,7 @@ PathFinder = Game.extend({
         // space
 
         if (this.keys[32] && this.flag) {
+            var self = this;
             if (this.permBoxCounter <= 4) {
                 this.createdBoxesPerm.push({
                     x: this.mainCharacter.x,
@@ -122,6 +123,7 @@ PathFinder = Game.extend({
                     width: this.mainCharacter.width,
                     height: this.mainCharacter.height
                 });
+                this.permBoxCounter++;
             }
             else {
                 this.createdBoxesTemp[this.tempBoxCounter] = {
@@ -130,12 +132,25 @@ PathFinder = Game.extend({
                     width: this.mainCharacter.width,
                     height: this.mainCharacter.height
                 };
+                
+                var current = self.tempBoxCounter;
+                setTimeout(function () {
+                    self.createdBoxesTemp[current] = null;
+                }, 7000);
                 this.tempBoxCounter++;
             }
+            if (this.tempBoxCounter >= 1 && this.createdBoxesTemp[this.tempBoxCounter - 2] != null) {
+                this.resetMainCharacter(this.createdBoxesTemp[this.tempBoxCounter - 2].x, this.createdBoxesTemp[this.tempBoxCounter - 2].y - this.mainCharacter.height);
+            }
+            else if (this.createdBoxesPerm.length > 1) {
+                this.resetMainCharacter(this.createdBoxesPerm[this.createdBoxesPerm.length - 2].x, this.createdBoxesPerm[this.createdBoxesPerm.length - 2].y - this.mainCharacter.height);
+            }
+            else {
+                this.resetMainCharacter();
+            }
             
-            this.resetMainCharacter();
             this.flag = false;
-            var self = this;
+           
             setTimeout(function () {
                 self.flag = true;
             }, 2000);
@@ -219,19 +234,21 @@ PathFinder = Game.extend({
         /// Checking the created temprorary boxes for collision///////////////////////////////////////////////////////////////
         this.gameContext.fillStyle = "green";
         for (var i = 0; i < this.createdBoxesTemp.length; i++) {                                                            //
-            this.gameContext.fillRect(this.createdBoxesTemp[i].x, this.createdBoxesTemp[i].y + 14, this.createdBoxesTemp[i].width, this.createdBoxesTemp[i].height - 14); //
-                                                                                                                            //
-            var dir = this.colCheck(this.mainCharacter, this.createdBoxesTemp[i]);                                          //
-                                                                                                                            //
-            if (dir === "l" || dir === "r") {                                                                               //
-                this.mainCharacter.velX = 0;                                                                                //
-                this.mainCharacter.jumping = false;                                                                         //
-            } else if (dir === "b") {                                                                                       //
-                this.mainCharacter.grounded = true;                                                                         //
-                this.mainCharacter.jumping = false;                                                                         //
-            } else if (dir === "t") {                                                                                       //
-                this.mainCharacter.velY *= -1;                                                                              //
-            }                                                                                                               //
+            if (this.createdBoxesTemp[i] != null) {
+                this.gameContext.fillRect(this.createdBoxesTemp[i].x, this.createdBoxesTemp[i].y + 14, this.createdBoxesTemp[i].width, this.createdBoxesTemp[i].height - 14); //
+                //
+                var dir = this.colCheck(this.mainCharacter, this.createdBoxesTemp[i]);                                          //
+                //
+                if (dir === "l" || dir === "r") {                                                                               //
+                    this.mainCharacter.velX = 0;                                                                                //
+                    this.mainCharacter.jumping = false;                                                                         //
+                } else if (dir === "b") {                                                                                       //
+                    this.mainCharacter.grounded = true;                                                                         //
+                    this.mainCharacter.jumping = false;                                                                         //
+                } else if (dir === "t") {                                                                                       //
+                    this.mainCharacter.velY *= -1;                                                                              //
+                }
+            }                                                                                                              //
         }                                                                                                                   //
         /// Checking the created bottom Spikes for collision//////////////////////////////////////////////////////////////////
         this.gameContext.fillStyle = "red";
@@ -319,9 +336,15 @@ PathFinder = Game.extend({
         }
     },
     resetMainCharacter: function () {
+        if (arguments[1]) {
+            this.mainCharacter.x = arguments[0];
+            this.mainCharacter.y = arguments[1];
+        }
+        else {
+            this.mainCharacter.x = this.width / 2;
+            this.mainCharacter.y = this.height - 30;
+        }
         this.mainCharacterDead = false;
-        this.mainCharacter.x = this.width / 2;
-        this.mainCharacter.y = this.height - 30;
     },
 
     addEventListeners: function () {
