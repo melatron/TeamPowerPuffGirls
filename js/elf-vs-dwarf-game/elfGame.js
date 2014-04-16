@@ -30,7 +30,7 @@ RadoGame = Game.extend({
 			game.updateCharacter();
 			game.checkLevelProgress();
 			game.gameContext.restore();
-			this.animation = requestAnimationFrame(game.mainLoop);
+			game.animation = requestAnimationFrame(game.mainLoop);
 		};
 	},
 	
@@ -264,7 +264,8 @@ RadoGame = Game.extend({
 				moveLeft: false,
 				moveRight: false,
 				speed: 2,
-				isMoving: false
+				isMoving: false,
+				isCaught: false
 		};
 		
 		this.mainCharacterBoundingRect = {
@@ -361,7 +362,7 @@ RadoGame = Game.extend({
 				32,
 				32,
 				'circular',
-				'clockwise',
+				'counterClockwise',
 				level1.layout[1][4],
 				level1.layout[4][7],
 				3
@@ -444,7 +445,22 @@ RadoGame = Game.extend({
 				}
 			}
 			else if(direction == 'counterClockwise'){
-
+				if(elf.x <= start.x && elf.y <= start.y){
+					elf.moveDown = true;
+					elf.moveLeft = false;
+				}
+				else if(elf.x <= end1.x && elf.y >= end1.y){
+					elf.moveRight = true;
+					elf.moveDown = false;
+				}
+				else if(elf.x >= end.x && elf.y >= end.y){
+					elf.moveUp = true;
+					elf.moveRight = false;
+				}
+				else if(elf.x >= start1.x && elf.y <= start1.y){
+					elf.moveLeft = true;
+					elf.moveUp = false;
+				}
 			}
 
 			break;
@@ -481,6 +497,9 @@ RadoGame = Game.extend({
 		
 		for(i = 0; i < len; i++){
 			this.updateElf(this.currentLevel.elves[i]);
+			if(this.areOverlapping(this.currentLevel.elves[i], this.mainCharacter)){
+				this.mainCharacter.isCaught = true;
+			}
 		}
 	},
 	
@@ -706,7 +725,14 @@ RadoGame = Game.extend({
 			charBox = this.mainCharacterBoundingRect;
 
 		//this.gameContext.fillRect(this.mainCharacterBoundingRect.x, this.mainCharacterBoundingRect.y, this.mainCharacterBoundingRect.width, this.mainCharacterBoundingRect.height);
-		
+		if (char.isCaught){
+			char.x = this.startingBlock.x;
+			charBox.x = this.startingBlock.x + 6;
+			char.y = this.startingBlock.y;
+			charBox.y = this.startingBlock.y + 28;
+			char.isCaught = false;
+		}
+
 		if(char.moveUp == true){
 			if(char.moveLeft == true){
 				char.spriteLeft.drawSprite();
@@ -818,6 +844,7 @@ RadoGame = Game.extend({
 				((obj1.y > obj2.y && obj1.y < obj2.y + obj2.height) || (obj1.y + obj1.height > obj2.y && obj1.y + obj1.height < obj2.y + obj2.height))){
 			return true;
 		}
+		return false;
 	},
 	
 	// ============ EVENT HANDLERS ============ //

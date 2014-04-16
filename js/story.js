@@ -435,7 +435,6 @@ window.onload = function () {
 	ctx = canvas.getContext('2d');
 	story = new Story();
 
-
 	
 	
 	
