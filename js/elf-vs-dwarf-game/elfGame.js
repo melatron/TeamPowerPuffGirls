@@ -2,8 +2,7 @@
 
 RadoGame = Game.extend({
 	init: function(){
-		var game = this,
-			mainLoop = null;
+		var game = this;
 
 		this.levels = [];            //array of levels
 		this.levelIndex = 0;
@@ -13,20 +12,25 @@ RadoGame = Game.extend({
 		this.finishBlocks = [];		//array of all finish blocks
 		this.startingBlock = null;	//the hero starting point
 		
-		this.plot = $("#elf-game");
+		this.plot = $('#elf-game');
 		this.canvas = $('#elf-game-canvas')[0];	
 		this.gameContext = $('#elf-game-canvas')[0].getContext('2d');
 		this.mainCharacter = {};
 		
+		this.elves = [];
+		
+		this.animation = null;
 		// -- MAIN LOOP -- //
 		
 		this.mainLoop = function(){
 			game.gameContext.save();
 			game.gameContext.clearRect(0, 0, canvas.width, canvas.height);
 			game.drawLevel();
+			game.updateElves();
 			game.updateCharacter();
 			game.checkLevelProgress();
 			game.gameContext.restore();
+			this.animation = requestAnimationFrame(game.mainLoop);
 		};
 	},
 	
@@ -37,9 +41,10 @@ RadoGame = Game.extend({
 		this.createLevels();
 		this.currentLevel = this.levels[this.levelIndex];
 		this.populateLevel(this.currentLevel);
+		this.createElves();
 		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
 		this.addEventListeners();
-		mainLoop = setInterval(this.mainLoop, 30);
+		this.mainLoop();
 	},
 	
 	startNewLevel: function(){
@@ -86,7 +91,8 @@ RadoGame = Game.extend({
 				number: number,
 				image: new Image(),
 				layout: layout,
-				isFinished: false
+				isFinished: false,
+				elves: []
 		};
 		level.image.src = image;
 		return level;
@@ -107,6 +113,8 @@ RadoGame = Game.extend({
                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 				)
 		);
+		
+	
 		
 		this.levels.push(this.createLevel(
 				2,
@@ -199,7 +207,8 @@ RadoGame = Game.extend({
 		for(i = 0; i < len; i++){
 			var temp = this.passableBlocks[i];
 			
-			if(((charBox.x > temp.x && charBox.x < temp.x + temp.width) || (charBox.x + charBox.width > temp.x && charBox.x + charBox.width < temp.x + temp.width)) && ((charBox.y > temp.y && charBox.y < temp.y + temp.height) || (charBox.y + charBox.height > temp.y && charBox.y + charBox.height < temp.y + temp.height))){
+			if(((charBox.x > temp.x && charBox.x < temp.x + temp.width) || (charBox.x + charBox.width > temp.x && charBox.x + charBox.width < temp.x + temp.width)) && 
+	((charBox.y > temp.y && charBox.y < temp.y + temp.height) || (charBox.y + charBox.height > temp.y && charBox.y + charBox.height < temp.y + temp.height))){
 				temp.isActive = true;
 				activeBlocks.push(temp);
 			}
@@ -254,7 +263,7 @@ RadoGame = Game.extend({
 				moveDown: false,
 				moveLeft: false,
 				moveRight: false,
-				speed: 3,
+				speed: 2,
 				isMoving: false
 		};
 		
@@ -265,11 +274,163 @@ RadoGame = Game.extend({
 				height: 8
 		};
 		
-		this.mainCharacter.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[0], this.mainCharacter, this.gameContext);  // create Sprites
-		this.mainCharacter.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[1], this.mainCharacter, this.gameContext);
-		this.mainCharacter.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[2], this.mainCharacter, this.gameContext);
-		this.mainCharacter.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[3], this.mainCharacter, this.gameContext);
-		this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[1], this.mainCharacter, this.gameContext);
+		this.mainCharacter.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[0], this.mainCharacter, this.gameContext);  // create Sprites
+		this.mainCharacter.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[1], this.mainCharacter, this.gameContext);
+		this.mainCharacter.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this.mainCharacter, this.gameContext);
+		this.mainCharacter.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this.mainCharacter, this.gameContext);
+		this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this.mainCharacter, this.gameContext);
+	},
+
+	createElf: function(x, y, width, height, movePatternType, direction, startBlock, endBlock, speed){
+		var elf = {
+			x: x,
+			y: y - 10,
+			width: width,
+			height: height,
+			speed: speed,
+			moveUp: false,
+			moveDown: false,
+			moveLeft: false,
+			moveRight: false,
+			movePattern: this.createMovePattern(movePatternType, direction, startBlock, endBlock)
+		};
+		
+//		elf.movePattern = this.createMovePattern(movePatternType, direction, startBlock, endBlock);
+		
+		elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[12], elf, this.gameContext);
+		elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[13], elf, this.gameContext);
+		elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[14], elf, this.gameContext);
+		elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[15], elf, this.gameContext);
+		elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[13], elf, this.gameContext);
+
+		return elf;
+	},
+	
+	createElves: function(){
+		var level1 = this.levels[0],
+			level2 = this.levels[1],
+			level3 = this.levels[2];
+		
+		level1.elves[0] = this.createElf (
+				level1.layout[1][12].x, 
+				level1.layout[1][12].y, 
+				32, 
+				32, 
+				'linear', 
+				'horizontal', 
+				level1.layout[1][12], 
+				level1.layout[1][18],
+				4
+				);
+		level1.elves[1] = this.createElf (
+				level1.layout[2][18].x,
+				level1.layout[2][18].y,
+				32,
+				32,
+				'linear',
+				'horizontal',
+				level1.layout[2][12],
+				level1.layout[2][18],
+				4
+		);
+		level1.elves[2] = this.createElf(
+				level1.layout[4][12].x,
+				level1.layout[4][12].y,
+				32,
+				32,
+				'linear',
+				'horizontal',
+				level1.layout[4][12],
+				level1.layout[4][18],
+				3
+		);
+	},
+	
+	createMovePattern: function(type, direction, startBlock, endBlock){
+		var pattern = {
+			type: type,
+			direction: direction,
+			startBlock: startBlock,
+			endBlock: endBlock
+		};
+
+		return pattern;
+	},
+	
+	implementMovePattern: function(elf){
+		var type = elf.movePattern.type,
+			start = elf.movePattern.startBlock,
+			end = elf.movePattern.endBlock,
+			direction = elf.movePattern.direction,
+			reverse = elf.movePattern.reverse;
+		
+		switch(type){
+		case 'linear':
+			if(direction == 'horizontal'){
+				
+				if(elf.x >= end.x){
+					elf.moveLeft = true;
+				}
+				else if(elf.x <= start.x){
+					elf.moveLeft = false;
+					elf.moveRight = true;
+					console.log('change');
+				}
+				
+			}
+			else if(direction == 'vertical'){
+				if(elf.y >= end.y){
+					elf.moveUp = true;
+				}
+				if(elf.y <= start.y){
+					elf.moveDown = true;
+				}
+			}
+
+			break;
+		case 'circular':
+			if(direction == 'clockwise'){
+
+			}
+			else if(direction == 'counterClockwise'){
+
+			}
+
+			break;
+		default:
+			break;
+	}
+	},
+
+	updateElf: function(elf){
+		
+		this.implementMovePattern(elf);
+		
+		if(elf.moveLeft == true){
+			elf.spriteLeft.drawSprite();
+			elf.x -= elf.speed;
+		}
+		else if(elf.moveRight == true){
+			elf.spriteRight.drawSprite();
+			elf.x += elf.speed;
+		}
+		else if(elf.moveUp == true){
+			elf.spriteUp.drawSprite();
+			elf.y -= elf.speed;
+		}
+		else if(elf.moveDown == true){
+			elf.spriteDown.drawSprite();
+			elf.y += elf.speed;
+		}
+	},
+	
+	updateElves: function(){
+		var i,
+			len = this.currentLevel.elves.length;
+		
+		for(i = 0; i < len; i++){
+			this.updateElf(this.currentLevel.elves[i]);
+		}
 	},
 	
 	// =========================== COLLISION DETECTION METHOD ============================== //

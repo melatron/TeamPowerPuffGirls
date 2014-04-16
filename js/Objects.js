@@ -396,7 +396,7 @@ AIMovableObject = MovableObject.extend({
         this.name = name;
         this.clickPoint = clickPoint;
 		this.getDestinationCounter = 0;
-        this.getDestinationDelay = 100;
+        this.getDestinationDelay = 200;
 		this.speed = 1;
 	},
 	
