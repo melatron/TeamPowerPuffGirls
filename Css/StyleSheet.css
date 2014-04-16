@@ -149,7 +149,6 @@ background-image: linear-gradient(to left bottom, #232402 13%, #F7FA5A 81%);
 #elf-game {
 	height:224px;
 	width:640px;
-	border: 1px solid red;
     position: absolute;
     display: none;
 }

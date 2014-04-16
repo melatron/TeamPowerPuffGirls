@@ -86,24 +86,27 @@ RadoGame = Game.extend({
 	
 	// ======== LEVEL CONSTRUCTOR ======= //
 	
-	createLevel: function(number, image, layout){
+	createLevel: function(number, layout, sprite){
 		var level = {
+				x: 0,
+				y: 0,
 				number: number,
-				image: new Image(),
 				layout: layout,
 				isFinished: false,
-				elves: []
+				elves: [],
+				sprite: null
 		};
-		level.image.src = image;
 		return level;
 	},
 	
 	// ======= CREATING THE LEVELS ======== //
 	
 	createLevels: function(){
+		
+		
+		
 		this.levels.push(this.createLevel(
 				1,
-				'source/elf game/level1.png',
 				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],		// 0 - impassable,
                  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],		// 1 - passable,
                  [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0],		// 2 - finish,
@@ -114,11 +117,10 @@ RadoGame = Game.extend({
 				)
 		);
 		
-	
+		this.levels[0].sprite = new Sprite(1920, 224, 3, 8, story.sprites[24], this.levels[0], this.gameContext);
 		
 		this.levels.push(this.createLevel(
 				2,
-				'source/elf game/level2.png',
 				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
                  [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 1, 0, 2, 2, 0, 0],
@@ -131,7 +133,6 @@ RadoGame = Game.extend({
 		
 		this.levels.push(this.createLevel(
 				3,
-				'source/elf game/level3.png',
 				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
                  [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -223,7 +224,7 @@ RadoGame = Game.extend({
 	
 	drawLevel: function(){
 		
-		this.gameContext.drawImage(this.currentLevel.image, 0, 0);
+		this.currentLevel.sprite.drawSprite();
 		
 //		for(var i = 0; i < this.passableBlocks.length; i++){
 //			var temp = this.passableBlocks[i];

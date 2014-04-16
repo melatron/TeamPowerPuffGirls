@@ -171,7 +171,9 @@ Story = Class.extend({
             orcSpriteUpImage = null,
             orcSpriteDownImage = null,
             orcSpriteLeftImage = null,
-            orcSpriteRightImage = null;
+            orcSpriteRightImage = null,
+            
+            elfGameLevel1Image = null;
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
     	this.sprites.push(heroSpriteDownImage);
@@ -202,6 +204,8 @@ Story = Class.extend({
         this.sprites.push(orcSpriteDownImage);
         this.sprites.push(orcSpriteLeftImage);
         this.sprites.push(orcSpriteRightImage);
+        
+        this.sprites.push(elfGameLevel1Image);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -474,7 +478,9 @@ window.onload = function () {
             'source/orcMoveUp.png',
             'source/orcMoveDown.png',
             'source/orcMoveLeft.png',
-            'source/orcMoveRight.png'
+            'source/orcMoveRight.png',
+            
+            'source/elf game/spriteLevel1.png'
 	);
 	
 	story.preloadPortraits(
