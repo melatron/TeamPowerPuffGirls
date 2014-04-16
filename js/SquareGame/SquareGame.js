@@ -199,15 +199,15 @@ var SquareGame = Game.extend({
 
 
     followLeader: function (that) {
-        var leaderX,
-            leaderY;
+        var lastX,
+            lastY;
 
         if (that.objectContext.direction === 'positive') {
-            //define the coordinates of the leader being followed
-            leaderX = that.gameContext.activeArray[that.gameContext.activeArray.length - 1].x;
-            leaderY = that.gameContext.activeArray[that.gameContext.activeArray.length - 1].y;
+            //define the coordinates of the last element being moved
+            lastX = that.gameContext.activeArray[that.gameContext.activeArray.length - 1].x;
+            lastY = that.gameContext.activeArray[that.gameContext.activeArray.length - 1].y;
 
-            that.gameContext.currentMap[leaderY][leaderX] = 1;
+            that.gameContext.currentMap[lastY][lastX] = 1;
 
             //itterate through all the elements of the current array and activate the 'followNext' method
             for (var i = (that.gameContext.activeArray.length - 1) ; i > 0; i--) {                
@@ -218,10 +218,10 @@ var SquareGame = Game.extend({
 
         if (that.objectContext.direction === "negative") {
 
-            leaderX = that.gameContext.activeArray[0].x;
-            leaderY = that.gameContext.activeArray[0].y;
+            lastX = that.gameContext.activeArray[0].x;
+            lastY = that.gameContext.activeArray[0].y;
 
-            that.gameContext.currentMap[leaderY][leaderX] = 1;
+            that.gameContext.currentMap[lastY][lastX] = 1;
 
             for (var i = 0; i < (that.gameContext.activeArray.length - 1) ; i++) {
                 that.gameContext.activeArray[i].followNext(that.gameContext.activeArray[i + 1]);
