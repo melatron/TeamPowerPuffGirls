@@ -132,7 +132,7 @@ Story = Class.extend({
             self.checkIfGamePlayed();
             ctx.restore();
             //console.log(soundtrack.ended);
-            this.animation = requestAnimationFrame(self.mainLoop);
+            self.animation = requestAnimationFrame(self.mainLoop);
         };
     },
     
@@ -434,7 +434,7 @@ window.onload = function () {
 	canvas = $("#canvas")[0];
 	ctx = canvas.getContext('2d');
 	story = new Story();
-
+	story.checkRequestAnimationFrame();
 
 	
 	

@@ -9,6 +9,10 @@ PathFinder = Game.extend({
         this.flag = true;
         this.width = 630;
         this.height = 224;
+        this.mainCharacterDead = false;
+        this.deaths = 0;
+        this.permBoxCounter = 0;
+        this.tempBoxCounter = 0;
         this.mainCharacter = {
             x: this.width / 2,
             y: this.height - 30,
@@ -29,62 +33,73 @@ PathFinder = Game.extend({
         this.keys = [];
         this.friction = 0.8;
         this.gravity = 0.3;
-        this.boxes= [];
+        this.mapBoxes = [];
+        this.createdBoxesPerm = [];
+        this.createdBoxesTemp = [];
+        this.bottomSpikes = [];
+        this.topSpikes = [];
 
         this.mainCharacter.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this.mainCharacter, this.gameContext);
         this.mainCharacter.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this.mainCharacter, this.gameContext);
         this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this.mainCharacter, this.gameContext);
         
-        this.boxes.push({
+        this.mapBoxes.push({
             x: 0,
             y: 0,
             width: 10,
             height: this.height
         });
-        this.boxes.push({
+        this.mapBoxes.push({
             x: 0,
             y: this.height - 20,
             width: this.width,
             height: 50
         });
-        this.boxes.push({
+        this.mapBoxes.push({
             x: this.width - 10,
             y: 0,
             width: 50,
             height: this.height
         });
+        this.bottomSpikes.push({
+            x: 100,
+            y: 100,
+            width: 50,
+            height: 50
+        });
 
-        //this.boxes.push({
+        //this.mapBoxes.push({
         //    x: 120,
         //    y: 10,
         //    width: 80,
         //    height: 80
         //});
-        //this.boxes.push({
+        //this.mapBoxes.push({
         //    x: 170,
         //    y: 50,
         //    width: 80,
         //    height: 80
         //});
-        //this.boxes.push({
+        //this.mapBoxes.push({
         //    x: 220,
         //    y: 100,
         //    width: 80,
         //    height: 80
         //});
-        //this.boxes.push({
+        //this.mapBoxes.push({
         //    x: 270,
         //    y: 150,
         //    width: 40,
         //    height: 40
         //});
-        
+        this.animation = null;
         this.update = function () {
             self.updateCharacter();
             self.gameContext.clearRect(0, 0, self.width, self.height);
             self.colLoopCheck();
+            self.checkIfDead();
             self.drawCharacter();
-            requestAnimationFrame(self.update);
+            self.animation = requestAnimationFrame(self.update);
         };
     },
     updateCharacter: function () {
@@ -100,19 +115,30 @@ PathFinder = Game.extend({
         // space
 
         if (this.keys[32] && this.flag) {
-            this.boxes.push({
-                x: this.mainCharacter.x,
-                y: this.mainCharacter.y,
-                width: this.mainCharacter.width ,
-                height: this.mainCharacter.height 
-            });
-            this.mainCharacter.x = this.width / 2;
-            this.mainCharacter.y = this.height - 30;
+            if (this.permBoxCounter <= 4) {
+                this.createdBoxesPerm.push({
+                    x: this.mainCharacter.x,
+                    y: this.mainCharacter.y,
+                    width: this.mainCharacter.width,
+                    height: this.mainCharacter.height
+                });
+            }
+            else {
+                this.createdBoxesTemp[this.tempBoxCounter] = {
+                    x: this.mainCharacter.x,
+                    y: this.mainCharacter.y,
+                    width: this.mainCharacter.width,
+                    height: this.mainCharacter.height
+                };
+                this.tempBoxCounter++;
+            }
+            
+            this.resetMainCharacter();
             this.flag = false;
             var self = this;
             setTimeout(function () {
                 self.flag = true;
-            }, 1000);
+            }, 2000);
 
         }
         if (this.keys[39]) {
@@ -156,23 +182,93 @@ PathFinder = Game.extend({
         this.gameContext.beginPath();
 
         this.mainCharacter.grounded = false;
-        for (var i = 0; i < this.boxes.length; i++) {
-            this.gameContext.rect(this.boxes[i].x, this.boxes[i].y, this.boxes[i].width, this.boxes[i].height);
-
-            var dir = this.colCheck(this.mainCharacter, this.boxes[i]);
-
-            if (dir === "l" || dir === "r") {
-                this.mainCharacter.velX = 0;
-                this.mainCharacter.jumping = false;
-            } else if (dir === "b") {
-                this.mainCharacter.grounded = true;
-                this.mainCharacter.jumping = false;
-            } else if (dir === "t") {
-                this.mainCharacter.velY *= -1;
-            }
-
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// Checking the main boxes for collision                                                                           //
+        for (var i = 0; i < this.mapBoxes.length; i++) {                                                                    //
+            this.gameContext.fillRect(this.mapBoxes[i].x, this.mapBoxes[i].y, this.mapBoxes[i].width, this.mapBoxes[i].height); //
+                                                                                                                            //
+            var dir = this.colCheck(this.mainCharacter, this.mapBoxes[i]);                                                  //
+                                                                                                                            //
+            if (dir === "l" || dir === "r") {                                                                               //
+                this.mainCharacter.velX = 0;                                                                                //
+                this.mainCharacter.jumping = false;                                                                         //
+            } else if (dir === "b") {                                                                                       //
+                this.mainCharacter.grounded = true;                                                                         //
+                this.mainCharacter.jumping = false;                                                                         //
+            } else if (dir === "t") {                                                                                       //
+                this.mainCharacter.velY *= -1;                                                                              //
+            }                                                                                                               //
+        }                                                                                                                   //
+        /// Checking the created permanent boxes for collision ///////////////////////////////////////////////////////////////
+                                                                                               //
+        for (var i = 0; i < this.createdBoxesPerm.length; i++) {                                                            //
+            this.gameContext.fillRect(this.createdBoxesPerm[i].x, this.createdBoxesPerm[i].y + 14, this.createdBoxesPerm[i].width, this.createdBoxesPerm[i].height - 14); //
+                                                                                                                            //
+            var dir = this.colCheck(this.mainCharacter, this.createdBoxesPerm[i]);                                          //
+                                                                                                                            //
+            if (dir === "l" || dir === "r") {                                                                               //
+                this.mainCharacter.velX = 0;                                                                                //
+                this.mainCharacter.jumping = false;                                                                         //
+            } else if (dir === "b") {                                                                                       //
+                this.mainCharacter.grounded = true;                                                                         //
+                this.mainCharacter.jumping = false;                                                                         //
+            } else if (dir === "t") {                                                                                       //
+                this.mainCharacter.velY *= -1;                                                                              //
+            }                                                                                                               //
         }
+        /// Checking the created temprorary boxes for collision///////////////////////////////////////////////////////////////
+        this.gameContext.fillStyle = "green";
+        for (var i = 0; i < this.createdBoxesTemp.length; i++) {                                                            //
+            this.gameContext.fillRect(this.createdBoxesTemp[i].x, this.createdBoxesTemp[i].y + 14, this.createdBoxesTemp[i].width, this.createdBoxesTemp[i].height - 14); //
+                                                                                                                            //
+            var dir = this.colCheck(this.mainCharacter, this.createdBoxesTemp[i]);                                          //
+                                                                                                                            //
+            if (dir === "l" || dir === "r") {                                                                               //
+                this.mainCharacter.velX = 0;                                                                                //
+                this.mainCharacter.jumping = false;                                                                         //
+            } else if (dir === "b") {                                                                                       //
+                this.mainCharacter.grounded = true;                                                                         //
+                this.mainCharacter.jumping = false;                                                                         //
+            } else if (dir === "t") {                                                                                       //
+                this.mainCharacter.velY *= -1;                                                                              //
+            }                                                                                                               //
+        }                                                                                                                   //
+        /// Checking the created bottom Spikes for collision//////////////////////////////////////////////////////////////////
+        this.gameContext.fillStyle = "red";
+        for (var i = 0; i < this.bottomSpikes.length; i++) {                                                                //
+            this.gameContext.fillRect(this.bottomSpikes[i].x, this.bottomSpikes[i].y + 14, this.bottomSpikes[i].width, this.bottomSpikes[i].height - 14); //
+                                                                                                                            //
+            var dir = this.colCheck(this.mainCharacter, this.bottomSpikes[i]);                                              //
+                                                                                                                            //
+            if (dir === "l" || dir === "r") {                                                                               //
+                this.mainCharacter.velX = 0;                                                                                //
+                this.mainCharacter.jumping = false;                                                                         //
+            } else if (dir === "b") {                                                                                       //
+                this.mainCharacter.grounded = true;                                                                         //
+                this.mainCharacter.jumping = false;
 
+                this.mainCharacterDead = true;
+            } else if (dir === "t") {                                                                                       //
+                this.mainCharacter.velY *= -1;                                                                              //
+            }                                                                                                               //
+        }                                                                                                                   //
+        /// Checking the created top Spikes for collision/////////////////////////////////////////////////////////////////////
+        for (var i = 0; i < this.topSpikes.length; i++) {                                                                   //
+            this.gameContext.rect(this.topSpikes[i].x, this.topSpikes[i].y, this.topSpikes[i].width, this.topSpikes[i].height); //
+                                                                                                                            //
+            var dir = this.colCheck(this.mainCharacter, this.topSpikes[i]);                                                 //
+                                                                                                                            //
+            if (dir === "l" || dir === "r") {                                                                               //
+                this.mainCharacter.velX = 0;                                                                                //
+                this.mainCharacter.jumping = false;                                                                         //
+            } else if (dir === "b") {
+                this.mainCharacter.grounded = true;                                                                         
+                this.mainCharacter.jumping = false;
+            } else if (dir === "t") {                                                                                       
+                this.mainCharacter.velY *= -1;                                                                              //
+            }                                                                                                               //
+        }                                                                                                                   //
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (this.mainCharacter.grounded) {
             this.mainCharacter.velY = 0;
         }
@@ -180,7 +276,7 @@ PathFinder = Game.extend({
         this.mainCharacter.x += this.mainCharacter.velX;
         this.mainCharacter.y += this.mainCharacter.velY;
 
-        this.gameContext.fill();
+        //this.gameContext.fill();
     },
     colCheck: function (shapeA, shapeB) {
     // get the vectors to check against
@@ -216,13 +312,30 @@ PathFinder = Game.extend({
     }
     return colDir;
     },
+    checkIfDead: function () {
+        if (this.mainCharacterDead) {
+            this.resetMainCharacter();
+            this.deaths++;
+        }
+    },
+    resetMainCharacter: function () {
+        this.mainCharacterDead = false;
+        this.mainCharacter.x = this.width / 2;
+        this.mainCharacter.y = this.height - 30;
+    },
 
     addEventListeners: function () {
         var self = this;
         $(document).on('keydown', function (e) {
+            if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39) {
+                e.preventDefault();
+            }
             self.keys[e.keyCode] = true;
         });
         $(document).on('keyup', function (e) {
+            if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39) {
+                e.preventDefault();
+            }
             self.keys[e.keyCode] = false;
         });
     },
