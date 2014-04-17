@@ -26,6 +26,7 @@ RadoGame = Game.extend({
 			game.gameContext.save();
 			game.gameContext.clearRect(0, 0, canvas.width, canvas.height);
 			game.drawLevel();
+			game.updateCoins();
 			game.updateElves();
 			game.updateCharacter();
 			game.checkLevelProgress();
@@ -41,6 +42,7 @@ RadoGame = Game.extend({
 		this.createLevels();
 		this.currentLevel = this.levels[this.levelIndex];
 		this.populateLevel(this.currentLevel);
+		this.createCoins();
 		this.createElves();
 		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
 		this.addEventListeners();
@@ -94,6 +96,7 @@ RadoGame = Game.extend({
 				layout: layout,
 				isFinished: false,
 				elves: [],
+				coins: [],
 				sprite: null
 		};
 		return level;
@@ -117,7 +120,7 @@ RadoGame = Game.extend({
 				)
 		);
 		
-		this.levels[0].sprite = new Sprite(1920, 224, 3, 8, story.sprites[24], this.levels[0], this.gameContext);
+		this.levels[0].sprite = new Sprite(1920, 224, 3, 10, story.sprites[24], this.levels[0], this.gameContext);
 		
 		this.levels.push(this.createLevel(
 				2,
@@ -313,6 +316,8 @@ RadoGame = Game.extend({
 		return elf;
 	},
 	
+	// ================ POPULATES THE LEVELS WITH ELVES ====================== //
+	
 	createElves: function(){
 		var level1 = this.levels[0],
 			level2 = this.levels[1],
@@ -386,6 +391,43 @@ RadoGame = Game.extend({
 			);
 	},
 	
+	createCoins: function(){
+		var level1 = this.levels[0],
+			level2 = this.levels[1],
+			level3 = this.levels[2];
+		
+		level1.coins[0] = this.createCoin(level1.layout[4][4]);
+		level1.coins[1] = this.createCoin(level1.layout[4][7]);
+		level1.coins[2] = this.createCoin(level1.layout[4][10]);
+	},
+	
+	updateCoins: function(){
+		var i, len = this.currentLevel.coins.length, temp;
+		
+		for(i = 0; i < len; i++){
+			temp = this.currentLevel.coins[i];
+			
+			if(this.areOverlapping(this.mainCharacter, temp, 8, 4, 8, 4)){
+				console.log('pickup');
+				temp.isCollected = true;
+			}
+			if(temp.isCollected == false){
+				temp.sprite.drawSprite();
+			}
+		}
+	},
+	
+	resetCoins: function(){
+		var i, len = this.currentLevel.coins.length, temp;
+		
+		for(i = 0; i < len; i++){
+			temp = this.currentLevel.coins[i];
+			temp.isCollected = false;
+		}
+	},
+	
+	// ================== MOVE PATTERN OBJECT ================= //
+	
 	createMovePattern: function(type, direction, startBlock, endBlock){
 		var pattern = {
 			type: type,
@@ -396,6 +438,8 @@ RadoGame = Game.extend({
 
 		return pattern;
 	},
+	
+	// ============= MOVE PATTERN IMPLEMENTATION ============= //
 	
 	implementMovePattern: function(elf){
 		var type = elf.movePattern.type,
@@ -508,7 +552,22 @@ RadoGame = Game.extend({
 			}
 		}
 	},
-
+	
+	//=========== COIN OBJECT ===========//
+	
+	createCoin: function(position){
+		var coin = {
+			x: position.x,
+			y: position.y,
+			width: 32,
+			height: 32,
+			isCollected: false
+		};
+		
+		coin.sprite = new Sprite(2048, 32, 64, 2, story.sprites[27], coin, this.gameContext);
+		
+		return coin;
+	},
 	
 	// =========================== COLLISION DETECTION METHOD ============================== //
 	
@@ -738,6 +797,8 @@ RadoGame = Game.extend({
 			char.y = this.startingBlock.y;
 			charBox.y = this.startingBlock.y + 28;
 			char.isCaught = false;
+			
+			this.resetCoins();
 		}
 
 		if(char.moveUp == true){
