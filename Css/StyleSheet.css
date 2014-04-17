@@ -62,16 +62,17 @@ body {
 /*--------------------PATH FINDER GAME-------------------*/
 #pathFinder {
     border:1px solid #000;
+    display:none;
 }
 /*-----------------SQUARE GAME CSS--------------------*/
 
 #square-game{
-    width:260px;
+    width:420px;
     height:260px;
     margin:auto;
     position:relative;
-    background-image: url(../source/square-game-backgorund.png);
-    background-size:260px 260px;
+    background-image: url(../source/square-game-background3.png);
+    background-size:420px 260px;
     display:none;
 }
 
@@ -79,37 +80,52 @@ body {
     width:240px;
     height:240px;
     position:absolute;
-    margin:10px 0 0 10px;
-    opacity:0.9;
+    margin:10px 0 0 90px;
+    z-index:-1;
     
 }
 
 .square {
-    opacity:0.8;
-    border-radius: 14px;
+    border-radius: 18px;
     position: absolute;
-    width:26px;
-    height:26px;
-    border: 2px solid black;
+    width:32px;
+    height:32px;
+    background-size:32px 32px;
 
 }
 
 /* images of crystals will be placed here*/
+
 .square.green{
-	background-image: linear-gradient(to left bottom, #0F4D19 37%, #80BD8E 100%);
+    background-image: url(../source/square-game/green-orb.png); 
 }
+.square.green.selected{
+    background-image: url(../source/square-game/green-orb-selected.png); 
+}
+
 .square.red {
-	background-image: linear-gradient(to left bottom, #451001 29%, #D65D45 100%);
+	background-image: url(../source/square-game/red-orb.png);
 }
+.square.red.selected{
+    background-image: url(../source/square-game/red-orb-selected.png);
+}
+
 .square.yellow{
-background-image: linear-gradient(to left bottom, #232402 13%, #F7FA5A 81%);
+    background-image: url(../source/square-game/yellow-orb.png);
 }
+.square.yellow.selected{
+    background-image: url(../source/square-game/yellow-orb-selected.png);
+}
+
 .square.blue{
-	background-image: linear-gradient(to left bottom, #5A607A 44%, #BEB5FF 100%);
+	background-image:  url(../source/square-game/blue-orb.png);
+}
+.square.blue.selected{
+	background-image:  url(../source/square-game/blue-orb-selected.png);
 }
 
 
-
+/*-----------------INVENTORY CSS--------------------*/
 /*moar work to be done here*/
 
 #inventory-container {
@@ -118,7 +134,6 @@ background-image: linear-gradient(to left bottom, #232402 13%, #F7FA5A 81%);
     height: 250px;
     margin-right: 3px;
     float: right;
- /*   background-size: 180px 260px; */
     z-index:1;
 }
 
@@ -140,8 +155,10 @@ background-image: linear-gradient(to left bottom, #232402 13%, #F7FA5A 81%);
 }
 
  .item {
-    width:60px;
-    height:60px;
+    width:50px;
+    height:50px;
+    padding: 5px 0 0 5px;
+
  }
 
 /* ELF GAME STYLEZ */

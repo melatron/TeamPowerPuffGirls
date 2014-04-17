@@ -10,8 +10,8 @@
 
         this.dom = $('<div class="square"> </div>');
         this.dom.css({
-            left: (this.x) * 40 + 15 + 'px',
-            top: (this.y) * 40 + 15 + 'px',
+            left: (this.x) * 40 + 92 + 'px',
+            top: (this.y) * 40 + 12 + 'px',
            //backgroundColor: this.color,
         });
 
@@ -30,10 +30,10 @@
 
     updatePosition: function () {
         this.dom.animate({
-            width: '26px',
-            height: '26px',
-            left: (this.x) * 40 + 15 + 'px',
-            top: (this.y) * 40 + 15 + 'px',
+            /*width: '26px',
+            height: '26px', */
+            left: (this.x) * 40 + 92 + 'px',
+            top: (this.y) * 40 + 12 + 'px',
         }, 300);
     },
 
@@ -139,13 +139,14 @@ var SquareGame = Game.extend({
         if (e.data.objectContext.color === 'blue') { e.data.gameContext.activeArray = e.data.gameContext.blueSquares }
 
         e.data.objectContext.dom.css({
-            width: '30px',
-            height: '30px',
-            left: (e.data.objectContext.x) * 40 + 13 + 'px',
-            top: (e.data.objectContext.y) * 40 + 13 + 'px',
+            
+            left: (e.data.objectContext.x) * 40 + 92 + 'px',
+            top: (e.data.objectContext.y) * 40 + 12 + 'px',
         });
 
-        $(e.data.objectContext.dom).unbind();
+        e.data.objectContext.dom.addClass('selected');
+
+        e.data.objectContext.dom.unbind();
         e.data.gameContext.plot.on('mousedown', e.data, e.data.gameContext.placeLeader);
         e.data.gameContext.drawPossibleMoves(e.data.objectContext);
     },
@@ -156,10 +157,16 @@ var SquareGame = Game.extend({
         var mouseX = Math.floor((e.pageX - e.data.gameContext.mapBoundaries.left) / e.data.gameContext.squareWidth),
             mouseY = Math.floor((e.pageY - e.data.gameContext.mapBoundaries.top) / e.data.gameContext.squareWidth);
 
-        if ((mouseX !== e.data.objectContext.x || mouseY !== e.data.objectContext.y) &&
+        if (((mouseX == e.data.objectContext.x && mouseY == (e.data.objectContext.y + 1)) ||
+            (mouseX == e.data.objectContext.x && mouseY == (e.data.objectContext.y - 1)) ||
+            (mouseX == (e.data.objectContext.x + 1) && mouseY == e.data.objectContext.y) ||
+            (mouseX == (e.data.objectContext.x - 1) && mouseY == e.data.objectContext.y)) &&
+            (e.data.gameContext.currentMap[mouseY][mouseX] == 1)) {
+
+            /*(mouseX !== e.data.objectContext.x || mouseY !== e.data.objectContext.y) &&
             ((mouseX >= (e.data.objectContext.x - 1) && mouseX <= (e.data.objectContext.x + 1) && mouseY == e.data.objectContext.y) ||
             (mouseY >= (e.data.objectContext.y - 1) && mouseY <= (e.data.objectContext.y + 1) && mouseX == e.data.objectContext.x)) &&
-            (e.data.gameContext.currentMap[mouseY][mouseX] == 1)) {
+            (e.data.gameContext.currentMap[mouseY][mouseX] == 1)*/
 
             e.data.gameContext.followLeader(e.data);
             e.data.objectContext.x = mouseX;
@@ -189,9 +196,12 @@ var SquareGame = Game.extend({
 
 
         } else {
+            if (mouseX == e.data.objectContext.x && mouseY == (e.data.objectContext.y)) {
+                e.data.objectContext.updatePosition();
+            }
             e.data.objectContext.updatePosition();
         };
-
+        e.data.objectContext.dom.removeClass('selected');
         e.data.gameContext.plot.unbind();
         e.data.objectContext.dom.on('click', e.data, e.data.gameContext.pickLeader);
 
@@ -342,3 +352,8 @@ var SquareGame = Game.extend({
 /*  
     linear-gradient(to left bottom, #5A607A 44%, #BEB5FF 100%);
     */
+
+function checkEvent(dom, eq) {
+    var a = $('.' + dom)[eq].data('events');
+    console.log(a);
+}
