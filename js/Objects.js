@@ -481,22 +481,25 @@ Sprite = Class.extend({
 
 ItemAttributes = {
     axe: {
-        name: 'Battle Axe of Epic Fail',
-        bonuses: '<p>Additional moves : ..... </p>' +
-                 '<p>Additional time: ..... </p>'   +
-                 '<p>Movement speed: ..... </p>'
+        name: 'Epic Axe',
+        bonusMoves: 18,
+        bonusSpeed: 1,
+        bonusTime:320
     },
 
     bow: {
         name: 'Useless Bow',
-        bonuses: '<p> Not worth a damn.. </p>'
+        bonusMoves: 5,
+        bonusSpeed: 1,
+        bonusTime: 3
     },
 
     sword: {
         name: 'Plain Dagger',
-        bonuses: '<p> asdasdasd </p>' +
-                 '<p> asdasdasd </p>' +
-                 '<p> asdasdasd </p>'
+        bonusMoves: 0,
+        bonusTime: 5,
+        bonusSpeed: 1,
+
     }
 };
 
@@ -520,7 +523,7 @@ Inventory = Class.extend({
         for (var i = 0; i < this.slots.length; i++) {
             if (this.slots[i] == 0) {
                 temp.dom.appendTo($('.inventory-slot').eq(i))
-                this.slots[i] = temp.dom;
+                this.slots[i] = temp;
                 break;
             };
         };
@@ -539,17 +542,44 @@ Item = Class.extend({
         this.dom.on('click', this, this.pickItem);        
     },
 
+
     showAttributes: function (e) {
+        var temp = '';
 
         $('#item-attributes').css({
             display: 'block',
             left: e.clientX - 150 + 'px',
             top:e.clientY - 250 + 'px'
         });
-        $('#item-name').html(ItemAttributes[e.data.name].name);
-        $('#item-bonuses').html(ItemAttributes[e.data.name].bonuses);
 
+
+        $('#item-name').html(ItemAttributes[e.data.name].name);
+
+
+        for( var attr in ItemAttributes[e.data.name]){
+            
+            if(attr == 'bonusMoves'){
+                temp += '<p>Bonus Moves: '+ ItemAttributes[e.data.name][attr] + '</p>';
+            };
+
+            if(attr == 'bonusSpeed'){
+                temp += '<p>Bonus Speed: '+ ItemAttributes[e.data.name][attr] + '</p>';
+            };
+
+            if(attr == 'bonusTime'){
+                temp += '<p>Bonus Time: '+ ItemAttributes[e.data.name][attr] + '</p>';
+            };
+
+            if(attr == 'bonusDamage'){
+                temp += '<p>Bonus Damage: '+ ItemAttributes[e.data.name][attr] + '</p>';
+            };
+            
+        };
+
+        
+        $('#item-bonuses').html(temp);
     },
+
 
     hideAttributes: function () {
         $('#item-attributes').css({ display: 'none'});
@@ -653,7 +683,9 @@ function PlayList() {
 Game = Class.extend({
     init: function () {
         this.gameOver = false;
-        this.objectives = null;
+        this.objectives = null;                 
+        this.gameBonuses = null;                //example : this.gameBonuses = ['additionalMoves', 'additionalSpeed, .. ]'
+                                                
         this.score = null;
         this.plot = null;
 
@@ -664,15 +696,46 @@ Game = Class.extend({
     endGame: function () {
 
     },
-    addBonuses: function (bonuses) {
 
+    //WORK IN PROGRESS
+    calculateBonuses: function (gameBonuses) { 
+        var object = {
+            bonusMoves : 0,
+            bonusSpeed : 0,
+            bonusTime : 0
+        },
+
+        itemName, attribute; 
+
+        for(var i in story.inventory.slots){ 
+            for(var j in gameBonuses){
+
+                if(story.inventory.slots[i] !== 0){
+                    itemName = story.inventory.slots[i].name;
+                    attribute = gameBonuses[j];
+
+                    console.log(ItemAttributes[itemName][attribute] !== 'undefined')
+
+                    if(ItemAttributes[itemName][gameBonuses[j]] !== 'undefined'){
+                        
+                        object[attribute] += ItemAttributes[itemName][attribute]
+                    }
+
+                };
+            };
+        };
+
+        return object;
     },
     addGameToPlot: function () {
         this.plot.show();
     },
     removeGameFromPlot: function () {
         this.plot.hide();
+    },
+
+    getReward: function (item) {
+
+
     }
-
-
 });

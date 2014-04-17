@@ -134,6 +134,8 @@ Story = Class.extend({
             //console.log(soundtrack.ended);
             self.animation = requestAnimationFrame(self.mainLoop);
         };
+
+        this.inventory = new Inventory();
     },
     
     // ---- Methods for preloading images ---- //
@@ -455,10 +457,10 @@ window.onload = function () {
 	
 	
 	
-	Inventory = new Inventory();
-	Inventory.getItem('axe');
-	Inventory.getItem('bow');
-	Inventory.getItem('sword');
+
+	story.inventory.getItem('axe');
+	story.inventory.getItem('bow');
+	story.inventory.getItem('sword');
 
 
 	story.preloadSprites(
