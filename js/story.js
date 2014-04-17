@@ -177,7 +177,9 @@ Story = Class.extend({
             elfGameLevel2Image = null,
             elfGameLevel3Image = null,
             
-            elfGameCoinImage = null;
+            elfGameCoinImage = null,
+    	
+    		lightningImage = null;
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
     	this.sprites.push(heroSpriteDownImage);
@@ -214,6 +216,8 @@ Story = Class.extend({
         this.sprites.push(elfGameLevel3Image);
         
         this.sprites.push(elfGameCoinImage);
+        
+        this.sprites.push(lightningImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -489,10 +493,12 @@ window.onload = function () {
             'source/orcMoveRight.png',
             
             'source/elf game/spriteLevel1.png',
-            'source/elf game/spriteLevel1.png',
+            'source/elf game/spriteLevel2.png',
             'source/elf game/spriteLevel1.png',
             
-            'source/elf game/coinSprite.png'
+            'source/elf game/coinSprite.png',
+            
+            'source/lightning_width40px.png'
 	);
 	
 	story.preloadPortraits(
