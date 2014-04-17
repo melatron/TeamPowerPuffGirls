@@ -7,6 +7,7 @@ Story = Class.extend({
             squareGame = new SquareGame(),
             swapPuzzle = new SwapPuzzle();
         this.interactableObjects = new Array();
+        this.stopEvents = false;
         var humanCastle = new ClickPoint(100, 50, 140, 100, "humanCastle",
         													{
         														x: 175,
@@ -131,7 +132,6 @@ Story = Class.extend({
             self.soundTrack.startNextSong();
             self.checkIfGamePlayed();
             ctx.restore();
-            //console.log(soundtrack.ended);
             self.animation = requestAnimationFrame(self.mainLoop);
         };
 
@@ -140,8 +140,44 @@ Story = Class.extend({
     
     // ---- Methods for preloading images ---- //
     addEvents: function () {
+        this.stopEvents = false;
         $('canvas').on('click', this, this.clickEvent);
         $(document).on('keyup', this, this.handleKeyPressed);
+    },
+    handleKeyPressed: function (ev) {
+        if (!ev.data.stopEvents) {
+            ev.preventDefault();
+            switch (ev.keyCode) {
+                case 13:
+                    console.log(ev);
+                    if (ev.type == 'keyup') {
+                        ev.data.changeSpeaker();
+                    }
+                    break;
+
+            }
+        }
+    },
+    clickEvent: function (ev) {
+        if (!ev.data.stopEvents) {
+            console.log('rado is gay');
+            var rect = ev.data.mainCanvas.getBoundingClientRect(),
+                    mouseX = ev.clientX - rect.left,
+                    mouseY = ev.clientY - rect.top,
+                    currentObject;
+
+            console.log("Mouse X: " + mouseX + " Mouse Y: " + mouseY);
+
+            for (var i = 0; i < ev.data.interactableObjects.length; i++) {  // check if clicked
+                currentObject = ev.data.interactableObjects[i];
+                if (currentObject.checkIfClicked(mouseX, mouseY)) {
+                    ev.data.hero.prepareObjectForSpeaking(currentObject);
+                    for (var j = 0; j < ev.data.interactableObjects.length; j++) {
+                        ev.data.interactableObjects[j].isInteracting = false;           // set all other click points to "inactive"
+                    }
+                }
+            }
+        }
     },
     preloadSprites: function() {
     	//define sprites
@@ -303,36 +339,6 @@ Story = Class.extend({
 		this.interactableObjects[6].setImage(this.portraits[7]);
 		
 	},
-	handleKeyPressed: function (ev) {
-	    ev.preventDefault();
-	    switch (ev.keyCode) {
-	        case 13:
-	            console.log(ev);
-	            if (ev.type == 'keyup') {
-	                ev.data.changeSpeaker();
-	            }
-	            break;
-
-	    }
-	},
-	clickEvent: function (ev) {
-	    var rect = ev.data.mainCanvas.getBoundingClientRect(),
-            mouseX = ev.clientX - rect.left,
-            mouseY = ev.clientY - rect.top,
-            currentObject;
-        
-        console.log("Mouse X: " + mouseX + " Mouse Y: " + mouseY);
-        
-        for (var i = 0; i < ev.data.interactableObjects.length; i++) {  // check if clicked
-            currentObject = ev.data.interactableObjects[i];
-            if (currentObject.checkIfClicked(mouseX, mouseY)) {
-                ev.data.hero.prepareObjectForSpeaking(currentObject);
-                for (var j = 0; j < ev.data.interactableObjects.length; j++) {
-                    ev.data.interactableObjects[j].isInteracting = false;           // set all other click points to "inactive"
-                }
-            }
-        }
-    },
 	checkIfSpeaking: function () {
 	    for (var i = 0; i < this.interactableObjects.length; i++) {
 	        if (this.interactableObjects[i].isInteracting) {
@@ -369,8 +375,7 @@ Story = Class.extend({
 	            
 
 	            if (this.hero.speakingTo.game) {
-	                $('*').off();
-	                $(document).off();
+	                this.stopEvents = true;
 	                this.hero.speakingTo.startGame();
 	            }
 	        }

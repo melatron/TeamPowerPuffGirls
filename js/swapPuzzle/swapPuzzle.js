@@ -94,7 +94,6 @@ SwapPuzzle = Game.extend({
     },
     endGame: function () {
         this.gameOver = true;
-        console.log("hello");
         this.removeGameFromPlot();
         clearInterval(this.swapPuzzleLoop);
         $("#swapPuzzleCanvas").off();

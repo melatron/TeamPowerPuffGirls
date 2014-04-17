@@ -24,6 +24,7 @@ PathFinder = Game.extend({
             speed: 3,
             velX: 0,
             velY: 0,
+            onObject: false,
             moveLeft: false,
             moveRight: false,
             jumping: false,
@@ -35,13 +36,14 @@ PathFinder = Game.extend({
         this.gameContext = $('#pathFinderCanvas')[0].getContext('2d');
         this.keys = [];
         this.friction = 0.8;
-        this.gravity = 0.3;
+        this.gravity = 0.2;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
         this.createdBoxesTemp = [];
         this.bottomSpikes = [];
         this.topSpikes = [];
         this.verticalSpikes = [];
+        this.movableStepableObjects = [];
         this.lightningOnInterval = [];
 
 
@@ -55,7 +57,33 @@ PathFinder = Game.extend({
             width: 20,
             height: 220
         }
-        this.lightning.sprite = new Sprite(320, 220, 8, 2, story.sprites[28], this.lightning, this.gameContext);
+        
+        var ligObj = {
+            x: self.lightning.x - 5,
+            y: self.lightning.y        
+        }
+        this.lightning.sprite = new Sprite(320, 220, 8, 2, story.sprites[28], ligObj, this.gameContext);
+
+        this.movableBox = {
+            x: 100,
+            y: 100,
+            width: 120,
+            height: 20,
+            speed: 0.5,
+            moveLeft: false,
+            moveRight: true,
+            updatePosition: function () {
+                if (this.x >= 400) {
+                    this.moveLeft = true;
+                    this.moveRight = false;
+                }
+                else if (this.x <= 100) {
+                    this.moveLeft = false;
+                    this.moveRight = true;
+                }
+            }
+        };
+        this.movableStepableObjects.push(this.movableBox);
 
         this.mapBoxes.push({
             x: 0,
@@ -88,6 +116,8 @@ PathFinder = Game.extend({
             height: 20
         });
         this.lightningOnInterval.push(this.lightning);
+
+        
 
         //this.mapBoxes.push({
         //    x: 120,
@@ -200,6 +230,7 @@ PathFinder = Game.extend({
             this.mainCharacter.moveLeft = false;
         }
 
+       
         this.mainCharacter.velX *= this.friction;
         this.mainCharacter.velY += this.gravity;
     },
@@ -212,6 +243,7 @@ PathFinder = Game.extend({
         }
         else {
             this.mainCharacter.spriteIdle.drawSprite();
+            this.mainCharacter.velX = 0;
         }
     },
     colLoopCheck: function () {
@@ -349,10 +381,46 @@ PathFinder = Game.extend({
             }
         }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        for (var i = 0; i < this.movableStepableObjects.length; i++) {
+            var a = this.movableStepableObjects[i];
+            if (a.moveLeft) {
+                a.x -= a.speed;
+            }
+            else if (a.moveRight) {
+                a.x += a.speed;
+            }
+            a.updatePosition();
+            this.gameContext.fillRect(a.x + 2, a.y + 14, a.width - 2, a.height - 14); //
+            //
+            var dir = this.colCheck(this.mainCharacter, a);
+            //
+            if (dir === "l" || dir === "r") {
+                
+                this.mainCharacter.velX = 0;                                                                                
+                this.mainCharacter.jumping = false;                                                                         
+            } else if (dir === "b") {
+                
+                this.mainCharacter.grounded = true;
+                this.mainCharacter.jumping = false;
+                if (a.moveLeft) {
+                    this.mainCharacter.velX -= 2 * a.speed;
+                }
+                else if (a.moveRight) {
+                    this.mainCharacter.velX += 2 * a.speed;
+                }
+
+            } else if (dir === "t") {
+                
+                this.mainCharacter.velY *= -1;                                                                              //
+            }
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (this.mainCharacter.grounded) {
             this.mainCharacter.velY = 0;
         }
-
+        console.log(this.mainCharacter.velX);
         this.mainCharacter.x += this.mainCharacter.velX;
         this.mainCharacter.y += this.mainCharacter.velY;
 
