@@ -44,10 +44,19 @@ PathFinder = Game.extend({
         this.verticalSpikes = [];
         this.lightningOnInterval = [];
 
+
         this.mainCharacter.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this.mainCharacter, this.gameContext);
         this.mainCharacter.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this.mainCharacter, this.gameContext);
         this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this.mainCharacter, this.gameContext);
-        
+
+        this.lightning = {
+            x: this.width / 2,
+            y: -5,
+            width: 20,
+            height: 220
+        }
+        this.lightning.sprite = new Sprite(320, 220, 8, 2, story.sprites[28], this.lightning, this.gameContext);
+
         this.mapBoxes.push({
             x: 0,
             y: 0,
@@ -78,12 +87,7 @@ PathFinder = Game.extend({
             width: 100,
             height: 20
         });
-        this.lightningOnInterval.push({
-            x: this.width / 2,
-            y: -5,
-            width: 20,
-            height: 220,
-        });
+        this.lightningOnInterval.push(this.lightning);
 
         //this.mapBoxes.push({
         //    x: 120,
@@ -328,7 +332,7 @@ PathFinder = Game.extend({
         if (this.lightningFlag) {
             this.gameContext.fillStyle = "yellow";
             for (var i = 0; i < this.lightningOnInterval.length; i++) {                                                                   //
-                this.gameContext.fillRect(this.lightningOnInterval[i].x + 2, this.lightningOnInterval[i].y + 14, this.lightningOnInterval[i].width - 2, this.lightningOnInterval[i].height - 14); //
+                this.lightningOnInterval[0].sprite.drawSprite();
                 //
                 var dir = this.colCheck(this.mainCharacter, this.lightningOnInterval[i]);                                                 //
                 //
