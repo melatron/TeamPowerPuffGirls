@@ -13,7 +13,7 @@ RadoGame = Game.extend({
 		this.startingBlock = null;	//the hero starting point
 		
 		this.plot = $('#elf-game');
-		this.canvas = $('#elf-game-canvas')[0];	
+		this.canvas = $('#elf-game-canvas')[0];
 		this.gameContext = $('#elf-game-canvas')[0].getContext('2d');
 		this.mainCharacter = {};
 		
@@ -59,9 +59,10 @@ RadoGame = Game.extend({
 	},
 	
 	endGame: function(){
-		clearInterval(mainLoop);
+		cancelAnimationFrame(this.animation);
 		this.removeGameFromPlot();
-		this.removeEventListeners
+		this.removeEventListeners();
+		this.gameOver = true;
 	},
 	
 	// ===== GET CONTEXT ====== //
@@ -259,8 +260,10 @@ RadoGame = Game.extend({
 	// ====== MAIN CHARACTER CONSTRUCTOR ===== //
 	
 	createMainCharacter: function(x, y){
+		var self = this;
 		this.mainCharacter = {
 				x: x,
+				self: this,
 				y: y,
 				width: 32,
 				height: 32,
@@ -268,17 +271,11 @@ RadoGame = Game.extend({
 				moveDown: false,
 				moveLeft: false,
 				moveRight: false,
-				boundingRect: {
-					x: x + 6,
-					y: y + 28,
-					width:20,
-					height: 8
-				},
 				speed: 2,
 				isMoving: false,
 				isCaught: false
 		};
-		
+
 		this.mainCharacterBoundingRect = {
 				x: this.mainCharacter.x + 6,
 				y: this.mainCharacter.y + 28,
@@ -293,10 +290,10 @@ RadoGame = Game.extend({
 		this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this.mainCharacter, this.gameContext);
 	},
 
-	createElf: function(x, y, width, height, movePatternType, direction, startBlock, endBlock, speed){
+	createElf: function(width, height, movePatternType, direction, startBlock, endBlock, speed){
 		var elf = {
-			x: x,
-			y: y - 10,
+			x: startBlock.x,
+			y: startBlock.y - 10,
 			width: width,
 			height: height,
 			speed: speed,
@@ -326,8 +323,6 @@ RadoGame = Game.extend({
 			level3 = this.levels[2];
 		
 		level1.elves[0] = this.createElf (
-				level1.layout[1][12].x, 
-				level1.layout[1][12].y, 
 				32, 
 				32, 
 				'linear', 
@@ -337,19 +332,15 @@ RadoGame = Game.extend({
 				4
 				);
 		level1.elves[1] = this.createElf (
-				level1.layout[2][18].x,
-				level1.layout[2][18].y,
 				32,
 				32,
 				'linear',
 				'horizontal',
-				level1.layout[2][12],
 				level1.layout[2][18],
+				level1.layout[2][12],
 				4
 		);
 		level1.elves[2] = this.createElf(
-				level1.layout[4][12].x,
-				level1.layout[4][12].y,
 				32,
 				32,
 				'linear',
@@ -359,8 +350,6 @@ RadoGame = Game.extend({
 				3
 		);
 		level1.elves[3] = this.createElf(
-				level1.layout[1][1].x,
-				level1.layout[1][1].y,
 				32,
 				32,
 				'circular',
@@ -370,8 +359,6 @@ RadoGame = Game.extend({
 				3
 			);
 		level1.elves[4] = this.createElf(
-				level1.layout[1][4].x,
-				level1.layout[1][4].y,
 				32,
 				32,
 				'circular',
@@ -381,8 +368,6 @@ RadoGame = Game.extend({
 				3
 			);
 		level1.elves[5] = this.createElf(
-				level1.layout[1][7].x,
-				level1.layout[1][7].y,
 				32,
 				32,
 				'circular',
@@ -390,6 +375,87 @@ RadoGame = Game.extend({
 				level1.layout[1][7],
 				level1.layout[4][10],
 				3
+			);
+		level2.elves[0] = this.createElf(
+				32,
+				32,
+				'circular',
+				'clockwise',
+				level2.layout[2][2],
+				level2.layout[3][3],
+				1
+			);
+		level2.elves[1] = this.createElf(
+				32,
+				32,
+				'circular',
+				'clockwise',
+				level2.layout[2][4],
+				level2.layout[3][5],
+				2
+			);
+		level2.elves[2] = this.createElf(
+				32,
+				32,
+				'circular',
+				'clockwise',
+				level2.layout[4][2],
+				level2.layout[5][3],
+				2
+			);
+		level2.elves[3] = this.createElf(
+				32,
+				32,
+				'circular',
+				'clockwise',
+				level2.layout[4][4],
+				level2.layout[5][5],
+				1
+			);
+		level2.elves[4] = this.createElf(
+				32,
+				32,
+				'circular',
+				'counterClockwise',
+				level2.layout[4][6],
+				level2.layout[5][7],
+				2
+			);
+		level2.elves[5] = this.createElf(
+				32,
+				32,
+				'circular',
+				'clockwise',
+				level2.layout[2][8],
+				level2.layout[3][9],
+				1
+			);
+		level2.elves[6] = this.createElf(
+				32,
+				32,
+				'linear',
+				'horizontal',
+				level2.layout[5][8],
+				level2.layout[5][11],
+				2
+			);
+		level2.elves[7] = this.createElf(
+				32,
+				32,
+				'linear',
+				'horizontal',
+				level2.layout[4][11],
+				level2.layout[4][8],
+				2
+			);
+		level2.elves[8] = this.createElf(
+				32,
+				32,
+				'circular',
+				'clockwise',
+				level2.layout[2][10],
+				level2.layout[3][11],
+				1
 			);
 	},
 	
@@ -401,6 +467,9 @@ RadoGame = Game.extend({
 		level1.coins[0] = this.createCoin(level1.layout[4][4]);
 		level1.coins[1] = this.createCoin(level1.layout[4][7]);
 		level1.coins[2] = this.createCoin(level1.layout[4][10]);
+		level2.coins[0] = this.createCoin(level2.layout[3][8]);
+		level2.coins[1] = this.createCoin(level2.layout[5][11]);
+		level2.coins[2] = this.createCoin(level2.layout[5][2]);
 	},
 	
 	updateCoins: function(){
@@ -450,10 +519,15 @@ RadoGame = Game.extend({
 			direction = elf.movePattern.direction,
 			reverse = elf.movePattern.reverse;
 		
+		if(start.x > end.x){
+			var temp = start;
+			start = end;
+			end = temp;
+		}
+
 		switch(type){
 		case 'linear':
 			if(direction == 'horizontal'){
-				
 				if(elf.x >= end.x){
 					elf.moveLeft = true;
 				}
@@ -462,7 +536,6 @@ RadoGame = Game.extend({
 					elf.moveRight = true;
 					console.log('change');
 				}
-				
 			}
 			else if(direction == 'vertical'){
 				if(elf.y >= end.y){
@@ -497,19 +570,19 @@ RadoGame = Game.extend({
 				}
 			}
 			else if(direction == 'counterClockwise'){
-				if(elf.x <= start.x && elf.y <= start.y){
+				if(elf.x <= start.x && elf.y <= start.y - 10){
 					elf.moveDown = true;
 					elf.moveLeft = false;
 				}
-				else if(elf.x <= end1.x && elf.y >= end1.y){
+				else if(elf.x <= end1.x && elf.y >= end1.y - 10){
 					elf.moveRight = true;
 					elf.moveDown = false;
 				}
-				else if(elf.x >= end.x && elf.y >= end.y){
+				else if(elf.x >= end.x && elf.y >= end.y - 10){
 					elf.moveUp = true;
 					elf.moveRight = false;
 				}
-				else if(elf.x >= start1.x && elf.y <= start1.y){
+				else if(elf.x >= start1.x && elf.y <= start1.y - 10){
 					elf.moveLeft = true;
 					elf.moveUp = false;
 				}
