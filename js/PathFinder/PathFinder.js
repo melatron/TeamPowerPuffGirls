@@ -10,11 +10,14 @@ PathFinder = Game.extend({
         this.width = 630;
         this.height = 224;
         this.mainCharacterDead = false;
+        this.timeExistOnBox = 7000;
+        this.timeAfterCastingNewBox = 2000;
         this.deaths = 0;
         this.permBoxCounter = 0;
         this.tempBoxCounter = 0;
+        this.lightningFlag = true;
         this.mainCharacter = {
-            x: this.width / 2,
+            x: this.width / 2 + 70,
             y: this.height - 30,
             width: 25,
             height: 18,
@@ -38,6 +41,8 @@ PathFinder = Game.extend({
         this.createdBoxesTemp = [];
         this.bottomSpikes = [];
         this.topSpikes = [];
+        this.verticalSpikes = [];
+        this.lightningOnInterval = [];
 
         this.mainCharacter.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this.mainCharacter, this.gameContext);
         this.mainCharacter.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this.mainCharacter, this.gameContext);
@@ -66,6 +71,18 @@ PathFinder = Game.extend({
             y: 150,
             width: 100,
             height: 20
+        });
+        this.topSpikes.push({
+            x: 400,
+            y: 150,
+            width: 100,
+            height: 20
+        });
+        this.lightningOnInterval.push({
+            x: this.width / 2,
+            y: -5,
+            width: 20,
+            height: 220,
         });
 
         //this.mapBoxes.push({
@@ -120,7 +137,7 @@ PathFinder = Game.extend({
                 this.createdBoxesPerm.push({
                     x: this.mainCharacter.x,
                     y: this.mainCharacter.y,
-                    width: this.mainCharacter.width,
+                    width: this.mainCharacter.width * (1 / 2),
                     height: this.mainCharacter.height
                 });
                 this.permBoxCounter++;
@@ -129,16 +146,17 @@ PathFinder = Game.extend({
                 this.createdBoxesTemp[this.tempBoxCounter] = {
                     x: this.mainCharacter.x,
                     y: this.mainCharacter.y,
-                    width: this.mainCharacter.width,
+                    width: this.mainCharacter.width * (1 / 2),
                     height: this.mainCharacter.height
                 };
                 
                 var current = self.tempBoxCounter;
                 setTimeout(function () {
                     self.createdBoxesTemp[current] = null;
-                }, 7000);
+                }, self.timeExistOnBox);
                 this.tempBoxCounter++;
             }
+            //- Making the reseting after creating box
             if (this.tempBoxCounter >= 1 && this.createdBoxesTemp[this.tempBoxCounter - 2] != null) {
                 this.resetMainCharacter(this.createdBoxesTemp[this.tempBoxCounter - 2].x, this.createdBoxesTemp[this.tempBoxCounter - 2].y - this.mainCharacter.height);
             }
@@ -153,8 +171,8 @@ PathFinder = Game.extend({
            
             setTimeout(function () {
                 self.flag = true;
-            }, 2000);
-
+            }, self.timeAfterCastingNewBox);
+            
         }
         if (this.keys[39]) {
             // right arrow
@@ -200,7 +218,7 @@ PathFinder = Game.extend({
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /// Checking the main boxes for collision                                                                           //
         for (var i = 0; i < this.mapBoxes.length; i++) {                                                                    //
-            this.gameContext.fillRect(this.mapBoxes[i].x, this.mapBoxes[i].y, this.mapBoxes[i].width, this.mapBoxes[i].height); //
+            this.gameContext.fillRect(this.mapBoxes[i].x, this.mapBoxes[i].y + 14, this.mapBoxes[i].width, this.mapBoxes[i].height - 14); //
                                                                                                                             //
             var dir = this.colCheck(this.mainCharacter, this.mapBoxes[i]);                                                  //
                                                                                                                             //
@@ -270,8 +288,9 @@ PathFinder = Game.extend({
             }                                                                                                               //
         }                                                                                                                   //
         /// Checking the created top Spikes for collision/////////////////////////////////////////////////////////////////////
+        this.gameContext.fillStyle = "purple";
         for (var i = 0; i < this.topSpikes.length; i++) {                                                                   //
-            this.gameContext.rect(this.topSpikes[i].x, this.topSpikes[i].y, this.topSpikes[i].width, this.topSpikes[i].height); //
+            this.gameContext.fillRect(this.topSpikes[i].x, this.topSpikes[i].y + 14, this.topSpikes[i].width, this.topSpikes[i].height - 14); //
                                                                                                                             //
             var dir = this.colCheck(this.mainCharacter, this.topSpikes[i]);                                                 //
                                                                                                                             //
@@ -281,11 +300,51 @@ PathFinder = Game.extend({
             } else if (dir === "b") {
                 this.mainCharacter.grounded = true;                                                                         
                 this.mainCharacter.jumping = false;
-            } else if (dir === "t") {                                                                                       
+            } else if (dir === "t") {
+                this.mainCharacterDead = true;
                 this.mainCharacter.velY *= -1;                                                                              //
             }                                                                                                               //
         }                                                                                                                   //
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        this.gameContext.fillStyle = "yellow";
+        for (var i = 0; i < this.verticalSpikes.length; i++) {                                                                   //
+            this.gameContext.fillRect(this.verticalSpikes[i].x + 2, this.verticalSpikes[i].y + 14, this.verticalSpikes[i].width - 2, this.verticalSpikes[i].height - 14); //
+            //
+            var dir = this.colCheck(this.mainCharacter, this.verticalSpikes[i]);                                                 //
+            //
+            if (dir === "l" || dir === "r") {
+                this.mainCharacterDead = true;                                                                              //
+                this.mainCharacter.velX = 0;                                                                                //
+                this.mainCharacter.jumping = false;                                                                         //
+            } else if (dir === "b") {
+                this.mainCharacter.grounded = true;
+                this.mainCharacter.jumping = false;
+            } else if (dir === "t") {
+                this.mainCharacter.velY *= -1;                                                                              //
+            }                                                                                                               //
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        if (this.lightningFlag) {
+            this.gameContext.fillStyle = "yellow";
+            for (var i = 0; i < this.lightningOnInterval.length; i++) {                                                                   //
+                this.gameContext.fillRect(this.lightningOnInterval[i].x + 2, this.lightningOnInterval[i].y + 14, this.lightningOnInterval[i].width - 2, this.lightningOnInterval[i].height - 14); //
+                //
+                var dir = this.colCheck(this.mainCharacter, this.lightningOnInterval[i]);                                                 //
+                //
+                if (dir === "l" || dir === "r") {
+                    this.mainCharacterDead = true;                                                                              //
+                    this.mainCharacter.velX = 0;                                                                                //
+                    this.mainCharacter.jumping = false;                                                                         //
+                } else if (dir === "b") {
+                    this.mainCharacter.grounded = true;
+                    this.mainCharacter.jumping = false;
+                } else if (dir === "t") {
+                    this.mainCharacter.velY *= -1;                                                                              //
+                }                                                                                                               //
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (this.mainCharacter.grounded) {
             this.mainCharacter.velY = 0;
         }
@@ -332,6 +391,10 @@ PathFinder = Game.extend({
     checkIfDead: function () {
         if (this.mainCharacterDead) {
             this.resetMainCharacter();
+            this.createdBoxesPerm = [];
+            this.createdBoxesTemp = [];
+            this.permBoxCounter = 0;
+            this.tempBoxCounder = 0;
             this.deaths++;
         }
     },
@@ -341,7 +404,7 @@ PathFinder = Game.extend({
             this.mainCharacter.y = arguments[1];
         }
         else {
-            this.mainCharacter.x = this.width / 2;
+            this.mainCharacter.x = this.width / 2 + 70;
             this.mainCharacter.y = this.height - 30;
         }
         this.mainCharacterDead = false;
@@ -362,7 +425,14 @@ PathFinder = Game.extend({
             self.keys[e.keyCode] = false;
         });
     },
+    lightningInterval: function (n) {
+        var self = this;
+        window.setInterval(function () {
+            self.lightningFlag = !self.lightningFlag;
+        }, n);
+    },
     startGame: function () {
+        this.lightningInterval(5000);
         this.addEventListeners();
         this.addGameToPlot();
         this.update();
