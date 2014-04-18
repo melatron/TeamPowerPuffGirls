@@ -160,7 +160,7 @@ Story = Class.extend({
     },
     clickEvent: function (ev) {
         if (!ev.data.stopEvents) {
-            console.log('rado is gay');
+            console.log('tony is a gay persona');
             var rect = ev.data.mainCanvas.getBoundingClientRect(),
                     mouseX = ev.clientX - rect.left,
                     mouseY = ev.clientY - rect.top,
@@ -217,7 +217,12 @@ Story = Class.extend({
             
             elfGameCoinImage = null,
     	
-    		lightningImage = null;
+    		lightningImage = null,
+
+            brownElfSpriteUpImage = null,
+            brownElfSpriteDownImage = null,
+            brownElfSpriteLeftImage = null,
+            brownElfSpriteRightImage = null;
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
     	this.sprites.push(heroSpriteDownImage);
@@ -256,6 +261,11 @@ Story = Class.extend({
         this.sprites.push(elfGameCoinImage);
         
         this.sprites.push(lightningImage);
+
+        this.sprites.push(brownElfSpriteUpImage);
+        this.sprites.push(brownElfSpriteDownImage);
+        this.sprites.push(brownElfSpriteLeftImage);
+        this.sprites.push(brownElfSpriteRightImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -505,7 +515,13 @@ window.onload = function () {
             
             'source/elf game/coinSprite.png',
             
-            'source/lightning_width40px.png'
+            'source/lightning_width40px.png',
+
+            'source/brownElfMoveUp.png',
+            'source/brownElfMoveDown.png',
+            'source/brownElfMoveLeft.png',
+            'source/brownElfMoveRight.png'
+
 	);
 	
 	story.preloadPortraits(
@@ -547,8 +563,8 @@ window.onload = function () {
      //game.putFirstTwoRandomNumbers();
 
 
-    //elfGame = new RadoGame();
-    //elfGame.start();
-    yolo = new PathFinder();
-    yolo.startGame();
+    elfGame = new RadoGame();
+    elfGame.start();
+    /*yolo = new PathFinder();
+    yolo.startGame();*/
 };

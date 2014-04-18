@@ -5,7 +5,7 @@ RadoGame = Game.extend({
 		var game = this;
 
 		this.levels = [];            //array of levels
-		this.levelIndex = 0;
+		this.levelIndex = 1;
 		this.currentLevel = null;	//current level
 		this.passableBlocks = [];	//array of all passable blocks
 		this.impassableBlocks = [];	//array of all impassable blocks
@@ -265,7 +265,6 @@ RadoGame = Game.extend({
 		var self = this;
 		this.mainCharacter = {
 				x: x,
-				self: this,
 				y: y,
 				width: 32,
 				height: 32,
@@ -292,8 +291,9 @@ RadoGame = Game.extend({
 		this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this.mainCharacter, this.gameContext);
 	},
 
-	createElf: function(width, height, movePatternType, direction, startBlock, endBlock, speed){
+	createElf: function(type, width, height, movePatternType, direction, startBlock, endBlock, speed){
 		var elf = {
+			startBlock: startBlock,
 			x: startBlock.x,
 			y: startBlock.y - 10,
 			width: width,
@@ -305,14 +305,62 @@ RadoGame = Game.extend({
 			moveRight: false,
 			movePattern: this.createMovePattern(movePatternType, direction, startBlock, endBlock)
 		};
+		var game = this;
+		if(movePatternType == 'follow'){
+			elf.moveTo = function(destination){
+				//console.log(this);
+				if(game.areOverlapping(destination, elf, 5, 5, 5, 5) == false){
+					if(elf.x < destination.x - 2){
+						elf.moveRight = true;
+						elf.moveLeft = false;
+					}
+					else if(elf.x > destination.x + 2){
+						elf.moveLeft = true;
+						elf.moveRight = false;
+					}
+					else{
+						elf.moveLeft = false;
+						elf.moveRight = false;
+					}
+
+					if(elf.y < destination.y){
+						elf.moveDown = true;
+						elf.moveUp = false;
+					}
+					else if(elf.y > destination.y){
+						elf.moveUp = true;
+						elf.moveDown = false;
+					}
+					else {
+					elf.moveUp = false;
+					elf.moveDown = false;
+					}
+				}
+/*				else {
+					elf.moveUp = false;
+					elf.moveDown = false;
+					elf.moveLeft = false;
+					elf.moveRight = false;
+				}*/
+			}
+		}
 		
 //		elf.movePattern = this.createMovePattern(movePatternType, direction, startBlock, endBlock);
+		if(type == 'green'){
+			elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[12], elf, this.gameContext);
+			elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[13], elf, this.gameContext);
+			elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[14], elf, this.gameContext);
+			elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[15], elf, this.gameContext);
+			elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[13], elf, this.gameContext);
+		}
+		else if (type == 'brown'){
+			elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[29], elf, this.gameContext);
+			elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[30], elf, this.gameContext);
+			elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[31], elf, this.gameContext);
+			elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[32], elf, this.gameContext);
+			elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[30], elf, this.gameContext);
+		}
 		
-		elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[12], elf, this.gameContext);
-		elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[13], elf, this.gameContext);
-		elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[14], elf, this.gameContext);
-		elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[15], elf, this.gameContext);
-		elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[13], elf, this.gameContext);
 
 		return elf;
 	},
@@ -325,6 +373,7 @@ RadoGame = Game.extend({
 			level3 = this.levels[2];
 		
 		level1.elves[0] = this.createElf (
+				'green',
 				32, 
 				32, 
 				'linear', 
@@ -334,6 +383,7 @@ RadoGame = Game.extend({
 				4
 				);
 		level1.elves[1] = this.createElf (
+				'green',
 				32,
 				32,
 				'linear',
@@ -343,6 +393,7 @@ RadoGame = Game.extend({
 				4
 		);
 		level1.elves[2] = this.createElf(
+				'green',
 				32,
 				32,
 				'linear',
@@ -352,6 +403,7 @@ RadoGame = Game.extend({
 				3
 		);
 		level1.elves[3] = this.createElf(
+				'green',
 				32,
 				32,
 				'circular',
@@ -361,6 +413,7 @@ RadoGame = Game.extend({
 				3
 			);
 		level1.elves[4] = this.createElf(
+				'green',
 				32,
 				32,
 				'circular',
@@ -370,6 +423,7 @@ RadoGame = Game.extend({
 				3
 			);
 		level1.elves[5] = this.createElf(
+				'green',
 				32,
 				32,
 				'circular',
@@ -379,6 +433,7 @@ RadoGame = Game.extend({
 				3
 			);
 		level2.elves[0] = this.createElf(
+				'green',
 				32,
 				32,
 				'circular',
@@ -388,6 +443,7 @@ RadoGame = Game.extend({
 				1
 			);
 		level2.elves[1] = this.createElf(
+				'brown',
 				32,
 				32,
 				'circular',
@@ -397,6 +453,7 @@ RadoGame = Game.extend({
 				2
 			);
 		level2.elves[2] = this.createElf(
+				'green',
 				32,
 				32,
 				'circular',
@@ -406,6 +463,7 @@ RadoGame = Game.extend({
 				2
 			);
 		level2.elves[3] = this.createElf(
+				'brown',
 				32,
 				32,
 				'circular',
@@ -415,6 +473,7 @@ RadoGame = Game.extend({
 				1
 			);
 		level2.elves[4] = this.createElf(
+				'green',
 				32,
 				32,
 				'circular',
@@ -424,6 +483,7 @@ RadoGame = Game.extend({
 				2
 			);
 		level2.elves[5] = this.createElf(
+				'green',
 				32,
 				32,
 				'circular',
@@ -433,6 +493,7 @@ RadoGame = Game.extend({
 				1
 			);
 		level2.elves[6] = this.createElf(
+				'brown',
 				32,
 				32,
 				'linear',
@@ -442,6 +503,7 @@ RadoGame = Game.extend({
 				2
 			);
 		level2.elves[7] = this.createElf(
+				'green',
 				32,
 				32,
 				'linear',
@@ -451,12 +513,23 @@ RadoGame = Game.extend({
 				2
 			);
 		level2.elves[8] = this.createElf(
+				'brown',
 				32,
 				32,
 				'circular',
 				'clockwise',
 				level2.layout[2][10],
 				level2.layout[3][11],
+				1
+			);
+		level2.elves[9] = this.createElf(
+				'green',
+				32,
+				32,
+				'follow',
+				null,
+				level2.layout[5][17],
+				null,
 				1
 			);
 	},
@@ -504,9 +577,9 @@ RadoGame = Game.extend({
 	createMovePattern: function(type, direction, startBlock, endBlock){
 		var pattern = {
 			type: type,
-			direction: direction,
+			direction: direction || null,
 			startBlock: startBlock,
-			endBlock: endBlock
+			endBlock: endBlock || null
 		};
 
 		return pattern;
@@ -517,16 +590,19 @@ RadoGame = Game.extend({
 	implementMovePattern: function(elf){
 		var type = elf.movePattern.type,
 			start = elf.movePattern.startBlock,
-			end = elf.movePattern.endBlock,
-			direction = elf.movePattern.direction,
-			reverse = elf.movePattern.reverse;
+			end = elf.movePattern.endBlock || null,
+			direction = elf.movePattern.direction || null,
+			char = this.mainCharacter;
 		
-		if(start.x > end.x){
-			var temp = start;
-			start = end;
-			end = temp;
-		}
+		if(type != 'follow'){
+			if(start.x > end.x){
+				var temp = start;
+				start = end;
+				end = temp;
+			}
 
+		}
+		
 		switch(type){
 		case 'linear':
 			if(direction == 'horizontal'){
@@ -591,6 +667,50 @@ RadoGame = Game.extend({
 			}
 
 			break;
+		case 'follow':
+
+			
+			var level = this.currentLevel,
+				follow = true,
+				destination = char,
+				line = {
+				x1: elf.startBlock.x + elf.width/2,
+				y1: elf.startBlock.y + elf.height/2,
+				x2: char.x + char.width/2,
+				y2: char.y + char.height
+			};
+
+			
+
+			this.gameContext.save();
+			this.gameContext.strokeStyle = 'red';
+			this.gameContext.beginPath();
+			this.gameContext.moveTo(line.x1, line.y1);
+			this.gameContext.lineTo(line.x2, line.y2);
+			this.gameContext.stroke();
+			this.gameContext.restore();
+
+			for(var row = 0; row < level.layout.length; row++){
+				for(var col = 0; col < level.layout[row].length; col++){
+					var temp = level.layout[row][col];
+					if(this.detectLineIntersection(temp, line)){
+						this.gameContext.save();
+						this.gameContext.strokeStyle = 'blue';
+						this.gameContext.strokeRect(temp.x, temp.y, temp.width, temp.height);
+						this.gameContext.restore();
+
+						if(temp.type == 0){
+							destination = elf.startBlock;
+							break;
+						}
+					}
+				}
+			}
+
+			elf.moveTo(destination);
+
+			break;
+
 		default:
 			break;
 		}
@@ -604,17 +724,20 @@ RadoGame = Game.extend({
 			elf.spriteLeft.drawSprite();
 			elf.x -= elf.speed;
 		}
-		else if(elf.moveRight == true){
+		if(elf.moveRight == true){
 			elf.spriteRight.drawSprite();
 			elf.x += elf.speed;
 		}
-		else if(elf.moveUp == true){
+		if(elf.moveUp == true){
 			elf.spriteUp.drawSprite();
 			elf.y -= elf.speed;
 		}
-		else if(elf.moveDown == true){
+		if(elf.moveDown == true){
 			elf.spriteDown.drawSprite();
 			elf.y += elf.speed;
+		}
+		if(!elf.moveUp && !elf.moveDown && !elf.moveLeft && !elf.moveRight){
+			elf.spriteIdle.drawSprite();
 		}
 	},
 	
@@ -625,7 +748,7 @@ RadoGame = Game.extend({
 		for(i = 0; i < len; i++){
 			this.updateElf(this.currentLevel.elves[i]);
 			if(this.areOverlapping(this.currentLevel.elves[i], this.mainCharacter, 8, 4, 8, 4)){
-				this.mainCharacter.isCaught = true;
+			//	this.mainCharacter.isCaught = true;
 			}
 		}
 	},
@@ -858,6 +981,54 @@ RadoGame = Game.extend({
 		}
 		
 		return collision;
+	},
+
+	detectLineIntersection: function(rect, line){
+		var minX = line.x1;
+	    var maxX = line.x2;
+	    
+	    if (line.x1 > line.x2) {
+	        minX = line.x2;
+	        maxX = line.x1;
+	    }
+	    
+	    if (maxX > rect.x + rect.width)
+	        maxX = rect.x + rect.width;
+	    
+	    if (minX < rect.x)
+	        minX = rect.x;
+	    
+	    if (minX > maxX)
+	        return false;
+	    
+	    var minY = line.y1;
+	    var maxY = line.y2;
+	    
+	    var dx = line.x2 - line.x1;
+	    
+	    if (Math.abs(dx) > 0.0000001) {
+	        var a = (line.y2 - line.y1) / dx;
+	        var b = line.y1 - a * line.x1;
+	        minY = a * minX + b;
+	        maxY = a * maxX + b;
+	    }
+	    
+	    if (minY > maxY) {
+	        var tmp = maxY;
+	        maxY = minY;
+	        minY = tmp;
+	    }
+	    
+	    if (maxY > rect.y + rect.height)
+	        maxY = rect.y + rect.height;
+	    
+	    if (minY < rect.y)
+	        minY = rect.y;
+	    
+	    if (minY > maxY)
+	        return false;
+	    
+	    return true;
 	},
 
 	// ===== UPDATE CHARACTER LOCATION ========== //
