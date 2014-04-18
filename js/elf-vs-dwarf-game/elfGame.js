@@ -5,7 +5,7 @@ RadoGame = Game.extend({
 		var game = this;
 
 		this.levels = [];            //array of levels
-		this.levelIndex = 1;
+		this.levelIndex = 0;
 		this.currentLevel = null;	//current level
 		this.passableBlocks = [];	//array of all passable blocks
 		this.impassableBlocks = [];	//array of all impassable blocks
@@ -55,6 +55,8 @@ RadoGame = Game.extend({
 		this.finishBlocks = [];
 		this.startingBlock = null;
 		this.populateLevel(this.currentLevel);
+		this.createCoins();
+		this.createElves();
 		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
 	},
 	
@@ -116,7 +118,7 @@ RadoGame = Game.extend({
                  [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0],		// 2 - finish,
                  [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0],		// 3 - starting 
                  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0],
-                 [0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0],
+                 [0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0],
                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 				)
 		);
