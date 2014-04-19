@@ -16,7 +16,8 @@ RadoGame = Game.extend({
 		this.canvas = $('#elf-game-canvas')[0];
 		this.gameContext = $('#elf-game-canvas')[0].getContext('2d');
 		this.mainCharacter = {};
-		
+		this.deaths = 0;
+
 		this.elves = [];
 		
 		this.animation = null;
@@ -25,11 +26,7 @@ RadoGame = Game.extend({
 		this.mainLoop = function(){
 			game.gameContext.save();
 			game.gameContext.clearRect(0, 0, canvas.width, canvas.height);
-			game.drawLevel();
-			game.updateCoins();
-			game.updateElves();
-			game.updateCharacter();
-			game.checkLevelProgress();
+			game.updateLevel();
 			game.gameContext.restore();
 			game.animation = requestAnimationFrame(game.mainLoop);
 		};
@@ -42,9 +39,6 @@ RadoGame = Game.extend({
 		this.createLevels();
 		this.currentLevel = this.levels[this.levelIndex];
 		this.populateLevel(this.currentLevel);
-		this.createCoins();
-		this.createElves();
-		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
 		this.addEventListeners();
 		this.mainLoop();
 	},
@@ -55,9 +49,6 @@ RadoGame = Game.extend({
 		this.finishBlocks = [];
 		this.startingBlock = null;
 		this.populateLevel(this.currentLevel);
-		this.createCoins();
-		this.createElves();
-		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
 	},
 	
 	endGame: function(){
@@ -71,22 +62,6 @@ RadoGame = Game.extend({
 	
 	getContext: function(){
 		this.gameContext = this.canvas.getContext('2d');
-	},
-	
-	// ===== LEVEL BLOCK CONSTRUCTOR ===== //
-	
-	createLevelBlock: function(row, col, type){
-		var block = {
-				row: row,
-				col: col,
-				x: col*32,
-				y: row*32,
-				width: 32,
-				height: 32,
-				type: type,
-				isActive: false
-		};
-		return block;
 	},
 	
 	// ======== LEVEL CONSTRUCTOR ======= //
@@ -178,6 +153,10 @@ RadoGame = Game.extend({
 				level.layout[row][col] = block;
 			}
 		}
+
+		this.createCoins();
+		this.createElves();
+		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
 	},
 	
 	checkLevelProgress: function(){
@@ -236,9 +215,14 @@ RadoGame = Game.extend({
 
 	// ====== DRAWING THE LEVEL (TEST) ===== //
 	
-	drawLevel: function(){
+	updateLevel: function(){
 		
 		this.currentLevel.sprite.drawSprite();
+
+		this.updateCoins();
+		this.updateElves();
+		this.updateCharacter();
+		this.checkLevelProgress();
 		
 /*		for(var i = 0; i < this.passableBlocks.length; i++){
 			var temp = this.passableBlocks[i];
@@ -265,7 +249,21 @@ RadoGame = Game.extend({
 		*/
 	},
 	
-	// ====== MAIN CHARACTER CONSTRUCTOR ===== //
+	// ====== CONSTRUCTORS ===== //
+
+	createLevelBlock: function(row, col, type){
+		var block = {
+				row: row,
+				col: col,
+				x: col*32,
+				y: row*32,
+				width: 32,
+				height: 32,
+				type: type,
+				isActive: false
+		};
+		return block;
+	},
 	
 	createMainCharacter: function(x, y){
 		var self = this;
@@ -358,8 +356,34 @@ RadoGame = Game.extend({
 
 		return elf;
 	},
+
+	createMovePattern: function(type, direction, startBlock, endBlock, radius){
+		var pattern = {
+			type: type,
+			direction: direction || null,
+			startBlock: startBlock,
+			endBlock: endBlock || null,
+			radius: radius || null
+		};
+
+		return pattern;
+	},
+
+	createCoin: function(position){
+		var coin = {
+			x: position.x,
+			y: position.y,
+			width: 32,
+			height: 32,
+			isCollected: false
+		};
+		
+		coin.sprite = new Sprite(2048, 32, 64, 2, story.sprites[27], coin, this.gameContext);
+		
+		return coin;
+	},
 	
-	// ================ POPULATES THE LEVELS WITH ELVES ====================== //
+	// ================ LEVEL POPULATION METHODS ====================== //
 	
 	createElves: function(){
 		var level1 = this.levels[0],
@@ -542,6 +566,20 @@ RadoGame = Game.extend({
 		level2.coins[2] = this.createCoin(level2.layout[5][2]);
 	},
 	
+	// ============== LEVEL UPDATE METHODS ================= //
+
+	updateElves: function(){
+		var i,
+			len = this.currentLevel.elves.length;
+		
+		for(i = 0; i < len; i++){
+			this.updateElf(this.currentLevel.elves[i]);
+			if(this.areOverlapping(this.mainCharacter, this.currentLevel.elves[i], 8, 4, 8, 4)){
+				this.mainCharacter.isCaught = true;
+			}
+		}
+	},
+
 	updateCoins: function(){
 		var i, len = this.currentLevel.coins.length, temp;
 		
@@ -565,20 +603,6 @@ RadoGame = Game.extend({
 			temp = this.currentLevel.coins[i];
 			temp.isCollected = false;
 		}
-	},
-	
-	// ================== MOVE PATTERN OBJECT ================= //
-	
-	createMovePattern: function(type, direction, startBlock, endBlock, radius){
-		var pattern = {
-			type: type,
-			direction: direction || null,
-			startBlock: startBlock,
-			endBlock: endBlock || null,
-			radius: radius || null
-		};
-
-		return pattern;
 	},
 	
 	// ============= MOVE PATTERN IMPLEMENTATION ============= //
@@ -725,101 +749,7 @@ RadoGame = Game.extend({
 		}
 	},
 
-	updateElf: function(elf){
-		
-		if(elf.movePattern.type == 'follow'){
-			var collision = this.detectLevelCollision(elf),
-				follow = true;
-		}
-
-		this.implementMovePattern(elf);
-		
-		if (follow) console.log(collision.left);
-
-		if(elf.moveLeft == true){
-			elf.spriteLeft.drawSprite();
-			if(follow){
-				if(!collision.left){
-					elf.x -= elf.speed;
-				}
-			}
-			else{
-				elf.x -= elf.speed;
-			}
-		}
-		if(elf.moveRight == true){
-			elf.spriteRight.drawSprite();
-			if(follow){
-				if(!collision.right){
-					elf.x += elf.speed;
-				}
-			}
-			else {
-				elf.x += elf.speed;
-			}
-		}
-		if(elf.moveUp == true){
-			if(!elf.moveLeft && !elf.moveRight){
-				elf.spriteUp.drawSprite();
-			}
-			if(follow){
-				if(!collision.top){
-					elf.y -= elf.speed;
-				}
-			}
-			else{ 
-				elf.y -= elf.speed;
-			}
-			
-		}
-		if(elf.moveDown == true){
-			if(!elf.moveLeft && !elf.moveRight){
-				elf.spriteDown.drawSprite();
-			}
-			if(follow){
-				if(!collision.bottom){
-					elf.y += elf.speed;
-				}
-			}
-			else{
-				elf.y += elf.speed;
-			}
-			
-		}
-		if(!elf.moveUp && !elf.moveDown && !elf.moveLeft && !elf.moveRight){
-			elf.spriteIdle.drawSprite();
-		}
-	},
-	
-	updateElves: function(){
-		var i,
-			len = this.currentLevel.elves.length;
-		
-		for(i = 0; i < len; i++){
-			this.updateElf(this.currentLevel.elves[i]);
-			if(this.areOverlapping(this.currentLevel.elves[i], this.mainCharacter, 8, 4, 8, 4)){
-				this.mainCharacter.isCaught = true;
-			}
-		}
-	},
-	
-	//=========== COIN OBJECT ===========//
-	
-	createCoin: function(position){
-		var coin = {
-			x: position.x,
-			y: position.y,
-			width: 32,
-			height: 32,
-			isCollected: false
-		};
-		
-		coin.sprite = new Sprite(2048, 32, 64, 2, story.sprites[27], coin, this.gameContext);
-		
-		return coin;
-	},
-	
-	// =========================== COLLISION DETECTION METHOD ============================== //
+	// =========================== COLLISION DETECTION METHODS ============================== //
 	
 	detectLevelCollision: function(obj){
 		var collision = {
@@ -1105,23 +1035,34 @@ RadoGame = Game.extend({
 	    }
 
 	},
+	
+	areOverlapping: function(obj1, obj2, offsetX1, offsetY1, offsetX2, offsetY2){
+		var oX1 = offsetX1 || 0,
+			oY1 = offsetY1 || 0,
+			oX2 = offsetX2 || 0,
+			oY2 = offsetY2 || 0;
+		
+		if(((obj1.x + oX1 > obj2.x + oX2 && obj1.x + oX1 < obj2.x + oX2 + (obj2.width - 2 * oX2)) || (obj1.x + oX1 + (obj1.width - 2 * oX1) > obj2.x + oX2 && obj1.x + oX1 + (obj1.width - 2 * oX1) < obj2.x + oX2 + (obj2.width - 2 * oX2))) && 
+				((obj1.y + oY1 > obj2.y + oY2 && obj1.y + oY1 < obj2.y + oY2 + (obj2.height - 2 * oY2)) || (obj1.y + oY1 + (obj1.height - 2 * oY1) > obj2.y + oY2 && obj1.y + oY1 + (obj1.height - 2 * oY1) < obj2.y + oY2 + (obj2.height - 2 * oY2)))){
+			return true;
+		}
+		return false;
+	},
 
-	// ===== UPDATE CHARACTER LOCATION ========== //
+	// ===== UPDATE METHODS ========== //
 	
 	updateCharacter: function(){
 		
 		var char = this.mainCharacter,
-	//		charBox = this.mainCharacterBoundingRect,
 			collision = this.detectLevelCollision(char);
 
-		//this.gameContext.fillRect(this.mainCharacterBoundingRect.x, this.mainCharacterBoundingRect.y, this.mainCharacterBoundingRect.width, this.mainCharacterBoundingRect.height);
-		if (char.isCaught){
+		if(char.isCaught){
 			char.x = this.startingBlock.x;
 			char.y = this.startingBlock.y;
+			this.deaths++;
 			char.isCaught = false;
-			
-			this.resetCoins();
 		}
+		//this.gameContext.fillRect(this.mainCharacterBoundingRect.x, this.mainCharacterBoundingRect.y, this.mainCharacterBoundingRect.width, this.mainCharacterBoundingRect.height);
 
 		if(char.moveUp == true){
 			if(char.moveLeft == true){
@@ -1215,19 +1156,70 @@ RadoGame = Game.extend({
 		
 	},
 	
-	// ======== CHECK IF OVERLAPPING METHOD =========== //
-	
-	areOverlapping: function(obj1, obj2, offsetX1, offsetY1, offsetX2, offsetY2){
-		var oX1 = offsetX1 || 0,
-			oY1 = offsetY1 || 0,
-			oX2 = offsetX2 || 0,
-			oY2 = offsetY2 || 0;
+	updateElf: function(elf){
 		
-		if(((obj1.x + oX1 > obj2.x + oX2 && obj1.x + oX1 < obj2.x + oX2 + (obj2.width - 2 * oX2)) || (obj1.x + oX1 + (obj1.width - 2 * oX1) > obj2.x + oX2 && obj1.x + oX1 + (obj1.width - 2 * oX1) < obj2.x + oX2 + (obj2.width - 2 * oX2))) && 
-				((obj1.y + oY1 > obj2.y + oY2 && obj1.y + oY1 < obj2.y + oY2 + (obj2.height - 2 * oY2)) || (obj1.y + oY1 + (obj1.height - 2 * oY1) > obj2.y + oY2 && obj1.y + oY1 + (obj1.height - 2 * oY1) < obj2.y + oY2 + (obj2.height - 2 * oY2)))){
-			return true;
+		if(elf.movePattern.type == 'follow'){
+			var collision = this.detectLevelCollision(elf),
+				follow = true;
 		}
-		return false;
+
+		this.implementMovePattern(elf);
+		
+		if (follow) console.log(collision.left);
+
+		if(elf.moveLeft == true){
+			elf.spriteLeft.drawSprite();
+			if(follow){
+				if(!collision.left){
+					elf.x -= elf.speed;
+				}
+			}
+			else{
+				elf.x -= elf.speed;
+			}
+		}
+		if(elf.moveRight == true){
+			elf.spriteRight.drawSprite();
+			if(follow){
+				if(!collision.right){
+					elf.x += elf.speed;
+				}
+			}
+			else {
+				elf.x += elf.speed;
+			}
+		}
+		if(elf.moveUp == true){
+			if(!elf.moveLeft && !elf.moveRight){
+				elf.spriteUp.drawSprite();
+			}
+			if(follow){
+				if(!collision.top){
+					elf.y -= elf.speed;
+				}
+			}
+			else{ 
+				elf.y -= elf.speed;
+			}
+			
+		}
+		if(elf.moveDown == true){
+			if(!elf.moveLeft && !elf.moveRight){
+				elf.spriteDown.drawSprite();
+			}
+			if(follow){
+				if(!collision.bottom){
+					elf.y += elf.speed;
+				}
+			}
+			else{
+				elf.y += elf.speed;
+			}
+			
+		}
+		if(!elf.moveUp && !elf.moveDown && !elf.moveLeft && !elf.moveRight){
+			elf.spriteIdle.drawSprite();
+		}
 	},
 	
 	// ============ EVENT HANDLERS ============ //
