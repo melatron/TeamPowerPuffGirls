@@ -5,7 +5,7 @@ RadoGame = Game.extend({
 		var game = this;
 
 		this.levels = [];            //array of levels
-		this.levelIndex = 1;
+		this.levelIndex = 0;
 		this.currentLevel = null;	//current level
 		this.passableBlocks = [];	//array of all passable blocks
 		this.impassableBlocks = [];	//array of all impassable blocks
@@ -17,6 +17,7 @@ RadoGame = Game.extend({
 		this.gameContext = $('#elf-game-canvas')[0].getContext('2d');
 		this.mainCharacter = {};
 		this.deaths = 0;
+		this.gameOver = false;
 
 		this.elves = [];
 		
@@ -107,14 +108,14 @@ RadoGame = Game.extend({
                  [0, 3, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
                  [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
                  [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0],
-                 [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0],
+                 [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 2, 0],
                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
                  )
 		);
 		
 		this.levels[1].sprite = new Sprite(1920, 224, 3, 10, story.sprites[25], this.levels[1], this.gameContext);
 		
-		this.levels.push(this.createLevel(
+		/*this.levels.push(this.createLevel(
 				3,
 				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -124,7 +125,7 @@ RadoGame = Game.extend({
                  [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
                  [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0]]
                  )
-		);
+		);*/
 	},
 	
 	// ====== INSERTING BLOCKS IN MATRIX ======= //
@@ -176,7 +177,8 @@ RadoGame = Game.extend({
 				this.startNewLevel();
 			}
 			else{
-//				this.gameOver();
+				this.endGame();
+				this.gameOver = true;
 			}
 		}
 	},
@@ -546,7 +548,7 @@ RadoGame = Game.extend({
 				32,
 				'follow',
 				null,
-				level2.layout[5][17],
+				level2.layout[5][14],
 				null,
 				1,
 				150
@@ -564,6 +566,7 @@ RadoGame = Game.extend({
 		level2.coins[0] = this.createCoin(level2.layout[3][8]);
 		level2.coins[1] = this.createCoin(level2.layout[5][11]);
 		level2.coins[2] = this.createCoin(level2.layout[5][2]);
+		level2.coins[3] = this.createCoin(level2.layout[2][17])
 	},
 	
 	// ============== LEVEL UPDATE METHODS ================= //
@@ -575,7 +578,7 @@ RadoGame = Game.extend({
 		for(i = 0; i < len; i++){
 			this.updateElf(this.currentLevel.elves[i]);
 			if(this.areOverlapping(this.mainCharacter, this.currentLevel.elves[i], 8, 4, 8, 4)){
-				this.mainCharacter.isCaught = true;
+				//this.mainCharacter.isCaught = true;
 			}
 		}
 	},
@@ -1060,6 +1063,7 @@ RadoGame = Game.extend({
 			char.x = this.startingBlock.x;
 			char.y = this.startingBlock.y;
 			this.deaths++;
+			this.resetCoins();
 			char.isCaught = false;
 		}
 		//this.gameContext.fillRect(this.mainCharacterBoundingRect.x, this.mainCharacterBoundingRect.y, this.mainCharacterBoundingRect.width, this.mainCharacterBoundingRect.height);
@@ -1164,8 +1168,6 @@ RadoGame = Game.extend({
 		}
 
 		this.implementMovePattern(elf);
-		
-		if (follow) console.log(collision.left);
 
 		if(elf.moveLeft == true){
 			elf.spriteLeft.drawSprite();
