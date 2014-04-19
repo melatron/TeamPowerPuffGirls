@@ -36,7 +36,7 @@ PathFinder = Game.extend({
         this.gameContext = $('#pathFinderCanvas')[0].getContext('2d');
         this.keys = [];
         this.friction = 0.8;
-        this.gravity = 0.2;
+        this.gravity = 0.4;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
         this.createdBoxesTemp = [];
@@ -46,7 +46,7 @@ PathFinder = Game.extend({
         this.movableStepableObjects = [];
         this.lightningOnInterval = [];
 
-
+        
         this.mainCharacter.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this.mainCharacter, this.gameContext);
         this.mainCharacter.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this.mainCharacter, this.gameContext);
         this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this.mainCharacter, this.gameContext);
@@ -72,6 +72,29 @@ PathFinder = Game.extend({
             speed: 0.5,
             moveLeft: false,
             moveRight: true,
+            moveDown: false,
+            moveUp: false,
+            updatePosition: function () {
+                if (this.x >= 400) {
+                    this.moveLeft = true;
+                    this.moveRight = false;
+                }
+                else if (this.x <= 100) {
+                    this.moveLeft = false;
+                    this.moveRight = true;
+                }
+            }
+        };
+        this.movableBoxUpDown = {
+            x: 100,
+            y: 100,
+            width: 120,
+            height: 20,
+            speed: 0.5,
+            moveLeft: false,
+            moveRight: true,
+            moveDown: false,
+            moveUp: false,
             updatePosition: function () {
                 if (this.x >= 400) {
                     this.moveLeft = true;
@@ -243,7 +266,7 @@ PathFinder = Game.extend({
         }
         else {
             this.mainCharacter.spriteIdle.drawSprite();
-            this.mainCharacter.velX = 0;
+            //this.mainCharacter.velX = 0;
         }
     },
     colLoopCheck: function () {
@@ -403,10 +426,10 @@ PathFinder = Game.extend({
                 this.mainCharacter.grounded = true;
                 this.mainCharacter.jumping = false;
                 if (a.moveLeft) {
-                    this.mainCharacter.velX -= 2 * a.speed;
+                    this.mainCharacter.velX -= a.speed / (261 / 100);//(299 / 100);
                 }
                 else if (a.moveRight) {
-                    this.mainCharacter.velX += 2 * a.speed;
+                    this.mainCharacter.velX += a.speed / (261 / 100);//(299 / 100);
                 }
 
             } else if (dir === "t") {
