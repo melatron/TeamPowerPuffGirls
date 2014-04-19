@@ -563,8 +563,8 @@ window.onload = function () {
      //game.putFirstTwoRandomNumbers();
 
 
-    elfGame = new RadoGame();
-    elfGame.start();
-    /*yolo = new PathFinder();
-    yolo.startGame();*/
+    //elfGame = new RadoGame();
+    //elfGame.start();
+    yolo = new PathFinder();
+    yolo.startGame();
 };

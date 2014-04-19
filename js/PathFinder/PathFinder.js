@@ -36,7 +36,7 @@ PathFinder = Game.extend({
         this.gameContext = $('#pathFinderCanvas')[0].getContext('2d');
         this.keys = [];
         this.friction = 0.8;
-        this.gravity = 0.4;
+        this.gravity = 0.2;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
         this.createdBoxesTemp = [];
@@ -83,30 +83,47 @@ PathFinder = Game.extend({
                     this.moveLeft = false;
                     this.moveRight = true;
                 }
+            },
+            move: function () {
+                if (this.moveLeft) {
+                    this.x -= this.speed;
+                }
+                else if (this.moveRight) {
+                    this.x += this.speed;
+                }
             }
         };
         this.movableBoxUpDown = {
-            x: 100,
-            y: 100,
+            x: 500,
+            y: 50,
             width: 120,
             height: 20,
             speed: 0.5,
             moveLeft: false,
-            moveRight: true,
-            moveDown: false,
+            moveRight: false,
+            moveDown: true,
             moveUp: false,
             updatePosition: function () {
-                if (this.x >= 400) {
-                    this.moveLeft = true;
-                    this.moveRight = false;
+                if (this.y >= 200) {
+                    this.moveUp = true;
+                    this.moveDown = false;
                 }
-                else if (this.x <= 100) {
-                    this.moveLeft = false;
-                    this.moveRight = true;
+                else if (this.y <= 50) {
+                    this.moveUp = false;
+                    this.moveDown = true;
+                }
+            },
+            move: function () {
+                if (this.moveUp) {
+                    this.y -= this.speed;
+                }
+                else if (this.moveDown) {
+                    this.y += this.speed;
                 }
             }
         };
         this.movableStepableObjects.push(this.movableBox);
+        this.movableStepableObjects.push(this.movableBoxUpDown);
 
         this.mapBoxes.push({
             x: 0,
@@ -271,158 +288,119 @@ PathFinder = Game.extend({
     },
     colLoopCheck: function () {
         this.gameContext.fillStyle = "black";
-        this.gameContext.beginPath();
 
         this.mainCharacter.grounded = false;
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// Checking the main boxes for collision                                                                           //
-        for (var i = 0; i < this.mapBoxes.length; i++) {                                                                    //
-            this.gameContext.fillRect(this.mapBoxes[i].x, this.mapBoxes[i].y + 14, this.mapBoxes[i].width, this.mapBoxes[i].height - 14); //
-                                                                                                                            //
-            var dir = this.colCheck(this.mainCharacter, this.mapBoxes[i]);                                                  //
-                                                                                                                            //
-            if (dir === "l" || dir === "r") {                                                                               //
-                this.mainCharacter.velX = 0;                                                                                //
-                this.mainCharacter.jumping = false;                                                                         //
-            } else if (dir === "b") {                                                                                       //
-                this.mainCharacter.grounded = true;                                                                         //
-                this.mainCharacter.jumping = false;                                                                         //
-            } else if (dir === "t") {                                                                                       //
-                this.mainCharacter.velY *= -1;                                                                              //
-            }                                                                                                               //
-        }                                                                                                                   //
-        /// Checking the created permanent boxes for collision ///////////////////////////////////////////////////////////////
-                                                                                               //
-        for (var i = 0; i < this.createdBoxesPerm.length; i++) {                                                            //
-            this.gameContext.fillRect(this.createdBoxesPerm[i].x, this.createdBoxesPerm[i].y + 14, this.createdBoxesPerm[i].width, this.createdBoxesPerm[i].height - 14); //
-                                                                                                                            //
-            var dir = this.colCheck(this.mainCharacter, this.createdBoxesPerm[i]);                                          //
-                                                                                                                            //
-            if (dir === "l" || dir === "r") {                                                                               //
-                this.mainCharacter.velX = 0;                                                                                //
-                this.mainCharacter.jumping = false;                                                                         //
-            } else if (dir === "b") {                                                                                       //
-                this.mainCharacter.grounded = true;                                                                         //
-                this.mainCharacter.jumping = false;                                                                         //
-            } else if (dir === "t") {                                                                                       //
-                this.mainCharacter.velY *= -1;                                                                              //
-            }                                                                                                               //
-        }
-        /// Checking the created temprorary boxes for collision///////////////////////////////////////////////////////////////
-        this.gameContext.fillStyle = "green";
-        for (var i = 0; i < this.createdBoxesTemp.length; i++) {                                                            //
-            if (this.createdBoxesTemp[i] != null) {
-                this.gameContext.fillRect(this.createdBoxesTemp[i].x, this.createdBoxesTemp[i].y + 14, this.createdBoxesTemp[i].width, this.createdBoxesTemp[i].height - 14); //
-                //
-                var dir = this.colCheck(this.mainCharacter, this.createdBoxesTemp[i]);                                          //
-                //
-                if (dir === "l" || dir === "r") {                                                                               //
-                    this.mainCharacter.velX = 0;                                                                                //
-                    this.mainCharacter.jumping = false;                                                                         //
-                } else if (dir === "b") {                                                                                       //
-                    this.mainCharacter.grounded = true;                                                                         //
-                    this.mainCharacter.jumping = false;                                                                         //
-                } else if (dir === "t") {                                                                                       //
-                    this.mainCharacter.velY *= -1;                                                                              //
-                }
-            }                                                                                                              //
-        }                                                                                                                   //
-        /// Checking the created bottom Spikes for collision//////////////////////////////////////////////////////////////////
-        this.gameContext.fillStyle = "red";
-        for (var i = 0; i < this.bottomSpikes.length; i++) {                                                                //
-            this.gameContext.fillRect(this.bottomSpikes[i].x, this.bottomSpikes[i].y + 14, this.bottomSpikes[i].width, this.bottomSpikes[i].height - 14); //
-                                                                                                                            //
-            var dir = this.colCheck(this.mainCharacter, this.bottomSpikes[i]);                                              //
-                                                                                                                            //
-            if (dir === "l" || dir === "r") {                                                                               //
-                this.mainCharacter.velX = 0;                                                                                //
-                this.mainCharacter.jumping = false;                                                                         //
-            } else if (dir === "b") {                                                                                       //
-                this.mainCharacter.grounded = true;                                                                         //
-                this.mainCharacter.jumping = false;
+        this.mainBlocks(this.mapBoxes, 'black');
+        this.mainBlocks(this.createdBoxesPerm, 'black');
+        this.mainBlocks(this.createdBoxesTemp, 'green');
+        this.bottomSpires(this.bottomSpikes, 'red');
+        this.topSpires(this.topSpikes, 'purple');
+        this.verticalSpires(this.lightningOnInterval, this.lightningFlag);
+        this.movableBlocks(this.movableStepableObjects, "yellow");
 
-                this.mainCharacterDead = true;
-            } else if (dir === "t") {                                                                                       //
-                this.mainCharacter.velY *= -1;                                                                              //
-            }                                                                                                               //
-        }                                                                                                                   //
-        /// Checking the created top Spikes for collision/////////////////////////////////////////////////////////////////////
-        this.gameContext.fillStyle = "purple";
-        for (var i = 0; i < this.topSpikes.length; i++) {                                                                   //
-            this.gameContext.fillRect(this.topSpikes[i].x, this.topSpikes[i].y + 14, this.topSpikes[i].width, this.topSpikes[i].height - 14); //
-                                                                                                                            //
-            var dir = this.colCheck(this.mainCharacter, this.topSpikes[i]);                                                 //
-                                                                                                                            //
-            if (dir === "l" || dir === "r") {                                                                               //
-                this.mainCharacter.velX = 0;                                                                                //
-                this.mainCharacter.jumping = false;                                                                         //
-            } else if (dir === "b") {
-                this.mainCharacter.grounded = true;                                                                         
-                this.mainCharacter.jumping = false;
-            } else if (dir === "t") {
-                this.mainCharacterDead = true;
-                this.mainCharacter.velY *= -1;                                                                              //
-            }                                                                                                               //
-        }                                                                                                                   //
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        this.gameContext.fillStyle = "yellow";
-        for (var i = 0; i < this.verticalSpikes.length; i++) {                                                                   //
-            this.gameContext.fillRect(this.verticalSpikes[i].x + 2, this.verticalSpikes[i].y + 14, this.verticalSpikes[i].width - 2, this.verticalSpikes[i].height - 14); //
-            //
-            var dir = this.colCheck(this.mainCharacter, this.verticalSpikes[i]);                                                 //
-            //
-            if (dir === "l" || dir === "r") {
-                this.mainCharacterDead = true;                                                                              //
-                this.mainCharacter.velX = 0;                                                                                //
-                this.mainCharacter.jumping = false;                                                                         //
-            } else if (dir === "b") {
-                this.mainCharacter.grounded = true;
-                this.mainCharacter.jumping = false;
-            } else if (dir === "t") {
-                this.mainCharacter.velY *= -1;                                                                              //
-            }                                                                                                               //
+        if (this.mainCharacter.grounded) {
+            this.mainCharacter.velY = 0;
         }
+        this.mainCharacter.x += this.mainCharacter.velX;
+        this.mainCharacter.y += this.mainCharacter.velY;
+    },
+    mainBlocks: function (blocks, color) {
+        this.gameContext.fillStyle = color;
+        var len = blocks.length;
+        for (var i = 0; i < len; i++) {
+            if (blocks[i] != null) {
+                this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14);
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (this.lightningFlag) {
-            this.gameContext.fillStyle = "yellow";
-            for (var i = 0; i < this.lightningOnInterval.length; i++) {                                                                   //
-                this.lightningOnInterval[0].sprite.drawSprite();
-                //
-                var dir = this.colCheck(this.mainCharacter, this.lightningOnInterval[i]);                                                 //
-                //
+                var dir = this.colCheck(this.mainCharacter, blocks[i]);
+
                 if (dir === "l" || dir === "r") {
-                    this.mainCharacterDead = true;                                                                              //
-                    this.mainCharacter.velX = 0;                                                                                //
-                    this.mainCharacter.jumping = false;                                                                         //
+                    this.mainCharacter.velX = 0;
+                    this.mainCharacter.jumping = false;
                 } else if (dir === "b") {
                     this.mainCharacter.grounded = true;
                     this.mainCharacter.jumping = false;
                 } else if (dir === "t") {
-                    this.mainCharacter.velY *= -1;                                                                              //
-                }                                                                                                               //
+                    this.mainCharacter.velY *= -1;
+                }
             }
         }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        for (var i = 0; i < this.movableStepableObjects.length; i++) {
-            var a = this.movableStepableObjects[i];
-            if (a.moveLeft) {
-                a.x -= a.speed;
+    },
+    bottomSpires: function (blocks, color) {
+        this.gameContext.fillStyle = color;
+        var len = blocks.length;
+        for (var i = 0; i < len; i++) {
+            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14);
+
+            var dir = this.colCheck(this.mainCharacter, blocks[i]);
+
+            if (dir === "l" || dir === "r") {
+                this.mainCharacter.velX = 0;
+                this.mainCharacter.jumping = false;
+            } else if (dir === "b") {
+                this.mainCharacter.grounded = true;
+                this.mainCharacter.jumping = false;
+            } else if (dir === "t") {
+                this.mainCharacterDead = true;
+                this.mainCharacter.velY *= -1;
             }
-            else if (a.moveRight) {
-                a.x += a.speed;
+        }
+    },
+    topSpires: function (blocks, color) {
+        this.gameContext.fillStyle = color;
+        var len = blocks.length;
+        for (var i = 0; i < len; i++) {
+            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14); 
+
+            var dir = this.colCheck(this.mainCharacter, blocks[i]);
+
+            if (dir === "l" || dir === "r") {
+                this.mainCharacter.velX = 0;
+                this.mainCharacter.jumping = false;
+            } else if (dir === "b") {
+                this.mainCharacter.grounded = true;
+                this.mainCharacter.jumping = false;
+
+                this.mainCharacterDead = true;
+            } else if (dir === "t") {
+                this.mainCharacter.velY *= -1;
             }
+        }
+    },
+    verticalSpires: function (blocks, flag) {
+        if (flag) {
+            var len = blocks.length;
+            for (var i = 0; i < len; i++) {
+                blocks[i].sprite.drawSprite();
+                var dir = this.colCheck(this.mainCharacter, blocks[i]);
+                if (dir === "l" || dir === "r") {
+                    this.mainCharacterDead = true;
+                    this.mainCharacter.velX = 0;
+                    this.mainCharacter.jumping = false;
+                } else if (dir === "b") {
+                    this.mainCharacter.grounded = true;
+                    this.mainCharacter.jumping = false;
+                } else if (dir === "t") {
+                    this.mainCharacter.velY *= -1;
+                }
+            }
+        }
+    },
+    movableBlocks: function (blocks, color) {
+        this.gameContext.fillStyle = color;
+        var len = blocks.length;
+        for (var i = 0; i < len; i++) {
+            var a = blocks[i];
             a.updatePosition();
-            this.gameContext.fillRect(a.x + 2, a.y + 14, a.width - 2, a.height - 14); //
-            //
+            a.move();
+            this.gameContext.fillRect(a.x + 2, a.y + 14, a.width - 2, a.height - 14);
             var dir = this.colCheck(this.mainCharacter, a);
             //
             if (dir === "l" || dir === "r") {
-                
-                this.mainCharacter.velX = 0;                                                                                
-                this.mainCharacter.jumping = false;                                                                         
+
+                this.mainCharacter.velX = 0;
+                this.mainCharacter.jumping = false;
             } else if (dir === "b") {
-                
+                console.log('hello');
                 this.mainCharacter.grounded = true;
                 this.mainCharacter.jumping = false;
                 if (a.moveLeft) {
@@ -431,23 +409,18 @@ PathFinder = Game.extend({
                 else if (a.moveRight) {
                     this.mainCharacter.velX += a.speed / (261 / 100);//(299 / 100);
                 }
+                else if (a.moveUp) {
+                    this.mainCharacter.y -= a.speed * 2;
+                }
+                else if (a.moveDown) {
+                    this.mainCharacter.y += a.speed / 2;
+                }
 
             } else if (dir === "t") {
-                
+
                 this.mainCharacter.velY *= -1;                                                                              //
             }
         }
-
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (this.mainCharacter.grounded) {
-            this.mainCharacter.velY = 0;
-        }
-        console.log(this.mainCharacter.velX);
-        this.mainCharacter.x += this.mainCharacter.velX;
-        this.mainCharacter.y += this.mainCharacter.velY;
-
-        //this.gameContext.fill();
     },
     colCheck: function (shapeA, shapeB) {
     // get the vectors to check against
