@@ -5,7 +5,7 @@ RadoGame = Game.extend({
 		var game = this;
 
 		this.levels = [];            //array of levels
-		this.levelIndex = 0;
+		this.levelIndex = 2;
 		this.currentLevel = null;	//current level
 		this.passableBlocks = [];	//array of all passable blocks
 		this.impassableBlocks = [];	//array of all impassable blocks
@@ -115,17 +115,19 @@ RadoGame = Game.extend({
 		
 		this.levels[1].sprite = new Sprite(1920, 224, 3, 10, story.sprites[25], this.levels[1], this.gameContext);
 		
-		/*this.levels.push(this.createLevel(
+		this.levels.push(this.createLevel(
 				3,
 				[[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                 [3, 1, 1, 1, 1, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 1, 1, 1, 0, 1, 0, 0, 1, 2, 2, 1, 0, 0, 0, 0, 1, 0, 0, 0],
-                 [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0]]
+                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                 [0, 3, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0],
+                 [0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+                 [0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0],
+                 [0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
                  )
-		);*/
+		);
+
+		this.levels[2].sprite = new Sprite(1920, 224, 3, 5, story.sprites[26], this.levels[2], this.gameContext);
 	},
 	
 	// ====== INSERTING BLOCKS IN MATRIX ======= //

@@ -511,7 +511,7 @@ window.onload = function () {
             
             'source/elf game/spriteLevel1.png',
             'source/elf game/spriteLevel2.png',
-            'source/elf game/spriteLevel1.png',
+            'source/elf game/spriteLevel3.png',
             
             'source/elf game/coinSprite.png',
             
@@ -565,6 +565,6 @@ window.onload = function () {
 
     //elfGame = new RadoGame();
     //elfGame.start();
-    yolo = new PathFinder();
-    yolo.startGame();
+    /*yolo = new PathFinder();
+    yolo.startGame();*/
 };
