@@ -683,7 +683,7 @@ RadoGame = Game.extend({
 		for(i = 0; i < len; i++){
 			this.updateElf(this.currentLevel.elves[i]);
 			if(this.areOverlapping(this.mainCharacter, this.currentLevel.elves[i], 8, 4, 8, 4)){
-				//this.mainCharacter.isCaught = true;
+				this.mainCharacter.isCaught = true;
 			}
 		}
 	},
