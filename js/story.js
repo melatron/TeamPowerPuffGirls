@@ -8,7 +8,7 @@ Story = Class.extend({
             swapPuzzle = new SwapPuzzle();
         this.interactableObjects = new Array();
         this.stopEvents = false;
-        var humanCastle = new ClickPoint(100, 50, 140, 100, "humanCastle",
+        var humanCastle = new ClickPoint(102, -13, 150, 140, "humanCastle",
         													{
         														x: 175,
         														y: 150
@@ -117,6 +117,8 @@ Story = Class.extend({
 
         this.animation = null;
 
+        this.mousePos = {};
+
         this.mainLoop = function () {
             ctx.save();
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -131,6 +133,7 @@ Story = Class.extend({
             //self.hero.drawSpeechBubble();
             self.soundTrack.startNextSong();
             self.checkIfGamePlayed();
+            self.checkIfFocused();
             ctx.restore();
             self.animation = requestAnimationFrame(self.mainLoop);
         };
@@ -143,6 +146,7 @@ Story = Class.extend({
         this.stopEvents = false;
         $('canvas').on('click', this, this.clickEvent);
         $(document).on('keyup', this, this.handleKeyPressed);
+        $(document).on('mousemove', this, this.onMouseMove);
     },
     handleKeyPressed: function (ev) {
         if (!ev.data.stopEvents) {
@@ -179,6 +183,34 @@ Story = Class.extend({
             }
         }
     },
+
+    onMouseMove: function(e){
+        var rect = e.data.mainCanvas.getBoundingClientRect();
+            e.data.mousePos.x = e.clientX - rect.left;
+            e.data.mousePos.y = e.clientY - rect.top;
+    },
+
+    checkIfFocused: function(){
+        var i, temp, len = this.interactableObjects.length;
+
+        for(i = 0; i < len; i++){
+            temp = this.interactableObjects[i];
+            if((this.mousePos.x > temp.x && this.mousePos.x < temp.x + temp.width) && 
+                (this.mousePos.y > temp.y && this.mousePos.y < temp.y + temp.height))
+            {
+                temp.isOnFocus = true;
+                if(temp.spriteGlow){
+                    temp.spriteGlow.drawSprite();
+                }
+            }
+            else{ 
+                temp.isOnFocus = false;
+            }
+        }
+    },
+
+
+
     preloadSprites: function() {
     	//define sprites
     	var heroSpriteUpImage = null, 
@@ -222,7 +254,9 @@ Story = Class.extend({
             brownElfSpriteUpImage = null,
             brownElfSpriteDownImage = null,
             brownElfSpriteLeftImage = null,
-            brownElfSpriteRightImage = null;
+            brownElfSpriteRightImage = null,
+
+            castleGlowImage = null;
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
     	this.sprites.push(heroSpriteDownImage);
@@ -266,6 +300,8 @@ Story = Class.extend({
         this.sprites.push(brownElfSpriteDownImage);
         this.sprites.push(brownElfSpriteLeftImage);
         this.sprites.push(brownElfSpriteRightImage);
+
+        this.sprites.push(castleGlowImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -311,6 +347,8 @@ Story = Class.extend({
         this.orc.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[23], story.orc, ctx);
         this.orc.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[21], story.orc, ctx);
         this.orc.getDestinationDelay = 124;
+
+        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, story.sprites[33], this.interactableObjects[0], ctx);
 	},
     
 	// ==== Portrait preloader ==== //
@@ -520,7 +558,9 @@ window.onload = function () {
             'source/brownElfMoveUp.png',
             'source/brownElfMoveDown.png',
             'source/brownElfMoveLeft.png',
-            'source/brownElfMoveRight.png'
+            'source/brownElfMoveRight.png',
+
+            'source/castleGlowSprite.png'
 
 	);
 	

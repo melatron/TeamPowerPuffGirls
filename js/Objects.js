@@ -88,21 +88,23 @@ SpeakingObject = GameObject.extend({
         this.image = image;
         this.portrait.image = image;
     },
+
     setCoordinates: function (portraitX, portraitY, speechX, speechY) {
         this.portrait.x = portraitX;
         this.portrait.y = portraitY;
         this.speech.x = speechX;
         this.speech.y = speechY;
     },
+
     drawSpeechBubble: function () {
-        if (this.speech.counter == this.speech.textArray.length-1) {
+        if (this.speech.counter == this.speech.textArray.length - 1) {
             this.speech.conversetionEnded = true;
         } else {
             var x = this.speechX,
                 y = this.speechY,
                 r = x + this.speech.maxWidth + 30,
                 b = y + this.bubbleHeight,
-                _that=this;
+                _that = this;
             //this.speech.getSpeech(name);    this should NOT be in the main loop 
             //this.portrait.drawPortrait();
             // Drawing the bubble >>>
@@ -133,6 +135,7 @@ SpeakingObject = GameObject.extend({
             
         }
     },
+
     getSpeech: function (questName) {
         var _that = this;
         $.ajax({
@@ -149,6 +152,7 @@ SpeakingObject = GameObject.extend({
             }
         })
     },
+
     prepareObjectForSpeaking: function (questObject) {
         if (this.name == "hero") {
             this.getSpeech(this.name + questObject.name);
@@ -163,6 +167,7 @@ SpeakingObject = GameObject.extend({
         this.speech.counter = 0;
     }
 });
+
 // ==== INTERACTABLE OBJECT CLASS ==== //
 
 InteractableObject = SpeakingObject.extend({
@@ -172,8 +177,10 @@ InteractableObject = SpeakingObject.extend({
         this.isInteracting = false;
         this.game = game;
         this.isGamePlayed = false;
-
+        this.spriteGlow = null;
+        this.isOnFocus = false;
     },
+
     startGame: function (bonuses) {
         if (!this.game.gameOver) {
             //this.calculateItemBonuses(bonuses);
@@ -184,6 +191,7 @@ InteractableObject = SpeakingObject.extend({
         this.game.addBonuses(bonuses);
     }
 });
+
 // =============== MOVABLE OBJECT CLASS ===================== //
 
 MovableObject = SpeakingObject.extend({
