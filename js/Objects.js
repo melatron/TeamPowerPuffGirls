@@ -178,7 +178,6 @@ InteractableObject = SpeakingObject.extend({
         this.game = game;
         this.isGamePlayed = false;
         this.spriteGlow = null;
-        this.isOnFocus = false;
     },
 
     startGame: function (bonuses) {

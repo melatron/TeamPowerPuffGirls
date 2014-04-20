@@ -14,13 +14,13 @@ Story = Class.extend({
         														y: 150
         													}, squareGame
         	),
-            dwarfCamp = new ClickPoint(622, 68, 100, 50, "dwarfCamp", 
+            dwarfCamp = new ClickPoint(736, -5, 130, 130, "dwarfCamp", 
             												{
             													x: 655,
             													y: 130
             												}, digitGame
             ),
-            treeOfLife = new ClickPoint(70, 377, 100, 100, "treeOfLife",{
+            treeOfLife = new ClickPoint(79, 372, 100, 100, "treeOfLife",{
             													x: 175,
             													y: 350
             												}, elfGame
@@ -38,13 +38,13 @@ Story = Class.extend({
                                                                 y: 345
                                                             }
             ),
-            bandit = new ClickPoint(460, 355, 50, 50, 'banditTavern',
+            bandit = new ClickPoint(448, 310, 100, 150, 'banditTavern',
             												{
             													x: 430,
             													y: 355
             												}
             ),
-            orcCamp = new ClickPoint(365, 5, 100, 100, 'orcCamp', 
+            orcCamp = new ClickPoint(437, 22, 100, 100, 'orcCamp', 
             												{
             													x: 430,
             													y: 140
@@ -198,13 +198,12 @@ Story = Class.extend({
             if((this.mousePos.x > temp.x && this.mousePos.x < temp.x + temp.width) && 
                 (this.mousePos.y > temp.y && this.mousePos.y < temp.y + temp.height))
             {
-                temp.isOnFocus = true;
                 if(temp.spriteGlow){
                     temp.spriteGlow.drawSprite();
                 }
             }
-            else{ 
-                temp.isOnFocus = false;
+            else if(temp.spriteGlow){ 
+                temp.spriteGlow.frameCounter = 6;
             }
         }
     },
@@ -257,6 +256,13 @@ Story = Class.extend({
             brownElfSpriteRightImage = null,
 
             castleGlowImage = null;
+            dwarfCampGlowImage = null;
+            treeGlowImage = null;
+            mageGlowImage = null;
+            dragonGlowImage = null;
+            banditGlowImage = null;
+            orcGlowImage = null;
+
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
     	this.sprites.push(heroSpriteDownImage);
@@ -302,6 +308,12 @@ Story = Class.extend({
         this.sprites.push(brownElfSpriteRightImage);
 
         this.sprites.push(castleGlowImage);
+        this.sprites.push(dwarfCampGlowImage);
+        this.sprites.push(treeGlowImage);
+        this.sprites.push(mageGlowImage);
+        this.sprites.push(dragonGlowImage);
+        this.sprites.push(banditGlowImage);
+        this.sprites.push(orcGlowImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -348,7 +360,13 @@ Story = Class.extend({
         this.orc.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[21], story.orc, ctx);
         this.orc.getDestinationDelay = 124;
 
-        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, story.sprites[33], this.interactableObjects[0], ctx);
+        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 2, story.sprites[33], this.interactableObjects[0], ctx);
+        this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 2, story.sprites[34], this.interactableObjects[1], ctx);
+        this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 2, story.sprites[35], this.interactableObjects[2], ctx);
+        /*this.interactableObjects[3].spriteGlow = new Sprite(850, 100, 10, 2, story.sprites[36], this.interactableObjects[3], ctx);
+        this.interactableObjects[4].spriteGlow = new Sprite(850, 100, 10, 2, story.sprites[37], this.interactableObjects[4], ctx);*/
+        this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 2, story.sprites[38], this.interactableObjects[5], ctx);
+        this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 2, story.sprites[39], this.interactableObjects[6], ctx);
 	},
     
 	// ==== Portrait preloader ==== //
@@ -560,7 +578,13 @@ window.onload = function () {
             'source/brownElfMoveLeft.png',
             'source/brownElfMoveRight.png',
 
-            'source/castleGlowSprite.png'
+            'source/castleGlowSprite.png',
+            'source/dwarfGlowSprite.png',
+            'source/treeGlowSprite.png',
+            'source/treeGlowSprite.png',
+            'source/treeGlowSprite.png',
+            'source/banditCampGlowSprite.png',
+            'source/orcGlowSprite.png'
 
 	);
 	
