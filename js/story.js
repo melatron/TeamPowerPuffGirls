@@ -605,6 +605,6 @@ window.onload = function () {
 
     //elfGame = new RadoGame();
     //elfGame.start();
-    /*yolo = new PathFinder();
-    yolo.startGame();*/
+    yolo = new PathFinder();
+    yolo.startGame();
 };
