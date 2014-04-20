@@ -555,6 +555,104 @@ RadoGame = Game.extend({
 				1,
 				150
 			);
+		level3.elves[0] = this.createElf(
+				'green',
+				32,
+				32,
+				'linear',
+				'vertical',
+				level3.layout[2][2],
+				level3.layout[3][2],
+				0.5
+
+			);
+		level3.elves[1] = this.createElf(
+				'green',
+				32,
+				32,
+				'linear',
+				'vertical',
+				level3.layout[3][3],
+				level3.layout[2][3],
+				1
+			);
+		level3.elves[2] = this.createElf(
+				'brown',
+				32,
+				32,
+				'follow',
+				null,
+				level3.layout[5][3],
+				null,
+				1,
+				70
+			);
+		level3.elves[3] = this.createElf(
+				'brown',
+				32,
+				32,
+				'follow',
+				null,
+				level3.layout[3][8],
+				null,
+				1,
+				120
+			);
+		level3.elves[4] = this.createElf(
+				'brown',
+				32,
+				32,
+				'follow',
+				null,
+				level3.layout[3][11],
+				null,
+				1,
+				120
+			);
+		level3.elves[5] = this.createElf(
+				'brown',
+				32,
+				32,
+				'follow',
+				null,
+				level3.layout[5][8],
+				null,
+				1,
+				120
+			);
+		level3.elves[6] = this.createElf(
+				'brown',
+				32,
+				32,
+				'follow',
+				null,
+				level3.layout[5][16],
+				null,
+				1,
+				30
+			);
+		level3.elves[7] = this.createElf(
+				'brown',
+				32,
+				32,
+				'follow',
+				null,
+				level3.layout[2][18],
+				null,
+				2,
+				70
+			);
+		level3.elves[8] = this.createElf(
+				'brown',
+				32,
+				32,
+				'follow',
+				null,
+				level3.layout[3][18],
+				null,
+				2,
+				70
+			);
 	},
 	
 	createCoins: function(){
@@ -568,7 +666,12 @@ RadoGame = Game.extend({
 		level2.coins[0] = this.createCoin(level2.layout[3][8]);
 		level2.coins[1] = this.createCoin(level2.layout[5][11]);
 		level2.coins[2] = this.createCoin(level2.layout[5][2]);
-		level2.coins[3] = this.createCoin(level2.layout[2][17])
+		level2.coins[3] = this.createCoin(level2.layout[2][17]);
+		level3.coins[0] = this.createCoin(level3.layout[2][3]);
+		level3.coins[1] = this.createCoin(level3.layout[2][6]);
+		level3.coins[2] = this.createCoin(level3.layout[2][8]);
+		level3.coins[3] = this.createCoin(level3.layout[2][11]);
+		level3.coins[4] = this.createCoin(level3.layout[2][13]);
 	},
 	
 	// ============== LEVEL UPDATE METHODS ================= //
@@ -592,7 +695,6 @@ RadoGame = Game.extend({
 			temp = this.currentLevel.coins[i];
 			
 			if(this.areOverlapping(this.mainCharacter, temp, 8, 4, 8, 4)){
-				console.log('pickup');
 				temp.isCollected = true;
 			}
 			if(temp.isCollected == false){
@@ -620,7 +722,7 @@ RadoGame = Game.extend({
 			char = this.mainCharacter;
 		
 		if(type != 'follow'){
-			if(start.x > end.x){
+			if(start.x > end.x || start.y > end.y){
 				var temp = start;
 				start = end;
 				end = temp;
@@ -641,11 +743,11 @@ RadoGame = Game.extend({
 				}
 			}
 			else if(direction == 'vertical'){
-				if(elf.y >= end.y){
+				if(elf.y >= end.y - 10){
 					elf.moveUp = true;
 					elf.moveDown = false;
 				}
-				if(elf.y <= start.y){
+				if(elf.y <= start.y - 10){
 					elf.moveDown = true;
 					elf.moveUp = false;
 				}
@@ -715,13 +817,13 @@ RadoGame = Game.extend({
 
 			
 
-			this.gameContext.save();
+			/*this.gameContext.save();
 			this.gameContext.strokeStyle = 'red';
 			this.gameContext.beginPath();
 			this.gameContext.moveTo(line.x1, line.y1);
 			this.gameContext.lineTo(line.x2, line.y2);
 			this.gameContext.stroke();
-			this.gameContext.restore();
+			this.gameContext.restore();*/
 
 			var isInSight = this.detectCircleIntersection(char, circle);
 
@@ -737,12 +839,12 @@ RadoGame = Game.extend({
 				}
 			}
 
-			this.gameContext.save();
+			/*this.gameContext.save();
 			this.gameContext.strokeStyle = 'green';
 			this.gameContext.beginPath();
 			this.gameContext.arc(circle.x, circle.y, circle.radius, 0, 2*Math.PI);
 			this.gameContext.stroke();
-			this.gameContext.restore();
+			this.gameContext.restore();*/
 
 
 			elf.moveTo(destination);
@@ -1066,6 +1168,7 @@ RadoGame = Game.extend({
 			char.y = this.startingBlock.y;
 			this.deaths++;
 			this.resetCoins();
+			console.log(this.deaths);
 			char.isCaught = false;
 		}
 		//this.gameContext.fillRect(this.mainCharacterBoundingRect.x, this.mainCharacterBoundingRect.y, this.mainCharacterBoundingRect.width, this.mainCharacterBoundingRect.height);
