@@ -26,13 +26,13 @@ Story = Class.extend({
             												}, elfGame
 
             ),
-            mage = new ClickPoint(790, 200, 50, 50, 'mage',
+            mage = new ClickPoint(800, 200, 50, 50, 'mage',
             												{
             													x: 810,
             													y: 250
             												}, swapPuzzle
             ),
-            dragon = new ClickPoint(675, 300, 50, 50, 'dragon',
+            dragon = new ClickPoint(675, 300, 200, 200, 'dragon',
                                                             {
                                                                 x: 660,
                                                                 y: 345
@@ -192,14 +192,15 @@ Story = Class.extend({
 
     checkIfFocused: function(){
         var i, temp, len = this.interactableObjects.length;
-
         for(i = 0; i < len; i++){
             temp = this.interactableObjects[i];
             if((this.mousePos.x > temp.x && this.mousePos.x < temp.x + temp.width) && 
                 (this.mousePos.y > temp.y && this.mousePos.y < temp.y + temp.height))
             {
-                if(temp.spriteGlow){
-                    temp.spriteGlow.drawSprite();
+                if(this.stopEvents == false){
+                    if(temp.spriteGlow){
+                        temp.spriteGlow.drawSprite()
+                    }
                 }
             }
             else if(temp.spriteGlow){ 
@@ -363,8 +364,8 @@ Story = Class.extend({
         this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 2, story.sprites[33], this.interactableObjects[0], ctx);
         this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 2, story.sprites[34], this.interactableObjects[1], ctx);
         this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 2, story.sprites[35], this.interactableObjects[2], ctx);
-        /*this.interactableObjects[3].spriteGlow = new Sprite(850, 100, 10, 2, story.sprites[36], this.interactableObjects[3], ctx);
-        this.interactableObjects[4].spriteGlow = new Sprite(850, 100, 10, 2, story.sprites[37], this.interactableObjects[4], ctx);*/
+        this.interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 1, story.sprites[36], this.interactableObjects[3], ctx);
+        this.interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 1, story.sprites[37], this.interactableObjects[4], ctx);
         this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 2, story.sprites[38], this.interactableObjects[5], ctx);
         this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 2, story.sprites[39], this.interactableObjects[6], ctx);
 	},
@@ -581,8 +582,8 @@ window.onload = function () {
             'source/castleGlowSprite.png',
             'source/dwarfGlowSprite.png',
             'source/treeGlowSprite.png',
-            'source/treeGlowSprite.png',
-            'source/treeGlowSprite.png',
+            'source/defaultGlow.png',
+            'source/defaultGlow.png',
             'source/banditCampGlowSprite.png',
             'source/orcGlowSprite.png'
 
