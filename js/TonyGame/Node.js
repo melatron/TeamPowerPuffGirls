@@ -38,7 +38,7 @@ Node.prototype.addToCell = function () {
         this.node.animate({
             width: "89px",
             height: "55px"
-        }, 100, function myfunction() {
+        }, 40, function myfunction() {
             self.animateNew = false;
         });
     }

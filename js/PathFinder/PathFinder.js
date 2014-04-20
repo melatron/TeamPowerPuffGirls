@@ -1,4 +1,64 @@
-﻿
+﻿PFObjects = Class.extend({
+    init: function (x, y, width, height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+});
+PFMovableObject = PFObjects.extend({
+    init: function (x, y, width, height, speed) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.speed = 3;
+        this.moveLeft = false;
+        this.moveRight = false;
+        this.moveUp = false;
+        this.moveDown = false;
+        this.velX = 0;
+        this.velY = 0;
+    },
+    move: function () {
+        this.x += this.velX;
+        this.y += this.velY;
+    }
+});
+MainCharacters = PFMovableObject.extend({
+    init: function (x, y, width, height, speed, ctx) {
+        this._super(x, y, width, height, speed);
+        this.onObject = false;
+        this.jumping = false;
+        this.grounded = false;
+        this.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this, ctx);
+        this.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this, ctx);
+        this.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this, ctx);
+    },
+    move: function () {
+        if (this.grounded) {
+            this.velY = 0;
+        }
+        this._super.move();
+    },
+    drawCharacter: function () {
+        if (this.moveRight) {
+            this.spriteRight.drawSprite();
+        }
+        else if (this.moveLeft) {
+            this.spriteLeft.drawSprite();
+        }
+        else {
+            this.spriteIdle.drawSprite();
+        }
+    },
+    gravityAndFrictionUpdate: function () {
+        this.velX *= this.friction;
+        this.velY += this.gravity;
+    },
+    
+});
+
 
 
 
@@ -14,6 +74,7 @@ PathFinder = Game.extend({
         this.timeAfterCastingNewBox = 2000;
         this.deaths = 0;
         this.permBoxCounter = 0;
+        this.permBoxMaxAmount = 2;
         this.tempBoxCounter = 0;
         this.lightningFlag = true;
         this.mainCharacter = {
@@ -36,7 +97,7 @@ PathFinder = Game.extend({
         this.gameContext = $('#pathFinderCanvas')[0].getContext('2d');
         this.keys = [];
         this.friction = 0.8;
-        this.gravity = 0.2;
+        this.gravity = 0.4;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
         this.createdBoxesTemp = [];
@@ -69,7 +130,7 @@ PathFinder = Game.extend({
             y: 100,
             width: 120,
             height: 20,
-            speed: 0.5,
+            speed: 2,
             moveLeft: false,
             moveRight: true,
             moveDown: false,
@@ -207,7 +268,7 @@ PathFinder = Game.extend({
 
         if (this.keys[32] && this.flag) {
             var self = this;
-            if (this.permBoxCounter <= 4) {
+            if (this.permBoxCounter < this.permBoxMaxAmount) {
                 this.createdBoxesPerm.push({
                     x: this.mainCharacter.x,
                     y: this.mainCharacter.y,
@@ -400,7 +461,6 @@ PathFinder = Game.extend({
                 this.mainCharacter.velX = 0;
                 this.mainCharacter.jumping = false;
             } else if (dir === "b") {
-                console.log('hello');
                 this.mainCharacter.grounded = true;
                 this.mainCharacter.jumping = false;
                 if (a.moveLeft) {
