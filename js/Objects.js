@@ -4,7 +4,7 @@ var ctx,
 // ============== MAIN OBJECT CLASS ============//
 
 GameObject = Class.extend({
-    init: function (x, y, width, height, name) {
+    init: function (x, y, width, height, name, heroDialogs, questDialogs) {
         this.name = name;
         this.width = width;
         this.height = height;
@@ -70,8 +70,8 @@ Speech = Class.extend({
     }
 });
 SpeakingObject = GameObject.extend({
-    init: function (x, y, width, height, name) {
-        this._super(x, y, width, height, name);
+    init: function (x, y, width, height, name, heroDialogs, questDialogs) {
+        this._super(x, y, width, height, name, heroDialogs, questDialogs);
         this.isSpeaking = false;
         this.image = null;
         this.radius = 30;
@@ -135,44 +135,52 @@ SpeakingObject = GameObject.extend({
             
         }
     },
-
-    getSpeech: function (questName) {
-        var _that = this;
-        $.ajax({
-            url: "serverPart.php",
-            data: {
-                fileName: questName,
-            }
-        }).done(function (data) {
-            var helper = new Array();
-            helper = data.split("|");
-            for (var i = 0; i < helper.length; i++) {                 
-                _that.speech.textArray[i] = helper[i].split("&");
-                console.log(_that.speech.textArray[i]);
-            }
-        })
-    },
-
     prepareObjectForSpeaking: function (questObject) {
         if (this.name == "hero") {
-            this.getSpeech(this.name + questObject.name);
+            this.heroSpeech = questObject.heroSpeech;
             this.speakingTo = questObject;
             this.setDestinaion(questObject);
+            this.isSpeaking = false;
+            this.speech.conversetionEnded = false;
+
+            if (questObject.progress.before) {
+                this.speech.textArray = this.heroSpeech.textBefore;
+            }
+            else if (questObject.progress.after) {
+                this.speech.textArray = this.heroSpeech.textAfter;
+            }
+            else {
+                questObject.progress.done = true;
+                this.speech.textArray = this.heroSpeech.textDone;
+            }
         }
         else {
-            this.getSpeech(this.name);
+
             this.isSpeaking = true;
+
+            if (this.progress.before) {
+                this.speech.textArray = this.questSpeech.textBefore;
+            }
+            else if (this.progress.after) {
+                this.speech.textArray = this.questSpeech.textAfter;
+            }
+            else {
+                this.progress.done = true;
+                this.speech.textArray = this.questSpeech.textDone;
+            }
         }
+
         this.speech.conversetionEnded = false;
         this.speech.counter = 0;
+
     }
 });
 
 // ==== INTERACTABLE OBJECT CLASS ==== //
 
 InteractableObject = SpeakingObject.extend({
-    init: function (x, y, width, height, name, game) {
-        this._super(x, y, width, height, name);
+    init: function (x, y, width, height, name, game, heroDialogs, questDialogs) {
+        this._super(x, y, width, height, name, heroDialogs, questDialogs);
         // Arrival point for Hero alignment
         this.isInteracting = false;
         this.game = game;
@@ -299,17 +307,31 @@ MovableObject = SpeakingObject.extend({
 //=== Click point object ====//
 
 ClickPoint = InteractableObject.extend({
-    init: function (x, y, width, height, name, arrivalPoint, game) {
-        this._super(x, y, width, height, name, game);
+    init: function (x, y, width, height, name, arrivalPoint, game, heroDialogs, questDialogs) {
+        this._super(x, y, width, height, name, game, heroDialogs, questDialogs);
         this.arrivalPoint = arrivalPoint;
+        this.heroSpeech = {
+            textBefore: heroDialogs.before,
+            textAfter: heroDialogs.after,
+            textDone: heroDialogs.done,
+        }
+        this.questSpeech = {
+            textBefore: questDialogs.before,
+            textAfter: questDialogs.after,
+            textDone: questDialogs.done,
+        }
+        this.progress = {
+            before: true,
+            after: false,
+            done: false
+        }
     },
-    
+
     // --- function that checks if the point is clicked --- //
-    
+
     checkIfClicked: function (mouseX, mouseY) {
         // if x between this x and this.x + this.width AND if y between this.y and this.y+this.height
         if ((mouseX > this.x && mouseX < (this.x + this.width)) && (mouseY > this.y && mouseY < (this.y + this.height))) {
-            this.prepareObjectForSpeaking("");
             return true;
         }
     },

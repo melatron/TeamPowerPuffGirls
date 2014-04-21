@@ -12,31 +12,72 @@ Story = Class.extend({
         													{
         														x: 175,
         														y: 150
-        													}, squareGame
+        													}, squareGame,
+            {                  // HERO SPEECH
+                before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
+                after: " ",
+                done: " "
+            },
+            {                  //QUEST SPEECH
+                before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
+                after: " ",
+                done: " "
+            }
         	),
             dwarfCamp = new ClickPoint(736, -5, 130, 130, "dwarfCamp", 
             												{
             													x: 655,
             													y: 130
-            												}, digitGame
+            												}, digitGame,
+            {                  // HERO SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            },
+            {                  //QUEST SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            }
             ),
             treeOfLife = new ClickPoint(79, 372, 100, 100, "treeOfLife",{
             													x: 175,
             													y: 350
-            												}, elfGame
+            }, elfGame,
+            {                  // HERO SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            },
+            {                  //QUEST SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            }
 
             ),
             mage = new ClickPoint(800, 200, 50, 50, 'mage',
             												{
             													x: 810,
             													y: 250
-            												}, swapPuzzle
+            												}, swapPuzzle,
+            {                  // HERO SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            },
+            {                  //QUEST SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            }
             ),
             dragon = new ClickPoint(675, 300, 200, 200, 'dragon',
                                                             {
                                                                 x: 660,
                                                                 y: 345
                                                             }
+     
             ),
             bandit = new ClickPoint(448, 310, 100, 150, 'banditTavern',
             												{
@@ -176,6 +217,7 @@ Story = Class.extend({
                 currentObject = ev.data.interactableObjects[i];
                 if (currentObject.checkIfClicked(mouseX, mouseY)) {
                     ev.data.hero.prepareObjectForSpeaking(currentObject);
+                    currentObject.prepareObjectForSpeaking("");
                     for (var j = 0; j < ev.data.interactableObjects.length; j++) {
                         ev.data.interactableObjects[j].isInteracting = false;           // set all other click points to "inactive"
                     }
@@ -423,41 +465,79 @@ Story = Class.extend({
 	    }
 	},
 	changeSpeaker: function () {
-	    if (this.hero.speakingTo.isInteracting) {
-	        if (!(this.hero.speakingTo.speech.conversetionEnded && this.hero.speech.conversetionEnded)) {
-	            if (this.hero.isSpeaking) {
-	                this.hero.isSpeaking = false;
-	                this.hero.speakingTo.isSpeaking = true;
-	                this.hero.speech.counter += 1;
+	    if (this.hero.speakingTo != null && this.hero.speakingTo.isInteracting) {
+	        console.log(this.hero.speech.conversetionEnded + " " + this.hero.speakingTo.speech.conversetionEnded + " " + this.hero.isSpeaking);
+	        if (this.hero.isSpeaking && !this.hero.speech.conversetionEnded) {
+	            this.hero.isSpeaking = false;
+	            this.hero.speakingTo.isSpeaking = true;
+	            this.hero.speech.counter += 1;
+
+	            if (this.hero.speech.counter == this.hero.speech.textArray.length) {
+	                this.hero.speech.conversetionEnded = true;
 	            }
-	            else {
+	        }
+	        else if (this.hero.speakingTo.isSpeaking && !this.hero.speakingTo.speech.conversetionEnded) {
+	            this.hero.speakingTo.isSpeaking = false;
+	            this.hero.isSpeaking = true;
+	            this.hero.speakingTo.speech.counter += 1;
+
+	            if (this.hero.speakingTo.speech.counter == this.hero.speakingTo.speech.textArray.length) {
+	                this.hero.speakingTo.speech.conversetionEnded = true;
+	            }
+	        }
+	        else if (this.hero.speech.conversetionEnded && this.hero.speakingTo.speech.conversetionEnded && this.hero.speakingTo != null) {
+	            if (this.hero.speakingTo.progress.before) {
 	                this.hero.speakingTo.isSpeaking = false;
-	                this.hero.isSpeaking = true;
-	                this.hero.speakingTo.speech.counter += 1;
-	                console.log(this.hero.speakingTo);
+	                this.hero.isSpeaking = false;
+	                this.hero.speakingTo.progress.before = false;
+	                this.hero.speakingTo.progress.after = true;
+
+	                if (this.hero.speakingTo.game) {
+	                    this.stopEvents = true;
+	                    this.hero.speakingTo.startGame();
+	                }
+	            }
+	            else if (this.hero.speakingTo.progress.after) {
+	                this.hero.speakingTo.progress.after = false;
+	                this.hero.speakingTo.progress.done = true;
+	                this.hero.speakingTo = null;
+	                this.stopEvents = false;
+	            }
+	            else if (this.hero.speakingTo.progress.done) {
+	                this.hero.speakingTo.isSpeaking = false;
+	                this.hero.isSpeaking = false;
+
+	                if (this.hero.speakingTo.game) {
+	                    this.stopEvents = true;
+	                    this.hero.speakingTo.startGame();
+	                }
 	            }
 	        }
 	        else {
-                // Startimg the game after the speech
-	            this.hero.speakingTo.isSpeaking = false;
-	            this.hero.isSpeaking = false;
-	            
-
-	            if (this.hero.speakingTo.game) {
-	                this.stopEvents = true;
-	                this.hero.speakingTo.startGame();
+	            if (this.hero.speakingTo.isSpeaking) {
+	                this.hero.isSpeaking = true;
+	                this.hero.speakingTo.isSpeaking = false;
+	            }
+	            else {
+	                this.hero.speakingTo.isSpeaking = true;
+	                this.hero.isSpeaking = false;
 	            }
 	        }
 	    }
 	},
-
-    // Dani have to write some logic about the conversation after the game is finished.
 	checkIfGamePlayed: function () {
 	    if (this.hero.speakingTo && this.hero.speakingTo != null && this.hero.speakingTo.game) {
-	        if (this.hero.speakingTo.game.gameOver) {
-	            //console.log("laaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaaaaalaaaaaaaaaaaaaaaaaaa");
-	            this.addEvents();
-	            this.hero.speakingTo = null;
+	        if (this.hero.speakingTo.game.gameOver && this.hero.speakingTo.speech.conversetionEnded && this.hero.speech.conversetionEnded) {
+	            this.stopEvents = false;
+	            this.hero.speakingTo.game.gameOver = false;
+
+	            if (this.hero.speakingTo.progress.after) {
+	                this.hero.prepareObjectForSpeaking(this.hero.speakingTo);
+	                this.hero.speakingTo.prepareObjectForSpeaking("");
+	            }
+	            else {
+	                this.hero.speakingTo = null;
+	            }
 	        }
 	    }
 	},
