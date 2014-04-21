@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head lang="en">
+    <meta charset="utf-8">
+    <title>RPG Game</title>
+    <script src="Scripts/jquery-2.1.0.js"></script>
+    <style>
+        #mainMenuWrapper{
+            width: 1024px;
+            height: 768px;
+            background-image: url(source/menu/background.png);
+        }
+        #flash{
+            width: 1024px;
+            height: 768px;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: none;
+        }
+    </style>
+    <script>
+    function flash(){
+        $('#flash').show();
+        $("#flash").fadeIn(50).fadeOut(20).fadeIn(50).fadeOut(1000);
+    }
+    var rain = new Audio();
+    var thunder = new Audio();
+    var intro = new Audio();
+    window.onload = function(){
+        rain.src = 'source/menu/rain.mp3';
+        thunder.src = 'source/menu/thunder.mp3';
+        intro.src = 'source/menu/birthOfAHero.mp3';
+
+        rain.loop = true;
+        rain.play();
+        thunder.loop = true;
+        thunder.play();
+        intro.loop = true;
+        intro.play();
+        setTimeout(flash,700);
+        setTimeout(flash,7000);
+        setTimeout(flash, 16500);
+
+    }
+    </script>
+
+</head>
+<body>
+   <div id="mainMenuWrapper">
+    <div id="flash">
+
+
+
+    </div>
+
+    </div>
+</body>
+</html>
