@@ -12,7 +12,7 @@ PFMovableObject = PFObjects.extend({
         this.y = y;
         this.width = width;
         this.height = height;
-        this.speed = 3;
+        this.speed = speed;
         this.moveLeft = false;
         this.moveRight = false;
         this.moveUp = false;
@@ -23,7 +23,44 @@ PFMovableObject = PFObjects.extend({
     move: function () {
         this.x += this.velX;
         this.y += this.velY;
+        
     }
+});
+MovablePlatforms = PFMovableObject.extend({
+    init: function (x, y, width, height, speed, fromLR, toLR, fromUD, toUD) {
+        this._super(x, y, width, height, speed);
+        this.fromLR = fromLR;
+        this.toLR = toLR;
+        this.fromUD = fromUD;
+        this.toUD = toUD;
+    },
+    updatePosition: function () {
+        if (this.fromUD == 0 && this.toUD == 0) {
+            
+            if (this.x >= this.toLR) {
+                this.moveLeft = true;
+                this.moveRight = false;
+                this.velX = -this.speed;
+            }
+            else if (this.x <= this.fromLR) {
+                this.moveLeft = false;
+                this.moveRight = true;
+                this.velX = this.speed;
+            }
+        }
+        else {
+            if (this.y >= this.toUD) {
+                this.moveUp = true;
+                this.moveDown = false;
+                this.velY = -this.speed
+            }
+            else if (this.y <= this.fromUD) {
+                this.moveUp = false;
+                this.moveDown = true;
+                this.velY = this.speed
+            }
+        }
+    },
 });
 MainCharacters = PFMovableObject.extend({
     init: function (x, y, width, height, speed, ctx) {
@@ -39,7 +76,7 @@ MainCharacters = PFMovableObject.extend({
         if (this.grounded) {
             this.velY = 0;
         }
-        this._super.move();
+        this._super();
     },
     drawCharacter: function () {
         if (this.moveRight) {
@@ -52,10 +89,41 @@ MainCharacters = PFMovableObject.extend({
             this.spriteIdle.drawSprite();
         }
     },
-    gravityAndFrictionUpdate: function () {
-        this.velX *= this.friction;
-        this.velY += this.gravity;
+    gravityAndFrictionUpdate: function (friction, gravity) {
+        this.velX *= friction;
+        this.velY += gravity;
     },
+    listenKeyEvents: function (keys) {
+        if (keys[38]) {
+            // up arrow
+            if (!this.jumping && this.grounded) {
+                this.jumping = true;
+                this.grounded = false;
+                this.velY = -this.speed * 2;
+            }
+        }
+        if (keys[39]) {
+            // right arrow
+            if (this.velX < this.speed) {
+                this.moveRight = true;
+
+                this.velX++;
+            }
+        }
+        else {
+            this.moveRight = false;
+        }
+        if (keys[37]) {
+            // left arrow
+            if (this.velX > -this.speed) {
+                this.moveLeft = true;
+                this.velX--;
+            }
+        }
+        else {
+            this.moveLeft = false;
+        }
+    }
     
 });
 
@@ -77,20 +145,7 @@ PathFinder = Game.extend({
         this.permBoxMaxAmount = 2;
         this.tempBoxCounter = 0;
         this.lightningFlag = true;
-        this.mainCharacter = {
-            x: this.width / 2 + 70,
-            y: this.height - 30,
-            width: 25,
-            height: 18,
-            speed: 3,
-            velX: 0,
-            velY: 0,
-            onObject: false,
-            moveLeft: false,
-            moveRight: false,
-            jumping: false,
-            grounded: false
-        }
+        
 
         this.plot = $("#pathFinder");
         this.canvas = $('#pathFinderCanvas')[0];
@@ -106,11 +161,7 @@ PathFinder = Game.extend({
         this.verticalSpikes = [];
         this.movableStepableObjects = [];
         this.lightningOnInterval = [];
-
-        
-        this.mainCharacter.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this.mainCharacter, this.gameContext);
-        this.mainCharacter.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this.mainCharacter, this.gameContext);
-        this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this.mainCharacter, this.gameContext);
+        this.mainCharacter = new MainCharacters(this.width / 2 + 70, this.height - 30, 25, 18, 3, this.gameContext);
 
         this.lightning = {
             x: this.width / 2,
@@ -125,64 +176,9 @@ PathFinder = Game.extend({
         }
         this.lightning.sprite = new Sprite(320, 220, 8, 2, story.sprites[28], ligObj, this.gameContext);
 
-        this.movableBox = {
-            x: 100,
-            y: 100,
-            width: 120,
-            height: 20,
-            speed: 2,
-            moveLeft: false,
-            moveRight: true,
-            moveDown: false,
-            moveUp: false,
-            updatePosition: function () {
-                if (this.x >= 400) {
-                    this.moveLeft = true;
-                    this.moveRight = false;
-                }
-                else if (this.x <= 100) {
-                    this.moveLeft = false;
-                    this.moveRight = true;
-                }
-            },
-            move: function () {
-                if (this.moveLeft) {
-                    this.x -= this.speed;
-                }
-                else if (this.moveRight) {
-                    this.x += this.speed;
-                }
-            }
-        };
-        this.movableBoxUpDown = {
-            x: 500,
-            y: 50,
-            width: 120,
-            height: 20,
-            speed: 0.5,
-            moveLeft: false,
-            moveRight: false,
-            moveDown: true,
-            moveUp: false,
-            updatePosition: function () {
-                if (this.y >= 200) {
-                    this.moveUp = true;
-                    this.moveDown = false;
-                }
-                else if (this.y <= 50) {
-                    this.moveUp = false;
-                    this.moveDown = true;
-                }
-            },
-            move: function () {
-                if (this.moveUp) {
-                    this.y -= this.speed;
-                }
-                else if (this.moveDown) {
-                    this.y += this.speed;
-                }
-            }
-        };
+        this.movableBox = new MovablePlatforms(20, 50, 120, 20, 1.5, 25, 450, 0, 0);
+
+        this.movableBoxUpDown = new MovablePlatforms(500, 50, 120, 20, 0.5 ,0, 0, 50, 200);
         this.movableStepableObjects.push(this.movableBox);
         this.movableStepableObjects.push(this.movableBoxUpDown);
 
@@ -250,21 +246,11 @@ PathFinder = Game.extend({
             self.gameContext.clearRect(0, 0, self.width, self.height);
             self.colLoopCheck();
             self.checkIfDead();
-            self.drawCharacter();
+            self.mainCharacter.drawCharacter();
             self.animation = requestAnimationFrame(self.update);
         };
     },
     updateCharacter: function () {
-        // check keys
-        if (this.keys[38]) {
-            // up arrow
-            if (!this.mainCharacter.jumping && this.mainCharacter.grounded) {
-                this.mainCharacter.jumping = true;
-                this.mainCharacter.grounded = false;
-                this.mainCharacter.velY = -this.mainCharacter.speed * 2;
-            }
-        }
-        // space
 
         if (this.keys[32] && this.flag) {
             var self = this;
@@ -309,43 +295,9 @@ PathFinder = Game.extend({
             }, self.timeAfterCastingNewBox);
             
         }
-        if (this.keys[39]) {
-            // right arrow
-            if (this.mainCharacter.velX < this.mainCharacter.speed) {
-                this.mainCharacter.moveRight = true;
-
-                this.mainCharacter.velX++;
-            }
-        }
-        else {
-            this.mainCharacter.moveRight = false;
-        }
-        if (this.keys[37]) {
-            // left arrow
-            if (this.mainCharacter.velX > -this.mainCharacter.speed) {
-                this.mainCharacter.moveLeft = true;
-                this.mainCharacter.velX--;
-            }
-        }
-        else {
-            this.mainCharacter.moveLeft = false;
-        }
-
        
-        this.mainCharacter.velX *= this.friction;
-        this.mainCharacter.velY += this.gravity;
-    },
-    drawCharacter: function () {
-        if (this.mainCharacter.moveRight) {
-            this.mainCharacter.spriteRight.drawSprite();
-        }
-        else if (this.mainCharacter.moveLeft) {
-            this.mainCharacter.spriteLeft.drawSprite();
-        }
-        else {
-            this.mainCharacter.spriteIdle.drawSprite();
-            //this.mainCharacter.velX = 0;
-        }
+        this.mainCharacter.listenKeyEvents(this.keys);
+        this.mainCharacter.gravityAndFrictionUpdate(this.friction, this.gravity);
     },
     colLoopCheck: function () {
         this.gameContext.fillStyle = "black";
@@ -359,11 +311,7 @@ PathFinder = Game.extend({
         this.verticalSpires(this.lightningOnInterval, this.lightningFlag);
         this.movableBlocks(this.movableStepableObjects, "yellow");
 
-        if (this.mainCharacter.grounded) {
-            this.mainCharacter.velY = 0;
-        }
-        this.mainCharacter.x += this.mainCharacter.velX;
-        this.mainCharacter.y += this.mainCharacter.velY;
+        this.mainCharacter.move();
     },
     mainBlocks: function (blocks, color) {
         this.gameContext.fillStyle = color;
@@ -451,8 +399,7 @@ PathFinder = Game.extend({
         var len = blocks.length;
         for (var i = 0; i < len; i++) {
             var a = blocks[i];
-            a.updatePosition();
-            a.move();
+            
             this.gameContext.fillRect(a.x + 2, a.y + 14, a.width - 2, a.height - 14);
             var dir = this.colCheck(this.mainCharacter, a);
             //
@@ -480,6 +427,8 @@ PathFinder = Game.extend({
 
                 this.mainCharacter.velY *= -1;                                                                              //
             }
+            a.updatePosition();
+            a.move();
         }
     },
     colCheck: function (shapeA, shapeB) {
