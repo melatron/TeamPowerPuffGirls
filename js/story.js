@@ -184,10 +184,12 @@ Story = Class.extend({
         }
     },
 
-    onMouseMove: function(e){
-        var rect = e.data.mainCanvas.getBoundingClientRect();
+    onMouseMove: function (e) {
+        if (!e.data.stopEvents) {
+            var rect = e.data.mainCanvas.getBoundingClientRect();
             e.data.mousePos.x = e.clientX - rect.left;
             e.data.mousePos.y = e.clientY - rect.top;
+        }
     },
 
     checkIfFocused: function(){

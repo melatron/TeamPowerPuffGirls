@@ -26,16 +26,16 @@
 });*/
 TonyGame = Game.extend({
     init: function () {
+        this.stopEvents = false;
         this.length = 4;
         this.plot = $("#Game6561");
         this.multiplyBy = 2;
         this.matrix = [[0, 0, 0, 0],
-                          [0, 0, 0, 0],
-                          [0, 0, 0, 0],
-                          [0, 0, 0, 0]];
+                       [0, 0, 0, 0],
+                       [0, 0, 0, 0],
+                       [0, 0, 0, 0]];
     },
     start: function () {
-        console.log('hello');
         this.addGameToPlot();
         this.putStartingNumbers();
         this.addEvents();
@@ -43,7 +43,7 @@ TonyGame = Game.extend({
     endGame: function () {
         this.gameOver = true;
         this.removeGameFromPlot();
-        $(document).off();
+        this.stopEvents = true;
     },
     addBonuses: function (bonuses) {
 
@@ -169,39 +169,40 @@ TonyGame = Game.extend({
         setTimeout(function () {
             self.removeNodes();
             self.addNodes();
-            setTimeout(function () { self.addEvents(); }, 50);
+            setTimeout(function () { self.stopEvents = false; }, 50);
         }, 180);
         if (zeroes <= 0) {
             this.gameOver = isOver;
         }
     },
     listenKeyEvents: function (e) {
-        
-        console.log("aa");
-        switch (e.keyCode) {
-          case 37:
-        	  e.preventDefault();
-        	  e.data.move("left");
-              break;
-          case 38:
-        	  e.preventDefault();
-        	  e.data.move("up");
-              break;
-          case 39:
-        	  e.preventDefault();
-        	  e.data.move("right");
-              break;
-          case 40:
-        	  e.preventDefault();
-        	  e.data.move("down");
-              break;
+        if (!e.data.stopEvents) {
+            switch (e.keyCode) {
+                case 37:
+                    e.preventDefault();
+                    e.data.move("left");
+                    break;
+                case 38:
+                    e.preventDefault();
+                    e.data.move("up");
+                    break;
+                case 39:
+                    e.preventDefault();
+                    e.data.move("right");
+                    break;
+                case 40:
+                    e.preventDefault();
+                    e.data.move("down");
+                    break;
+            }
         }
     },
     addEvents: function () {
         $(document).on("keydown", this, this.listenKeyEvents);
     },
     move: function (direction) {
-        $(document).off();
+        //$(document).off();
+        this.stopEvents = true;
         if (this.gameOver) {
             this.endGame();
         }
