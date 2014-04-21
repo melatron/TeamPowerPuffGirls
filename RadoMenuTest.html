@@ -5,6 +5,10 @@
     <title>RPG Game</title>
     <script src="Scripts/jquery-2.1.0.js"></script>
     <style>
+        @font-face {
+            font-family: Morpheus;
+            src: url(source/MORPHEUS.TTF);
+        }
         #mainMenuWrapper{
             width: 1024px;
             height: 768px;
@@ -15,6 +19,25 @@
             height: 768px;
             background-color: rgba(255, 255, 255, 0.8);
             display: none;
+            position: absolute;
+        }
+        .menuCell{
+            font-family: Morpheus;
+            color: rgba(255, 255, 153, 1);
+            line-height: 100px;
+            text-align: center;
+            font-size: 30px;
+            width:210px;
+            height:100px;
+            background-color: rgba(0, 0, 0, 0.5);
+            float:right;
+            margin-top: 20px;
+            margin-right: 20px;
+            border-radius: 10px;
+        }
+        .menuCell:hover{
+            background-color: rgba(184, 184, 148, 1);
+            color: rgba(15, 15, 10, 1);
         }
     </style>
     <script>
@@ -46,11 +69,11 @@
 </head>
 <body>
    <div id="mainMenuWrapper">
-    <div id="flash">
+    <div id="flash"></div>
 
-
-
-    </div>
+    <div class = 'menuCell'> Begin </div>
+    <div class = 'menuCell'> How To Play </div>
+    <div class = 'menuCell'> Hall Of Fame </div>
 
     </div>
 </body>
