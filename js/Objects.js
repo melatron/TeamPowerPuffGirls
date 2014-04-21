@@ -4,7 +4,7 @@ var ctx,
 // ============== MAIN OBJECT CLASS ============//
 
 GameObject = Class.extend({
-    init: function (x, y, width, height, name, heroDialogs, questDialogs) {
+    init: function (x, y, width, height, name) {
         this.name = name;
         this.width = width;
         this.height = height;
@@ -70,8 +70,8 @@ Speech = Class.extend({
     }
 });
 SpeakingObject = GameObject.extend({
-    init: function (x, y, width, height, name, heroDialogs, questDialogs) {
-        this._super(x, y, width, height, name, heroDialogs, questDialogs);
+    init: function (x, y, width, height, name) {
+        this._super(x, y, width, height, name);
         this.isSpeaking = false;
         this.image = null;
         this.radius = 30;
@@ -81,9 +81,11 @@ SpeakingObject = GameObject.extend({
         this.speechX = this.portraitX - 130;
         this.speechY = 280;
         this.portrait = new Portrait(this.portraitX, this.portraitY);
-        this.speech = new Speech(this.speechX + 10   , this.speechY + 20);
+        this.speech = new Speech(this.speechX + 10, this.speechY + 20);
+        
         
     },
+
     setImage: function (image) {
         this.image = image;
         this.portrait.image = image;
@@ -180,12 +182,27 @@ SpeakingObject = GameObject.extend({
 
 InteractableObject = SpeakingObject.extend({
     init: function (x, y, width, height, name, game, heroDialogs, questDialogs) {
-        this._super(x, y, width, height, name, heroDialogs, questDialogs);
+        this._super(x, y, width, height, name);
         // Arrival point for Hero alignment
         this.isInteracting = false;
         this.game = game;
         this.isGamePlayed = false;
         this.spriteGlow = null;
+        this.heroSpeech = {
+            textBefore: heroDialogs.before,
+            textAfter: heroDialogs.after,
+            textDone: heroDialogs.done,
+        };
+        this.questSpeech = {
+            textBefore: questDialogs.before,
+            textAfter: questDialogs.after,
+            textDone: questDialogs.done,
+        };
+        this.progress = {
+            before: true,
+            after: false,
+            done: false
+        };
     },
 
     startGame: function (bonuses) {
@@ -310,21 +327,7 @@ ClickPoint = InteractableObject.extend({
     init: function (x, y, width, height, name, arrivalPoint, game, heroDialogs, questDialogs) {
         this._super(x, y, width, height, name, game, heroDialogs, questDialogs);
         this.arrivalPoint = arrivalPoint;
-        this.heroSpeech = {
-            textBefore: heroDialogs.before,
-            textAfter: heroDialogs.after,
-            textDone: heroDialogs.done,
-        }
-        this.questSpeech = {
-            textBefore: questDialogs.before,
-            textAfter: questDialogs.after,
-            textDone: questDialogs.done,
-        }
-        this.progress = {
-            before: true,
-            after: false,
-            done: false
-        }
+        
     },
 
     // --- function that checks if the point is clicked --- //

@@ -43,7 +43,8 @@ Story = Class.extend({
             treeOfLife = new ClickPoint(79, 372, 100, 100, "treeOfLife",{
             													x: 175,
             													y: 350
-            }, elfGame,
+            },
+            elfGame,
             {                  // HERO SPEECH
                 before: " ",
                 after: " ",
@@ -76,20 +77,50 @@ Story = Class.extend({
                                                             {
                                                                 x: 660,
                                                                 y: 345
-                                                            }
+                                                            },null,
+             {                  // HERO SPEECH
+                 before: " ",
+                 after: " ",
+                 done: " "
+             },
+            {                  //QUEST SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            }
      
             ),
             bandit = new ClickPoint(448, 310, 100, 150, 'banditTavern',
             												{
             													x: 430,
             													y: 355
-            												}
+            												},null,
+             {                  // HERO SPEECH
+                 before: " ",
+                 after: " ",
+                 done: " "
+             },
+            {                  //QUEST SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            }
             ),
             orcCamp = new ClickPoint(437, 22, 100, 100, 'orcCamp', 
             												{
             													x: 430,
             													y: 140
-            												}
+            												},null,
+             {                  // HERO SPEECH
+                 before: " ",
+                 after: " ",
+                 done: " "
+             },
+            {                  //QUEST SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            }
             );
         this.interactableObjects.push(humanCastle);
         this.interactableObjects.push(dwarfCamp);
