@@ -36,7 +36,7 @@
             border-radius: 10px;
         }
         .menuCell:hover{
-            background-color: rgba(184, 184, 148, 1);
+            background-color: rgba(184, 184, 148, 0.8);
             color: rgba(15, 15, 10, 1);
         }
     </style>
@@ -53,9 +53,21 @@
         thunder.src = 'source/menu/thunder.mp3';
         intro.src = 'source/menu/birthOfAHero.mp3';
 
+        thunder.addEventListener('ended', function() {
+            this.currentTime = 0;
+            setTimeout(flash,600);
+            setTimeout(flash,6900);
+            setTimeout(flash, 16400);
+            this.play();
+        }, false);
+
+        rain.addEventListener('ended', function() {
+            this.currentTime = 0;
+            this.play();
+        }, false);
+
         rain.loop = true;
         rain.play();
-        thunder.loop = true;
         thunder.play();
         intro.loop = true;
         intro.play();
