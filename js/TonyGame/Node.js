@@ -165,13 +165,22 @@ Node.prototype.proceed = function () {
         result = this.calculateAnimation();
         switch (this.calculateAnimation().diff) {
             case 1:
-                time = 80;
+                time = 25;
                 break;
             case 2:
-                time = 40;
+                time = 50;
                 break;
             case 3:
-                time = 20;
+                time = 100;
+                break;
+            case -1:
+                time = 25;
+                break;
+            case -2:
+                time = 50;
+                break;
+            case -3:
+                time = 100;
                 break;
             default:
                 break;
@@ -188,15 +197,22 @@ Node.prototype.proceed = function () {
         result = this.calculateAnimation();
         switch (this.calculateAnimation().diff) {
             case 1:
-                time = 80;
+                time = 25;
                 break;
             case 2:
-                time = 40;
+                time = 50;
                 break;
             case 3:
-                time = 20;
+                time = 100;
                 break;
-            default:
+            case -1:
+                time = 25;
+                break;
+            case -2:
+                time = 50;
+                break;
+            case -3:
+                time = 100;
                 break;
         }
         this.node.animate(result.css, time, function () {
