@@ -152,7 +152,7 @@ PathFinder = Game.extend({
         this.gameContext = $('#pathFinderCanvas')[0].getContext('2d');
         this.keys = [];
         this.friction = 0.8;
-        this.gravity = 0.4;
+        this.gravity = 0.35;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
         this.createdBoxesTemp = [];
@@ -161,85 +161,36 @@ PathFinder = Game.extend({
         this.verticalSpikes = [];
         this.movableStepableObjects = [];
         this.lightningOnInterval = [];
-        this.mainCharacter = new MainCharacters(this.width / 2 + 70, this.height - 30, 25, 18, 3, this.gameContext);
+        this.ballOfDeaths = [];
+        this.mainCharacter = new MainCharacters(30, 30, 25, 18, 3, this.gameContext);
 
-        this.lightning = {
-            x: this.width / 2,
-            y: -5,
-            width: 20,
-            height: 220
-        }
-        
+        this.lightning = new PFObjects(this.width / 2, -5, 20, 220);
         var ligObj = {
             x: self.lightning.x - 5,
             y: self.lightning.y        
         }
         this.lightning.sprite = new Sprite(320, 220, 8, 2, story.sprites[28], ligObj, this.gameContext);
 
-        this.movableBox = new MovablePlatforms(20, 50, 120, 20, 1.5, 25, 450, 0, 0);
+        this.movableBox = new MovablePlatforms(20, 50, 100, 20, 1.5, 25, 450, 0, 0);
 
-        this.movableBoxUpDown = new MovablePlatforms(500, 50, 120, 20, 0.5 ,0, 0, 50, 200);
+        this.movableBoxUpDown = new MovablePlatforms(500, 50, 100, 20, 0.5 ,0, 0, 50, 200);
         this.movableStepableObjects.push(this.movableBox);
         this.movableStepableObjects.push(this.movableBoxUpDown);
 
-        this.mapBoxes.push({
-            x: 0,
-            y: 0,
-            width: 10,
-            height: this.height
-        });
-        this.mapBoxes.push({
-            x: 0,
-            y: this.height - 20,
-            width: this.width,
-            height: 50
-        });
-        this.mapBoxes.push({
-            x: this.width - 10,
-            y: 0,
-            width: 50,
-            height: this.height
-        });
-        this.bottomSpikes.push({
-            x: 100,
-            y: 150,
-            width: 100,
-            height: 20
-        });
-        this.topSpikes.push({
-            x: 400,
-            y: 150,
-            width: 100,
-            height: 20
-        });
+        this.mapBoxes.push( new PFObjects(0,0,10, this.height));
+        this.mapBoxes.push(new PFObjects(0,this.height - 20,this.width,50));
+        this.mapBoxes.push(new PFObjects(this.width - 10, 0, 50, this.height));
+        this.ballOfDeaths.push(new PFObjects(100, 25, 20, 20));
+        this.ballOfDeaths.push(new PFObjects(220, 25, 20, 20));
+        this.ballOfDeaths.push(new PFObjects(340, 25, 20, 20));
+        this.ballOfDeaths.push(new PFObjects(460, 25, 20, 20));
+        //
+        //this.ballOfDeaths.push(new PFObjects(515, 25, 30, 10));
+        this.ballOfDeaths.push(new PFObjects(565, 55, 30, 40));
+        this.ballOfDeaths.push(new PFObjects(515, 135, 30, 10));
+        this.ballOfDeaths.push(new PFObjects(565, 175, 30, 40));
         this.lightningOnInterval.push(this.lightning);
 
-        
-
-        //this.mapBoxes.push({
-        //    x: 120,
-        //    y: 10,
-        //    width: 80,
-        //    height: 80
-        //});
-        //this.mapBoxes.push({
-        //    x: 170,
-        //    y: 50,
-        //    width: 80,
-        //    height: 80
-        //});
-        //this.mapBoxes.push({
-        //    x: 220,
-        //    y: 100,
-        //    width: 80,
-        //    height: 80
-        //});
-        //this.mapBoxes.push({
-        //    x: 270,
-        //    y: 150,
-        //    width: 40,
-        //    height: 40
-        //});
         this.animation = null;
         this.update = function () {
             self.updateCharacter();
@@ -310,6 +261,7 @@ PathFinder = Game.extend({
         this.topSpires(this.topSpikes, 'purple');
         this.verticalSpires(this.lightningOnInterval, this.lightningFlag);
         this.movableBlocks(this.movableStepableObjects, "yellow");
+        this.ballOfDeath(this.ballOfDeaths, "orange");
 
         this.mainCharacter.move();
     },
@@ -391,6 +343,26 @@ PathFinder = Game.extend({
                 } else if (dir === "t") {
                     this.mainCharacter.velY *= -1;
                 }
+            }
+        }
+    },
+    ballOfDeath: function (blocks, color) {
+        this.gameContext.fillStyle = color;
+        var len = blocks.length;
+        for (var i = 0; i < len; i++) {
+            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14);
+            var dir = this.colCheck(this.mainCharacter, blocks[i]);
+            if (dir === "l" || dir === "r") {
+                this.mainCharacterDead = true;
+                this.mainCharacter.velX = 0;
+                this.mainCharacter.jumping = false;
+            } else if (dir === "b") {
+                this.mainCharacterDead = true;
+                this.mainCharacter.grounded = true;
+                this.mainCharacter.jumping = false;
+            } else if (dir === "t") {
+                this.mainCharacterDead = true;
+                this.mainCharacter.velY *= -1;
             }
         }
     },
@@ -509,7 +481,7 @@ PathFinder = Game.extend({
         }, n);
     },
     startGame: function () {
-        this.lightningInterval(5000);
+        this.lightningInterval(2500);
         this.addEventListeners();
         this.addGameToPlot();
         this.update();

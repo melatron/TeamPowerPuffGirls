@@ -468,7 +468,7 @@ Sprite = Class.extend({
 				0,
 				this.width / this.frames,
 				this.height,
-				this.object.x - 1,
+				this.object.x - 2,
 				this.object.y,
 				this.width / this.frames,
 				this.height
