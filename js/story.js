@@ -8,6 +8,7 @@ Story = Class.extend({
             swapPuzzle = new SwapPuzzle();
         this.interactableObjects = new Array();
         this.stopEvents = false;
+        this.inGame = false;
         var humanCastle = new ClickPoint(102, -13, 150, 140, "humanCastle",
         													{
         														x: 175,
@@ -15,13 +16,13 @@ Story = Class.extend({
         													}, squareGame,
             {                  // HERO SPEECH
                 before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                after: " ",
-                done: " "
+                after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
+                done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
             },
             {                  //QUEST SPEECH
                 before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                after: " ",
-                done: " "
+                after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
+                done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
             }
         	),
             dwarfCamp = new ClickPoint(736, -5, 130, 130, "dwarfCamp", 
@@ -204,6 +205,7 @@ Story = Class.extend({
             self.checkIfSpeaking();
             //self.hero.drawSpeechBubble();
             self.soundTrack.startNextSong();
+            self.startGameAfterConversation();
             self.checkIfGamePlayed();
             self.checkIfFocused();
             ctx.restore();
@@ -484,13 +486,23 @@ Story = Class.extend({
 	checkIfSpeaking: function () {
 	    for (var i = 0; i < this.interactableObjects.length; i++) {
 	        if (this.interactableObjects[i].isInteracting) {
-	            this.hero.portrait.drawPortrait();
-	            this.interactableObjects[i].portrait.drawPortrait();
 	            if (this.interactableObjects[i].isSpeaking && !(this.interactableObjects[i].speech.conversetionEnded)) {
+	                ctx.save();
+	                ctx.globalAlpha = 0.7;
+	                ctx.fillRect(0, 0, this.mainCanvas.width, this.mainCanvas.height);
+	                ctx.restore();
+	                this.hero.portrait.drawPortrait();
+	                this.interactableObjects[i].portrait.drawPortrait();
 	                this.interactableObjects[i].drawSpeechBubble();
 	            }
 	            else if (this.hero.isSpeaking && !(this.hero.speech.conversetionEnded)) {
+	                ctx.save();
+	                ctx.globalAlpha = 0.7;
+	                ctx.fillRect(0, 0, this.mainCanvas.width, this.mainCanvas.height);
+	                ctx.restore();
 	                this.hero.drawSpeechBubble();
+	                this.hero.portrait.drawPortrait();
+	                this.interactableObjects[i].portrait.drawPortrait();
 	            }
 	        }
 	    }
@@ -516,34 +528,34 @@ Story = Class.extend({
 	                this.hero.speakingTo.speech.conversetionEnded = true;
 	            }
 	        }
-	        else if (this.hero.speech.conversetionEnded && this.hero.speakingTo.speech.conversetionEnded && this.hero.speakingTo != null) {
-	            if (this.hero.speakingTo.progress.before) {
-	                this.hero.speakingTo.isSpeaking = false;
-	                this.hero.isSpeaking = false;
-	                this.hero.speakingTo.progress.before = false;
-	                this.hero.speakingTo.progress.after = true;
+	        //else if (this.hero.speech.conversetionEnded && this.hero.speakingTo.speech.conversetionEnded && this.hero.speakingTo != null) {
+	        //    if (this.hero.speakingTo.progress.before) {
+	        //        this.hero.speakingTo.isSpeaking = false;
+	        //        this.hero.isSpeaking = false;
+	        //        this.hero.speakingTo.progress.before = false;
+	        //        this.hero.speakingTo.progress.after = true;
 
-	                if (this.hero.speakingTo.game) {
-	                    this.stopEvents = true;
-	                    this.hero.speakingTo.startGame();
-	                }
-	            }
-	            else if (this.hero.speakingTo.progress.after) {
-	                this.hero.speakingTo.progress.after = false;
-	                this.hero.speakingTo.progress.done = true;
-	                this.hero.speakingTo = null;
-	                this.stopEvents = false;
-	            }
-	            else if (this.hero.speakingTo.progress.done) {
-	                this.hero.speakingTo.isSpeaking = false;
-	                this.hero.isSpeaking = false;
+	        //        if (this.hero.speakingTo.game) {
+	        //            this.stopEvents = true;
+	        //            this.hero.speakingTo.startGame();
+	        //        }
+	        //    }
+	        //    else if (this.hero.speakingTo.progress.after) {
+	        //        this.hero.speakingTo.progress.after = false;
+	        //        this.hero.speakingTo.progress.done = true;
+	        //        this.hero.speakingTo = null;
+	        //        this.stopEvents = false;
+	        //    }
+	        //    else if (this.hero.speakingTo.progress.done) {
+	        //        this.hero.speakingTo.isSpeaking = false;
+	        //        this.hero.isSpeaking = false;
 
-	                if (this.hero.speakingTo.game) {
-	                    this.stopEvents = true;
-	                    this.hero.speakingTo.startGame();
-	                }
-	            }
-	        }
+	        //        if (this.hero.speakingTo.game) {
+	        //            this.stopEvents = true;
+	        //            this.hero.speakingTo.startGame();
+	        //        }
+	        //    }
+	        //}
 	        else {
 	            if (this.hero.speakingTo.isSpeaking) {
 	                this.hero.isSpeaking = true;
@@ -561,13 +573,44 @@ Story = Class.extend({
 	        if (this.hero.speakingTo.game.gameOver && this.hero.speakingTo.speech.conversetionEnded && this.hero.speech.conversetionEnded) {
 	            this.stopEvents = false;
 	            this.hero.speakingTo.game.gameOver = false;
-
+	            this.inGame = false;
 	            if (this.hero.speakingTo.progress.after) {
 	                this.hero.prepareObjectForSpeaking(this.hero.speakingTo);
 	                this.hero.speakingTo.prepareObjectForSpeaking("");
 	            }
 	            else {
 	                this.hero.speakingTo = null;
+	            }
+	        }
+	    }
+	},
+	startGameAfterConversation: function(){
+	    if (this.hero.speakingTo != null && this.hero.speech.conversetionEnded && this.hero.speakingTo.speech.conversetionEnded && !this.inGame) {
+	        this.inGame = true;
+	        if (this.hero.speakingTo.progress.before) { 
+	            this.hero.speakingTo.isSpeaking = false;
+	            this.hero.isSpeaking = false;
+	            this.hero.speakingTo.progress.before = false;
+	            this.hero.speakingTo.progress.after = true;
+
+	            if (this.hero.speakingTo.game) {
+	                this.stopEvents = true;
+	                this.hero.speakingTo.startGame();
+	            }
+	        }
+	        else if (this.hero.speakingTo.progress.after) {
+	            this.hero.speakingTo.progress.after = false;
+	            this.hero.speakingTo.progress.done = true;
+	            this.hero.speakingTo = null;
+	            this.stopEvents = false;
+	        }
+	        else if (this.hero.speakingTo.progress.done) {
+	            this.hero.speakingTo.isSpeaking = false;
+	            this.hero.isSpeaking = false;
+
+	            if (this.hero.speakingTo.game) {
+	                this.stopEvents = true;
+	                this.hero.speakingTo.startGame();
 	            }
 	        }
 	    }

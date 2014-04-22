@@ -99,16 +99,12 @@ SpeakingObject = GameObject.extend({
     },
 
     drawSpeechBubble: function () {
-        if (this.speech.counter == this.speech.textArray.length - 1) {
-            this.speech.conversetionEnded = true;
-        } else {
             var x = this.speechX,
                 y = this.speechY,
                 r = x + this.speech.maxWidth + 30,
                 b = y + this.bubbleHeight,
                 _that = this;
-            //this.speech.getSpeech(name);    this should NOT be in the main loop 
-            //this.portrait.drawPortrait();
+
             // Drawing the bubble >>>
             ctx.save();
             ctx.beginPath();
@@ -135,7 +131,7 @@ SpeakingObject = GameObject.extend({
             // Drawing the text inside the bubble >>>
             this.speech.drawSpeech();
             
-        }
+        
     },
     prepareObjectForSpeaking: function (questObject) {
         if (this.name == "hero") {
@@ -374,9 +370,6 @@ Heroes = MovableObject.extend({
         this.destinationObject = intObject;
     },
     drawSpeechBubble: function () {
-        if (this.speech.counter == this.speech.textArray.length - 1) {
-            this.speech.conversetionEnded = true;
-        } else {
             this.speech.drawSpeech();
             // Drawing the bubble >>>
             var x = this.speechX,
@@ -412,8 +405,6 @@ Heroes = MovableObject.extend({
             ctx.restore();
             // Drawing the text inside the bubble >>>
             this.speech.drawSpeech();
-
-        }
     }
 
 });
