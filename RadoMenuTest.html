@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>RPG Game</title>
     <script src="Scripts/jquery-2.1.0.js"></script>
+    <script src='Scripts/jquery-ui.js'></script>
     <style>
     	
     	body{
@@ -27,10 +28,8 @@
             position: absolute;
         }
         .menuCell{
-        	background-image: url(source/menu/menuCellBackground.png);
             font-family: Morpheus;
             color: rgba(255, 255, 153, 1);
-            line-height: 100px;
             text-align: center;
             font-size: 30px;
             width: 210px;
@@ -40,25 +39,57 @@
             margin-top: 20px;
             margin-right: 20px;
             border-radius: 10px;
+            position: relative;
+            z-index: 10;
         }
         .menuCell:hover{
         	background-image: url();
             background-color: rgba(184, 184, 148, 0.8);
             color: rgba(15, 15, 10, 1);
+            z-index: 10;
         }
         .dropDown{
-        	background-color: rgba(255, 255, 255, 0.6);
         	width: 210px;
         	height: 100px;
-        	position: relative;
+        	position: absolute;
+            display: none;
         	border-radius: 10px;
+            z-index: 3;
         }
         .dropDownCell{
         	background-image: url(source/menu/menuCellBackground.png);
         	width: 210px;
         	height: 100px;
-        	position:absolute;
+        	position: absolute;
         	top: 0px;
+            display: none;
+            border-radius: 10px;
+            z-index: 5;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        .menuText{
+            text-align: center;
+            position: absolute;
+            width: 220px;
+            height: 100px;
+            line-height: 100px;
+            left: -5px;
+            z-index: 1;
+        }
+        .chains{
+            position:absolute;
+            width:220px;
+            height: 100px;
+            padding-left: 50px;
+            z-index: 1;
+        }
+        .chain{
+            width: 12px;
+            height: 70px;
+            background-image: url(source/menu/chain.png);
+            float: left;
+            margin-right: 90px;
+            z-index: 1;
         }
     </style>
     <script>
@@ -94,7 +125,69 @@
         setTimeout(flash,500);
         setTimeout(flash,6800);
         setTimeout(flash, 16200);
+
+
+
+        $('.howTo').click(function(){
+            $('.howTo .first .dropDownCell').show();
+
+                $('.howTo .first').show().animate({
+                    top: "100px"
+                }, 1000, 'easeOutBounce');
+                $('.howTo .second').animate({
+                    top: "170px"
+                }, 1000, 'easeOutBounce');
+
+                setTimeout(function(){
+                    $('.howTo .second').animate({
+                            top: '270px'
+                        }, 1000, 'easeOutBounce');
+                    $('.howTo .first .dropDownCell').show().animate({
+                        top: "70px"
+                    }, 1000, 'easeOutBounce', function(){
+                        $('.howTo .second').show();
+                        $('.howTo .second .dropDownCell').show()
+                        setTimeout(function(){
+                            $('.howTo .second .dropDownCell').animate({
+                                top: '70px'
+                            }, 1000, 'easeOutBounce');
+                        }, 200);
+                    });
+                }, 200);
+            });
+            $('.highScores').click(function(){
+             console.log('click');
+            $('.highScores .first .dropDownCell').show();
+
+                $('.highScores .first').show().animate({
+                    top: "100px"
+                }, 1000, 'easeOutBounce');
+                $('.highScores .second').animate({
+                    top: "170px"
+                }, 1000, 'easeOutBounce');
+
+                setTimeout(function(){
+                    $('.highScores .second').animate({
+                            top: '270px'
+                        }, 1000, 'easeOutBounce');
+                    $('.highScores .first .dropDownCell').show().animate({
+                        top: "70px"
+                    }, 1000, 'easeOutBounce', function(){
+                        $('.highScores .second').show();
+                        $('.highScores .second .dropDownCell').show()
+                        setTimeout(function(){
+                            $('.highScores .second .dropDownCell').animate({
+                                top: '70px'
+                            }, 1000, 'easeOutBounce');
+                        }, 200);
+                    });
+                }, 200);
+            });
     }
+
+    
+
+
     </script>
 
 </head>
@@ -102,24 +195,76 @@
    <div id="mainMenuWrapper">
     <div id="flash"></div>
 
-    <div class = 'menuCell'> Hall Of Fame </div>
-    <div class = 'menuCell'> How To Play
-    
-    	<div class = 'dropDown'>
-	    	<div class = 'dropDownCell'></div>
-	    		<div class = 'chains'>
-	    			<div class = 'chain'></div>
-	    			<div class = 'chain'></div>
-	    		</div>
-	    	<div class = 'dropDownCell'></div>
-	    		<div class = 'chains'>
-	    			<div class = 'chain'></div>
-	    			<div class = 'chain'></div>
-    			</div>
-    	</div>
-    
+    <div class = 'menuCell highScores'> <div class = 'menuText'>Hall Of Fame </div>
+                <div class = 'dropDown first'>
+
+                    <div class = 'chains'>
+                        <div class = 'chain'></div>
+                        <div class = 'chain'></div>
+                    </div>
+
+                    <div class = 'dropDownCell'></div>
+
+                </div>
+
+                <div class = 'dropDown second'>
+
+                    <div class = 'chains'>
+                        <div class = 'chain'></div>
+                        <div class = 'chain'></div>
+                    </div>
+
+                    <div class = 'dropDownCell'></div>
+
+                </div>
+
     </div>
-    <div class = 'menuCell'> Begin </div>
+        <div class = 'menuCell howTo'> <div class = 'menuText'> How To Play </div>
+    	    	<div class = 'dropDown first'>
+
+                    <div class = 'chains'>
+                        <div class = 'chain'></div>
+                        <div class = 'chain'></div>
+                    </div>
+
+                    <div class = 'dropDownCell'></div>
+
+                </div>
+
+                <div class = 'dropDown second'>
+
+                    <div class = 'chains'>
+                        <div class = 'chain'></div>
+                        <div class = 'chain'></div>
+                    </div>
+
+                    <div class = 'dropDownCell'></div>
+
+                </div>
+        </div>
+    <div class = 'menuCell'> <div class = 'menuText'> Begin </div>
+        <div class = 'dropDown first'>
+
+                        <div class = 'chains'>
+                            <div class = 'chain'></div>
+                            <div class = 'chain'></div>
+                        </div>
+
+                        <div class = 'dropDownCell'></div>
+
+                    </div>
+
+                    <div class = 'dropDown second'>
+
+                        <div class = 'chains'>
+                            <div class = 'chain'></div>
+                            <div class = 'chain'></div>
+                        </div>
+
+                        <div class = 'dropDownCell'></div>
+
+                    </div>
+        </div>
 
     </div>
 </body>
