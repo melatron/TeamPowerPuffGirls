@@ -162,7 +162,7 @@ PathFinder = Game.extend({
         this.movableStepableObjects = [];
         this.lightningOnInterval = [];
         this.ballOfDeaths = [];
-        this.mainCharacter = new MainCharacters(30, 30, 25, 18, 3, this.gameContext);
+        this.mainCharacter = new MainCharacters(30, 140, 25, 18, 3, this.gameContext);
 
         this.lightning = new PFObjects(this.width / 2, -5, 20, 220);
         var ligObj = {
@@ -176,6 +176,16 @@ PathFinder = Game.extend({
         this.movableBoxUpDown = new MovablePlatforms(500, 50, 100, 20, 0.5 ,0, 0, 50, 200);
         this.movableStepableObjects.push(this.movableBox);
         this.movableStepableObjects.push(this.movableBoxUpDown);
+
+        this.topSpikes.push(new PFObjects(10, 55, 500, 20));
+        this.verticalSpikes.push(new PFObjects(10, 60, 5, this.height - 60));
+        this.verticalSpikes.push(new PFObjects(140, 105, 5, this.height - 105));
+
+        this.mapBoxes.push(new PFObjects(140, 130, 50, 90));
+        this.mapBoxes.push(new PFObjects(190, 180, 30, 40));
+        this.bottomSpikes.push(new PFObjects(190, 60, 30, 20));
+        this.topSpikes.push(new PFObjects(190, 170, 30, 10));
+        this.mapBoxes.push(new PFObjects(220, 130, 50, 90));
 
         this.mapBoxes.push( new PFObjects(0,0,10, this.height));
         this.mapBoxes.push(new PFObjects(0,this.height - 20,this.width,50));
@@ -259,7 +269,8 @@ PathFinder = Game.extend({
         this.mainBlocks(this.createdBoxesTemp, 'green');
         this.bottomSpires(this.bottomSpikes, 'red');
         this.topSpires(this.topSpikes, 'purple');
-        this.verticalSpires(this.lightningOnInterval, this.lightningFlag);
+        this.verticalSpires(this.lightningOnInterval, this.lightningFlag, true);
+        this.verticalSpires(this.verticalSpikes, true, false, "yellow");
         this.movableBlocks(this.movableStepableObjects, "yellow");
         this.ballOfDeath(this.ballOfDeaths, "orange");
 
@@ -327,11 +338,17 @@ PathFinder = Game.extend({
             }
         }
     },
-    verticalSpires: function (blocks, flag) {
-        if (flag) {
+    verticalSpires: function (blocks, isShown, isDrown, color) {
+        if (isShown) {
             var len = blocks.length;
             for (var i = 0; i < len; i++) {
-                blocks[i].sprite.drawSprite();
+                if (isDrown) {
+                    blocks[i].sprite.drawSprite();
+                }
+                else {
+                    this.gameContext.fillStyle = color;
+                    this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14);
+                }
                 var dir = this.colCheck(this.mainCharacter, blocks[i]);
                 if (dir === "l" || dir === "r") {
                     this.mainCharacterDead = true;
@@ -453,7 +470,7 @@ PathFinder = Game.extend({
             this.mainCharacter.y = arguments[1];
         }
         else {
-            this.mainCharacter.x = this.width / 2 + 70;
+            this.mainCharacter.x = 40;
             this.mainCharacter.y = this.height - 30;
         }
         this.mainCharacterDead = false;
