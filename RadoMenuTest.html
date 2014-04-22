@@ -41,6 +41,7 @@
             border-radius: 10px;
             position: relative;
             z-index: 10;
+            border: 2px solid rgba(255, 255, 255, 0.5);
         }
         .menuCell:hover{
         	background-image: url();
@@ -100,7 +101,9 @@
     var rain = new Audio();
     var thunder = new Audio();
     var intro = new Audio();
+    var chains = new Audio();
     window.onload = function(){
+    	chains.src = 'source/menu/chains.mp3';
         rain.src = 'source/menu/rain.mp3';
         thunder.src = 'source/menu/thunder.mp3';
         intro.src = 'source/menu/birthOfAHero.mp3';
@@ -118,6 +121,10 @@
             this.play();
         }, false);
         
+        chains.addEventListener('ended', function() {
+            this.currentTime = 0;
+        }, false);
+        
         rain.play();
         thunder.play();
         intro.loop = true;
@@ -129,6 +136,7 @@
 
 
         $('.howTo').click(function(){
+        	chains.play();
             $('.howTo .first .dropDownCell').show();
 
                 $('.howTo .first').show().animate({
@@ -156,6 +164,7 @@
                 }, 200);
             });
             $('.highScores').click(function(){
+            	chains.play();
              console.log('click');
             $('.highScores .first .dropDownCell').show();
 
