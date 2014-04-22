@@ -5,6 +5,11 @@
     <title>RPG Game</title>
     <script src="Scripts/jquery-2.1.0.js"></script>
     <style>
+    	
+    	body{
+    		margin: 0px;
+    		padding: 0px;
+    	}
         @font-face {
             font-family: Morpheus;
             src: url(source/MORPHEUS.TTF);
@@ -22,22 +27,38 @@
             position: absolute;
         }
         .menuCell{
+        	background-image: url(source/menu/menuCellBackground.png);
             font-family: Morpheus;
             color: rgba(255, 255, 153, 1);
             line-height: 100px;
             text-align: center;
             font-size: 30px;
-            width:210px;
-            height:100px;
+            width: 210px;
+            height: 100px;
             background-color: rgba(0, 0, 0, 0.5);
-            float:right;
+            float: right;
             margin-top: 20px;
             margin-right: 20px;
             border-radius: 10px;
         }
         .menuCell:hover{
+        	background-image: url();
             background-color: rgba(184, 184, 148, 0.8);
             color: rgba(15, 15, 10, 1);
+        }
+        .dropDown{
+        	background-color: rgba(255, 255, 255, 0.6);
+        	width: 210px;
+        	height: 100px;
+        	position: relative;
+        	border-radius: 10px;
+        }
+        .dropDownCell{
+        	background-image: url(source/menu/menuCellBackground.png);
+        	width: 210px;
+        	height: 100px;
+        	position:absolute;
+        	top: 0px;
         }
     </style>
     <script>
@@ -55,9 +76,9 @@
 
         thunder.addEventListener('ended', function() {
             this.currentTime = 0;
-            setTimeout(flash,600);
-            setTimeout(flash,6900);
-            setTimeout(flash, 16400);
+            setTimeout(flash,500);
+            setTimeout(flash,6800);
+            setTimeout(flash, 16200);
             this.play();
         }, false);
 
@@ -65,16 +86,14 @@
             this.currentTime = 0;
             this.play();
         }, false);
-
-        rain.loop = true;
+        
         rain.play();
         thunder.play();
         intro.loop = true;
         intro.play();
-        setTimeout(flash,700);
-        setTimeout(flash,7000);
-        setTimeout(flash, 16500);
-
+        setTimeout(flash,500);
+        setTimeout(flash,6800);
+        setTimeout(flash, 16200);
     }
     </script>
 
@@ -83,9 +102,24 @@
    <div id="mainMenuWrapper">
     <div id="flash"></div>
 
-    <div class = 'menuCell'> Begin </div>
-    <div class = 'menuCell'> How To Play </div>
     <div class = 'menuCell'> Hall Of Fame </div>
+    <div class = 'menuCell'> How To Play
+    
+    	<div class = 'dropDown'>
+	    	<div class = 'dropDownCell'></div>
+	    		<div class = 'chains'>
+	    			<div class = 'chain'></div>
+	    			<div class = 'chain'></div>
+	    		</div>
+	    	<div class = 'dropDownCell'></div>
+	    		<div class = 'chains'>
+	    			<div class = 'chain'></div>
+	    			<div class = 'chain'></div>
+    			</div>
+    	</div>
+    
+    </div>
+    <div class = 'menuCell'> Begin </div>
 
     </div>
 </body>

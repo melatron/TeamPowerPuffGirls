@@ -127,7 +127,7 @@ RadoGame = Game.extend({
                  )
 		);
 
-		this.levels[2].sprite = new Sprite(1920, 224, 3, 5, story.sprites[26], this.levels[2], this.gameContext);
+		this.levels[2].sprite = new Sprite(1920, 224, 3, 8, story.sprites[26], this.levels[2], this.gameContext);
 	},
 	
 	// ====== INSERTING BLOCKS IN MATRIX ======= //
