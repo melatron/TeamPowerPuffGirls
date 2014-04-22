@@ -280,7 +280,7 @@ PathFinder = Game.extend({
         this.topSpires(this.topSpikes, 'purple');
         this.verticalSpires(this.lightningOnInterval, this.lightningFlag, true);
         this.verticalSpires(this.verticalSpikes, true, false, "yellow");
-        this.movableBlocks(this.movableStepableObjects, "yellow");
+        this.movableBlocks(this.movableStepableObjects, "green");
         this.ballOfDeath(this.ballOfDeaths, "orange");
 
         this.mainCharacter.move();
