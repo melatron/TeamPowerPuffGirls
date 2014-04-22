@@ -573,8 +573,8 @@ Story = Class.extend({
 	    if (this.hero.speakingTo && this.hero.speakingTo != null && this.hero.speakingTo.game) {
 	        if (this.hero.speakingTo.game.gameOver && this.hero.speakingTo.speech.conversetionEnded && this.hero.speech.conversetionEnded) {
 	            this.stopEvents = false;
+	                this.inGame = false;
 	            this.hero.speakingTo.game.gameOver = false;
-	            this.inGame = false;
 	            if (this.hero.speakingTo.progress.after) {
 	                this.hero.prepareObjectForSpeaking(this.hero.speakingTo);
 	                this.hero.speakingTo.prepareObjectForSpeaking("");
@@ -587,8 +587,9 @@ Story = Class.extend({
 	},
 	startGameAfterConversation: function(){
 	    if (this.hero.speakingTo != null && this.hero.speech.conversetionEnded && this.hero.speakingTo.speech.conversetionEnded && !this.inGame) {
-	        this.inGame = true;
+            console.log("COCK")
 	        if (this.hero.speakingTo.progress.before) { 
+	            this.inGame = true;
 	            this.hero.speakingTo.isSpeaking = false;
 	            this.hero.isSpeaking = false;
 	            this.hero.speakingTo.progress.before = false;
@@ -606,6 +607,7 @@ Story = Class.extend({
 	            this.stopEvents = false;
 	        }
 	        else if (this.hero.speakingTo.progress.done) {
+	            this.inGame = true;
 	            this.hero.speakingTo.isSpeaking = false;
 	            this.hero.isSpeaking = false;
 
