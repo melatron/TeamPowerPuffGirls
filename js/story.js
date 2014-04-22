@@ -13,7 +13,8 @@ Story = Class.extend({
         													{
         														x: 175,
         														y: 150
-        													}, squareGame,
+        													},
+            squareGame,
             {                  // HERO SPEECH
                 before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
                 after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],

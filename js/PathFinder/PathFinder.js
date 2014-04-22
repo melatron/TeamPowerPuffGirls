@@ -137,22 +137,24 @@ PathFinder = Game.extend({
         this.flag = true;
         this.width = 630;
         this.height = 224;
-        this.mainCharacterDead = false;
+        this.plot = $("#pathFinder");
+        this.canvas = $('#pathFinderCanvas')[0];
+        this.gameContext = $('#pathFinderCanvas')[0].getContext('2d');
+        this.keys = [];
+
+
+        this.friction = 0.8;
+        this.gravity = 0.35;
         this.timeExistOnBox = 7000;
         this.timeAfterCastingNewBox = 2000;
+
+        this.mainCharacterDead = false;
         this.deaths = 0;
         this.permBoxCounter = 0;
         this.permBoxMaxAmount = 2;
         this.tempBoxCounter = 0;
         this.lightningFlag = true;
-        
-
-        this.plot = $("#pathFinder");
-        this.canvas = $('#pathFinderCanvas')[0];
-        this.gameContext = $('#pathFinderCanvas')[0].getContext('2d');
-        this.keys = [];
-        this.friction = 0.8;
-        this.gravity = 0.35;
+        this.interval = null;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
         this.createdBoxesTemp = [];
@@ -162,53 +164,13 @@ PathFinder = Game.extend({
         this.movableStepableObjects = [];
         this.lightningOnInterval = [];
         this.ballOfDeaths = [];
-        this.mainCharacter = new MainCharacters(30, 100, 25, 18, 3, this.gameContext);
-
-        this.lightning = new PFObjects(this.width / 2 - 40, -5, 20, 220);
-        var ligObj = {
-            x: self.lightning.x - 5,
-            y: self.lightning.y        
-        }
-        this.lightning.sprite = new Sprite(320, 220, 8, 2, story.sprites[28], ligObj, this.gameContext);
-
-        this.movableStepableObjects.push(new MovablePlatforms(20, 50, 100, 20, 1.5, 25, 450, 0, 0));
-        this.movableStepableObjects.push(new MovablePlatforms(500, 50, 100, 20, 0.5, 0, 0, 50, 200));
-        this.movableStepableObjects.push(new MovablePlatforms(this.width / 2 - 40, 60, 20, 30, 4, 0, 0, 60, 200));
-
-        this.topSpikes.push(new PFObjects(10, 55, 500, 20));
-        this.verticalSpikes.push(new PFObjects(10, 60, 5, this.height - 60));
-        this.verticalSpikes.push(new PFObjects(135, 105, 5, this.height - 105));
 
 
-        this.mapBoxes.push(new PFObjects(140, 130, 40, 90));
-        this.mapBoxes.push(new PFObjects(180, 180, 30, 40));
-        this.bottomSpikes.push(new PFObjects(180, 60, 30, 20));
-        this.topSpikes.push(new PFObjects(180, 170, 30, 10));
-        this.mapBoxes.push(new PFObjects(210, 130, 40, 90));
-        this.topSpikes.push(new PFObjects(250, 200, 80, 40));
-        this.mapBoxes.push(new PFObjects(330, 130, 40, 90));
-        this.mapBoxes.push(new PFObjects(370, 180, 30, 40));
-        this.bottomSpikes.push(new PFObjects(370, 60, 30, 20));
-        this.topSpikes.push(new PFObjects(370, 170, 30, 10));
-        this.mapBoxes.push(new PFObjects(400, 130, 40, 90));
-        this.verticalSpikes.push(new PFObjects(500, 60, 5, 100));
-
-
-        this.mapBoxes.push( new PFObjects(0,0,10, this.height));
-        this.mapBoxes.push(new PFObjects(0,this.height - 20,this.width,50));
-        this.mapBoxes.push(new PFObjects(this.width - 10, 0, 50, this.height));
-        this.ballOfDeaths.push(new PFObjects(100, 25, 20, 20));
-        this.ballOfDeaths.push(new PFObjects(220, 25, 20, 20));
-        this.ballOfDeaths.push(new PFObjects(340, 25, 20, 20));
-        this.ballOfDeaths.push(new PFObjects(460, 25, 20, 20));
-        //
-        //this.ballOfDeaths.push(new PFObjects(515, 25, 30, 10));
-        this.ballOfDeaths.push(new PFObjects(575, 55, 30, 40));
-        this.ballOfDeaths.push(new PFObjects(515, 125, 30, 10));
-        this.ballOfDeaths.push(new PFObjects(575, 175, 30, 40));
-        this.mapBoxes.push(new PFObjects(570, 50, 60, 30));
-        this.mapBoxes.push(new PFObjects(0, 50, 60, 30));
-        this.lightningOnInterval.push(this.lightning);
+        this.startingPoint = {x: null, y:null};
+        this.mainCharacter = new MainCharacters(this.startingPoint.x, this.startingPoint.y, 25, 18, 3, this.gameContext);
+        this.levelsPassed = [false, false, false];
+        this.currentLevel = 0;
+        
 
         this.animation = null;
         this.update = function () {
@@ -479,8 +441,8 @@ PathFinder = Game.extend({
             this.mainCharacter.y = arguments[1];
         }
         else {
-            this.mainCharacter.x = 40;
-            this.mainCharacter.y = this.height - 30;
+            this.mainCharacter.x = this.startingPoint.x;
+            this.mainCharacter.y = this.startingPoint.y;
         }
         this.mainCharacterDead = false;
     },
@@ -502,12 +464,80 @@ PathFinder = Game.extend({
     },
     lightningInterval: function (n) {
         var self = this;
-        window.setInterval(function () {
+        this.interval = window.setInterval(function () {
             self.lightningFlag = !self.lightningFlag;
         }, n);
     },
+    startLevel: function (level) {
+        var self = this;
+        switch (level) {
+            case 0:
+
+                break;
+
+            case 1:
+
+                break;
+
+            case 2:
+                this.lightningInterval(2500);
+                this.startingPoint = { x: 30, y: 170 };
+                this.mainCharacter = new MainCharacters(this.startingPoint.x, this.startingPoint.y, 25, 18, 3, this.gameContext);
+
+                this.lightningFlag = true;
+                this.lightning = new PFObjects(this.width / 2 - 40, -5, 20, 220);
+                var ligObj = {
+                    x: self.lightning.x - 5,
+                    y: self.lightning.y
+                }
+                this.lightning.sprite = new Sprite(320, 220, 8, 2, story.sprites[28], ligObj, this.gameContext);
+
+                this.movableStepableObjects.push(new MovablePlatforms(20, 50, 100, 20, 1.5, 25, 450, 0, 0));
+                this.movableStepableObjects.push(new MovablePlatforms(500, 50, 100, 20, 0.5, 0, 0, 50, 200));
+                this.movableStepableObjects.push(new MovablePlatforms(this.width / 2 - 40, 60, 20, 30, 4, 0, 0, 60, 200));
+
+                this.topSpikes.push(new PFObjects(10, 55, 500, 20));
+                this.verticalSpikes.push(new PFObjects(10, 60, 5, this.height - 60));
+                this.verticalSpikes.push(new PFObjects(135, 105, 5, this.height - 105));
+
+
+                this.mapBoxes.push(new PFObjects(140, 130, 40, 90));
+                this.mapBoxes.push(new PFObjects(180, 180, 30, 40));
+                this.bottomSpikes.push(new PFObjects(180, 60, 30, 20));
+                this.topSpikes.push(new PFObjects(180, 170, 30, 10));
+                this.mapBoxes.push(new PFObjects(210, 130, 40, 90));
+                this.topSpikes.push(new PFObjects(250, 200, 80, 40));
+                this.mapBoxes.push(new PFObjects(330, 130, 40, 90));
+                this.mapBoxes.push(new PFObjects(370, 180, 30, 40));
+                this.bottomSpikes.push(new PFObjects(370, 60, 30, 20));
+                this.topSpikes.push(new PFObjects(370, 170, 30, 10));
+                this.mapBoxes.push(new PFObjects(400, 130, 40, 90));
+                this.verticalSpikes.push(new PFObjects(500, 60, 5, 100));
+
+
+                this.mapBoxes.push(new PFObjects(0, 0, 10, this.height));
+                this.mapBoxes.push(new PFObjects(0, this.height - 20, this.width, 50));
+                this.mapBoxes.push(new PFObjects(this.width - 10, 0, 50, this.height));
+                this.ballOfDeaths.push(new PFObjects(100, 25, 20, 20));
+                this.ballOfDeaths.push(new PFObjects(220, 25, 20, 20));
+                this.ballOfDeaths.push(new PFObjects(340, 25, 20, 20));
+                this.ballOfDeaths.push(new PFObjects(460, 25, 20, 20));
+                //
+                //this.ballOfDeaths.push(new PFObjects(515, 25, 30, 10));
+                this.ballOfDeaths.push(new PFObjects(575, 55, 30, 40));
+                this.ballOfDeaths.push(new PFObjects(515, 125, 30, 10));
+                this.ballOfDeaths.push(new PFObjects(575, 175, 30, 40));
+                this.mapBoxes.push(new PFObjects(570, 50, 60, 30));
+                this.mapBoxes.push(new PFObjects(0, 50, 60, 30));
+                this.lightningOnInterval.push(this.lightning);
+                break;
+            default:
+                break;
+
+        }
+    },
     startGame: function () {
-        this.lightningInterval(2500);
+        this.startLevel(2);
         this.addEventListeners();
         this.addGameToPlot();
         this.update();
