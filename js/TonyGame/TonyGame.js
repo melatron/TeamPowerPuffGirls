@@ -28,6 +28,7 @@ TonyGame = Game.extend({
     init: function () {
         this.stopEvents = false;
         this.length = 4;
+        this.highestValue = 4;
         this.plot = $("#Game6561");
         this.multiplyBy = 2;
         this.matrix = [[0, 0, 0, 0],
@@ -161,6 +162,9 @@ TonyGame = Game.extend({
                             isOver = false;
                         }
                     }
+                    if (this.matrix[i][j].value > this.highestValue) {
+                        this.highestValue = this.matrix[i][j].value;
+                    }
                     this.matrix[i][j].proceed();
                 }
             }
@@ -173,6 +177,8 @@ TonyGame = Game.extend({
         }, 180);
         if (zeroes <= 0) {
             this.gameOver = isOver;
+            this.endGame();
+            console.log(this.highestValue);
         }
     },
     listenKeyEvents: function (e) {
