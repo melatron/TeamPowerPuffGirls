@@ -134,7 +134,8 @@ MainCharacters = PFMovableObject.extend({
 PathFinder = Game.extend({
     init: function () {
         var self = this;
-        this.flag = true;
+        this.canSpawnTemp = true;
+        this.canSpawnPerm = true;
         this.width = 630;
         this.height = 224;
         this.plot = $("#pathFinder");
@@ -146,15 +147,16 @@ PathFinder = Game.extend({
         this.friction = 0.8;
         this.gravity = 0.35;
         this.timeExistOnBox = 7000;
-        this.timeAfterCastingNewBox = 2000;
+        this.timeAfterCastingNewBox = 1000;
 
         this.mainCharacterDead = false;
         this.deaths = 0;
-        this.permBoxCounter = 0;
-        this.permBoxMaxAmount = 2;
-        this.tempBoxCounter = 0;
         this.lightningFlag = true;
         this.interval = null;
+        // Arrays
+        this.checkPointCounter = 0;
+        this.checkPointMaxAmount = 2;
+        this.tempBoxCounter = 0;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
         this.createdBoxesTemp = [];
@@ -164,6 +166,7 @@ PathFinder = Game.extend({
         this.movableStepableObjects = [];
         this.lightningOnInterval = [];
         this.ballOfDeaths = [];
+        this.finishBlocks = [];
 
 
         this.startingPoint = {x: null, y:null};
@@ -183,54 +186,100 @@ PathFinder = Game.extend({
         };
     },
     updateCharacter: function () {
-
-        if (this.keys[32] && this.flag) {
-            var self = this;
-            if (this.permBoxCounter < this.permBoxMaxAmount) {
-                this.createdBoxesPerm.push({
-                    x: this.mainCharacter.x,
-                    y: this.mainCharacter.y,
-                    width: this.mainCharacter.width * (1 / 2),
-                    height: this.mainCharacter.height
-                });
-                this.permBoxCounter++;
+        var self = this;
+        if (this.keys[67] && this.canSpawnPerm) {
+            if (this.checkPointCounter < this.checkPointMaxAmount) {
+                this.createdBoxesPerm.push(new PFObjects(this.mainCharacter.x, this.mainCharacter.y, this.mainCharacter.width * (1 / 2), this.mainCharacter.height));
+                this.checkPointCounter++;
             }
-            else {
-                this.createdBoxesTemp[this.tempBoxCounter] = {
-                    x: this.mainCharacter.x,
-                    y: this.mainCharacter.y,
-                    width: this.mainCharacter.width * (1 / 2),
-                    height: this.mainCharacter.height
-                };
-                
-                var current = self.tempBoxCounter;
-                setTimeout(function () {
-                    self.createdBoxesTemp[current] = null;
-                }, self.timeExistOnBox);
-                this.tempBoxCounter++;
-            }
-            //- Making the reseting after creating box
-            if (this.tempBoxCounter >= 1 && this.createdBoxesTemp[this.tempBoxCounter - 2] != null) {
-                this.resetMainCharacter(this.createdBoxesTemp[this.tempBoxCounter - 2].x, this.createdBoxesTemp[this.tempBoxCounter - 2].y - this.mainCharacter.height);
-            }
-            else if (this.createdBoxesPerm.length > 1) {
-                this.resetMainCharacter(this.createdBoxesPerm[this.createdBoxesPerm.length - 2].x, this.createdBoxesPerm[this.createdBoxesPerm.length - 2].y - this.mainCharacter.height);
+            if (this.createdBoxesPerm.length > 0) {
+                this.resetMainCharacter(this.createdBoxesPerm[this.createdBoxesPerm.length - 1].x, this.createdBoxesPerm[this.createdBoxesPerm.length - 1].y - this.mainCharacter.height);
             }
             else {
                 this.resetMainCharacter();
             }
-            
-            this.flag = false;
-           
+            this.canSpawnPerm = false;
             setTimeout(function () {
-                self.flag = true;
+                self.canSpawnPerm = true;
             }, self.timeAfterCastingNewBox);
-            
         }
-       
+        if (this.keys[32] && this.canSpawnTemp) {
+            this.createdBoxesTemp[this.tempBoxCounter] = new PFObjects(this.mainCharacter.x, this.mainCharacter.y, this.mainCharacter.width * (1 / 2), this.mainCharacter.height);
+
+            var current = self.tempBoxCounter;
+            setTimeout(function () {
+                self.createdBoxesTemp[current] = null;
+            }, self.timeExistOnBox);
+            this.tempBoxCounter++;
+
+            //- Making the reseting after creating box
+            if (this.createdBoxesPerm.length > 0) {
+                this.resetMainCharacter(this.createdBoxesPerm[this.createdBoxesPerm.length - 1].x, this.createdBoxesPerm[this.createdBoxesPerm.length - 1].y - this.mainCharacter.height);
+            }
+            else {
+                this.resetMainCharacter();
+            }
+
+            this.canSpawnTemp = false;
+
+            setTimeout(function () {
+                self.canSpawnTemp = true;
+            }, self.timeAfterCastingNewBox);
+        }
+        
+
         this.mainCharacter.listenKeyEvents(this.keys);
         this.mainCharacter.gravityAndFrictionUpdate(this.friction, this.gravity);
     },
+    //updateCharacter: function () {
+    //
+    //    if (this.keys[32] && this.canSpawnTemp) {
+    //        var self = this;
+    //        if (this.permBoxCounter < this.permBoxMaxAmount) {
+    //            this.createdBoxesPerm.push({
+    //                x: this.mainCharacter.x,
+    //                y: this.mainCharacter.y,
+    //                width: this.mainCharacter.width * (1 / 2),
+    //                height: this.mainCharacter.height
+    //            });
+    //            this.permBoxCounter++;
+    //        }
+    //        else {
+    //            this.createdBoxesTemp[this.tempBoxCounter] = {
+    //                x: this.mainCharacter.x,
+    //                y: this.mainCharacter.y,
+    //                width: this.mainCharacter.width * (1 / 2),
+    //                height: this.mainCharacter.height
+    //            };
+    //            
+    //            var current = self.tempBoxCounter;
+    //            setTimeout(function () {
+    //                self.createdBoxesTemp[current] = null;
+    //            }, self.timeExistOnBox);
+    //            this.tempBoxCounter++;
+    //        }
+    //        //- Making the reseting after creating box
+    //        if (this.tempBoxCounter >= 1 && this.createdBoxesTemp[this.tempBoxCounter - 2] != null) {
+    //            this.resetMainCharacter(this.createdBoxesTemp[this.tempBoxCounter - 2].x, this.createdBoxesTemp[this.tempBoxCounter - 2].y - this.mainCharacter.height);
+    //        }
+    //        else if (this.createdBoxesPerm.length > 1) {
+    //            this.resetMainCharacter(this.createdBoxesPerm[this.createdBoxesPerm.length - 2].x, this.createdBoxesPerm[this.createdBoxesPerm.length - 2].y - this.mainCharacter.height);
+    //        }
+    //        else {
+    //            this.resetMainCharacter();
+    //        }
+    //        
+    //        this.canSpawnTemp = false;
+    //       
+    //        setTimeout(function () {
+    //            self.flag = true;
+    //        }, self.timeAfterCastingNewBox);
+    //        
+    //    }
+    //   
+    //    this.mainCharacter.listenKeyEvents(this.keys);
+    //    this.mainCharacter.gravityAndFrictionUpdate(this.friction, this.gravity);
+    //},
     colLoopCheck: function () {
         this.gameContext.fillStyle = "black";
 
@@ -391,6 +440,30 @@ PathFinder = Game.extend({
             a.move();
         }
     },
+    finishBlock: function (blocks, color) {
+        this.gameContext.fillStyle = color;
+        var len = blocks.length;
+        for (var i = 0; i < len; i++) {
+            if (blocks[i] != null) {
+                this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14);
+
+                var dir = this.colCheck(this.mainCharacter, blocks[i]);
+
+                if (dir === "l" || dir === "r") {
+                    this.finishLevel();
+                    this.mainCharacter.velX = 0;
+                    this.mainCharacter.jumping = false;
+                } else if (dir === "b") {
+                    this.finishLevel();
+                    this.mainCharacter.grounded = true;
+                    this.mainCharacter.jumping = false;
+                } else if (dir === "t") {
+                    this.finishLevel();
+                    this.mainCharacter.velY *= -1;
+                }
+            }
+        }
+    },
     colCheck: function (shapeA, shapeB) {
     // get the vectors to check against
     var vX = (shapeA.x + (shapeA.width / 2)) - (shapeB.x + (shapeB.width / 2)),
@@ -427,10 +500,13 @@ PathFinder = Game.extend({
     },
     checkIfDead: function () {
         if (this.mainCharacterDead) {
-            this.resetMainCharacter();
-            this.createdBoxesPerm = [];
+            if (this.createdBoxesPerm.length > 0) {
+                this.resetMainCharacter(this.createdBoxesPerm[this.createdBoxesPerm.length - 1].x, this.createdBoxesPerm[this.createdBoxesPerm.length - 1].y - this.mainCharacter.height);
+            }
+            else {
+                this.resetMainCharacter();
+            }
             this.createdBoxesTemp = [];
-            this.permBoxCounter = 0;
             this.tempBoxCounder = 0;
             this.deaths++;
         }
@@ -450,13 +526,13 @@ PathFinder = Game.extend({
     addEventListeners: function () {
         var self = this;
         $(document).on('keydown', function (e) {
-            if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39) {
+            if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39 || e.keyCode == 67) {
                 e.preventDefault();
             }
             self.keys[e.keyCode] = true;
         });
         $(document).on('keyup', function (e) {
-            if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39) {
+            if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39 || e.keyCode == 67) {
                 e.preventDefault();
             }
             self.keys[e.keyCode] = false;
@@ -468,21 +544,62 @@ PathFinder = Game.extend({
             self.lightningFlag = !self.lightningFlag;
         }, n);
     },
+    finishLevel: function () {
+        this.currentLevel++;
+        if (this.currentLevel <= 2) {
+            this.startLevel(this.currentLevel);
+        }
+    },
     startLevel: function (level) {
         var self = this;
+        this.checkPointCounter = 0;
+        this.checkPointMaxAmount = 2;
+        this.tempBoxCounter = 0;
+        this.mapBoxes = [];
+        this.createdBoxesPerm = [];
+        this.createdBoxesTemp = [];
+        this.bottomSpikes = [];
+        this.topSpikes = [];
+        this.verticalSpikes = [];
+        this.movableStepableObjects = [];
+        this.lightningOnInterval = [];
+        this.ballOfDeaths = [];
         switch (level) {
             case 0:
+
+                this.startingPoint = { x: 30, y: 170 };
+                this.mapBoxes.push(new PFObjects(0, 0, 10, this.height));
+                this.mapBoxes.push(new PFObjects(0, this.height - 20, this.width, 50));
+                this.mapBoxes.push(new PFObjects(this.width - 10, 0, 50, this.height));
 
                 break;
 
             case 1:
+
+                this.startingPoint = { x: 5, y: 10 };
+                this.mapBoxes.push(new PFObjects(0, 30, 50, this.height));
+                this.mapBoxes.push(new PFObjects(this.width - 50, 30, 50, this.height));
+
+                this.mapBoxes.push(new PFObjects(0, this.height - 20, this.width, 50));
+
+                this.mapBoxes.push(new PFObjects(this.width / 2 - 25, 60, 50, this.height - 60));
+
+                this.mapBoxes.push(new PFObjects(this.width / 4 - 25, -25, 70, this.height - 60));
+
+                this.mapBoxes.push(new PFObjects(this.width - 210, -25, 70, this.height - 60));
+
+                this.topSpikes.push(new PFObjects(50, this.height - 25, this.width - 100, 20));
+                this.topSpikes.push(new PFObjects(this.width / 2 - 25, 60, 50, 20));
+
+
+                this.bottomSpikes.push(new PFObjects(0, -15, 133, 20));
+
 
                 break;
 
             case 2:
                 this.lightningInterval(2500);
                 this.startingPoint = { x: 30, y: 170 };
-                this.mainCharacter = new MainCharacters(this.startingPoint.x, this.startingPoint.y, 25, 18, 3, this.gameContext);
 
                 this.lightningFlag = true;
                 this.lightning = new PFObjects(this.width / 2 - 40, -5, 20, 220);
@@ -535,6 +652,9 @@ PathFinder = Game.extend({
                 break;
 
         }
+
+        this.mainCharacter.x = this.startingPoint.x;
+        this.mainCharacter.y = this.startingPoint.y;
     },
     startGame: function () {
         this.startLevel(2);
