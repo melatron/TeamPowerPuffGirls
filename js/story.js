@@ -587,7 +587,7 @@ Story = Class.extend({
 	},
 	startGameAfterConversation: function(){
 	    if (this.hero.speakingTo != null && this.hero.speech.conversetionEnded && this.hero.speakingTo.speech.conversetionEnded && !this.inGame) {
-            console.log("COCK")
+            
 	        if (this.hero.speakingTo.progress.before) { 
 	            this.inGame = true;
 	            this.hero.speakingTo.isSpeaking = false;
