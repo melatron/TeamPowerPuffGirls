@@ -40,22 +40,18 @@
             margin-right: 20px;
             border-radius: 10px;
             position: relative;
-            z-index: 10;
             border: 2px solid rgba(255, 255, 255, 0.5);
         }
         .menuCell:hover{
-        	background-image: url();
             background-color: rgba(184, 184, 148, 0.8);
             color: rgba(15, 15, 10, 1);
-            z-index: 10;
         }
         .dropDown{
         	width: 210px;
         	height: 100px;
         	position: absolute;
             display: none;
-        	border-radius: 10px;
-            z-index: 3;
+        	border-radius: 10px;\
         }
         .dropDownCell{
         	background-image: url(source/menu/menuCellBackground.png);
@@ -64,8 +60,7 @@
         	position: absolute;
         	top: 0px;
             display: none;
-            border-radius: 10px;
-            z-index: 5;
+            border-radius: 10px;\
             border: 2px solid rgba(255, 255, 255, 0.5);
         }
         .menuText{
@@ -75,14 +70,12 @@
             height: 100px;
             line-height: 100px;
             left: -5px;
-            z-index: 1;
         }
         .chains{
             position:absolute;
             width:220px;
             height: 100px;
             padding-left: 50px;
-            z-index: 1;
         }
         .chain{
             width: 12px;
@@ -90,7 +83,6 @@
             background-image: url(source/menu/chain.png);
             float: left;
             margin-right: 90px;
-            z-index: 1;
         }
     </style>
     <script>
@@ -201,80 +193,62 @@
 
 </head>
 <body>
-   <div id="mainMenuWrapper">
-    <div id="flash"></div>
+	<div id="mainMenuWrapper">
+		<div id="flash"></div>
 
-    <div class = 'menuCell highScores'> <div class = 'menuText'>Hall Of Fame </div>
-                <div class = 'dropDown first'>
+		<div class='menuCell highScores'>
+			<div class='menuText'>Hall Of Fame</div>
+			<div class='dropDown first'>
 
-                    <div class = 'chains'>
-                        <div class = 'chain'></div>
-                        <div class = 'chain'></div>
-                    </div>
+				<div class='chains'>
+					<div class='chain'></div>
+					<div class='chain'></div>
+				</div>
 
-                    <div class = 'dropDownCell'></div>
+				<div class='dropDownCell'></div>
 
-                </div>
+			</div>
 
-                <div class = 'dropDown second'>
+			<div class='dropDown second'>
 
-                    <div class = 'chains'>
-                        <div class = 'chain'></div>
-                        <div class = 'chain'></div>
-                    </div>
+				<div class='chains'>
+					<div class='chain'></div>
+					<div class='chain'></div>
+				</div>
 
-                    <div class = 'dropDownCell'></div>
+				<div class='dropDownCell'></div>
 
-                </div>
+			</div>
 
-    </div>
-        <div class = 'menuCell howTo'> <div class = 'menuText'> How To Play </div>
-    	    	<div class = 'dropDown first'>
+		</div>
+		<div class='menuCell howTo'>
+			<div class='menuText'>How To Play</div>
+			<div class='dropDown first'>
 
-                    <div class = 'chains'>
-                        <div class = 'chain'></div>
-                        <div class = 'chain'></div>
-                    </div>
+				<div class='chains'>
+					<div class='chain'></div>
+					<div class='chain'></div>
+				</div>
 
-                    <div class = 'dropDownCell'></div>
+				<div class='dropDownCell'></div>
 
-                </div>
+			</div>
 
-                <div class = 'dropDown second'>
+			<div class='dropDown second'>
 
-                    <div class = 'chains'>
-                        <div class = 'chain'></div>
-                        <div class = 'chain'></div>
-                    </div>
+				<div class='chains'>
+					<div class='chain'></div>
+					<div class='chain'></div>
+				</div>
 
-                    <div class = 'dropDownCell'></div>
+				<div class='dropDownCell'></div>
 
-                </div>
-        </div>
-    <div class = 'menuCell'> <div class = 'menuText'> Begin </div>
-        <div class = 'dropDown first'>
+			</div>
+		</div>
+		<div class='menuCell begin'>
+			<div class='menuText'>Begin</div>
+		</div>
 
-                        <div class = 'chains'>
-                            <div class = 'chain'></div>
-                            <div class = 'chain'></div>
-                        </div>
-
-                        <div class = 'dropDownCell'></div>
-
-                    </div>
-
-                    <div class = 'dropDown second'>
-
-                        <div class = 'chains'>
-                            <div class = 'chain'></div>
-                            <div class = 'chain'></div>
-                        </div>
-
-                        <div class = 'dropDownCell'></div>
-
-                    </div>
-        </div>
-
-    </div>
+	</div>
 </body>
 </html>

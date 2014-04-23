@@ -746,7 +746,141 @@ Game = Class.extend({
 
     getReward: function (item) {            //item - the name of the item (string)
 
-        story.inventory.getItem(item)
+        story.inventory.getItem(item);
 
     }
+});
+
+Menu = Class.extend({
+	init: function(){
+		this.mainWrapper = $('#mainMenuWrapper');
+		this.menuCells = [{
+			class: '.highScores',
+			isExpanded: false
+		}, {
+			class: '.howTo',
+			isExpanded: false
+		}];
+		
+		this.flash = $('#flash');
+		
+		this.rainSound = null;
+		this.music = null;
+		this.thunderSound = null;
+		this.chainSound = null;
+	},
+	
+	initializeMenu: function(){
+		this.addAnimations(0);
+		this.addAnimations(1);
+		this.manageSounds();
+	},
+	
+	addStartEvent: function(){
+		var elem = $('.menuCell.begin');
+		
+		elem.on('click', this, this.startGame);
+	},
+	
+	startGame: function(e){
+		
+		e.data.hideMenu();
+		
+		canvas = $("#canvas")[0];
+		ctx = canvas.getContext('2d');
+		story = new Story();
+		story.checkRequestAnimationFrame();
+
+		story.preloadEverything();
+
+		story.inventory.getItem('axe');
+		story.inventory.getItem('bow');
+		story.inventory.getItem('sword');
+		
+	    story.addEvents();
+	    
+	    story.mainLoop();
+
+	    //game = new TonyGame();
+	    //game.start();
+	    //elfGame = new RadoGame();
+	    //elfGame.start();
+	    yolo = new PathFinder();
+	    yolo.startGame();
+	},
+	
+	manageSounds: function(){
+		this.rainSound.on('ended', this, function(e){
+			e.data.rainSound.currentTime = 0;
+			e.data.rainSound.play();
+		});
+		
+		this.chainSound.on('ended', this, function(e){
+			e.data.chainSound.currentTime = 0;
+		});
+		
+		this.thunderSound.on('ended', this, function(e){
+			e.data.rainSound.currentTime = 0;
+			e.data.rainSound.play();
+		});
+	},
+	
+	hideMenu: function(){
+		this.mainWrapper.fadeOut(2000);
+	},
+	
+	flash: function(){
+		this.flash.show().fadeIn(50).fadeOut(20).fadeIn(50).fadeOut(1000);
+	},
+	
+	addAnimations: function(index){
+		var elem = this.menuCells[index].class;
+	
+		$(elem).on('click', function(){
+			if(this.menuCells[index].isExpanded == false){
+				
+				this.chainSound.play();
+				
+				$(elem + ' .first .dropDownCell').show();
+
+	            $(elem + ' .first').show().animate({
+	                top: "100px"
+	            }, 1000, 'easeOutBounce');
+	            $(elem + '.second').animate({
+	                top: "170px"
+	            }, 1000, 'easeOutBounce');
+
+	            setTimeout(function(){
+	                $(elem + ' .second').animate({
+	                        top: '270px'
+	                    }, 1000, 'easeOutBounce');
+	                $(elem + ' .first .dropDownCell').show().animate({
+	                    top: "70px"
+	                }, 1000, 'easeOutBounce', function(){
+	                    $(elem + ' .second').show();
+	                    $(elem + ' .second .dropDownCell').show()
+	                    setTimeout(function(){
+	                        $(elem + ' .second .dropDownCell').animate({
+	                            top: '70px'
+	                        }, 1000, 'easeOutBounce');
+	                    }, 200);
+	                });
+	            }, 200);
+			}
+		});
+		
+		$(elem).hover(function(e){
+			if(this.menuCells[index].isExpanded == false){
+				$(elem).css({
+					'background-color': 'rgba(184, 184, 148, 0.8)',
+					'color': 'rgba(15, 15, 10, 1)'
+				});
+			}
+		}, function(e){
+			$(elem).css({
+				'background-color': 'rgba(0, 0, 0, 0.5)',
+				'color': 'rgba(255, 255, 153, 1)'
+			});
+		});
+	}
 });

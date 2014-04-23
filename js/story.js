@@ -666,6 +666,90 @@ Story = Class.extend({
             })();
 
         }
+    },
+    
+    preloadEverything: function(){
+    	this.preloadSprites(
+    			'source/heroMoveUp.png',
+    			'source/heroMoveDown.png',
+    			'source/heroMoveLeft.png',
+    			'source/heroMoveRight.png',
+    			
+    			'source/elderMoveUp.png',
+    			'source/elderMoveDown.png',
+    			'source/elderMoveLeft.png',
+    			'source/elderMoveRight.png',
+    			
+                'source/dragonMoveUp.png',
+                'source/dragonMoveDown.png',
+                'source/dragonMoveLeft.png',
+                'source/dragonMoveRight.png',
+                
+                'source/elfMoveUp.png',
+                'source/elfMoveDown.png',
+                'source/elfMoveLeft.png',
+                'source/elfMoveRight.png',
+                
+                'source/banditMoveUp.png',
+                'source/banditMoveDown.png',
+                'source/banditMoveLeft.png',
+                'source/banditMoveRight.png',
+                
+                'source/orcMoveUp.png',
+                'source/orcMoveDown.png',
+                'source/orcMoveLeft.png',
+                'source/orcMoveRight.png',
+                
+                'source/elf game/spriteLevel1.png',
+                'source/elf game/spriteLevel2.png',
+                'source/elf game/spriteLevel3.png',
+                
+                'source/elf game/coinSprite.png',
+                
+                'source/lightning_width40px.png',
+
+                'source/brownElfMoveUp.png',
+                'source/brownElfMoveDown.png',
+                'source/brownElfMoveLeft.png',
+                'source/brownElfMoveRight.png',
+
+                'source/castleGlowSprite.png',
+                'source/dwarfGlowSprite.png',
+                'source/treeGlowSprite.png',
+                'source/defaultGlow.png',
+                'source/defaultGlow.png',
+                'source/banditCampGlowSprite.png',
+                'source/orcGlowSprite.png'
+
+    	);
+    	
+    	this.preloadPortraits(
+    		'source/heroPortrait.png',
+    		'source/elderPortrait.png',
+    		'source/elfPortrait.png',
+    		'source/dwarfPortrait.png',
+    		'source/kingPortrait.png',
+            'source/banditPortrait.png',
+            'source/dragonPortrait.png',
+            'source/orcPortrait.png'
+    	);
+    	this.soundTrack.preloadMainSounds(
+            'music/Dirt.mp3',
+            'music/Grass.mp3',
+            'music/Rough.mp3',
+            'music/Swamp.mp3',
+            'music/Water.mp3',
+            'music/Snow.mp3',
+            'music/ElementalMetropolis.mp3',
+            'music/Sand.mp3',
+            'music/Volcanic.mp3',
+            'music/Wizards.mp3',
+            'music/ElvesTown.mp3',
+            'music/Necropolis.mp3',
+            'music/KnightsFortress.mp3',
+            'music/ChaosCity.mp3'
+        );
+    	this.soundTrack.preloadQuestSounds('source/rada.mp3');
     }
 });
 
@@ -685,108 +769,18 @@ window.onload = function () {
 	story = new Story();
 	story.checkRequestAnimationFrame();
 
-	
-	
-	
+	story.preloadEverything();
 
 	story.inventory.getItem('axe');
 	story.inventory.getItem('bow');
 	story.inventory.getItem('sword');
-
-
-	story.preloadSprites(
-			'source/heroMoveUp.png',
-			'source/heroMoveDown.png',
-			'source/heroMoveLeft.png',
-			'source/heroMoveRight.png',
-			
-			'source/elderMoveUp.png',
-			'source/elderMoveDown.png',
-			'source/elderMoveLeft.png',
-			'source/elderMoveRight.png',
-			
-            'source/dragonMoveUp.png',
-            'source/dragonMoveDown.png',
-            'source/dragonMoveLeft.png',
-            'source/dragonMoveRight.png',
-            
-            'source/elfMoveUp.png',
-            'source/elfMoveDown.png',
-            'source/elfMoveLeft.png',
-            'source/elfMoveRight.png',
-            
-            'source/banditMoveUp.png',
-            'source/banditMoveDown.png',
-            'source/banditMoveLeft.png',
-            'source/banditMoveRight.png',
-            
-            'source/orcMoveUp.png',
-            'source/orcMoveDown.png',
-            'source/orcMoveLeft.png',
-            'source/orcMoveRight.png',
-            
-            'source/elf game/spriteLevel1.png',
-            'source/elf game/spriteLevel2.png',
-            'source/elf game/spriteLevel3.png',
-            
-            'source/elf game/coinSprite.png',
-            
-            'source/lightning_width40px.png',
-
-            'source/brownElfMoveUp.png',
-            'source/brownElfMoveDown.png',
-            'source/brownElfMoveLeft.png',
-            'source/brownElfMoveRight.png',
-
-            'source/castleGlowSprite.png',
-            'source/dwarfGlowSprite.png',
-            'source/treeGlowSprite.png',
-            'source/defaultGlow.png',
-            'source/defaultGlow.png',
-            'source/banditCampGlowSprite.png',
-            'source/orcGlowSprite.png'
-
-	);
 	
-	story.preloadPortraits(
-		'source/heroPortrait.png',
-		'source/elderPortrait.png',
-		'source/elfPortrait.png',
-		'source/dwarfPortrait.png',
-		'source/kingPortrait.png',
-        'source/banditPortrait.png',
-        'source/dragonPortrait.png',
-        'source/orcPortrait.png'
-	);
-	story.soundTrack.preloadMainSounds(
-        'music/Dirt.mp3',
-        'music/Grass.mp3',
-        'music/Rough.mp3',
-        'music/Swamp.mp3',
-        'music/Water.mp3',
-        'music/Snow.mp3',
-        'music/ElementalMetropolis.mp3',
-        'music/Sand.mp3',
-        'music/Volcanic.mp3',
-        'music/Wizards.mp3',
-        'music/ElvesTown.mp3',
-        'music/Necropolis.mp3',
-        'music/KnightsFortress.mp3',
-        'music/ChaosCity.mp3'
-    );
-	story.soundTrack.preloadQuestSounds('source/rada.mp3');
     story.addEvents();
- //   mainLoop = setInterval(story.mainLoop, 30);
-    story.mainLoop();
     
+    story.mainLoop();
 
     //game = new TonyGame();
     //game.start();
-     //window.addEventsListener('keydown', listenKeyEvents, false);
-     //window.addEventsListener('keyup', listenKeyEvents, false);
-     //game.putFirstTwoRandomNumbers();
-
-
     //elfGame = new RadoGame();
     //elfGame.start();
     yolo = new PathFinder();
