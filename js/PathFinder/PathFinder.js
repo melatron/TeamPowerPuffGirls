@@ -68,6 +68,7 @@ MainCharacters = PFMovableObject.extend({
         this.onObject = false;
         this.jumping = false;
         this.grounded = false;
+        this.gameContext = ctx;
         this.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this, ctx);
         this.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this, ctx);
         this.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this, ctx);
@@ -88,6 +89,8 @@ MainCharacters = PFMovableObject.extend({
         else {
             this.spriteIdle.drawSprite();
         }
+        this.gameContext.fillStyle = "black";
+        this.gameContext.fillRect(this.x, this.y , this.width, this.height);
     },
     gravityAndFrictionUpdate: function (friction, gravity) {
         this.velX *= friction;
@@ -147,7 +150,7 @@ PathFinder = Game.extend({
         this.friction = 0.8;
         this.gravity = 0.35;
         this.timeExistOnBox = 7000;
-        this.timeAfterCastingNewBox = 1000;
+        this.timeAfterCastingNewBox = 1500;
 
         this.mainCharacterDead = false;
         this.deaths = 0;
@@ -155,7 +158,7 @@ PathFinder = Game.extend({
         this.interval = null;
         // Arrays
         this.checkPointCounter = 0;
-        this.checkPointMaxAmount = 2;
+        this.checkPointMaxAmount = 10;
         this.tempBoxCounter = 0;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
@@ -168,9 +171,11 @@ PathFinder = Game.extend({
         this.ballOfDeaths = [];
         this.finishBlocks = [];
 
+        this.score = 0;
+
 
         this.startingPoint = {x: null, y:null};
-        this.mainCharacter = new MainCharacters(this.startingPoint.x, this.startingPoint.y, 25, 18, 3, this.gameContext);
+        this.mainCharacter = new MainCharacters(this.startingPoint.x, this.startingPoint.y, 22, 15, 3, this.gameContext);
         this.levelsPassed = [false, false, false];
         this.currentLevel = 0;
         
@@ -189,11 +194,11 @@ PathFinder = Game.extend({
         var self = this;
         if (this.keys[67] && this.canSpawnPerm) {
             if (this.checkPointCounter < this.checkPointMaxAmount) {
-                this.createdBoxesPerm.push(new PFObjects(this.mainCharacter.x, this.mainCharacter.y, this.mainCharacter.width * (1 / 2), this.mainCharacter.height));
+                this.createdBoxesPerm.push(new PFObjects(this.mainCharacter.x, this.mainCharacter.y + 10, this.mainCharacter.width * (1 / 2), this.mainCharacter.height));
                 this.checkPointCounter++;
             }
-            if (this.createdBoxesPerm.length > 0) {
-                this.resetMainCharacter(this.createdBoxesPerm[this.createdBoxesPerm.length - 1].x, this.createdBoxesPerm[this.createdBoxesPerm.length - 1].y - this.mainCharacter.height);
+            if (this.createdBoxesPerm.length > 1) {
+                this.resetMainCharacter(this.createdBoxesPerm[this.createdBoxesPerm.length - 2].x, this.createdBoxesPerm[this.createdBoxesPerm.length - 2].y - this.mainCharacter.height);
             }
             else {
                 this.resetMainCharacter();
@@ -204,7 +209,7 @@ PathFinder = Game.extend({
             }, self.timeAfterCastingNewBox);
         }
         if (this.keys[32] && this.canSpawnTemp) {
-            this.createdBoxesTemp[this.tempBoxCounter] = new PFObjects(this.mainCharacter.x, this.mainCharacter.y, this.mainCharacter.width * (1 / 2), this.mainCharacter.height);
+            this.createdBoxesTemp[this.tempBoxCounter] = new PFObjects(this.mainCharacter.x, this.mainCharacter.y + 10, this.mainCharacter.width * (1 / 2), this.mainCharacter.height);
 
             var current = self.tempBoxCounter;
             setTimeout(function () {
@@ -293,7 +298,7 @@ PathFinder = Game.extend({
         this.verticalSpires(this.verticalSpikes, true, false, "yellow");
         this.movableBlocks(this.movableStepableObjects, "green");
         this.ballOfDeath(this.ballOfDeaths, "orange");
-
+        this.finishBlock(this.finishBlocks, "Maroon")
         this.mainCharacter.move();
     },
     mainBlocks: function (blocks, color) {
@@ -301,7 +306,7 @@ PathFinder = Game.extend({
         var len = blocks.length;
         for (var i = 0; i < len; i++) {
             if (blocks[i] != null) {
-                this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14);
+                this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
 
                 var dir = this.colCheck(this.mainCharacter, blocks[i]);
 
@@ -321,7 +326,7 @@ PathFinder = Game.extend({
         this.gameContext.fillStyle = color;
         var len = blocks.length;
         for (var i = 0; i < len; i++) {
-            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14);
+            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
 
             var dir = this.colCheck(this.mainCharacter, blocks[i]);
 
@@ -341,7 +346,7 @@ PathFinder = Game.extend({
         this.gameContext.fillStyle = color;
         var len = blocks.length;
         for (var i = 0; i < len; i++) {
-            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14); 
+            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17); 
 
             var dir = this.colCheck(this.mainCharacter, blocks[i]);
 
@@ -367,7 +372,7 @@ PathFinder = Game.extend({
                 }
                 else {
                     this.gameContext.fillStyle = color;
-                    this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14);
+                    this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
                 }
                 var dir = this.colCheck(this.mainCharacter, blocks[i]);
                 if (dir === "l" || dir === "r") {
@@ -387,7 +392,7 @@ PathFinder = Game.extend({
         this.gameContext.fillStyle = color;
         var len = blocks.length;
         for (var i = 0; i < len; i++) {
-            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14);
+            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
             var dir = this.colCheck(this.mainCharacter, blocks[i]);
             if (dir === "l" || dir === "r") {
                 this.mainCharacterDead = true;
@@ -409,7 +414,7 @@ PathFinder = Game.extend({
         for (var i = 0; i < len; i++) {
             var a = blocks[i];
             
-            this.gameContext.fillRect(a.x + 2, a.y + 14, a.width - 2, a.height - 14);
+            this.gameContext.fillRect(a.x + 2, a.y + 17, a.width - 2, a.height - 17);
             var dir = this.colCheck(this.mainCharacter, a);
             //
             if (dir === "l" || dir === "r") {
@@ -445,7 +450,7 @@ PathFinder = Game.extend({
         var len = blocks.length;
         for (var i = 0; i < len; i++) {
             if (blocks[i] != null) {
-                this.gameContext.fillRect(blocks[i].x, blocks[i].y + 14, blocks[i].width, blocks[i].height - 14);
+                this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
 
                 var dir = this.colCheck(this.mainCharacter, blocks[i]);
 
@@ -549,11 +554,14 @@ PathFinder = Game.extend({
         if (this.currentLevel <= 2) {
             this.startLevel(this.currentLevel);
         }
+        else {
+            this.endGame();
+        }
     },
     startLevel: function (level) {
         var self = this;
         this.checkPointCounter = 0;
-        this.checkPointMaxAmount = 2;
+        this.checkPointMaxAmount = 10;
         this.tempBoxCounter = 0;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
@@ -564,13 +572,38 @@ PathFinder = Game.extend({
         this.movableStepableObjects = [];
         this.lightningOnInterval = [];
         this.ballOfDeaths = [];
+        this.finishBlocks = [];
         switch (level) {
             case 0:
 
-                this.startingPoint = { x: 30, y: 170 };
+                this.startingPoint = { x: 20, y: 30 };
                 this.mapBoxes.push(new PFObjects(0, 0, 10, this.height));
                 this.mapBoxes.push(new PFObjects(0, this.height - 20, this.width, 50));
                 this.mapBoxes.push(new PFObjects(this.width - 10, 0, 50, this.height));
+                this.mapBoxes.push(new PFObjects(0, 50, 50, this.height));
+                this.topSpikes.push(new PFObjects(50, this.height - 25, this.width - 60, 20));
+                this.topSpikes.push(new PFObjects(50, 100, this.width - 210, 20));
+
+                this.ballOfDeaths.push(new PFObjects(80, 55, 28, 37));
+                this.bottomSpikes.push(new PFObjects(140, -15, 30, 20));
+                this.ballOfDeaths.push(new PFObjects(190, 55, 28, 37));
+                this.bottomSpikes.push(new PFObjects(260, -15, 15, 20));
+                this.ballOfDeaths.push(new PFObjects(300, 55, 28, 37));
+                this.bottomSpikes.push(new PFObjects(380, -15, 15, 20));
+                this.ballOfDeaths.push(new PFObjects(420, 55, 28, 37));
+                this.bottomSpikes.push(new PFObjects(450, -15, 180, 20));
+                this.verticalSpikes.push(new PFObjects(615, -15, 10, 240));
+                this.verticalSpikes.push(new PFObjects(515, 50, 10, 120));
+                this.bottomSpikes.push(new PFObjects(470, 150, 50, 20));
+
+                this.mapBoxes.push(new PFObjects(470, 50, 50, 118));
+
+                this.ballOfDeaths.push(new PFObjects(110,  162, 30, 30));
+                this.ballOfDeaths.push(new PFObjects(230, 162, 30, 30));
+                this.ballOfDeaths.push(new PFObjects(350, 162, 30, 30));
+
+                this.movableStepableObjects.push(new MovablePlatforms(20, 190, 100, 20, 2, 25, 460, 0, 0));
+                this.finishBlocks.push(new PFObjects(50, 110, 30, 30));
 
                 break;
 
@@ -588,12 +621,34 @@ PathFinder = Game.extend({
 
                 this.mapBoxes.push(new PFObjects(this.width - 210, -25, 70, this.height - 60));
 
-                this.topSpikes.push(new PFObjects(50, this.height - 25, this.width - 100, 20));
-                this.topSpikes.push(new PFObjects(this.width / 2 - 25, 60, 50, 20));
+                this.mapBoxes.push(new PFObjects(50, this.height / 2 - 20, 20, 40));
 
+                this.mapBoxes.push(new PFObjects(this.width / 2 - 40, this.height / 2 - 20, 20, 40));
+                this.mapBoxes.push(new PFObjects(this.width - 240, this.height / 2 - 15, 30, 40));
+
+                this.topSpikes.push(new PFObjects(50, this.height - 25, this.width - 100, 20));
+                this.topSpikes.push(new PFObjects(this.width / 2 - 25, 58, 50, 20));
+                this.verticalSpikes.push(new PFObjects(45, 118, 10, 100));
+                this.verticalSpikes.push(new PFObjects(this.width / 4 - 26, -25, 10, this.height - 60));
+                this.verticalSpikes.push(new PFObjects(this.width / 4 + 36, -25, 10, this.height - 60));
+                this.verticalSpikes.push(new PFObjects(this.width / 2 - 30, 118, 10, 100));
+                this.verticalSpikes.push(new PFObjects(this.width - 52, 50, 10, 165));
+                this.bottomSpikes.push(new PFObjects(this.width / 4 - 25, 122, 70, 20));
+                this.bottomSpikes.push(new PFObjects(this.width / 4 + 45, -15, 40, 20));
 
                 this.bottomSpikes.push(new PFObjects(0, -15, 133, 20));
 
+                this.bottomSpikes.push(new PFObjects(this.width - 240, 122, 100, 20));
+                this.bottomSpikes.push(new PFObjects(this.width - 140, -15, 60, 20));
+                this.verticalSpikes.push(new PFObjects(this.width - 140, -25, 10, this.height - 60));
+                this.bottomSpikes.push(new PFObjects(this.width - 240, -15, 30, 20));
+
+                this.movableStepableObjects.push(new MovablePlatforms(100, 180, 30, 20, 1.5, 100, 210, 0, 0));
+                this.movableStepableObjects.push(new MovablePlatforms(210, 10, 47, 20, 1, 0, 0, 10, 70));
+                this.movableStepableObjects.push(new MovablePlatforms(370, 180, 40, 20, 1.5, 370, 495, 0, 0));
+
+
+                this.finishBlocks.push(new PFObjects(this.width -20, 15, 30, 30));
 
                 break;
 
@@ -647,6 +702,8 @@ PathFinder = Game.extend({
                 this.mapBoxes.push(new PFObjects(570, 50, 60, 30));
                 this.mapBoxes.push(new PFObjects(0, 50, 60, 30));
                 this.lightningOnInterval.push(this.lightning);
+
+                this.finishBlocks.push(new PFObjects(10, 15, 15, 30));
                 break;
             default:
                 break;
@@ -657,10 +714,17 @@ PathFinder = Game.extend({
         this.mainCharacter.y = this.startingPoint.y;
     },
     startGame: function () {
-        this.startLevel(2);
+        this.startLevel(0);
         this.addEventListeners();
         this.addGameToPlot();
         this.update();
+    },
+    endGame: function () {
+        clearInterval(this.interval);
+        cancelAnimationFrame(this.animation);
+        this.removeGameFromPlot();
+        this.gameOver = true;
+        return this.score;
     }
 
 

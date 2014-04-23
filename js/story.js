@@ -9,6 +9,10 @@ Story = Class.extend({
         this.interactableObjects = new Array();
         this.stopEvents = false;
         this.inGame = false;
+        
+        this.gamesFinished = 0;
+        this.gamesAmount = 7;
+
         var humanCastle = new ClickPoint(102, -13, 150, 140, "humanCastle",
         													{
         														x: 175,
@@ -574,7 +578,14 @@ Story = Class.extend({
 	        if (this.hero.speakingTo.game.gameOver && this.hero.speakingTo.speech.conversetionEnded && this.hero.speech.conversetionEnded) {
 	            this.stopEvents = false;
 	                this.inGame = false;
-	            this.hero.speakingTo.game.gameOver = false;
+	                this.hero.speakingTo.game.gameOver = false;
+	            /*Here we will add the points from the finished game into the click point in which the game is.*/
+	            //if(this.hero.speakingTo.score == 0) {
+	            //  this.gamesFinished++;
+	            //}
+	            //if(this.hero.speakingTo.score < this.hero.speakingTo.game.score) {
+	            //  this.hero.speakingTo.score = this.hero.speakingTo.game.score;
+	            //}
 	            if (this.hero.speakingTo.progress.after) {
 	                this.hero.prepareObjectForSpeaking(this.hero.speakingTo);
 	                this.hero.speakingTo.prepareObjectForSpeaking("");
@@ -618,6 +629,18 @@ Story = Class.extend({
 	        }
 	    }
 	},
+    // will be finished after end game screen is done;
+	checkIfAllGamesFinished: function(){
+	    if (this.gamesFinished == this.gamesAmount) {
+	        var array = this.interactableObjects,
+                finalScore = 0;
+	        for (var i = 0; i < array.length; i++) {
+	            finalScore += array[i].score;
+	        }
+	        this.endStory();
+	        return finalScore;
+	    }
+	},
     addInteractableObject: function (iObject) {
         this.interactableObjects.push(iObject);
     },
@@ -629,7 +652,7 @@ Story = Class.extend({
     },
     searchInteractableObjectByName: function (name) {
         var array = this.interactableObjects;
-        for (var i = 0; i <= array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             if (array[i].name == name) {
                 return array[i];
             }
@@ -637,7 +660,7 @@ Story = Class.extend({
     },
     searchMovableObjectsByName: function (name) {
         var array = this.MovableObjects;
-        for (var i = 0; i <= array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             if (array[i].name == name) {
                 return array[i];
             }

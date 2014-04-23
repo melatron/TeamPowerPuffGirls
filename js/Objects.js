@@ -180,6 +180,7 @@ InteractableObject = SpeakingObject.extend({
     init: function (x, y, width, height, name, game, heroDialogs, questDialogs) {
         this._super(x, y, width, height, name);
         // Arrival point for Hero alignment
+        this.score = 0;
         this.isInteracting = false;
         this.game = game;
         this.isGamePlayed = false;
@@ -484,7 +485,7 @@ Sprite = Class.extend({
 				0,
 				this.width / this.frames,
 				this.height,
-				this.object.x - 2,
+				this.object.x - 4.5,
 				this.object.y,
 				this.width / this.frames,
 				this.height
