@@ -760,9 +760,10 @@ Menu = Class.extend({
 		}, {
 			class: '.howTo',
 			isExpanded: false
+		},{
+			class: '.begin',
+			isExpanded: false
 		}];
-		
-		this.flash = $('#flash');
 		
 		this.rainSound = null;
 		this.music = null;
@@ -771,9 +772,15 @@ Menu = Class.extend({
 	},
 	
 	initializeMenu: function(){
+		$('#main').hide();
 		this.addAnimations(0);
 		this.addAnimations(1);
-		this.manageSounds();
+		this.addAnimations(2);
+		this.addStartEvent();
+		/*this.manageSounds();*/
+		setTimeout(this.thunder, 500);
+        setTimeout(this.thunder, 6800);
+        setTimeout(this.thunder, 16200);
 	},
 	
 	addStartEvent: function(){
@@ -785,6 +792,10 @@ Menu = Class.extend({
 	startGame: function(e){
 		
 		e.data.hideMenu();
+		
+		setTimeout(function(){
+			$('#main').fadeIn(2000);
+		}, 2000);
 		
 		canvas = $("#canvas")[0];
 		ctx = canvas.getContext('2d');
@@ -809,7 +820,7 @@ Menu = Class.extend({
 	    yolo.startGame();
 	},
 	
-	manageSounds: function(){
+	/*manageSounds: function(){
 		this.rainSound.on('ended', this, function(e){
 			e.data.rainSound.currentTime = 0;
 			e.data.rainSound.play();
@@ -823,59 +834,71 @@ Menu = Class.extend({
 			e.data.rainSound.currentTime = 0;
 			e.data.rainSound.play();
 		});
-	},
+	},*/
 	
 	hideMenu: function(){
 		this.mainWrapper.fadeOut(2000);
 	},
 	
-	flash: function(){
-		this.flash.show().fadeIn(50).fadeOut(20).fadeIn(50).fadeOut(1000);
+	thunder: function(){
+		$('#flash').show().fadeIn(50).fadeOut(20).fadeIn(50).fadeOut(1000);
 	},
 	
 	addAnimations: function(index){
 		var elem = this.menuCells[index].class;
-	
-		$(elem).on('click', function(){
-			if(this.menuCells[index].isExpanded == false){
-				
-				this.chainSound.play();
-				
-				$(elem + ' .first .dropDownCell').show();
+		if(index != 2){
+			$(elem).on('click', this, function(e){
+				if(e.data.menuCells[index].isExpanded == false){
+					e.data.menuCells[index].isExpanded = true;
+					//e.data.chainSound.play();
+					
+					$(elem + ' .first .dropDownCell').show();
 
-	            $(elem + ' .first').show().animate({
-	                top: "100px"
-	            }, 1000, 'easeOutBounce');
-	            $(elem + '.second').animate({
-	                top: "170px"
-	            }, 1000, 'easeOutBounce');
+		            $(elem + ' .first').show().animate({
+		                top: "100px"
+		            }, 1000, 'easeOutBounce');
+		            $(elem + ' .second').animate({
+		                top: "170px"
+		            }, 1000, 'easeOutBounce');
 
-	            setTimeout(function(){
-	                $(elem + ' .second').animate({
-	                        top: '270px'
-	                    }, 1000, 'easeOutBounce');
-	                $(elem + ' .first .dropDownCell').show().animate({
-	                    top: "70px"
-	                }, 1000, 'easeOutBounce', function(){
-	                    $(elem + ' .second').show();
-	                    $(elem + ' .second .dropDownCell').show()
-	                    setTimeout(function(){
-	                        $(elem + ' .second .dropDownCell').animate({
-	                            top: '70px'
-	                        }, 1000, 'easeOutBounce');
-	                    }, 200);
-	                });
-	            }, 200);
-			}
+		            setTimeout(function(){
+		                $(elem + ' .second').animate({
+		                        top: '270px'
+		                    }, 1000, 'easeOutBounce');
+		                $(elem + ' .first .dropDownCell').show().animate({
+		                    top: "70px"
+		                }, 1000, 'easeOutBounce', function(){
+		                    $(elem + ' .second').show();
+		                    $(elem + ' .second .dropDownCell').show()
+		                    setTimeout(function(){
+		                        $(elem + ' .second .dropDownCell').animate({
+		                            top: '70px'
+		                        }, 1000, 'easeOutBounce');
+		                    }, 200);
+		                });
+		            }, 200);
+		            
+		            
+				}
+			});
+		}
+		
+		$(elem).mouseenter({
+			_this: this,
+			index: index
+		}, function(e){
+			$(elem).css({
+				'background-color': 'rgba(184, 184, 148, 0.8)',
+				'color': 'rgba(15, 15, 10, 1)'
+			});
+			$(elem + ' .dropDownCell').css({
+				'color': 'rgba(255, 255, 153, 1)'
+			});
 		});
 		
-		$(elem).hover(function(e){
-			if(this.menuCells[index].isExpanded == false){
-				$(elem).css({
-					'background-color': 'rgba(184, 184, 148, 0.8)',
-					'color': 'rgba(15, 15, 10, 1)'
-				});
-			}
+		$(elem).mouseleave({
+			_this: this,
+			index: index
 		}, function(e){
 			$(elem).css({
 				'background-color': 'rgba(0, 0, 0, 0.5)',

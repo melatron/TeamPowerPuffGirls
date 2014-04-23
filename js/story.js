@@ -757,6 +757,7 @@ Story = Class.extend({
 var story,
     context,
     mainLoop,
+    menu,
     yolo;
 
 
@@ -764,7 +765,13 @@ var story,
 
 
 window.onload = function () {
-	canvas = $("#canvas")[0];
+	
+	menu = new Menu();
+	
+	menu.initializeMenu();
+	
+	
+	/*canvas = $("#canvas")[0];
 	ctx = canvas.getContext('2d');
 	story = new Story();
 	story.checkRequestAnimationFrame();
@@ -784,5 +791,5 @@ window.onload = function () {
     //elfGame = new RadoGame();
     //elfGame.start();
     yolo = new PathFinder();
-    yolo.startGame();
+    yolo.startGame();*/
 };
