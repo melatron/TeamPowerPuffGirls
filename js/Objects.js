@@ -524,6 +524,9 @@ function PlayList() {
             questSounds[i].src = arguments[i];
         }
     };
+    this.getMainSoundsArray = function(){
+    	return mainSounds;
+    };
     this.preloadMainSounds = function () {
         for (var i = 0; i < arguments.length; i++) {
             mainSounds[i] = new Audio();
@@ -574,7 +577,7 @@ function PlayList() {
     };
     this.pauseMainMusic = function () {
         mainSounds[currentMainSongIndex].pause();
-    }
+    };
     this.pauseQuestMusic = function (quest) {
         switch (quest) {
             case "castle":
@@ -586,7 +589,7 @@ function PlayList() {
             default:
                 break;
         }
-    }
+    };
 }
 
 //======== GAME OBJECTS ==========//
@@ -782,14 +785,26 @@ Menu = Class.extend({
 	
 	initializeMenu: function(){
 		$('#main').hide();
+		this.preloadSounds();
 		this.addAnimations(0);
 		this.addAnimations(1);
 		this.addAnimations(2);
 		this.addStartEvent();
-		/*this.manageSounds();*/
+		this.manageSounds();
 		setTimeout(this.thunder, 500);
         setTimeout(this.thunder, 6800);
         setTimeout(this.thunder, 16200);
+	},
+	
+	preloadSounds: function(){
+		this.rainSound = new Audio();
+		this.rainSound.src = 'source/menu/rain.mp3';
+		this.music = new Audio();
+		this.music.src = 'source/menu/birthOfAHero.mp3';
+		this.thunderSound = new Audio();
+		this.thunderSound.src = 'source/menu/thunder.mp3';
+		this.chainSound = new Audio();
+		this.chainSound.src = 'source/menu/chains.mp3';
 	},
 	
 	addStartEvent: function(){
@@ -829,8 +844,8 @@ Menu = Class.extend({
 	    //yolo.startGame();
 	},
 	
-	/*manageSounds: function(){
-		this.rainSound.on('ended', this, function(e){
+	manageSounds: function(){
+		/*this.rainSound.on('ended', this, function(e){
 			e.data.rainSound.currentTime = 0;
 			e.data.rainSound.play();
 		});
@@ -842,8 +857,8 @@ Menu = Class.extend({
 		this.thunderSound.on('ended', this, function(e){
 			e.data.rainSound.currentTime = 0;
 			e.data.rainSound.play();
-		});
-	},*/
+		});*/
+	},
 	
 	hideMenu: function(){
 		this.mainWrapper.fadeOut(2000);
@@ -859,7 +874,7 @@ Menu = Class.extend({
 			$(elem).on('click', this, function(e){
 				if(e.data.menuCells[index].isExpanded == false){
 					e.data.menuCells[index].isExpanded = true;
-					//e.data.chainSound.play();
+					e.data.chainSound.play();
 					
 					$(elem + ' .first .dropDownCell').show();
 

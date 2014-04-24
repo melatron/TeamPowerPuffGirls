@@ -14,7 +14,7 @@ Story = Class.extend({
         this.gamesFinished = 0;
         this.gamesAmount = 7;
 
-        var humanCastle = new ClickPoint(102, -13, 150, 140, "humanCastle",
+        var humanCastle = new ClickPoint(106, -13, 150, 140, "humanCastle",
         													{
         														x: 175,
         														y: 150
