@@ -76,6 +76,18 @@ RadoGame = Game.extend({
 		this.removeEventListeners();
 		this.gameOver = true;
 	},
+
+	showScore:function(){
+		this.gameContext.font = 'bold 20px Ariel';
+		this.gameContext.fillStyle = 'white';
+		this.gameContext.lineWidth = 2;
+		this.gameContext.save();
+		this.gameContext.fillStyle = 'black';
+		this.gameContext.fillRect(0, 0, 220, 25);
+		this.gameContext.restore();
+		this.gameContext.fillText('Deaths: ' + this.deaths, 10, 20);
+		this.gameContext.stroke();
+	},
 	
 	// ===== GET CONTEXT ====== //
 	
@@ -244,7 +256,7 @@ RadoGame = Game.extend({
 	updateLevel: function(){
 		
 		this.currentLevel.sprite.drawSprite();
-
+		this.showScore();
 		this.updateCoins();
 		this.updateElves();
 		this.updateCharacter();
