@@ -750,10 +750,18 @@ Game = Class.extend({
         this.gameBonuses = object;
     },
     addGameToPlot: function () {
-        this.plot.show();
+        var self = this;
+        setTimeout(function () {
+            self.plot.fadeIn(1000);
+        }, 1000)
+        //this.plot.show();
     },
     removeGameFromPlot: function () {
-        this.plot.hide();
+        var self = this;
+        setTimeout(function () {
+            self.plot.fadeOut(1000);
+        }, 1000)
+        //this.plot.hide();
     },
 
     getReward: function (item) {            //item - the name of the item (string)

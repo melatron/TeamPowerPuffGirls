@@ -177,6 +177,7 @@ PathFinder = Game.extend({
         this.score = 0;
         this.gameOver = false;
 
+        this.backGroundSprite = null;
 
         this.startingPoint = {x: null, y:null};
         this.mainCharacter = new MainCharacters(this.startingPoint.x, this.startingPoint.y, 22, 15, 3, this.gameContext);
@@ -189,10 +190,18 @@ PathFinder = Game.extend({
             self.updateCharacter();
             self.gameContext.clearRect(0, 0, self.width, self.height);
             self.colLoopCheck();
+            //self.drawBackground();
             self.checkIfDead();
             self.mainCharacter.drawCharacter();
             self.animation = requestAnimationFrame(self.update);
+            console.log('a');
         };
+    },
+    drawBackground: function () {
+        if (this.backGroundSprite != null) {
+            this.backGroundSprite.drawSprite();
+        }
+       
     },
     updateCharacter: function () {
         var self = this;
@@ -565,7 +574,7 @@ PathFinder = Game.extend({
     startLevel: function (level) {
         var self = this;
         this.checkPointCounter = 0;
-        this.checkPointMaxAmount = 10;
+        this.checkPointMaxAmount = 3;
         this.tempBoxCounter = 0;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
@@ -579,7 +588,7 @@ PathFinder = Game.extend({
         this.finishBlocks = [];
         switch (level) {
             case 0:
-
+                this.backGroundSprite = new Sprite(5040, 224, 8, 6, story.sprites[story.sprites.length - 1], { x: + 4.5, y: 0 }, this.gameContext);
                 this.startingPoint = { x: 20, y: 30 };
                 this.mapBoxes.push(new PFObjects(0, 0, 10, this.height));
                 this.mapBoxes.push(new PFObjects(0, this.height - 20, this.width, 50));
