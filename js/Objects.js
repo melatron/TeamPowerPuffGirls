@@ -794,6 +794,9 @@ Menu = Class.extend({
 	initializeMenu: function(){
 		$('#main').hide();
 		this.preloadSounds();
+        this.rainSound.play();
+        this.thunderSound.play();
+        this.music.play();
 		this.addAnimations(0);
 		this.addAnimations(1);
 		this.addAnimations(2);
@@ -822,6 +825,10 @@ Menu = Class.extend({
 	},
 	
 	startGame: function(e){
+
+        e.data.rainSound.pause();
+        e.data.music.pause();
+        e.data.thunderSound.pause();
 		
 		e.data.hideMenu();
 		
@@ -853,19 +860,20 @@ Menu = Class.extend({
 	},
 	
 	manageSounds: function(){
-		/*this.rainSound.on('ended', this, function(e){
+		$(this.rainSound).on('ended', this, function(e){
+            console.log(e.data);
 			e.data.rainSound.currentTime = 0;
 			e.data.rainSound.play();
 		});
 		
-		this.chainSound.on('ended', this, function(e){
+		$(this.chainSound).on('ended', this, function(e){
 			e.data.chainSound.currentTime = 0;
 		});
 		
-		this.thunderSound.on('ended', this, function(e){
+		$(this.thunderSound).on('ended', this, function(e){
 			e.data.rainSound.currentTime = 0;
 			e.data.rainSound.play();
-		});*/
+		});
 	},
 	
 	hideMenu: function(){
