@@ -61,7 +61,8 @@ var EightPuzzle = Game.extend({
         this.update = function () {
             _this.drawTableArray();
             if (_this.isGameOver()) {
-                _this.endGame();
+                setTimeout(_this.endGame,700);
+                cancelAnimationFrame(this.animation);
             }
             _this.animation = requestAnimationFrame(_this.update);
         };
@@ -76,10 +77,9 @@ var EightPuzzle = Game.extend({
         this.update();
     },
     endGame: function () {
-        this.gameOver = true;
-        this.removeGameFromPlot();
-        cancelAnimationFrame(this.animation);
-        this.stopEvents = true;
+        _this.gameOver = true;
+        _this.removeGameFromPlot();
+        _this.stopEvents = true;
 
     },
     addBonuses: function (bonuses) {
@@ -87,8 +87,8 @@ var EightPuzzle = Game.extend({
     },
     createTableArray: function () {
         var startArray = new Array(),
-            x = 50,
-            y = 10;
+            x = 250,
+            y = 20;
         var initialState = this.tableState.getRandomState();
 
         for (var i = 0; i < 3; i++) {
@@ -106,7 +106,7 @@ var EightPuzzle = Game.extend({
                 x += 70;
             }
             y += 70;
-            x = 50;
+            x = 250;
         }
     },
     drawTableArray: function () {
@@ -197,12 +197,5 @@ var EightPuzzle = Game.extend({
                     break;
             }
         }
-    },
-    eightPuzzleLoop: function () {
-        _this.drawTableArray();
-        if (_this.isGameOver()) {
-            this.endGame();
-        }
     }
-
 });
