@@ -11,9 +11,11 @@ Story = Class.extend({
         this.interactableObjects = new Array();
         this.stopEvents = false;
         this.inGame = false;
+
+        this.storyFinished = false;
         
         this.gamesFinished = 0;
-        this.gamesAmount = 7;
+        this.gamesAmount = 6;
 
         var humanCastle = new ClickPoint(106, -13, 150, 140, "humanCastle",
         													{
@@ -498,25 +500,25 @@ Story = Class.extend({
 	    for (var i = 0; i < this.interactableObjects.length; i++) {
 	        if (this.interactableObjects[i].isInteracting) {
 	            if (this.interactableObjects[i].isSpeaking && !(this.interactableObjects[i].speech.conversetionEnded)) {
-	                ctx.save();
-	                ctx.globalAlpha = 0.7;
-	                ctx.fillRect(0, 0, this.mainCanvas.width, this.mainCanvas.height);
-	                ctx.restore();
+	                this.blackenScreen();
 	                this.hero.portrait.drawPortrait();
 	                this.interactableObjects[i].portrait.drawPortrait();
 	                this.interactableObjects[i].drawSpeechBubble();
 	            }
 	            else if (this.hero.isSpeaking && !(this.hero.speech.conversetionEnded)) {
-	                ctx.save();
-	                ctx.globalAlpha = 0.7;
-	                ctx.fillRect(0, 0, this.mainCanvas.width, this.mainCanvas.height);
-	                ctx.restore();
+	                this.blackenScreen();
 	                this.hero.drawSpeechBubble();
 	                this.hero.portrait.drawPortrait();
 	                this.interactableObjects[i].portrait.drawPortrait();
 	            }
 	        }
 	    }
+	},
+	blackenScreen: function () {
+	    ctx.save();
+	    ctx.globalAlpha = 0.7;
+	    ctx.fillRect(0, 0, this.mainCanvas.width, this.mainCanvas.height);
+	    ctx.restore();
 	},
 	changeSpeaker: function () {
 	    if (this.hero.speakingTo != null && this.hero.speakingTo.isInteracting) {
@@ -539,34 +541,6 @@ Story = Class.extend({
 	                this.hero.speakingTo.speech.conversetionEnded = true;
 	            }
 	        }
-	        //else if (this.hero.speech.conversetionEnded && this.hero.speakingTo.speech.conversetionEnded && this.hero.speakingTo != null) {
-	        //    if (this.hero.speakingTo.progress.before) {
-	        //        this.hero.speakingTo.isSpeaking = false;
-	        //        this.hero.isSpeaking = false;
-	        //        this.hero.speakingTo.progress.before = false;
-	        //        this.hero.speakingTo.progress.after = true;
-
-	        //        if (this.hero.speakingTo.game) {
-	        //            this.stopEvents = true;
-	        //            this.hero.speakingTo.startGame();
-	        //        }
-	        //    }
-	        //    else if (this.hero.speakingTo.progress.after) {
-	        //        this.hero.speakingTo.progress.after = false;
-	        //        this.hero.speakingTo.progress.done = true;
-	        //        this.hero.speakingTo = null;
-	        //        this.stopEvents = false;
-	        //    }
-	        //    else if (this.hero.speakingTo.progress.done) {
-	        //        this.hero.speakingTo.isSpeaking = false;
-	        //        this.hero.isSpeaking = false;
-
-	        //        if (this.hero.speakingTo.game) {
-	        //            this.stopEvents = true;
-	        //            this.hero.speakingTo.startGame();
-	        //        }
-	        //    }
-	        //}
 	        else {
 	            if (this.hero.speakingTo.isSpeaking) {
 	                this.hero.isSpeaking = true;
@@ -579,6 +553,9 @@ Story = Class.extend({
 	        }
 	    }
 	},
+    /* This is the method that checks if the game is finished and starts the after game conversations.
+       Also here we will add the end game logic which will darken the screen and asks you if you want to continue
+       or you want to end the game! */
 	checkIfGamePlayed: function () {
 	    if (this.hero.speakingTo && this.hero.speakingTo != null && this.hero.speakingTo.game) {
 	        if (this.hero.speakingTo.game.gameOver && this.hero.speakingTo.speech.conversetionEnded && this.hero.speech.conversetionEnded) {
@@ -586,12 +563,16 @@ Story = Class.extend({
 	                this.inGame = false;
 	                this.hero.speakingTo.game.gameOver = false;
 	            /*Here we will add the points from the finished game into the click point in which the game is.*/
-	            //if(this.hero.speakingTo.score == 0) {
-	            //  this.gamesFinished++;
-	            //}
-	            //if(this.hero.speakingTo.score < this.hero.speakingTo.game.score) {
-	            //  this.hero.speakingTo.score = this.hero.speakingTo.game.score;
-	            //}
+	            if(this.hero.speakingTo.score == 0) {
+	                this.gamesFinished++;
+	                if (this.gamesFinished == this.gamesAmount) {
+	                    this.storyEnded = true;
+	                    this.endStory();
+	                }
+	            }
+	            if(this.hero.speakingTo.score < this.hero.speakingTo.game.score) {
+	              this.hero.speakingTo.score = this.hero.speakingTo.game.score;
+	            }
 	            if (this.hero.speakingTo.progress.after) {
 	                this.hero.prepareObjectForSpeaking(this.hero.speakingTo);
 	                this.hero.speakingTo.prepareObjectForSpeaking("");
@@ -637,16 +618,15 @@ Story = Class.extend({
 	    }
 	},
     // will be finished after end game screen is done;
-	checkIfAllGamesFinished: function(){
-	    if (this.gamesFinished == this.gamesAmount) {
+	endStory: function () {
+	    this.blackenScreen();
+	    alert(':] E PEDAL !!!!!!!!!!!!!!!!');
 	        var array = this.interactableObjects,
                 finalScore = 0;
 	        for (var i = 0; i < array.length; i++) {
 	            finalScore += array[i].score;
 	        }
-	        this.endStory();
 	        return finalScore;
-	    }
 	},
     addInteractableObject: function (iObject) {
         this.interactableObjects.push(iObject);

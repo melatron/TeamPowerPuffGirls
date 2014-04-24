@@ -186,6 +186,7 @@ TonyGame = Game.extend({
                 if (zeroes <= 0) {
                     self.gameOver = isOver;
                     if (self.gameOver) {
+
                         self.endGame();
                     }
                 }

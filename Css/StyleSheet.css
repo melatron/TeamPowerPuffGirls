@@ -265,7 +265,9 @@ body {
         .dropDownCell{
         	background-image: url(../source/menu/menuCellBackground.png);
         	width: 210px;
-        	height: 100px;
+            padding-top: 15px;
+        	height: 85px;
+            font-size: 20px;
         	position: absolute;
         	top: 0px;
             display: none;

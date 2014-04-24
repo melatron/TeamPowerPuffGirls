@@ -194,7 +194,6 @@ PathFinder = Game.extend({
             self.checkIfDead();
             self.mainCharacter.drawCharacter();
             self.animation = requestAnimationFrame(self.update);
-            console.log('a');
         };
     },
     drawBackground: function () {
