@@ -343,6 +343,8 @@ Story = Class.extend({
             dragonGlowImage = null;
             banditGlowImage = null;
             orcGlowImage = null;
+            
+            pathFinderLevelOneImage = null;
 
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
@@ -395,6 +397,8 @@ Story = Class.extend({
         this.sprites.push(dragonGlowImage);
         this.sprites.push(banditGlowImage);
         this.sprites.push(orcGlowImage);
+        
+        this.sprites.push(pathFinderLevelOneImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -718,7 +722,9 @@ window.onload = function () {
             'source/defaultGlow.png',
             'source/defaultGlow.png',
             'source/banditCampGlowSprite.png',
-            'source/orcGlowSprite.png'
+            'source/orcGlowSprite.png',
+            
+            'source/PathFinder/spriteLevel1.png'
 
 	);
 	
