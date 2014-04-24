@@ -1,6 +1,7 @@
 var ctx,
     canvas,
-    soundtrack;
+    soundtrack,
+    story;
 // ============== MAIN OBJECT CLASS ============//
 
 GameObject = Class.extend({
@@ -180,6 +181,7 @@ InteractableObject = SpeakingObject.extend({
     init: function (x, y, width, height, name, game, heroDialogs, questDialogs) {
         this._super(x, y, width, height, name);
         // Arrival point for Hero alignment
+        this.score = 0;
         this.isInteracting = false;
         this.game = game;
         this.isGamePlayed = false;
@@ -202,6 +204,7 @@ InteractableObject = SpeakingObject.extend({
     },
 
     startGame: function (bonuses) {
+        console.log(this.game.gameOver);
         if (!this.game.gameOver) {
             //this.calculateItemBonuses(bonuses);
             this.game.start();
@@ -420,7 +423,7 @@ AIMovableObject = MovableObject.extend({
         this.clickPoint = clickPoint;
 		this.getDestinationCounter = 0;
         this.getDestinationDelay = 200;
-		this.speed = 1;
+		this.speed = 0.5;
 	},
 	
 	// -- Sets a random destination for "walking around" -- //
@@ -484,7 +487,7 @@ Sprite = Class.extend({
 				0,
 				this.width / this.frames,
 				this.height,
-				this.object.x - 2,
+				this.object.x - 4.5,
 				this.object.y,
 				this.width / this.frames,
 				this.height
@@ -500,141 +503,29 @@ Sprite = Class.extend({
 	}
 });
 
-//--basic inventory objects--//
 
-ItemAttributes = {
-    axe: {
-        name: 'Epic Axe',
-        bonusMoves: 18,
-        bonusSpeed: 1,
-        bonusTime:320
-    },
-
-    bow: {
-        name: 'Useless Bow',
-        bonusMoves: 5,
-        bonusSpeed: 1,
-        bonusTime: 3
-    },
-
-    sword: {
-        name: 'Plain Dagger',
-        bonusMoves: 0,
-        bonusTime: 5,
-        bonusSpeed: 1,
-
-    }
-};
-
-Inventory = Class.extend({
-    name: "inventory",
-    init: function () {
-
-        this.slots = [0, 0, 0, 0, 0, 0];
-
-    },
-
-    removeItem : function (index) {
-        if (this.slots[index] == 1) {
-            $('.inventory-slot').eq(index).html(' ');
-            this.slots[index] = 0;
-        }
-    },
-
-    getItem : function (name) {
-        var temp = new Item(name);
-        for (var i = 0; i < this.slots.length; i++) {
-            if (this.slots[i] == 0) {
-                temp.dom.appendTo($('.inventory-slot').eq(i))
-                this.slots[i] = temp;
-                break;
-            };
-        };
-    },
-
-
-});
-
-Item = Class.extend({
-    name: 'item',
-    init: function (name) {
-        this.name = name;
-        this.dom = $('<img class ="item" src="source/items/' + this.name + '.png">');
-        this.dom.on('mouseenter', this, this.showAttributes);
-        this.dom.on('mouseleave', this, this.hideAttributes);
-        this.dom.on('click', this, this.pickItem);        
-    },
-
-
-    showAttributes: function (e) {
-        var temp = '';
-
-        $('#item-attributes').css({
-            display: 'block',
-            left: e.clientX - 150 + 'px',
-            top:e.clientY - 250 + 'px'
-        });
-
-
-        $('#item-name').html(ItemAttributes[e.data.name].name);
-
-
-        for( var attr in ItemAttributes[e.data.name]){
-            
-            if(attr == 'bonusMoves'){
-                temp += '<p>Bonus Moves: '+ ItemAttributes[e.data.name][attr] + '</p>';
-            };
-
-            if(attr == 'bonusSpeed'){
-                temp += '<p>Bonus Speed: '+ ItemAttributes[e.data.name][attr] + '</p>';
-            };
-
-            if(attr == 'bonusTime'){
-                temp += '<p>Bonus Time: '+ ItemAttributes[e.data.name][attr] + '</p>';
-            };
-
-            if(attr == 'bonusDamage'){
-                temp += '<p>Bonus Damage: '+ ItemAttributes[e.data.name][attr] + '</p>';
-            };
-            
-        };
-
-        
-        $('#item-bonuses').html(temp);
-    },
-
-
-    hideAttributes: function () {
-        $('#item-attributes').css({ display: 'none'});
-    },
-
-    pickItem: function (e) {
-        console.log('a')
-
-
-    },
-
-    placeItem: function (e) {
-        console.log('b')
-
-
-    }
-
-});
 
 //======== PLAYLIST OBJECT ==========//
 
 function PlayList() {
     var questSounds = new Array(),
         mainSounds = new Array(),
+        sounds = [],
         currentMainSongIndex = null;
-    
+    this.preloadSounds = function () {
+        for (var i = 0; i < arguments.length; i++) {
+            sounds[i] = new Audio();
+            sounds[i].src = arguments[i];
+        }
+    };
     this.preloadQuestSounds = function () {
         for (var i = 0; i < arguments.length; i++) {
             questSounds[i] = new Audio();
             questSounds[i].src = arguments[i];
         }
-        console.log(questSounds[0]);
+    };
+    this.getMainSoundsArray = function(){
+    	return mainSounds;
     };
     this.preloadMainSounds = function () {
         for (var i = 0; i < arguments.length; i++) {
@@ -686,7 +577,7 @@ function PlayList() {
     };
     this.pauseMainMusic = function () {
         mainSounds[currentMainSongIndex].pause();
-    }
+    };
     this.pauseQuestMusic = function (quest) {
         switch (quest) {
             case "castle":
@@ -698,19 +589,131 @@ function PlayList() {
             default:
                 break;
         }
-    }
+    };
 }
 
 //======== GAME OBJECTS ==========//
 
+Item = Class.extend({
+    name: 'item',
+    init: function (name) {
+        this.name = name;
+        this.dom = $('<img class ="item" src="source/items/' + this.name + '.png">');
+        this.dom.on('mouseenter', this, this.showAttributes);
+        this.dom.on('mouseleave', this, this.hideAttributes);
+        this.dom.on('click', this, this.pickItem);        
+    
+        this.bonusTime = null;
+        this.bonusMoves = null;
+        this.bonusSpeed = null;
+
+
+        if (this.name === 'axe') {
+
+            this.bonusMoves = 18;
+            this.bonusSpeed = 1;
+            this.bonusTime = 320;
+        };
+            
+        if(this.name === 'bow') { 
+
+            this.bonusMoves = 5;
+            this.bonusSpeed = 2;
+            this.bonusTime = 200;
+        };
+            
+        if(this.name === 'sword') { 
+
+            this.bonusMoves = 0;
+            this.bonusSpeed = 1;
+            this.bonusTime = 300;
+        };       
+    },
+
+    showAttributes: function (e) {
+        var temp = '';
+
+        $('#item-attributes').css({
+            display: 'block',
+            left: e.clientX - 150 + 'px',
+            top:e.clientY - 250 + 'px'
+        });
+
+        $('#item-name').html(e.data.name);
+
+
+        temp += '<p>Bonus Moves: '+ e.data.bonusMoves + '</p>';  
+        temp += '<p>Bonus Speed: '+ e.data.bonusSpeed + '</p>';
+        temp += '<p>Bonus Time: '+ e.data.bonusTime + '</p>';    
+
+        $('#item-bonuses').html(temp);
+    },
+
+
+    hideAttributes: function () {
+        $('#item-attributes').css({ display: 'none'});
+    },
+
+    pickItem: function (e) {
+        console.log('a')
+
+
+    },
+
+    placeItem: function (e) {
+        console.log('b')
+
+
+    }
+
+});
+
+Inventory = Class.extend({
+    name: "inventory",
+    init: function () {
+
+        this.slots = [0, 0, 0, 0, 0, 0];
+
+    },
+
+    removeItem : function (index) {
+        if (this.slots[index] == 1) {
+            $('.inventory-slot').eq(index).html(' ');
+            this.slots[index] = 0;
+        }
+    },
+
+    getItem : function (name) {
+        var temp = new Item(name);
+        for (var i = 0; i < this.slots.length; i++) {
+            if (this.slots[i] == 0) {
+                temp.dom.appendTo($('.inventory-slot').eq(i))
+                this.slots[i] = temp;
+                break;
+            };
+        };
+    },
+
+
+});
+
+
+
 Game = Class.extend({
     init: function () {
-        this.gameOver = false;
-        this.objectives = null;                 
-        this.gameBonuses = null;                //example : this.gameBonuses = ['additionalMoves', 'additionalSpeed, .. ]'
+                        
+        this.gameBonuses = {            // object containing all the game bonuses (calculated at the start of each game)
+
+            bonusMoves : 0,
+            bonusSpeed : 0,
+            bonusTime : 0
+
+        };                
                                                 
         this.score = null;
         this.plot = null;
+        this.gameOver = false;
+        this.objectives = null;
 
     },
     start: function () {
@@ -728,27 +731,23 @@ Game = Class.extend({
             bonusTime : 0
         },
 
-        itemName, attribute; 
+        item; 
 
         for(var i in story.inventory.slots){ 
-            for(var j in gameBonuses){
+            
+            if(story.inventory.slots[i] !== 0){
 
-                if(story.inventory.slots[i] !== 0){
-                    itemName = story.inventory.slots[i].name;
-                    attribute = gameBonuses[j];
+                var item = story.inventory.slots[i];
 
-                    console.log(ItemAttributes[itemName][attribute] !== 'undefined')
+                for (var attribute in object) {
 
-                    if(ItemAttributes[itemName][gameBonuses[j]] !== 'undefined'){
-                        
-                        object[attribute] += ItemAttributes[itemName][attribute]
-                    }
+                    object[attribute] += item[attribute]
 
                 };
             };
         };
 
-        return object;
+        this.gameBonuses = object;
     },
     addGameToPlot: function () {
         this.plot.show();
@@ -757,8 +756,178 @@ Game = Class.extend({
         this.plot.hide();
     },
 
-    getReward: function (item) {
+    getReward: function (item) {            //item - the name of the item (string)
 
+        story.inventory.getItem(item);
 
     }
+});
+
+Menu = Class.extend({
+	init: function(){
+		this.mainWrapper = $('#mainMenuWrapper');
+		this.menuCells = [{
+			class: '.highScores',
+			isExpanded: false
+		}, {
+			class: '.howTo',
+			isExpanded: false
+		},{
+			class: '.begin',
+			isExpanded: false
+		}];
+		
+		this.rainSound = null;
+		this.music = null;
+		this.thunderSound = null;
+		this.chainSound = null;
+	},
+	
+	initializeMenu: function(){
+		$('#main').hide();
+		this.preloadSounds();
+		this.addAnimations(0);
+		this.addAnimations(1);
+		this.addAnimations(2);
+		this.addStartEvent();
+		this.manageSounds();
+		setTimeout(this.thunder, 500);
+        setTimeout(this.thunder, 6800);
+        setTimeout(this.thunder, 16200);
+	},
+	
+	preloadSounds: function(){
+		this.rainSound = new Audio();
+		this.rainSound.src = 'source/menu/rain.mp3';
+		this.music = new Audio();
+		this.music.src = 'source/menu/birthOfAHero.mp3';
+		this.thunderSound = new Audio();
+		this.thunderSound.src = 'source/menu/thunder.mp3';
+		this.chainSound = new Audio();
+		this.chainSound.src = 'source/menu/chains.mp3';
+	},
+	
+	addStartEvent: function(){
+		var elem = $('.menuCell.begin');
+		
+		elem.on('click', this, this.startGame);
+	},
+	
+	startGame: function(e){
+		
+		e.data.hideMenu();
+		
+		setTimeout(function(){
+			$('#main').fadeIn(2000);
+		}, 2000);
+		
+		canvas = $("#canvas")[0];
+		ctx = canvas.getContext('2d');
+		story = new Story();
+		story.checkRequestAnimationFrame();
+
+		story.preloadEverything();
+
+		story.inventory.getItem('axe');
+		story.inventory.getItem('bow');
+		story.inventory.getItem('sword');
+		
+	    story.addEvents();
+	    
+	    story.mainLoop();
+
+	    //game = new TonyGame();
+	    //game.start();
+	    //elfGame = new RadoGame();
+	    //elfGame.start();
+	    //yolo = new PathFinder();
+	    //yolo.startGame();
+	},
+	
+	manageSounds: function(){
+		/*this.rainSound.on('ended', this, function(e){
+			e.data.rainSound.currentTime = 0;
+			e.data.rainSound.play();
+		});
+		
+		this.chainSound.on('ended', this, function(e){
+			e.data.chainSound.currentTime = 0;
+		});
+		
+		this.thunderSound.on('ended', this, function(e){
+			e.data.rainSound.currentTime = 0;
+			e.data.rainSound.play();
+		});*/
+	},
+	
+	hideMenu: function(){
+		this.mainWrapper.fadeOut(2000);
+	},
+	
+	thunder: function(){
+		$('#flash').show().fadeIn(50).fadeOut(20).fadeIn(50).fadeOut(1000);
+	},
+	
+	addAnimations: function(index){
+		var elem = this.menuCells[index].class;
+		if(index != 2){
+			$(elem).on('click', this, function(e){
+				if(e.data.menuCells[index].isExpanded == false){
+					e.data.menuCells[index].isExpanded = true;
+					e.data.chainSound.play();
+					
+					$(elem + ' .first .dropDownCell').show();
+
+		            $(elem + ' .first').show().animate({
+		                top: "100px"
+		            }, 1000, 'easeOutBounce');
+		            $(elem + ' .second').animate({
+		                top: "170px"
+		            }, 1000, 'easeOutBounce');
+
+		            setTimeout(function(){
+		                $(elem + ' .second').animate({
+		                        top: '270px'
+		                    }, 1000, 'easeOutBounce');
+		                $(elem + ' .first .dropDownCell').show().animate({
+		                    top: "70px"
+		                }, 1000, 'easeOutBounce', function(){
+		                    $(elem + ' .second').show();
+		                    $(elem + ' .second .dropDownCell').show()
+		                    setTimeout(function(){
+		                        $(elem + ' .second .dropDownCell').animate({
+		                            top: '70px'
+		                        }, 1000, 'easeOutBounce');
+		                    }, 200);
+		                });
+		            }, 200);
+		            
+		            
+				}
+			});
+		}
+		
+		$(elem).mouseenter({
+			_this: this,
+			index: index
+		}, function(e){
+			$(elem).css({
+				'background-color': 'rgba(184, 184, 148, 0.8)',
+				'color': 'rgba(15, 15, 10, 1)'
+			});
+			$(elem + ' .dropDownCell').css({
+				'color': 'rgba(255, 255, 153, 1)'
+			});
+		});
+		
+		$(elem).mouseleave({
+			_this: this,
+			index: index
+		}, function(e){
+			$(elem).css({
+				'background-color': 'rgba(0, 0, 0, 0.5)',
+				'color': 'rgba(255, 255, 153, 1)'
+			});
+		});
+	}
 });
