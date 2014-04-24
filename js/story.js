@@ -32,7 +32,7 @@ Story = Class.extend({
                 done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
             }
         	),
-            dwarfCamp = new ClickPoint(736, -5, 130, 130, "dwarfCamp", 
+            dwarfCamp = new ClickPoint(740, -5, 130, 130, "dwarfCamp", 
             												{
             													x: 655,
             													y: 130
@@ -48,7 +48,7 @@ Story = Class.extend({
                 done: " "
             }
             ),
-            treeOfLife = new ClickPoint(79, 372, 100, 100, "treeOfLife",{
+            treeOfLife = new ClickPoint(83, 372, 100, 100, "treeOfLife",{
             													x: 175,
             													y: 350
             },
@@ -98,7 +98,7 @@ Story = Class.extend({
             }
      
             ),
-            bandit = new ClickPoint(448, 310, 100, 150, 'banditTavern',
+            bandit = new ClickPoint(451, 310, 100, 150, 'banditTavern',
             												{
             													x: 430,
             													y: 355
@@ -114,7 +114,7 @@ Story = Class.extend({
                 done: " "
             }
             ),
-            orcCamp = new ClickPoint(437, 22, 100, 100, 'orcCamp', 
+            orcCamp = new ClickPoint(440, 22, 100, 100, 'orcCamp', 
             												{
             													x: 430,
             													y: 140

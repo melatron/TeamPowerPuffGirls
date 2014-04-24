@@ -5,7 +5,7 @@ RadoGame = Game.extend({
 		var game = this;
 
 		this.levels = [];            //array of levels
-		this.levelIndex = 0;
+		this.levelIndex = 2;
 		this.currentLevel = null;	//current level
 		this.passableBlocks = [];	//array of all passable blocks
 		this.impassableBlocks = [];	//array of all impassable blocks
@@ -17,6 +17,8 @@ RadoGame = Game.extend({
 		this.gameContext = $('#elf-game-canvas')[0].getContext('2d');
 		this.mainCharacter = {};
 		this.deaths = 0;
+		this.coinScore = 0;
+		this.score = 0;
 		this.gameOver = false;
 
 		this.elves = [];
@@ -30,6 +32,7 @@ RadoGame = Game.extend({
 			game.updateLevel();
 			game.gameContext.restore();
 			game.animation = requestAnimationFrame(game.mainLoop);
+			
 		};
 	},
 	
@@ -52,11 +55,26 @@ RadoGame = Game.extend({
 		this.populateLevel(this.currentLevel);
 	},
 	
+	calculateCoinScore: function(){
+		var i, len = this.currentLevel.coins.length;
+
+		for(i = 0; i < len; i++){
+			var temp = this.currentLevel.coins[i];
+
+			if(temp.isCollected){
+				this.coinScore += 1000;
+			}
+		}
+	},
+
 	endGame: function(){
-		cancelAnimationFrame(this.animation);
+		this.score = Math.round(this.coinScore / this.deaths);
+		console.log(this.score);
+		this.coinScore = 0;
 		this.removeGameFromPlot();
 		this.removeEventListeners();
 		this.gameOver = true;
+		cancelAnimationFrame(this.animation);
 	},
 	
 	// ===== GET CONTEXT ====== //
@@ -175,12 +193,14 @@ RadoGame = Game.extend({
 		if(this.currentLevel.isFinished){
 			if(this.levelIndex < this.levels.length - 1){
 				this.levelIndex++;
+				this.calculateCoinScore();
 				this.currentLevel = this.levels[this.levelIndex];
+				this.calculateCoinScore();
 				this.startNewLevel();
+				console.log(this.coinScore);
 			}
 			else{
 				this.endGame();
-				this.gameOver = true;
 			}
 		}
 	},
