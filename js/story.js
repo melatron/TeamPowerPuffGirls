@@ -775,6 +775,7 @@ Story = Class.extend({
             'music/ChaosCity.mp3'
         );
     	this.soundTrack.preloadQuestSounds('source/rada.mp3');
+    	//this.soundTrack.preloadSounds('source/rada.mp3');
     }
 });
 

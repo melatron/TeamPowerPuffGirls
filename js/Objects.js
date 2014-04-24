@@ -510,14 +510,19 @@ Sprite = Class.extend({
 function PlayList() {
     var questSounds = new Array(),
         mainSounds = new Array(),
+        sounds = [],
         currentMainSongIndex = null;
-    
+    this.preloadSounds = function () {
+        for (var i = 0; i < arguments.length; i++) {
+            sounds[i] = new Audio();
+            sounds[i].src = arguments[i];
+        }
+    };
     this.preloadQuestSounds = function () {
         for (var i = 0; i < arguments.length; i++) {
             questSounds[i] = new Audio();
             questSounds[i].src = arguments[i];
         }
-        console.log(questSounds[0]);
     };
     this.preloadMainSounds = function () {
         for (var i = 0; i < arguments.length; i++) {
