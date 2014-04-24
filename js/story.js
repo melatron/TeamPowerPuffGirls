@@ -428,6 +428,8 @@ Story = Class.extend({
         this.sprites.push(orcGlowImage);
         
         this.sprites.push(pathFinderLevelOneImage);
+        this.sprites.push(pathFinderLevelTwoImage);
+        this.sprites.push(pathFinderLevelThreeImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -754,7 +756,9 @@ Story = Class.extend({
                 'source/banditCampGlowSprite.png',
                 'source/orcGlowSprite.png',
                 
-                'source/PathFinder/spriteLevel1.png'
+                'source/PathFinder/spriteLevel1.png',
+                'source/PathFinder/spriteLevel2.png',
+                'source/PathFinder/spriteLevel3.png'
 
     	);
     	

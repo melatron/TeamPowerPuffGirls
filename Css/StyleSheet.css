@@ -39,6 +39,7 @@ body {
     width: 380px;
     height: 255px;
     margin: auto;
+    background-image: url(../source/TonyGame/background.png);
     display: none;
 }
 .row {
