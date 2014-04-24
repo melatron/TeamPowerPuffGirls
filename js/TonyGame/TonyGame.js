@@ -37,6 +37,7 @@ TonyGame = Game.extend({
                        [0, 0, 0, 0]];
     },
     start: function () {
+        this.stopEvents = false;
         this.addGameToPlot();
         this.putStartingNumbers();
         this.addEvents();
@@ -45,6 +46,13 @@ TonyGame = Game.extend({
         this.gameOver = true;
         this.removeGameFromPlot();
         this.stopEvents = true;
+        this.matrix = [[0, 0, 0, 0],
+                       [0, 0, 0, 0],
+                       [0, 0, 0, 0],
+                       [0, 0, 0, 0]];
+        this.score = this.highestValue;
+        this.highestValue = 4;
+        this.removeNodes();
     },
     addBonuses: function (bonuses) {
 
@@ -173,13 +181,17 @@ TonyGame = Game.extend({
         setTimeout(function () {
             self.removeNodes();
             self.addNodes();
-            setTimeout(function () { self.stopEvents = false; }, 50);
+            setTimeout(function () {
+                self.stopEvents = false;
+                if (zeroes <= 0) {
+                    self.gameOver = isOver;
+                    if (self.gameOver) {
+                        self.endGame();
+                    }
+                }
+            }, 50);
         }, 180);
-        if (zeroes <= 0) {
-            this.gameOver = isOver;
-            this.endGame();
-            console.log(this.highestValue);
-        }
+        
     },
     listenKeyEvents: function (e) {
         if (!e.data.stopEvents) {
