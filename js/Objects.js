@@ -27,7 +27,26 @@ GameObject = Class.extend({
         };
     }   
 });
+// ================== Buttons =============== //
+ButtonsObject = GameObject.extend({
+    init: function myfunction(x, y, width, height, name, image) {
+        this._super(x, y, width, height, name);
+        this.image = image;
+        this.toggled = false;
+    },
+    checkIfClicked: function (mouseX, mouseY) {
+        // if x between this x and this.x + this.width AND if y between this.y and this.y+this.height
+        if ((mouseX > this.x && mouseX < (this.x + this.width)) && (mouseY > this.y && mouseY < (this.y + this.height))) {
+            this.toggled = !this.toggled;
+            console.log(this.toggled);
+            return true;
+        }
+    },
+    drawButtons: function () {
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+    }
 
+});
 // =============== SPEAKING OBJECT CLASS ===================== // ( object which can spawn speech bubbles )
 
 Portrait = Class.extend({

@@ -28,6 +28,7 @@ TonyGame = Game.extend({
     init: function () {
         this.stopEvents = false;
         this.length = 4;
+        this.score = 0;
         this.highestValue = 4;
         this.plot = $("#Game6561");
         this.multiplyBy = 2;

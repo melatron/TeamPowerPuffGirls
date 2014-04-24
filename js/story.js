@@ -16,6 +16,11 @@ Story = Class.extend({
         
         this.gamesFinished = 0;
         this.gamesAmount = 6;
+        this.buttons = [];
+        var toggleMusic = new ButtonsObject(0, 0, 40, 40, "ToggleMusic"),
+            finishGame = new ButtonsObject(984, 0, 40, 40, "FinishGame");
+        this.buttons.push(toggleMusic);
+        this.buttons.push(finishGame);
 
         var humanCastle = new ClickPoint(106, -13, 150, 140, "humanCastle",
         													{
@@ -264,6 +269,24 @@ Story = Class.extend({
                         ev.data.interactableObjects[j].isInteracting = false;           // set all other click points to "inactive"
                     }
                 }
+            }
+            ev.data.pauseMusicButton(mouseX, mouseY);
+        }
+    },
+    pauseMusicButton: function (x, y) {
+        if (this.buttons[0].checkIfClicked(x, y)) {
+            if (this.buttons[0].toggled) {
+                this.soundTrack.pauseMainMusic();
+            }
+            else {
+                this.soundTrack.resumeMainMusic();
+            }
+        }
+    },
+    endGameButton: function (x, y) {
+        if (this.buttons[0].checkIfClicked(x, y)) {
+            if (this.storyEnded) {
+                this.endStory();
             }
         }
     },

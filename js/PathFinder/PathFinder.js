@@ -596,13 +596,13 @@ PathFinder = Game.extend({
                 this.topSpikes.push(new PFObjects(50, this.height - 25, this.width - 60, 20));
                 this.topSpikes.push(new PFObjects(50, 100, this.width - 210, 20));
 
-                this.ballOfDeaths.push(new PFObjects(82, 59, 25, 37));
+                this.ballOfDeaths.push(new PFObjects(82, 61, 25, 37));
                 this.bottomSpikes.push(new PFObjects(140, -15, 30, 20));
-                this.ballOfDeaths.push(new PFObjects(192, 59, 25, 37));
+                this.ballOfDeaths.push(new PFObjects(192, 61, 25, 37));
                 this.bottomSpikes.push(new PFObjects(260, -15, 15, 20));
-                this.ballOfDeaths.push(new PFObjects(302, 59, 25, 37));
+                this.ballOfDeaths.push(new PFObjects(302, 61, 25, 37));
                 this.bottomSpikes.push(new PFObjects(380, -15, 15, 20));
-                this.ballOfDeaths.push(new PFObjects(420, 59, 25, 37));
+                this.ballOfDeaths.push(new PFObjects(420, 61, 25, 37));
                 this.bottomSpikes.push(new PFObjects(452, -15, 180, 20));
                 this.verticalSpikes.push(new PFObjects(615, -15, 10, 240));
                 this.verticalSpikes.push(new PFObjects(515, 50, 10, 120));
@@ -636,7 +636,7 @@ PathFinder = Game.extend({
                 this.mapBoxes.push(new PFObjects(50, this.height / 2 - 20, 20, 40));
 
                 this.mapBoxes.push(new PFObjects(this.width / 2 - 40, this.height / 2 - 20, 20, 40));
-                this.mapBoxes.push(new PFObjects(this.width - 240, this.height / 2 - 15, 30, 40));
+                this.mapBoxes.push(new PFObjects(this.width - 245, this.height / 2 - 15, 35, 40));
 
                 this.topSpikes.push(new PFObjects(50, this.height - 25, this.width - 100, 20));
                 this.topSpikes.push(new PFObjects(this.width / 2 - 25, 58, 50, 20));
@@ -729,7 +729,7 @@ PathFinder = Game.extend({
         
         this.mainCharacter.addSprites();
         this.gameOver = false;
-        this.startLevel(0);
+        this.startLevel(1);
         this.addEventListeners();
         this.addGameToPlot();
         this.update();
