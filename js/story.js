@@ -5,7 +5,8 @@ Story = Class.extend({
             elfGame = new RadoGame(),
             digitGame = new TonyGame(),
             squareGame = new SquareGame(),
-            swapPuzzle = new SwapPuzzle();
+            swapPuzzle = new SwapPuzzle(),
+            pathFinder = new PathFinder();
         this.interactableObjects = new Array();
         this.stopEvents = false;
         this.inGame = false;
@@ -100,7 +101,7 @@ Story = Class.extend({
             												{
             													x: 430,
             													y: 355
-            												},null,
+            												}, pathFinder,
              {                  // HERO SPEECH
                  before: " ",
                  after: " ",
@@ -243,7 +244,7 @@ Story = Class.extend({
     },
     clickEvent: function (ev) {
         if (!ev.data.stopEvents) {
-            console.log('tony is a gay persona');
+            console.log('rado is a gay persona');
             var rect = ev.data.mainCanvas.getBoundingClientRect(),
                     mouseX = ev.clientX - rect.left,
                     mouseY = ev.clientY - rect.top,
@@ -607,6 +608,7 @@ Story = Class.extend({
 	            this.hero.speakingTo.progress.after = true;
 
 	            if (this.hero.speakingTo.game) {
+	                console.log('asdaskdalsdkalskdlaskdlakdlaskdlaksdlakdlaskdlakdlasdkalsdkaldkadkal');
 	                this.stopEvents = true;
 	                this.hero.speakingTo.startGame();
 	            }

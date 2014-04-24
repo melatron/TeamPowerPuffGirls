@@ -1,6 +1,7 @@
 var ctx,
     canvas,
-    soundtrack;
+    soundtrack,
+    story;
 // ============== MAIN OBJECT CLASS ============//
 
 GameObject = Class.extend({
@@ -203,6 +204,7 @@ InteractableObject = SpeakingObject.extend({
     },
 
     startGame: function (bonuses) {
+        console.log(this.game.gameOver);
         if (!this.game.gameOver) {
             //this.calculateItemBonuses(bonuses);
             this.game.start();
@@ -691,8 +693,7 @@ Inventory = Class.extend({
 
 Game = Class.extend({
     init: function () {
-        this.gameOver = false;
-        this.objectives = null;                 
+                        
         this.gameBonuses = {            // object containing all the game bonuses (calculated at the start of each game)
 
             bonusMoves : 0,
@@ -703,6 +704,8 @@ Game = Class.extend({
                                                 
         this.score = null;
         this.plot = null;
+        this.gameOver = false;
+        this.objectives = null;
 
     },
     start: function () {
@@ -817,8 +820,8 @@ Menu = Class.extend({
 	    //game.start();
 	    //elfGame = new RadoGame();
 	    //elfGame.start();
-	    yolo = new PathFinder();
-	    yolo.startGame();
+	    //yolo = new PathFinder();
+	    //yolo.startGame();
 	},
 	
 	/*manageSounds: function(){

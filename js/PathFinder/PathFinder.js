@@ -8,6 +8,7 @@
 });
 PFMovableObject = PFObjects.extend({
     init: function (x, y, width, height, speed) {
+        this.gameOver = false;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -69,9 +70,11 @@ MainCharacters = PFMovableObject.extend({
         this.jumping = false;
         this.grounded = false;
         this.gameContext = ctx;
-        this.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this, ctx);
-        this.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this, ctx);
-        this.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this, ctx);
+    },
+    addSprites: function () {
+        this.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this, this.gameContext);
+        this.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this, this.gameContext);
+        this.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this, this.gameContext);
     },
     move: function () {
         if (this.grounded) {
@@ -172,6 +175,7 @@ PathFinder = Game.extend({
         this.finishBlocks = [];
 
         this.score = 0;
+        this.gameOver = false;
 
 
         this.startingPoint = {x: null, y:null};
@@ -665,7 +669,7 @@ PathFinder = Game.extend({
                 this.lightning.sprite = new Sprite(320, 220, 8, 2, story.sprites[28], ligObj, this.gameContext);
 
                 this.movableStepableObjects.push(new MovablePlatforms(20, 50, 100, 20, 1.5, 25, 450, 0, 0));
-                this.movableStepableObjects.push(new MovablePlatforms(500, 50, 100, 20, 0.5, 0, 0, 50, 200));
+                this.movableStepableObjects.push(new MovablePlatforms(500, 50, 100, 20, 0.8, 0, 0, 50, 200));
                 this.movableStepableObjects.push(new MovablePlatforms(this.width / 2 - 40, 60, 20, 30, 4, 0, 0, 60, 200));
 
                 this.topSpikes.push(new PFObjects(10, 55, 500, 20));
@@ -713,7 +717,10 @@ PathFinder = Game.extend({
         this.mainCharacter.x = this.startingPoint.x;
         this.mainCharacter.y = this.startingPoint.y;
     },
-    startGame: function () {
+    start: function () {
+        
+        this.mainCharacter.addSprites();
+        this.gameOver = false;
         this.startLevel(0);
         this.addEventListeners();
         this.addGameToPlot();
