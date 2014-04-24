@@ -177,6 +177,13 @@ body {
     display: none;
 }
 
+#eightPuzzle {
+	height:224px;
+	width:640px;
+    position: absolute;
+    display: none;
+}
+
 /* item attributes */
 @font-face {
     font-family: Morpheus;

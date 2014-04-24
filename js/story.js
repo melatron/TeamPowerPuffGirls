@@ -5,7 +5,9 @@ Story = Class.extend({
             elfGame = new RadoGame(),
             digitGame = new TonyGame(),
             squareGame = new SquareGame(),
-            swapPuzzle = new SwapPuzzle();
+            swapPuzzle = new SwapPuzzle(),
+            eightPuzzle = new EightPuzzle();
+
         this.interactableObjects = new Array();
         this.stopEvents = false;
         this.inGame = false;
@@ -112,7 +114,7 @@ Story = Class.extend({
             												{
             													x: 430,
             													y: 140
-            												},null,
+            												},eightPuzzle,
              {                  // HERO SPEECH
                  before: " ",
                  after: " ",
@@ -529,34 +531,6 @@ Story = Class.extend({
 	                this.hero.speakingTo.speech.conversetionEnded = true;
 	            }
 	        }
-	        //else if (this.hero.speech.conversetionEnded && this.hero.speakingTo.speech.conversetionEnded && this.hero.speakingTo != null) {
-	        //    if (this.hero.speakingTo.progress.before) {
-	        //        this.hero.speakingTo.isSpeaking = false;
-	        //        this.hero.isSpeaking = false;
-	        //        this.hero.speakingTo.progress.before = false;
-	        //        this.hero.speakingTo.progress.after = true;
-
-	        //        if (this.hero.speakingTo.game) {
-	        //            this.stopEvents = true;
-	        //            this.hero.speakingTo.startGame();
-	        //        }
-	        //    }
-	        //    else if (this.hero.speakingTo.progress.after) {
-	        //        this.hero.speakingTo.progress.after = false;
-	        //        this.hero.speakingTo.progress.done = true;
-	        //        this.hero.speakingTo = null;
-	        //        this.stopEvents = false;
-	        //    }
-	        //    else if (this.hero.speakingTo.progress.done) {
-	        //        this.hero.speakingTo.isSpeaking = false;
-	        //        this.hero.isSpeaking = false;
-
-	        //        if (this.hero.speakingTo.game) {
-	        //            this.stopEvents = true;
-	        //            this.hero.speakingTo.startGame();
-	        //        }
-	        //    }
-	        //}
 	        else {
 	            if (this.hero.speakingTo.isSpeaking) {
 	                this.hero.isSpeaking = true;
