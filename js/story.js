@@ -403,53 +403,53 @@ Story = Class.extend({
 			this.sprites[i].src = arguments[i];
 		}
 		
-		this.hero.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[0], story.hero, ctx);  // create Sprites
-		this.hero.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[1], story.hero, ctx);
-		this.hero.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[2], story.hero, ctx);
-		this.hero.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[3], story.hero, ctx);
-		this.hero.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[1], story.hero, ctx);
+		this.hero.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[0], story.hero, ctx);  // create Sprites
+		this.hero.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[1], story.hero, ctx);
+		this.hero.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], story.hero, ctx);
+		this.hero.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], story.hero, ctx);
+		this.hero.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], story.hero, ctx);
 		
-		this.elder.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[4], story.elder, ctx);
-		this.elder.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[5], story.elder, ctx);
-		this.elder.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[6], story.elder, ctx);
-		this.elder.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[7], story.elder, ctx);
-		this.elder.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[5], story.elder, ctx);
+		this.elder.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[4], story.elder, ctx);
+		this.elder.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[5], story.elder, ctx);
+		this.elder.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[6], story.elder, ctx);
+		this.elder.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[7], story.elder, ctx);
+		this.elder.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[5], story.elder, ctx);
 
-        this.dragon.spriteUp = new Sprite(384, 96, 4, 6, story.sprites[8], story.dragon, ctx);
-        this.dragon.spriteDown = new Sprite(384, 96, 4, 6, story.sprites[9], story.dragon, ctx);
-        this.dragon.spriteLeft = new Sprite(384, 96, 4, 6, story.sprites[10], story.dragon, ctx);
-        this.dragon.spriteRight = new Sprite(384, 96, 4, 6, story.sprites[11], story.dragon, ctx);
-        this.dragon.spriteIdle = new Sprite(96, 96, 1, 6, story.sprites[9], story.dragon, ctx);
-        this.dragon.getDestinationDelay = 250;
+        this.dragon.spriteUp = new Sprite(384, 96, 4, 10, story.sprites[8], story.dragon, ctx);
+        this.dragon.spriteDown = new Sprite(384, 96, 4, 10, story.sprites[9], story.dragon, ctx);
+        this.dragon.spriteLeft = new Sprite(384, 96, 4, 10, story.sprites[10], story.dragon, ctx);
+        this.dragon.spriteRight = new Sprite(384, 96, 4, 10, story.sprites[11], story.dragon, ctx);
+        this.dragon.spriteIdle = new Sprite(96, 96, 1, 10, story.sprites[9], story.dragon, ctx);
+        this.dragon.getDestinationDelay = 500;
         
-        this.elf.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[12], story.elf, ctx);
-        this.elf.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[13], story.elf, ctx);
-        this.elf.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[14], story.elf, ctx);
-        this.elf.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[15], story.elf, ctx);
-        this.elf.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[13], story.elf, ctx);
-        this.elf.getDestinationDelay = 150;
+        this.elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[12], story.elf, ctx);
+        this.elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[13], story.elf, ctx);
+        this.elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[14], story.elf, ctx);
+        this.elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[15], story.elf, ctx);
+        this.elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[13], story.elf, ctx);
+        this.elf.getDestinationDelay = 300;
         
-        this.bandit.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[16], story.bandit, ctx);
-        this.bandit.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[17], story.bandit, ctx);
-        this.bandit.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[18], story.bandit, ctx);
-        this.bandit.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[19], story.bandit, ctx);
-        this.bandit.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[17], story.bandit, ctx);
-        this.bandit.getDestinationDelay = 80;
+        this.bandit.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[16], story.bandit, ctx);
+        this.bandit.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[17], story.bandit, ctx);
+        this.bandit.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[18], story.bandit, ctx);
+        this.bandit.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[19], story.bandit, ctx);
+        this.bandit.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[17], story.bandit, ctx);
+        this.bandit.getDestinationDelay = 160;
         
-        this.orc.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[20], story.orc, ctx);
-        this.orc.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[21], story.orc, ctx);
-        this.orc.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[22], story.orc, ctx);
-        this.orc.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[23], story.orc, ctx);
-        this.orc.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[21], story.orc, ctx);
-        this.orc.getDestinationDelay = 124;
+        this.orc.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[20], story.orc, ctx);
+        this.orc.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[21], story.orc, ctx);
+        this.orc.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[22], story.orc, ctx);
+        this.orc.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[23], story.orc, ctx);
+        this.orc.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[21], story.orc, ctx);
+        this.orc.getDestinationDelay = 248;
 
-        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 2, story.sprites[33], this.interactableObjects[0], ctx);
-        this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 2, story.sprites[34], this.interactableObjects[1], ctx);
-        this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 2, story.sprites[35], this.interactableObjects[2], ctx);
-        this.interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 1, story.sprites[36], this.interactableObjects[3], ctx);
-        this.interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 1, story.sprites[37], this.interactableObjects[4], ctx);
-        this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 2, story.sprites[38], this.interactableObjects[5], ctx);
-        this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 2, story.sprites[39], this.interactableObjects[6], ctx);
+        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, story.sprites[33], this.interactableObjects[0], ctx);
+        this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 4, story.sprites[34], this.interactableObjects[1], ctx);
+        this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 4, story.sprites[35], this.interactableObjects[2], ctx);
+        this.interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 2, story.sprites[36], this.interactableObjects[3], ctx);
+        this.interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 2, story.sprites[37], this.interactableObjects[4], ctx);
+        this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 4, story.sprites[38], this.interactableObjects[5], ctx);
+        this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 4, story.sprites[39], this.interactableObjects[6], ctx);
 	},
     
 	// ==== Portrait preloader ==== //

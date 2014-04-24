@@ -251,7 +251,7 @@ body {
         	height: 100px;
         	position: absolute;
             display: none;
-        	border-radius: 10px;\
+        	border-radius: 10px;
         }
         .dropDownCell{
         	background-image: url(../source/menu/menuCellBackground.png);
@@ -260,7 +260,8 @@ body {
         	position: absolute;
         	top: 0px;
             display: none;
-            border-radius: 10px;\
+            border-radius: 10px;
+            z-index: 10;
             border: 2px solid rgba(255, 255, 255, 0.5);
         }
         .menuText{

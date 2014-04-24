@@ -421,7 +421,7 @@ AIMovableObject = MovableObject.extend({
         this.clickPoint = clickPoint;
 		this.getDestinationCounter = 0;
         this.getDestinationDelay = 200;
-		this.speed = 1;
+		this.speed = 0.5;
 	},
 	
 	// -- Sets a random destination for "walking around" -- //
