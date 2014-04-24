@@ -32,6 +32,7 @@ RadoGame = Game.extend({
 			game.updateLevel();
 			game.gameContext.restore();
 			game.animation = requestAnimationFrame(game.mainLoop);
+
 			
 		};
 	},
@@ -69,12 +70,11 @@ RadoGame = Game.extend({
 
 	endGame: function(){
 		this.score = Math.round(this.coinScore / this.deaths);
-		console.log(this.score);
+		console.log('a');
 		this.coinScore = 0;
 		this.removeGameFromPlot();
 		this.removeEventListeners();
 		this.gameOver = true;
-		cancelAnimationFrame(this.animation);
 	},
 	
 	// ===== GET CONTEXT ====== //
@@ -190,7 +190,7 @@ RadoGame = Game.extend({
 				this.currentLevel.isFinished = true;
 			}
 		}
-		if(this.currentLevel.isFinished){
+		if(this.currentLevel.isFinished && this.gameOver == false){
 			if(this.levelIndex < this.levels.length - 1){
 				this.levelIndex++;
 				this.calculateCoinScore();
@@ -200,6 +200,8 @@ RadoGame = Game.extend({
 				console.log(this.coinScore);
 			}
 			else{
+
+				cancelAnimationFrame(this.animation);
 				this.endGame();
 			}
 		}
@@ -1187,7 +1189,6 @@ RadoGame = Game.extend({
 			char.y = this.startingBlock.y;
 			this.deaths++;
 			this.resetCoins();
-			console.log(this.deaths);
 			char.isCaught = false;
 		}
 		//this.gameContext.fillRect(this.mainCharacterBoundingRect.x, this.mainCharacterBoundingRect.y, this.mainCharacterBoundingRect.width, this.mainCharacterBoundingRect.height);
@@ -1352,6 +1353,7 @@ RadoGame = Game.extend({
 	
 	onKeyDown:function(e){
 		var char = e.data.mainCharacter;
+
 		if(e.keyCode == 38){
 			char.moveUp = true;
 			char.isMoving = true;
