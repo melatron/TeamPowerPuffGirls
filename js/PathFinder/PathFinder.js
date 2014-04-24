@@ -588,14 +588,14 @@ PathFinder = Game.extend({
                 this.topSpikes.push(new PFObjects(50, this.height - 25, this.width - 60, 20));
                 this.topSpikes.push(new PFObjects(50, 100, this.width - 210, 20));
 
-                this.ballOfDeaths.push(new PFObjects(80, 55, 28, 37));
+                this.ballOfDeaths.push(new PFObjects(82, 59, 25, 37));
                 this.bottomSpikes.push(new PFObjects(140, -15, 30, 20));
-                this.ballOfDeaths.push(new PFObjects(190, 55, 28, 37));
+                this.ballOfDeaths.push(new PFObjects(192, 59, 25, 37));
                 this.bottomSpikes.push(new PFObjects(260, -15, 15, 20));
-                this.ballOfDeaths.push(new PFObjects(300, 55, 28, 37));
+                this.ballOfDeaths.push(new PFObjects(302, 59, 25, 37));
                 this.bottomSpikes.push(new PFObjects(380, -15, 15, 20));
-                this.ballOfDeaths.push(new PFObjects(420, 55, 28, 37));
-                this.bottomSpikes.push(new PFObjects(450, -15, 180, 20));
+                this.ballOfDeaths.push(new PFObjects(420, 59, 25, 37));
+                this.bottomSpikes.push(new PFObjects(452, -15, 180, 20));
                 this.verticalSpikes.push(new PFObjects(615, -15, 10, 240));
                 this.verticalSpikes.push(new PFObjects(515, 50, 10, 120));
                 this.bottomSpikes.push(new PFObjects(470, 150, 50, 20));
