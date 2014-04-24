@@ -45,6 +45,8 @@
     }
 });
 
+
+
 var GreenSquare = Square.extend({
 
     init: function (x, y, color, duty, index) { 
@@ -95,10 +97,11 @@ var SquareGame = Game.extend({
     blueSquares:[],
     currentMap: [],
     movesCounter: 0,
-
+    activeLeader : null,
 
     init: function () {
         this._super();
+       
 
         this.plot = $('#square-game');
         this.gameOver = false;
@@ -128,12 +131,24 @@ var SquareGame = Game.extend({
                 bottom: $('#square-game-map').offset().top + 260
             };
         };
+
+        this.plot.on('click', this , this.placeLeader);
     },
 
-    //Attribute Contains Selector [class*="selected"]
 
     pickLeader: function (e) {
-        console.log(e.data.objectContext.dom.attr('class'))
+      
+        //if(e.data.objectContext === e.data.gameContext.activeLeader){return;}
+        e.stopPropagation()
+       
+        if($(this).hasClass('selected')) {
+            return;
+        }
+
+        e.data.gameContext.activeLeader = e.data.objectContext;
+
+
+
         // define the array being moved
         if (e.data.objectContext.color === 'green') { e.data.gameContext.activeArray = e.data.gameContext.greenSquares }
         if (e.data.objectContext.color === 'red') { e.data.gameContext.activeArray = e.data.gameContext.redSquares }
@@ -145,98 +160,94 @@ var SquareGame = Game.extend({
             top: (e.data.objectContext.y) * 40 + 12 + 'px',
         });
 
+        $('.selected').removeClass('selected');
         e.data.objectContext.dom.addClass('selected');
 
-        e.data.objectContext.dom.unbind();
-        e.data.gameContext.plot.on('mousedown', e.data, e.data.gameContext.placeLeader);
-        
     },
 
 
     placeLeader: function (e) {
-        console.log(typeof e.data.objectContext.dom.attr('class'));
+        
+        if(e.data.activeLeader !== null){
+            
+           // if(e.data.activeLeader.dom.attr('class')){  };
+            
+            var mouseX = Math.floor((e.pageX - e.data.mapBoundaries.left) / e.data.squareWidth),
+                mouseY = Math.floor((e.pageY - e.data.mapBoundaries.top) / e.data.squareWidth);
 
-        //!!!!!! 
-        if(e.data.objectContext.dom.attr('class')){  };
-        console.log('1');
-        var mouseX = Math.floor((e.pageX - e.data.gameContext.mapBoundaries.left) / e.data.gameContext.squareWidth),
-            mouseY = Math.floor((e.pageY - e.data.gameContext.mapBoundaries.top) / e.data.gameContext.squareWidth);
+            if (((mouseX == e.data.activeLeader.x && mouseY == (e.data.activeLeader.y + 1)) ||
+                (mouseX == e.data.activeLeader.x && mouseY == (e.data.activeLeader.y - 1)) ||
+                (mouseX == (e.data.activeLeader.x + 1) && mouseY == e.data.activeLeader.y) ||
+                (mouseX == (e.data.activeLeader.x - 1) && mouseY == e.data.activeLeader.y)) &&
+                (e.data.currentMap[mouseY][mouseX] == 1)) {
 
-        if (((mouseX == e.data.objectContext.x && mouseY == (e.data.objectContext.y + 1)) ||
-            (mouseX == e.data.objectContext.x && mouseY == (e.data.objectContext.y - 1)) ||
-            (mouseX == (e.data.objectContext.x + 1) && mouseY == e.data.objectContext.y) ||
-            (mouseX == (e.data.objectContext.x - 1) && mouseY == e.data.objectContext.y)) &&
-            (e.data.gameContext.currentMap[mouseY][mouseX] == 1)) {
-
-            /*(mouseX !== e.data.objectContext.x || mouseY !== e.data.objectContext.y) &&
-            ((mouseX >= (e.data.objectContext.x - 1) && mouseX <= (e.data.objectContext.x + 1) && mouseY == e.data.objectContext.y) ||
-            (mouseY >= (e.data.objectContext.y - 1) && mouseY <= (e.data.objectContext.y + 1) && mouseX == e.data.objectContext.x)) &&
-            (e.data.gameContext.currentMap[mouseY][mouseX] == 1)*/
-             console.log('2');   
-            e.data.gameContext.followLeader(e.data);
-            e.data.objectContext.x = mouseX;
-            e.data.objectContext.y = mouseY;
-            e.data.objectContext.updatePosition();
-            e.data.gameContext.currentMap[mouseY][mouseX] = 2;
-            e.data.gameContext.movesCounter++;
+                 
+                e.data.followLeader(e.data);
+                e.data.activeLeader.x = mouseX;
+                e.data.activeLeader.y = mouseY;
+                e.data.activeLeader.updatePosition();
+                e.data.currentMap[mouseY][mouseX] = 2;
+                e.data.movesCounter++;
 
 
-            //====CHECKS IF THE FIRST MAP IS OVER====//
-            if (e.data.gameContext.currentMap == e.data.gameContext.firstMap &&
-                mouseX == 5 && mouseY == 5 && e.data.objectContext.color == 'green') {
+                //====CHECKS IF THE FIRST MAP IS OVER====//==== This will be moved to a standalone moethod 
+                if (e.data.currentMap == e.data.firstMap &&
+                    mouseX == 5 && mouseY == 5 && e.data.activeLeader.color == 'green') {
 
-                console.log('first map is over in ' + e.data.gameContext.movesCounter + ' moves');
-                e.data.gameContext.plot.html(' ');
-                e.data.gameContext.populateSecondMap();
+                    console.log('first map is over in ' + e.data.movesCounter + ' moves');
+                    e.data.plot.html(' ');
+                    e.data.populateSecondMap();
+                };
+
+                //====CHECKS IF THE SECOND MAP IS OVER====//
+                if (e.data.currentMap == e.data.secondMap &&
+                    mouseX == 0 && mouseY == 0 && e.data.activeLeader.color == 'green') {
+
+                    console.log('good game in ' + e.data.movesCounter + ' moves!');
+                    e.data.endGame();
+                }
+
+
+
             };
-
-            //====CHECKS IF THE SECOND MAP IS OVER====//
-            if (e.data.gameContext.currentMap == e.data.gameContext.secondMap &&
-                mouseX == 0 && mouseY == 0 && e.data.objectContext.color == 'green') {
-
-                console.log('good game in ' + e.data.gameContext.movesCounter + ' moves!');
-                e.data.gameContext.endGame();
-            }
-
-
-
+            
+            //e.data.gameContext.plot.unbind();
+            //e.data.objectContext.dom.on('click', e.data, e.data.gameContext.pickLeader);
+            e.data.activeLeader.dom.removeClass('selected');
         };
-        
-        
-        e.data.gameContext.plot.unbind();
-        e.data.objectContext.dom.on('click', e.data, e.data.gameContext.pickLeader);
-        e.data.objectContext.dom.removeClass('selected');
-
     },
 
+    checkLevelProgress: function () {
+
+    },
 
     followLeader: function (that) {
         var lastX,
             lastY;
 
-        if (that.objectContext.direction === 'positive') {
+        if (that.activeLeader.direction === 'positive') {
             //define the coordinates of the last element being moved
-            lastX = that.gameContext.activeArray[that.gameContext.activeArray.length - 1].x;
-            lastY = that.gameContext.activeArray[that.gameContext.activeArray.length - 1].y;
+            lastX = that.activeArray[that.activeArray.length - 1].x;
+            lastY = that.activeArray[that.activeArray.length - 1].y;
 
-            that.gameContext.currentMap[lastY][lastX] = 1;
+            that.currentMap[lastY][lastX] = 1;
 
             //itterate through all the elements of the current array and activate the 'followNext' method
-            for (var i = (that.gameContext.activeArray.length - 1) ; i > 0; i--) {                
-                that.gameContext.activeArray[i].followNext(that.gameContext.activeArray[i - 1]);
+            for (var i = (that.activeArray.length - 1) ; i > 0; i--) {                
+                that.activeArray[i].followNext(that.activeArray[i - 1]);
             };
         }
 
 
-        if (that.objectContext.direction === "negative") {
+        if (that.activeLeader.direction === "negative") {
 
-            lastX = that.gameContext.activeArray[0].x;
-            lastY = that.gameContext.activeArray[0].y;
+            lastX = that.activeArray[0].x;
+            lastY = that.activeArray[0].y;
 
-            that.gameContext.currentMap[lastY][lastX] = 1;
+            that.currentMap[lastY][lastX] = 1;
 
-            for (var i = 0; i < (that.gameContext.activeArray.length - 1) ; i++) {
-                that.gameContext.activeArray[i].followNext(that.gameContext.activeArray[i + 1]);
+            for (var i = 0; i < (that.activeArray.length - 1) ; i++) {
+                that.activeArray[i].followNext(that.activeArray[i + 1]);
             };
 
         };

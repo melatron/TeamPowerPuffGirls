@@ -601,7 +601,7 @@ Item = Class.extend({
         this.dom = $('<img class ="item" src="source/items/' + this.name + '.png">');
         this.dom.on('mouseenter', this, this.showAttributes);
         this.dom.on('mouseleave', this, this.hideAttributes);
-        this.dom.on('click', this, this.pickItem);        
+        this.dom.on('mousehold', this, this.pickItem);        
     
         this.bonusTime = null;
         this.bonusMoves = null;
@@ -706,7 +706,8 @@ Game = Class.extend({
 
             bonusMoves : 0,
             bonusSpeed : 0,
-            bonusTime : 0
+            bonusTime : 0,
+            bonusCheckpoints : 0
 
         };                
                                                 
