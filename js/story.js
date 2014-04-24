@@ -749,7 +749,9 @@ Story = Class.extend({
                 'source/defaultGlow.png',
                 'source/defaultGlow.png',
                 'source/banditCampGlowSprite.png',
-                'source/orcGlowSprite.png'
+                'source/orcGlowSprite.png',
+                
+                'source/PathFinder/spriteLevel1.png'
 
     	);
     	
