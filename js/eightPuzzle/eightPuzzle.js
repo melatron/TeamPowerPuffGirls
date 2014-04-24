@@ -51,24 +51,35 @@ var EightPuzzle = Game.extend({
         this.tableArray = new Array();
         this.emptySlotPosition = new Array();
         this.tableState = new TableState();
+        this.gameOver = false;
         this.plot = $('#eightPuzzle');
+
+        this.canvas = $("#eightPuzzleCanvas")[0];
+        this.context = this.canvas.getContext("2d");
+
+        this.animation = null;
+        this.update = function () {
+            _this.drawTableArray();
+            if (_this.isGameOver()) {
+                _this.endGame();
+            }
+            _this.animation = requestAnimationFrame(_this.update);
+        };
 
     },
     start: function () {
-        console.log("sexy");
+        this.gameOver = false;
         this.addGameToPlot();
-        this.canvas = $("#eightPuzzleCanvas")[0];
-        this.context = this.canvas.getContext("2d");
         this.createTableArray();
         this.getEmptySlot();
-        $("#eightPuzzleCanvas").on('keyup', this, this.listenKeyEvents);
-        this.canvasLoop = setInterval(this.eightPuzzleLoop, 30);
+        $(document).on('keyup', this, this.listenKeyEvents);
+        this.update();
     },
     endGame: function () {
         this.gameOver = true;
         this.removeGameFromPlot();
-        clearInterval(this.canvasLoop);
-        $("#eightPuzzleCanvas").off();
+        cancelAnimationFrame(this.animation);
+        this.stopEvents = true;
 
     },
     addBonuses: function (bonuses) {
@@ -165,6 +176,7 @@ var EightPuzzle = Game.extend({
         return gameOver;
     },
     listenKeyEvents: function (e) {
+        console.log('hello');
         if (!e.data.stopEvents) {
             switch (e.keyCode) {
                 case 37:

@@ -6,12 +6,16 @@ Story = Class.extend({
             digitGame = new TonyGame(),
             squareGame = new SquareGame(),
             swapPuzzle = new SwapPuzzle(),
+            pathFinder = new PathFinder(),
             eightPuzzle = new EightPuzzle();
-
         this.interactableObjects = new Array();
         this.stopEvents = false;
         this.inGame = false;
-        var humanCastle = new ClickPoint(102, -13, 150, 140, "humanCastle",
+        
+        this.gamesFinished = 0;
+        this.gamesAmount = 7;
+
+        var humanCastle = new ClickPoint(106, -13, 150, 140, "humanCastle",
         													{
         														x: 175,
         														y: 150
@@ -98,7 +102,7 @@ Story = Class.extend({
             												{
             													x: 430,
             													y: 355
-            												},null,
+            												}, pathFinder,
              {                  // HERO SPEECH
                  before: " ",
                  after: " ",
@@ -114,7 +118,7 @@ Story = Class.extend({
             												{
             													x: 430,
             													y: 140
-            												},eightPuzzle,
+            												}, eightPuzzle,
              {                  // HERO SPEECH
                  before: " ",
                  after: " ",
@@ -230,7 +234,7 @@ Story = Class.extend({
             ev.preventDefault();
             switch (ev.keyCode) {
                 case 13:
-                    console.log(ev);
+                    //console.log(ev);
                     if (ev.type == 'keyup') {
                         ev.data.changeSpeaker();
                     }
@@ -241,7 +245,7 @@ Story = Class.extend({
     },
     clickEvent: function (ev) {
         if (!ev.data.stopEvents) {
-            console.log('tony is a gay persona');
+            //console.log('rado is a gay persona');
             var rect = ev.data.mainCanvas.getBoundingClientRect(),
                     mouseX = ev.clientX - rect.left,
                     mouseY = ev.clientY - rect.top,
@@ -401,53 +405,53 @@ Story = Class.extend({
 			this.sprites[i].src = arguments[i];
 		}
 		
-		this.hero.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[0], story.hero, ctx);  // create Sprites
-		this.hero.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[1], story.hero, ctx);
-		this.hero.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[2], story.hero, ctx);
-		this.hero.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[3], story.hero, ctx);
-		this.hero.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[1], story.hero, ctx);
+		this.hero.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[0], story.hero, ctx);  // create Sprites
+		this.hero.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[1], story.hero, ctx);
+		this.hero.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], story.hero, ctx);
+		this.hero.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], story.hero, ctx);
+		this.hero.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], story.hero, ctx);
 		
-		this.elder.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[4], story.elder, ctx);
-		this.elder.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[5], story.elder, ctx);
-		this.elder.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[6], story.elder, ctx);
-		this.elder.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[7], story.elder, ctx);
-		this.elder.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[5], story.elder, ctx);
+		this.elder.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[4], story.elder, ctx);
+		this.elder.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[5], story.elder, ctx);
+		this.elder.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[6], story.elder, ctx);
+		this.elder.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[7], story.elder, ctx);
+		this.elder.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[5], story.elder, ctx);
 
-        this.dragon.spriteUp = new Sprite(384, 96, 4, 6, story.sprites[8], story.dragon, ctx);
-        this.dragon.spriteDown = new Sprite(384, 96, 4, 6, story.sprites[9], story.dragon, ctx);
-        this.dragon.spriteLeft = new Sprite(384, 96, 4, 6, story.sprites[10], story.dragon, ctx);
-        this.dragon.spriteRight = new Sprite(384, 96, 4, 6, story.sprites[11], story.dragon, ctx);
-        this.dragon.spriteIdle = new Sprite(96, 96, 1, 6, story.sprites[9], story.dragon, ctx);
-        this.dragon.getDestinationDelay = 250;
+        this.dragon.spriteUp = new Sprite(384, 96, 4, 10, story.sprites[8], story.dragon, ctx);
+        this.dragon.spriteDown = new Sprite(384, 96, 4, 10, story.sprites[9], story.dragon, ctx);
+        this.dragon.spriteLeft = new Sprite(384, 96, 4, 10, story.sprites[10], story.dragon, ctx);
+        this.dragon.spriteRight = new Sprite(384, 96, 4, 10, story.sprites[11], story.dragon, ctx);
+        this.dragon.spriteIdle = new Sprite(96, 96, 1, 10, story.sprites[9], story.dragon, ctx);
+        this.dragon.getDestinationDelay = 500;
         
-        this.elf.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[12], story.elf, ctx);
-        this.elf.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[13], story.elf, ctx);
-        this.elf.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[14], story.elf, ctx);
-        this.elf.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[15], story.elf, ctx);
-        this.elf.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[13], story.elf, ctx);
-        this.elf.getDestinationDelay = 150;
+        this.elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[12], story.elf, ctx);
+        this.elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[13], story.elf, ctx);
+        this.elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[14], story.elf, ctx);
+        this.elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[15], story.elf, ctx);
+        this.elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[13], story.elf, ctx);
+        this.elf.getDestinationDelay = 300;
         
-        this.bandit.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[16], story.bandit, ctx);
-        this.bandit.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[17], story.bandit, ctx);
-        this.bandit.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[18], story.bandit, ctx);
-        this.bandit.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[19], story.bandit, ctx);
-        this.bandit.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[17], story.bandit, ctx);
-        this.bandit.getDestinationDelay = 80;
+        this.bandit.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[16], story.bandit, ctx);
+        this.bandit.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[17], story.bandit, ctx);
+        this.bandit.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[18], story.bandit, ctx);
+        this.bandit.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[19], story.bandit, ctx);
+        this.bandit.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[17], story.bandit, ctx);
+        this.bandit.getDestinationDelay = 160;
         
-        this.orc.spriteUp = new Sprite(96, 32, 3, 2, story.sprites[20], story.orc, ctx);
-        this.orc.spriteDown = new Sprite(96, 32, 3, 2, story.sprites[21], story.orc, ctx);
-        this.orc.spriteLeft = new Sprite(96, 32, 3, 2, story.sprites[22], story.orc, ctx);
-        this.orc.spriteRight = new Sprite(96, 32, 3, 2, story.sprites[23], story.orc, ctx);
-        this.orc.spriteIdle = new Sprite(32, 32, 1, 2, story.sprites[21], story.orc, ctx);
-        this.orc.getDestinationDelay = 124;
+        this.orc.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[20], story.orc, ctx);
+        this.orc.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[21], story.orc, ctx);
+        this.orc.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[22], story.orc, ctx);
+        this.orc.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[23], story.orc, ctx);
+        this.orc.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[21], story.orc, ctx);
+        this.orc.getDestinationDelay = 248;
 
-        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 2, story.sprites[33], this.interactableObjects[0], ctx);
-        this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 2, story.sprites[34], this.interactableObjects[1], ctx);
-        this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 2, story.sprites[35], this.interactableObjects[2], ctx);
-        this.interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 1, story.sprites[36], this.interactableObjects[3], ctx);
-        this.interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 1, story.sprites[37], this.interactableObjects[4], ctx);
-        this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 2, story.sprites[38], this.interactableObjects[5], ctx);
-        this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 2, story.sprites[39], this.interactableObjects[6], ctx);
+        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, story.sprites[33], this.interactableObjects[0], ctx);
+        this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 4, story.sprites[34], this.interactableObjects[1], ctx);
+        this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 4, story.sprites[35], this.interactableObjects[2], ctx);
+        this.interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 2, story.sprites[36], this.interactableObjects[3], ctx);
+        this.interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 2, story.sprites[37], this.interactableObjects[4], ctx);
+        this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 4, story.sprites[38], this.interactableObjects[5], ctx);
+        this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 4, story.sprites[39], this.interactableObjects[6], ctx);
 	},
     
 	// ==== Portrait preloader ==== //
@@ -512,7 +516,7 @@ Story = Class.extend({
 	},
 	changeSpeaker: function () {
 	    if (this.hero.speakingTo != null && this.hero.speakingTo.isInteracting) {
-	        console.log(this.hero.speech.conversetionEnded + " " + this.hero.speakingTo.speech.conversetionEnded + " " + this.hero.isSpeaking);
+	        //console.log(this.hero.speech.conversetionEnded + " " + this.hero.speakingTo.speech.conversetionEnded + " " + this.hero.isSpeaking);
 	        if (this.hero.isSpeaking && !this.hero.speech.conversetionEnded) {
 	            this.hero.isSpeaking = false;
 	            this.hero.speakingTo.isSpeaking = true;
@@ -531,6 +535,34 @@ Story = Class.extend({
 	                this.hero.speakingTo.speech.conversetionEnded = true;
 	            }
 	        }
+	        //else if (this.hero.speech.conversetionEnded && this.hero.speakingTo.speech.conversetionEnded && this.hero.speakingTo != null) {
+	        //    if (this.hero.speakingTo.progress.before) {
+	        //        this.hero.speakingTo.isSpeaking = false;
+	        //        this.hero.isSpeaking = false;
+	        //        this.hero.speakingTo.progress.before = false;
+	        //        this.hero.speakingTo.progress.after = true;
+
+	        //        if (this.hero.speakingTo.game) {
+	        //            this.stopEvents = true;
+	        //            this.hero.speakingTo.startGame();
+	        //        }
+	        //    }
+	        //    else if (this.hero.speakingTo.progress.after) {
+	        //        this.hero.speakingTo.progress.after = false;
+	        //        this.hero.speakingTo.progress.done = true;
+	        //        this.hero.speakingTo = null;
+	        //        this.stopEvents = false;
+	        //    }
+	        //    else if (this.hero.speakingTo.progress.done) {
+	        //        this.hero.speakingTo.isSpeaking = false;
+	        //        this.hero.isSpeaking = false;
+
+	        //        if (this.hero.speakingTo.game) {
+	        //            this.stopEvents = true;
+	        //            this.hero.speakingTo.startGame();
+	        //        }
+	        //    }
+	        //}
 	        else {
 	            if (this.hero.speakingTo.isSpeaking) {
 	                this.hero.isSpeaking = true;
@@ -548,7 +580,14 @@ Story = Class.extend({
 	        if (this.hero.speakingTo.game.gameOver && this.hero.speakingTo.speech.conversetionEnded && this.hero.speech.conversetionEnded) {
 	            this.stopEvents = false;
 	                this.inGame = false;
-	            this.hero.speakingTo.game.gameOver = false;
+	                this.hero.speakingTo.game.gameOver = false;
+	            /*Here we will add the points from the finished game into the click point in which the game is.*/
+	            //if(this.hero.speakingTo.score == 0) {
+	            //  this.gamesFinished++;
+	            //}
+	            //if(this.hero.speakingTo.score < this.hero.speakingTo.game.score) {
+	            //  this.hero.speakingTo.score = this.hero.speakingTo.game.score;
+	            //}
 	            if (this.hero.speakingTo.progress.after) {
 	                this.hero.prepareObjectForSpeaking(this.hero.speakingTo);
 	                this.hero.speakingTo.prepareObjectForSpeaking("");
@@ -570,6 +609,7 @@ Story = Class.extend({
 	            this.hero.speakingTo.progress.after = true;
 
 	            if (this.hero.speakingTo.game) {
+	                //console.log('asdaskdalsdkalskdlaskdlakdlaskdlaksdlakdlaskdlakdlasdkalsdkaldkadkal');
 	                this.stopEvents = true;
 	                this.hero.speakingTo.startGame();
 	            }
@@ -592,6 +632,18 @@ Story = Class.extend({
 	        }
 	    }
 	},
+    // will be finished after end game screen is done;
+	checkIfAllGamesFinished: function(){
+	    if (this.gamesFinished == this.gamesAmount) {
+	        var array = this.interactableObjects,
+                finalScore = 0;
+	        for (var i = 0; i < array.length; i++) {
+	            finalScore += array[i].score;
+	        }
+	        this.endStory();
+	        return finalScore;
+	    }
+	},
     addInteractableObject: function (iObject) {
         this.interactableObjects.push(iObject);
     },
@@ -603,7 +655,7 @@ Story = Class.extend({
     },
     searchInteractableObjectByName: function (name) {
         var array = this.interactableObjects;
-        for (var i = 0; i <= array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             if (array[i].name == name) {
                 return array[i];
             }
@@ -611,7 +663,7 @@ Story = Class.extend({
     },
     searchMovableObjectsByName: function (name) {
         var array = this.MovableObjects;
-        for (var i = 0; i <= array.length; i++) {
+        for (var i = 0; i < array.length; i++) {
             if (array[i].name == name) {
                 return array[i];
             }
@@ -640,6 +692,91 @@ Story = Class.extend({
             })();
 
         }
+    },
+    
+    preloadEverything: function(){
+    	this.preloadSprites(
+    			'source/heroMoveUp.png',
+    			'source/heroMoveDown.png',
+    			'source/heroMoveLeft.png',
+    			'source/heroMoveRight.png',
+    			
+    			'source/elderMoveUp.png',
+    			'source/elderMoveDown.png',
+    			'source/elderMoveLeft.png',
+    			'source/elderMoveRight.png',
+    			
+                'source/dragonMoveUp.png',
+                'source/dragonMoveDown.png',
+                'source/dragonMoveLeft.png',
+                'source/dragonMoveRight.png',
+                
+                'source/elfMoveUp.png',
+                'source/elfMoveDown.png',
+                'source/elfMoveLeft.png',
+                'source/elfMoveRight.png',
+                
+                'source/banditMoveUp.png',
+                'source/banditMoveDown.png',
+                'source/banditMoveLeft.png',
+                'source/banditMoveRight.png',
+                
+                'source/orcMoveUp.png',
+                'source/orcMoveDown.png',
+                'source/orcMoveLeft.png',
+                'source/orcMoveRight.png',
+                
+                'source/elf game/spriteLevel1.png',
+                'source/elf game/spriteLevel2.png',
+                'source/elf game/spriteLevel3.png',
+                
+                'source/elf game/coinSprite.png',
+                
+                'source/lightning_width40px.png',
+
+                'source/brownElfMoveUp.png',
+                'source/brownElfMoveDown.png',
+                'source/brownElfMoveLeft.png',
+                'source/brownElfMoveRight.png',
+
+                'source/castleGlowSprite.png',
+                'source/dwarfGlowSprite.png',
+                'source/treeGlowSprite.png',
+                'source/defaultGlow.png',
+                'source/defaultGlow.png',
+                'source/banditCampGlowSprite.png',
+                'source/orcGlowSprite.png'
+
+    	);
+    	
+    	this.preloadPortraits(
+    		'source/heroPortrait.png',
+    		'source/elderPortrait.png',
+    		'source/elfPortrait.png',
+    		'source/dwarfPortrait.png',
+    		'source/kingPortrait.png',
+            'source/banditPortrait.png',
+            'source/dragonPortrait.png',
+            'source/orcPortrait.png'
+    	);
+    	this.soundTrack.preloadMainSounds(
+            'music/Dirt.mp3',
+            'music/Grass.mp3',
+            'music/Rough.mp3',
+            'music/Swamp.mp3',
+            'music/Water.mp3',
+            'music/Snow.mp3',
+            'music/ElementalMetropolis.mp3',
+            'music/Sand.mp3',
+            'music/Volcanic.mp3',
+            'music/Wizards.mp3',
+            'music/ElvesTown.mp3',
+            'music/Necropolis.mp3',
+            'music/KnightsFortress.mp3',
+            'music/ChaosCity.mp3'
+        );
+    	this.soundTrack.preloadQuestSounds('source/rada.mp3');
+    	//this.soundTrack.preloadSounds('source/rada.mp3');
     }
 });
 
@@ -647,6 +784,7 @@ Story = Class.extend({
 var story,
     context,
     mainLoop,
+    menu,
     yolo;
 
 
@@ -654,115 +792,31 @@ var story,
 
 
 window.onload = function () {
-	canvas = $("#canvas")[0];
+	
+	menu = new Menu();
+	
+	menu.initializeMenu();
+	
+	
+	/*canvas = $("#canvas")[0];
 	ctx = canvas.getContext('2d');
 	story = new Story();
 	story.checkRequestAnimationFrame();
 
-	
-	
-	
+	story.preloadEverything();
 
 	story.inventory.getItem('axe');
 	story.inventory.getItem('bow');
 	story.inventory.getItem('sword');
-
-
-	story.preloadSprites(
-			'source/heroMoveUp.png',
-			'source/heroMoveDown.png',
-			'source/heroMoveLeft.png',
-			'source/heroMoveRight.png',
-			
-			'source/elderMoveUp.png',
-			'source/elderMoveDown.png',
-			'source/elderMoveLeft.png',
-			'source/elderMoveRight.png',
-			
-            'source/dragonMoveUp.png',
-            'source/dragonMoveDown.png',
-            'source/dragonMoveLeft.png',
-            'source/dragonMoveRight.png',
-            
-            'source/elfMoveUp.png',
-            'source/elfMoveDown.png',
-            'source/elfMoveLeft.png',
-            'source/elfMoveRight.png',
-            
-            'source/banditMoveUp.png',
-            'source/banditMoveDown.png',
-            'source/banditMoveLeft.png',
-            'source/banditMoveRight.png',
-            
-            'source/orcMoveUp.png',
-            'source/orcMoveDown.png',
-            'source/orcMoveLeft.png',
-            'source/orcMoveRight.png',
-            
-            'source/elf game/spriteLevel1.png',
-            'source/elf game/spriteLevel2.png',
-            'source/elf game/spriteLevel3.png',
-            
-            'source/elf game/coinSprite.png',
-            
-            'source/lightning_width40px.png',
-
-            'source/brownElfMoveUp.png',
-            'source/brownElfMoveDown.png',
-            'source/brownElfMoveLeft.png',
-            'source/brownElfMoveRight.png',
-
-            'source/castleGlowSprite.png',
-            'source/dwarfGlowSprite.png',
-            'source/treeGlowSprite.png',
-            'source/defaultGlow.png',
-            'source/defaultGlow.png',
-            'source/banditCampGlowSprite.png',
-            'source/orcGlowSprite.png'
-
-	);
 	
-	story.preloadPortraits(
-		'source/heroPortrait.png',
-		'source/elderPortrait.png',
-		'source/elfPortrait.png',
-		'source/dwarfPortrait.png',
-		'source/kingPortrait.png',
-        'source/banditPortrait.png',
-        'source/dragonPortrait.png',
-        'source/orcPortrait.png'
-	);
-	story.soundTrack.preloadMainSounds(
-        'music/Dirt.mp3',
-        'music/Grass.mp3',
-        'music/Rough.mp3',
-        'music/Swamp.mp3',
-        'music/Water.mp3',
-        'music/Snow.mp3',
-        'music/ElementalMetropolis.mp3',
-        'music/Sand.mp3',
-        'music/Volcanic.mp3',
-        'music/Wizards.mp3',
-        'music/ElvesTown.mp3',
-        'music/Necropolis.mp3',
-        'music/KnightsFortress.mp3',
-        'music/ChaosCity.mp3'
-    );
-	story.soundTrack.preloadQuestSounds('source/rada.mp3');
     story.addEvents();
- //   mainLoop = setInterval(story.mainLoop, 30);
-    story.mainLoop();
     
+    story.mainLoop();
 
     //game = new TonyGame();
     //game.start();
-     //window.addEventsListener('keydown', listenKeyEvents, false);
-     //window.addEventsListener('keyup', listenKeyEvents, false);
-     //game.putFirstTwoRandomNumbers();
-
-
     //elfGame = new RadoGame();
     //elfGame.start();
     yolo = new PathFinder();
-    yolo.startGame();
+    yolo.startGame();*/
 };
