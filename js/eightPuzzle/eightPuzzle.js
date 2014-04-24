@@ -72,7 +72,7 @@ var EightPuzzle = Game.extend({
         this.addGameToPlot();
         this.createTableArray();
         this.getEmptySlot();
-        $(document).on('keyup', this, this.listenKeyEvents);
+        $(document).on('keydown', this, this.listenKeyEvents);
         this.update();
     },
     endGame: function () {
