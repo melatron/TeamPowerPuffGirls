@@ -72,7 +72,9 @@ body {
     margin:auto;
     position:relative;
     background-image: url(../source/square-game-background3.png);
-    background-size:420px 260px;
+    background-size:260px 260px;
+    background-position:center;
+    background-repeat: no-repeat;
     display:none;
 }
 
