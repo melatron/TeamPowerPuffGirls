@@ -262,7 +262,7 @@ Story = Class.extend({
 
             for (var i = 0; i < ev.data.interactableObjects.length; i++) {  // check if clicked
                 currentObject = ev.data.interactableObjects[i];
-                if (currentObject.checkIfClicked(mouseX, mouseY)) {
+                if (currentObject.checkIfClicked(mouseX, mouseY) && currentObject.isAvailable) {
                     ev.data.hero.prepareObjectForSpeaking(currentObject);
                     currentObject.prepareObjectForSpeaking("");
                     for (var j = 0; j < ev.data.interactableObjects.length; j++) {
@@ -306,7 +306,7 @@ Story = Class.extend({
             if((this.mousePos.x > temp.x && this.mousePos.x < temp.x + temp.width) && 
                 (this.mousePos.y > temp.y && this.mousePos.y < temp.y + temp.height))
             {
-                if(this.stopEvents == false){
+                if(this.stopEvents == false && temp.isAvailable){
                     if(temp.spriteGlow){
                         temp.spriteGlow.drawSprite()
                     }
@@ -606,6 +606,12 @@ Story = Class.extend({
 	              this.hero.speakingTo.score = this.hero.speakingTo.game.score;
 	            }
 	            if (this.hero.speakingTo.progress.after) {
+	                for (var i = 0; i < this.interactableObjects.length; i++){
+	                    if (this.interactableObjects[i] == this.hero.speakingTo) {
+	                        this.interactableObjects[i + 1].isAvailable = true;
+	                        break;
+	                    }
+	                }
 	                this.hero.prepareObjectForSpeaking(this.hero.speakingTo);
 	                this.hero.speakingTo.prepareObjectForSpeaking("");
 	            }

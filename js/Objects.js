@@ -345,6 +345,7 @@ ClickPoint = InteractableObject.extend({
     init: function (x, y, width, height, name, arrivalPoint, game, heroDialogs, questDialogs) {
         this._super(x, y, width, height, name, game, heroDialogs, questDialogs);
         this.arrivalPoint = arrivalPoint;
+        this.isAvailable = false;
         
     },
 
@@ -853,41 +854,47 @@ Menu = Class.extend({
 	},
 	
 	startGame: function(e){
-		if(!e.data.isGameStarted){
-			
-			e.data.isGameStarted = true;
-			e.data.rainSound.pause();
-			e.data.music.pause();
-			e.data.thunderSound.pause();
-			
-			e.data.hideMenu();
-			
-			setTimeout(function(){
-				$('#main').fadeIn(2000);
-			}, 2000);
-			
-			canvas = $("#canvas")[0];
-			ctx = canvas.getContext('2d');
-			story = new Story();
-			story.checkRequestAnimationFrame();
-			
-			story.preloadEverything();
-			
-			story.inventory.getItem('axe');
-			story.inventory.getItem('bow');
-			story.inventory.getItem('sword');
-			
-			story.addEvents();
-			
-			story.mainLoop();
-			
-			//game = new TonyGame();
-			//game.start();
-			//elfGame = new RadoGame();
-			//elfGame.start();
-			//yolo = new PathFinder();
-			//yolo.startGame();			
-		}
+
+        e.data.rainSound.pause();
+        e.data.music.pause();
+        e.data.thunderSound.pause();
+		
+		e.data.hideMenu();
+		
+		setTimeout(function(){
+			$('#main').fadeIn(2000);
+		}, 2000);
+		
+		canvas = $("#canvas")[0];
+		ctx = canvas.getContext('2d');
+		story = new Story();
+		story.checkRequestAnimationFrame();
+
+	     /* all quests are available */
+		story.interactableObjects[0].isAvailable = true;       
+		story.interactableObjects[1].isAvailable = true;
+		story.interactableObjects[2].isAvailable = true;
+		story.interactableObjects[3].isAvailable = true;
+		story.interactableObjects[4].isAvailable = true;
+		story.interactableObjects[5].isAvailable = true;
+		story.interactableObjects[6].isAvailable = true;
+
+		story.preloadEverything();
+
+		story.inventory.getItem('axe');
+		story.inventory.getItem('bow');
+		story.inventory.getItem('sword');
+		story.inte
+	    story.addEvents();
+	    
+	    story.mainLoop();
+
+	    //game = new TonyGame();
+	    //game.start();
+	    //elfGame = new RadoGame();
+	    //elfGame.start();
+	    //yolo = new PathFinder();
+	    //yolo.startGame();
 	},
 	
 	manageSounds: function(){
