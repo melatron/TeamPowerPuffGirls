@@ -140,6 +140,7 @@ MainCharacters = PFMovableObject.extend({
 PathFinder = Game.extend({
     init: function () {
         var self = this;
+        this.scroll = $('#scroll');
         this.stopEvents = false;
         this.canSpawnTemp = true;
         this.canSpawnPerm = true;
@@ -199,7 +200,9 @@ PathFinder = Game.extend({
             if (!self.stopEvents) {
                 self.mainCharacter.drawCharacter();
             }
-            self.animation = requestAnimationFrame(self.update);
+            if(!self.gameOver){
+            	self.animation = requestAnimationFrame(self.update);            	
+            }
         };
     },
     addPlatformImages: function () {
@@ -563,9 +566,19 @@ PathFinder = Game.extend({
         }
         this.mainCharacterDead = false;
     },
-
+    clickEvent: function (ev) {
+        if (!ev.data.stopEvents) {
+            console.log('hello');
+            var rect = ev.data.canvas.getBoundingClientRect(),
+                mouseX = ev.clientX - rect.left,
+                mouseY = ev.clientY - rect.top;
+            ev.data.resetMainCharacter(mouseX, mouseY);
+        }
+    },
     addEventListeners: function () {
+        
         var self = this;
+        $('#pathFinderCanvas').on('click', this, this.clickEvent);
         $(document).on('keydown', function (e) {
             if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39 || e.keyCode == 67) {
                 e.preventDefault();
@@ -615,7 +628,7 @@ PathFinder = Game.extend({
         this.ballOfDeaths = [];
         this.finishBlocks = [];
         switch (level) {
-            case 0:
+            case 1:
                 this.backGroundSprite = new Sprite(5040, 224, 8, 6, story.sprites[40], { x: + 4.5, y: 0 }, this.gameContext);
                 this.startingPoint = { x: 20, y: 30 };
                 this.mapBoxes.push(new PFObjects(0, 0, 10, this.height));
@@ -648,7 +661,7 @@ PathFinder = Game.extend({
 
                 break;
 
-            case 1:
+            case 0:
                 this.backGroundSprite = new Sprite(630, 224, 1, 6, story.sprites[41], { x: +4.5, y: 0 }, this.gameContext);
                 this.startingPoint = { x: 5, y: 10 };
                 this.mapBoxes.push(new PFObjects(0, 30, 50, this.height));
@@ -770,11 +783,11 @@ PathFinder = Game.extend({
         this.score = 15000 / this.deaths;
         this.stopEvents = true;
         clearInterval(this.interval);
-        cancelAnimationFrame(this.animation);
         this.removeGameFromPlot();
         this.gameOver = true;
 
-    }
+    },
+
 
 
 });

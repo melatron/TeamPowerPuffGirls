@@ -29,6 +29,37 @@ body {
 	float: left;
 	background-image: url(../source/gamePlotBackground.png);
 }
+#scroll{
+	float: right;
+	position: relative;
+	width: 150px;
+	height: 224px;
+	margin-right: 5px;
+	margin-top: 35px;
+    display: none;
+}
+#scroll .top{
+	background-image: url(../source/scrollTop.png);
+	width: 150px;
+	height: 29px;
+	position: absolute;
+	top: -5px;
+	z-index: 10;
+}
+#scroll .bottom{
+	background-image: url(../source/scrollBottom.png);
+	width: 150px;
+	height: 184px;
+	position: absolute;
+	top: -120px;
+	z-index: 1;
+}
+#bottomScrollWrapper{
+	overflow: hidden;
+	position: relative;
+	width: inherit;
+	height: inherit;
+}
 #inventory {
 	width: 224px;
 	height: 256px;
@@ -62,7 +93,10 @@ body {
 
 /*--------------------PATH FINDER GAME-------------------*/
 #pathFinder {
-    border:1px solid #000;
+	width: 630px;
+	height: 224px;
+	float: left;
+	border: 2px solid rgba(255, 255, 255, 0.4);
     display:none;
 }
 /*-----------------SQUARE GAME CSS--------------------*/
@@ -167,6 +201,8 @@ body {
 /* ELF GAME STYLEZ */
 
 #elf-game {
+	margin-top: 15px;
+	margin-left: 5px;
 	height:224px;
 	width:640px;
     position: absolute;
@@ -234,7 +270,6 @@ body {
             margin-left: 119px;
             margin-top: -3px;
         }
-        
         .tutorial{
         	display: none;
         	width: 200px;
@@ -244,11 +279,12 @@ body {
         	border: 2px solid rgba(255, 255, 255, 0.5);
         	border-radius: 10px;
         }
-        
         .tutorial.first{
         	background-image: url(../source/menu/tutorial1.png);
         }
-        
+        .tutorial.second{
+        	background-image: url(../source/menu/tutorial2.png);
+        }
         #flash{
             width: 1024px;
             height: 768px;

@@ -14,6 +14,8 @@ Story = Class.extend({
 
         this.storyFinished = false;
         
+        
+        
         this.gamesFinished = 0;
         this.gamesAmount = 6;
         this.buttons = [];
@@ -236,7 +238,7 @@ Story = Class.extend({
     // ---- Methods for preloading images ---- //
     addEvents: function () {
         this.stopEvents = false;
-        $('canvas').on('click', this, this.clickEvent);
+        $('#canvas').on('click', this, this.clickEvent);
         $(document).on('keyup', this, this.handleKeyPressed);
         $(document).on('mousemove', this, this.onMouseMove);
     },
@@ -306,7 +308,10 @@ Story = Class.extend({
         }
     },
     continueStoryButton: function () {
-    
+        if (this.buttons[3].checkIfClicked(x, y)) {
+            this.endGameScreenOn = false;
+            this.stopEvents = false;
+        }
     },
 
     onMouseMove: function (e) {
@@ -326,7 +331,7 @@ Story = Class.extend({
             {
                 if(this.stopEvents == false && temp.isAvailable){
                     if(temp.spriteGlow){
-                        temp.spriteGlow.drawSprite()
+                        temp.spriteGlow.drawSprite();
                     }
                 }
             }

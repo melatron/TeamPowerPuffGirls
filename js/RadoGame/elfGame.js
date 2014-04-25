@@ -3,9 +3,9 @@
 RadoGame = Game.extend({
 	init: function(){
 		var game = this;
-
+		this.scroll = $('#scroll');
 		this.levels = [];            //array of levels
-		this.levelIndex = 0;
+		this.levelIndex = 2;
 		this.currentLevel = null;	//current level
 		this.passableBlocks = [];	//array of all passable blocks
 		this.impassableBlocks = [];	//array of all impassable blocks
@@ -37,7 +37,6 @@ RadoGame = Game.extend({
 			}
 		};
 	},
-	
 	// ===== START METHOD ====== //
 	start: function(){
 		this.getContext();
@@ -72,7 +71,6 @@ RadoGame = Game.extend({
 
 	endGame: function(){
 		this.score = Math.round(this.coinScore / this.deaths);
-		console.log('a');
 		this.coinScore = 0;
 		this.removeGameFromPlot();
 		this.removeEventListeners();
