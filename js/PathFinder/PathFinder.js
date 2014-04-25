@@ -185,7 +185,8 @@ PathFinder = Game.extend({
         this.levelsPassed = [false, false, false];
         this.currentLevel = 0;
         
-
+        this.greenPlatform = null;
+        this.yellowPlatform = null;
         this.animation = null;
         this.update = function () {
             
@@ -200,6 +201,10 @@ PathFinder = Game.extend({
             }
             self.animation = requestAnimationFrame(self.update);
         };
+    },
+    addPlatformImages: function () {
+        this.greenPlatform = story.sprites[43];
+        this.yellowPlatform = story.sprites[44];
     },
     drawBackground: function () {
         if (this.backGroundSprite != null) {
@@ -313,8 +318,8 @@ PathFinder = Game.extend({
         this.ballOfDeath(this.ballOfDeaths, "orange");
 
         this.drawBackground();
-        this.mainBlocks(this.createdBoxesPerm, 'green', true);
-        this.mainBlocks(this.createdBoxesTemp, 'yellow', true);
+        this.mainBlocks(this.createdBoxesPerm, this.greenPlatform, true);
+        this.mainBlocks(this.createdBoxesTemp, this.yellowPlatform, true);
         
         this.verticalSpires(this.lightningOnInterval, this.lightningFlag, true);
         
@@ -329,7 +334,7 @@ PathFinder = Game.extend({
         for (var i = 0; i < len; i++) {
             if (blocks[i] != null) {
                 if (flag) {
-                    this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
+                    this.gameContext.drawImage(color, blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
                 }
 
                 var dir = this.colCheck(this.mainCharacter, blocks[i]);
@@ -752,6 +757,7 @@ PathFinder = Game.extend({
         this.mainCharacter.y = this.startingPoint.y;
     },
     start: function () {
+        this.addPlatformImages();
         this.stopEvents = false;
         this.mainCharacter.addSprites();
         this.gameOver = false;

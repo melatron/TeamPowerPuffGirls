@@ -436,7 +436,7 @@ Story = Class.extend({
         this.sprites.push(pathFinderLevelThreeImage);
         
         this.sprites.push(pathFinderGreenBoardImage);
-        this.sprites.push(pathFinderYellowBoardImag);
+        this.sprites.push(pathFinderYellowBoardImage);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
