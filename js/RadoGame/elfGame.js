@@ -25,14 +25,13 @@ RadoGame = Game.extend({
 		
 		this.animation = null;
 		
-		// -- MAIN LOOP -- //
+		// -- MAIN LOOP -- // Use arrows to move. Avoid elves. Collect coins. Get the tree piece. Go!
 		
 		this.mainLoop = function(){
 			game.gameContext.save();
 			game.gameContext.clearRect(0, 0, canvas.width, canvas.height);
 			game.updateLevel();
 			game.gameContext.restore();
-			console.log(game.currentLevel);
 			if(!game.gameOver){
 				game.animation = requestAnimationFrame(game.mainLoop);
 			}

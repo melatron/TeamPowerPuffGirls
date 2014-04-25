@@ -1005,20 +1005,37 @@ Menu = Class.extend({
 		            $(elem + ' .second').animate({
 		                top: "170px"
 		            }, 1000, 'easeOutBounce');
+		            $(elem + ' .third').animate({
+		            	top: '170px'
+		            }, 1000, 'easeOutBounce');
 
 		            setTimeout(function(){
 		                $(elem + ' .second').animate({
 		                        top: '270px'
-		                    }, 1000, 'easeOutBounce');
+		                	}, 1000, 'easeOutBounce');
+		                $(elem + ' .third').animate({
+	                        	top: '340px'
+	                    	}, 1000, 'easeOutBounce');
 		                $(elem + ' .first .dropDownCell').show().animate({
-		                    top: "70px"
+		                    top: '70px'
 		                }, 1000, 'easeOutBounce', function(){
 		                    $(elem + ' .second').show();
 		                    $(elem + ' .second .dropDownCell').show();
 		                    setTimeout(function(){
 		                        $(elem + ' .second .dropDownCell').animate({
 		                            top: '70px'
-		                        }, 1000, 'easeOutBounce');
+		                        }, 1000, 'easeOutBounce', function(){
+		                        	$(elem + ' .third').show();
+		                        	$(elem + ' .third .dropDownCell').show();
+		                        	$(elem + ' .third').animate({
+		                        		top: '440px'
+		                        	}, 1000, 'easeOutBounce');
+		                        	setTimeout(function(){
+		                        		$(elem + ' .third .dropDownCell').animate({
+		                        			top:'70px'
+		                        		}, 1000, 'easeOutBounce');
+		                        	}, 200);
+		                        });
 		                        e.data.menuCells[index].isExpanded = true;
 		                    }, 200);
 		                });
