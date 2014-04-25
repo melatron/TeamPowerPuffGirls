@@ -411,6 +411,7 @@ Story = Class.extend({
 	                if (this.gamesFinished == this.gamesAmount) {
 	                    this.storyEnded = true;
 	                    this.endGameScreenOn = true;
+	                    this.stopEvents = true;
 	                }
 	            }
 	            if(this.hero.speakingTo.score < this.hero.speakingTo.game.score) {
@@ -470,6 +471,8 @@ Story = Class.extend({
 	endStoryScreen: function () {
 	    if (this.endGameScreenOn) {
 	        this.blackenScreen();
+	        this.buttons[2].drawButton();
+	        this.buttons[3].drawButton();
 	    }   
 	},
 	calculateFinalScore: function () {

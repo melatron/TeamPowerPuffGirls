@@ -42,7 +42,7 @@ ButtonsObject = GameObject.extend({
             return true;
         }
     },
-    drawButtons: function () {
+    drawButton: function () {
         ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 
