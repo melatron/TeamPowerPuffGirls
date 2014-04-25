@@ -184,24 +184,23 @@ body {
     width: 222px;
     height:250px;
 	padding-left:1px;
-    padding-top: 2px;
+    padding-top: 1px;
 }
 
 .inventory-slot {
-    width: 55px;
-    height: 55px;
-    margin-left: 36px;
-    margin-top: 19px;
+    width: 54px;
+    height: 54px;
+    margin-left: 38px;
+    margin-top: 22px;
     float:left;
-    border-radius: 9px;
-    /*overflow:hidden;*/
+    border-radius: 4px;
+    background-color: grey;
 }
 
  .item {
-    width:50px;
-    height:50px;
-    padding: 3px 0 0 3px;
-    border-radius:5px;
+    width:54px;
+    height:54px;
+    border-radius:4px;
  }
 
 /* ELF GAME STYLEZ */

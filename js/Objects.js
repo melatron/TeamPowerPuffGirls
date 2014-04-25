@@ -627,13 +627,19 @@ Item = Class.extend({
         this.dom = $('<img class ="item" src="source/items/' + this.name + '.png">');
         this.dom.on('mouseenter', this, this.showAttributes);
         this.dom.on('mouseleave', this, this.hideAttributes);
+        var self = this;
 
         this.dom.draggable({
+            start: function () {
+                self.hideAttributes();
+                $(this).css({ zIndex: '1'})
+            },
+
             stop: function (ev, ui) {
                 $(this).css({
                     left: '0px',
                     top: '0px'
-                });
+                });               
             }
         });
         
@@ -689,32 +695,30 @@ Item = Class.extend({
         $('#item-attributes').css({ display: 'none'});
     },
 
-    pickItem: function (e) {
-        console.log('a');
-
-
-    },
-
-    placeItem: function (e) {
-        console.log('b');
-
-    }
-
 });
 
 Inventory = Class.extend({
     name: "inventory",
     init: function () {
+        this.slots = [0, 0, 0, 0, 0, 0];
+
 
         $('.inventory-slot').droppable({
             tolerance: 'pointer',
+
             drop: function (ev, ui) {
-                ui.draggable.appendTo($(this));
+
+                var oldSlotIndex = ui.draggable.parent().attr('slot'),
+                    newSlotIndex = $(this).attr('slot');                  
+                console.log(ui.draggable.css('z-index'))
+                if (story.inventory.slots[newSlotIndex] === 0) {
+                    story.inventory.slots[oldSlotIndex] = 0;
+                    ui.draggable.appendTo($(this));
+                    ui.draggable.css({ zIndex: '0' });
+                    story.inventory.slots[newSlotIndex] = 1;
+                };                             
             }
         });
-
-
-        this.slots = [0, 0, 0, 0, 0, 0];
 
     },
 
@@ -730,7 +734,7 @@ Inventory = Class.extend({
         for (var i = 0; i < this.slots.length; i++) {
             if (this.slots[i] == 0) {
                 temp.dom.appendTo($('.inventory-slot').eq(i));
-                this.slots[i] = temp;
+                this.slots[i] = 1;
                 break;
             };
         };
