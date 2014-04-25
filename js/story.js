@@ -374,6 +374,8 @@ Story = Class.extend({
             orcGlowImage = null;
             
             pathFinderLevelOneImage = null;
+            pathFinderLevelTwoImage = null;
+            pathFinderLevelThreeImage = null;
 
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
