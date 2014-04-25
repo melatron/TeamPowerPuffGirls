@@ -345,6 +345,7 @@ ClickPoint = InteractableObject.extend({
     init: function (x, y, width, height, name, arrivalPoint, game, heroDialogs, questDialogs) {
         this._super(x, y, width, height, name, game, heroDialogs, questDialogs);
         this.arrivalPoint = arrivalPoint;
+        this.isAvailable = false;
         
     },
 
@@ -861,12 +862,21 @@ Menu = Class.extend({
 		story = new Story();
 		story.checkRequestAnimationFrame();
 
+	     /* all quests are available */
+		story.interactableObjects[0].isAvailable = true;       
+		story.interactableObjects[1].isAvailable = true;
+		story.interactableObjects[2].isAvailable = true;
+		story.interactableObjects[3].isAvailable = true;
+		story.interactableObjects[4].isAvailable = true;
+		story.interactableObjects[5].isAvailable = true;
+		story.interactableObjects[6].isAvailable = true;
+
 		story.preloadEverything();
 
 		story.inventory.getItem('axe');
 		story.inventory.getItem('bow');
 		story.inventory.getItem('sword');
-		
+		story.inte
 	    story.addEvents();
 	    
 	    story.mainLoop();
