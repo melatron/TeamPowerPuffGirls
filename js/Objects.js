@@ -622,6 +622,14 @@ Item = Class.extend({
         this.dom.on('mouseenter', this, this.showAttributes);
         this.dom.on('mouseleave', this, this.hideAttributes);
 
+        this.dom.draggable({
+            stop: function (ev, ui) {
+                $(this).css({
+                    left: '0px',
+                    top: '0px'
+                });
+            }
+        });
         
     
         this.bonusTime = null;
@@ -648,7 +656,7 @@ Item = Class.extend({
             this.bonusMoves = 0;
             this.bonusSpeed = 1;
             this.bonusTime = 300;
-        };       
+        };
     },
 
     showAttributes: function (e) {
@@ -691,6 +699,14 @@ Item = Class.extend({
 Inventory = Class.extend({
     name: "inventory",
     init: function () {
+
+        $('.inventory-slot').droppable({
+            tolerance: 'pointer',
+            drop: function (ev, ui) {
+                ui.draggable.appendTo($(this));
+            }
+        });
+
 
         this.slots = [0, 0, 0, 0, 0, 0];
 

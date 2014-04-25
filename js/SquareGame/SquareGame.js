@@ -151,7 +151,7 @@ var SquareGame = Game.extend({
             top: (e.data.objectContext.y) * e.data.gameContext.squareWidth + e.data.gameContext.marginTop + 'px',
         });
 
-        //$('.selected').removeClass('selected');
+        $('.selected').removeClass('selected');
         e.data.objectContext.dom.addClass('selected');
        
     },
