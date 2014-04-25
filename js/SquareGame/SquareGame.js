@@ -279,9 +279,7 @@ var SquareGame = Game.extend({
 
 
     populateFirstMap: function () {
-
         this.currentMap = this.firstMap;
-
 
         this.createSquare(0, 1, 'green', 'leader', 0);
         this.createSquare(1, 1, 'green', 'filler', 1);
@@ -336,7 +334,7 @@ var SquareGame = Game.extend({
         this.removeGameFromPlot();
         this.score = (300 - this.movesCounter) * 10;
 
-        if ((this.objectives.moves - this.gameBonuses.bonusMoves) < this.movesCounter) {
+        if (this.movesCounter < (this.objectives.moves - this.gameBonuses.bonusMoves)) {
             this.getReward('sword');
         }
     },
