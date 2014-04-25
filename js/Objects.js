@@ -877,7 +877,6 @@ Menu = Class.extend({
 		story.inventory.getItem('axe');
 		story.inventory.getItem('bow');
 		story.inventory.getItem('sword');
-		story.inte
 	    story.addEvents();
 	    
 	    story.mainLoop();

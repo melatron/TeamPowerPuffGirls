@@ -14,6 +14,8 @@ Story = Class.extend({
 
         this.storyFinished = false;
         
+        this.scroll = $('#scroll'); // Scroll property - use this to HIDE and SHOW the scroll
+        
         this.gamesFinished = 0;
         this.gamesAmount = 6;
         this.buttons = [];
@@ -329,7 +331,7 @@ Story = Class.extend({
             {
                 if(this.stopEvents == false && temp.isAvailable){
                     if(temp.spriteGlow){
-                        temp.spriteGlow.drawSprite()
+                        temp.spriteGlow.drawSprite();
                     }
                 }
             }
@@ -746,6 +748,22 @@ Story = Class.extend({
             })();
 
         }
+    },
+    
+    // ========== SCROLL METHODS - OPEN & CLOSE ================ //
+    
+    openScroll: function(){
+    	var id = this.scroll.attr('id');
+    	$('#' + id + ' .bottom').animate({
+    		'top': '0px'
+    	}, 1000, 'easeInOutBack');
+    },
+    
+    closeScroll: function(){
+    	var id = this.scroll.attr('id');
+    	$('#' + id + ' .bottom').animate({
+    		'top': '-120px'
+    	}, 1000, 'easeInOutBack');
     },
     
     preloadEverything: function(){
