@@ -21,6 +21,7 @@ Story = Class.extend({
             finishGame = new ButtonsObject(984, 0, 40, 40, "FinishGame");
         this.buttons.push(toggleMusic);
         this.buttons.push(finishGame);
+        this.endGameScreenOn = false;
 
         var humanCastle = new ClickPoint(106, -13, 150, 140, "humanCastle",
         													{
@@ -224,6 +225,9 @@ Story = Class.extend({
             self.checkIfFocused();
             ctx.restore();
             self.animation = requestAnimationFrame(self.mainLoop);
+            if (self.endGameScreenOn) {
+                self.endStoryScreen();
+            }
         };
 
         this.inventory = new Inventory();
@@ -272,7 +276,13 @@ Story = Class.extend({
             }
             ev.data.pauseMusicButton(mouseX, mouseY);
         }
+        // here we will add events for the buttons that will apear when the end game screen is on !
+        if (ev.data.endGameScreenOn && ev.data.stopEvents) {
+            ev.data.endStoryButton(mouseX, mouseY);
+            ev.data.continueStoryButton(mouseX, mouseY);
+        }
     },
+    // Here is the functionallity of the buttons:
     pauseMusicButton: function (x, y) {
         if (this.buttons[0].checkIfClicked(x, y)) {
             if (this.buttons[0].toggled) {
@@ -283,12 +293,20 @@ Story = Class.extend({
             }
         }
     },
-    endGameButton: function (x, y) {
-        if (this.buttons[0].checkIfClicked(x, y)) {
+    endStoryScreenButton: function (x, y) {
+        if (this.buttons[1].checkIfClicked(x, y)) {
             if (this.storyEnded) {
-                this.endStory();
+                this.endStoryScreen();
             }
         }
+    },
+    endStoryButton: function () {
+        if (this.buttons[2].checkIfClicked(x, y)) {
+            this.endStory();
+        }
+    },
+    continueStoryButton: function () {
+    
     },
 
     onMouseMove: function (e) {
@@ -320,214 +338,7 @@ Story = Class.extend({
 
 
 
-    preloadSprites: function() {
-    	//define sprites
-    	var heroSpriteUpImage = null, 
-    		heroSpriteDownImage = null,
-    		heroSpriteLeftImage = null,
-    		heroSpriteRightImage = null,
-    		
-    		elderSpriteUpImage = null, 
-    		elderSpriteDownImage = null,
-    		elderSpriteLeftImage = null,
-    		elderSpriteRightImage = null,
-    		
-            dragonSpriteUpImage = null,
-            dragonSpriteDownImage = null,
-            dragonSpriteLeftImage = null,
-            dragonSpriteRightImage = null,
-            
-            elfSpriteUpImage = null,
-            elfSpriteDownImage = null,
-            elfSpriteLeftImage = null,
-            elfSpriteRightImage = null,
-            
-            banditSpriteUpImage = null,
-            banditSpriteDownImage = null,
-            banditSpriteLeftImage = null,
-            banditSpriteRightImage = null,
-            
-            orcSpriteUpImage = null,
-            orcSpriteDownImage = null,
-            orcSpriteLeftImage = null,
-            orcSpriteRightImage = null,
-            
-            elfGameLevel1Image = null,
-            elfGameLevel2Image = null,
-            elfGameLevel3Image = null,
-            
-            elfGameCoinImage = null,
-    	
-    		lightningImage = null,
-
-            brownElfSpriteUpImage = null,
-            brownElfSpriteDownImage = null,
-            brownElfSpriteLeftImage = null,
-            brownElfSpriteRightImage = null,
-
-            castleGlowImage = null;
-            dwarfCampGlowImage = null;
-            treeGlowImage = null;
-            mageGlowImage = null;
-            dragonGlowImage = null;
-            banditGlowImage = null;
-            orcGlowImage = null;
-            
-            pathFinderLevelOneImage = null;
-            pathFinderLevelTwoImage = null;
-            pathFinderLevelThreeImage = null;
-            
-            pathFinderGreenBoardImage = null;
-            pathFinderYellowBoardImage = null;
-    	
-    	this.sprites.push(heroSpriteUpImage);   // put images in array
-    	this.sprites.push(heroSpriteDownImage);
-    	this.sprites.push(heroSpriteLeftImage);
-    	this.sprites.push(heroSpriteRightImage);
-    	
-    	this.sprites.push(elderSpriteUpImage);
-    	this.sprites.push(elderSpriteDownImage);
-    	this.sprites.push(elderSpriteLeftImage);
-    	this.sprites.push(elderSpriteRightImage);
-
-        this.sprites.push(dragonSpriteUpImage);
-        this.sprites.push(dragonSpriteDownImage);
-        this.sprites.push(dragonSpriteLeftImage);
-        this.sprites.push(dragonSpriteRightImage);
-        
-        this.sprites.push(elfSpriteUpImage);
-        this.sprites.push(elfSpriteDownImage);
-        this.sprites.push(elfSpriteLeftImage);
-        this.sprites.push(elfSpriteRightImage);
-        
-        this.sprites.push(banditSpriteUpImage);
-        this.sprites.push(banditSpriteDownImage);
-        this.sprites.push(banditSpriteLeftImage);
-        this.sprites.push(banditSpriteRightImage);
-        
-        this.sprites.push(orcSpriteUpImage);
-        this.sprites.push(orcSpriteDownImage);
-        this.sprites.push(orcSpriteLeftImage);
-        this.sprites.push(orcSpriteRightImage);
-        
-        this.sprites.push(elfGameLevel1Image);
-        this.sprites.push(elfGameLevel2Image);
-        this.sprites.push(elfGameLevel3Image);
-        
-        this.sprites.push(elfGameCoinImage);
-        
-        this.sprites.push(lightningImage);
-
-        this.sprites.push(brownElfSpriteUpImage);
-        this.sprites.push(brownElfSpriteDownImage);
-        this.sprites.push(brownElfSpriteLeftImage);
-        this.sprites.push(brownElfSpriteRightImage);
-
-        this.sprites.push(castleGlowImage);
-        this.sprites.push(dwarfCampGlowImage);
-        this.sprites.push(treeGlowImage);
-        this.sprites.push(mageGlowImage);
-        this.sprites.push(dragonGlowImage);
-        this.sprites.push(banditGlowImage);
-        this.sprites.push(orcGlowImage);
-        
-        this.sprites.push(pathFinderLevelOneImage);
-        this.sprites.push(pathFinderLevelTwoImage);
-        this.sprites.push(pathFinderLevelThreeImage);
-        
-        this.sprites.push(pathFinderGreenBoardImage);
-        this.sprites.push(pathFinderYellowBoardImage);
-    	
-		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
-			this.sprites[i] = new Image();
-			this.sprites[i].src = arguments[i];
-		}
-		
-		this.hero.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[0], story.hero, ctx);  // create Sprites
-		this.hero.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[1], story.hero, ctx);
-		this.hero.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], story.hero, ctx);
-		this.hero.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], story.hero, ctx);
-		this.hero.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], story.hero, ctx);
-		
-		this.elder.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[4], story.elder, ctx);
-		this.elder.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[5], story.elder, ctx);
-		this.elder.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[6], story.elder, ctx);
-		this.elder.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[7], story.elder, ctx);
-		this.elder.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[5], story.elder, ctx);
-
-        this.dragon.spriteUp = new Sprite(384, 96, 4, 10, story.sprites[8], story.dragon, ctx);
-        this.dragon.spriteDown = new Sprite(384, 96, 4, 10, story.sprites[9], story.dragon, ctx);
-        this.dragon.spriteLeft = new Sprite(384, 96, 4, 10, story.sprites[10], story.dragon, ctx);
-        this.dragon.spriteRight = new Sprite(384, 96, 4, 10, story.sprites[11], story.dragon, ctx);
-        this.dragon.spriteIdle = new Sprite(96, 96, 1, 10, story.sprites[9], story.dragon, ctx);
-        this.dragon.getDestinationDelay = 500;
-        
-        this.elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[12], story.elf, ctx);
-        this.elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[13], story.elf, ctx);
-        this.elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[14], story.elf, ctx);
-        this.elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[15], story.elf, ctx);
-        this.elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[13], story.elf, ctx);
-        this.elf.getDestinationDelay = 300;
-        
-        this.bandit.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[16], story.bandit, ctx);
-        this.bandit.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[17], story.bandit, ctx);
-        this.bandit.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[18], story.bandit, ctx);
-        this.bandit.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[19], story.bandit, ctx);
-        this.bandit.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[17], story.bandit, ctx);
-        this.bandit.getDestinationDelay = 160;
-        
-        this.orc.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[20], story.orc, ctx);
-        this.orc.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[21], story.orc, ctx);
-        this.orc.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[22], story.orc, ctx);
-        this.orc.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[23], story.orc, ctx);
-        this.orc.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[21], story.orc, ctx);
-        this.orc.getDestinationDelay = 248;
-
-        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, story.sprites[33], this.interactableObjects[0], ctx);
-        this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 4, story.sprites[34], this.interactableObjects[1], ctx);
-        this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 4, story.sprites[35], this.interactableObjects[2], ctx);
-        this.interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 2, story.sprites[36], this.interactableObjects[3], ctx);
-        this.interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 2, story.sprites[37], this.interactableObjects[4], ctx);
-        this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 4, story.sprites[38], this.interactableObjects[5], ctx);
-        this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 4, story.sprites[39], this.interactableObjects[6], ctx);
-	},
-    
-	// ==== Portrait preloader ==== //
-	
-	preloadPortraits: function(){
-	    var heroPortrait = null,
-			elfPortrait = null,
-			elderPortrait = null,
-			kingPortrait = null,
-			dwarfPortrait = null,
-            banditPortrait = null,
-            dragonPortrait = null,
-            orcPortrait = null;
-		
-		this.portraits.push(heroPortrait);
-		this.portraits.push(elderPortrait);
-		this.portraits.push(elfPortrait);
-		this.portraits.push(dwarfPortrait);
-		this.portraits.push(kingPortrait);
-		this.portraits.push(banditPortrait);
-		this.portraits.push(dragonPortrait);
-		this.portraits.push(orcPortrait);
-		
-		for (var i = 0; i < arguments.length; i++){
-			this.portraits[i] = new Image();
-			this.portraits[i].src = arguments[i];
-		}
-		
-		this.hero.setImage(this.portraits[0]);
-		this.interactableObjects[3].setImage(this.portraits[1]);
-		this.interactableObjects[2].setImage(this.portraits[2]);
-		this.interactableObjects[1].setImage(this.portraits[3]);
-		this.interactableObjects[0].setImage(this.portraits[4]);
-		this.interactableObjects[5].setImage(this.portraits[5]);
-		this.interactableObjects[4].setImage(this.portraits[6]);
-		this.interactableObjects[6].setImage(this.portraits[7]);
-		
-	},
+ 
 	checkIfSpeaking: function () {
 	    for (var i = 0; i < this.interactableObjects.length; i++) {
 	        if (this.interactableObjects[i].isInteracting) {
@@ -599,7 +410,7 @@ Story = Class.extend({
 	                this.gamesFinished++;
 	                if (this.gamesFinished == this.gamesAmount) {
 	                    this.storyEnded = true;
-	                    this.endStory();
+	                    this.endGameScreenOn = true;
 	                }
 	            }
 	            if(this.hero.speakingTo.score < this.hero.speakingTo.game.score) {
@@ -655,16 +466,23 @@ Story = Class.extend({
 	        }
 	    }
 	},
-    // will be finished after end game screen is done;
+    // here is the method which will draw the end game screen!
+	endStoryScreen: function () {
+	    if (this.endGameScreenOn) {
+	        this.blackenScreen();
+	    }   
+	},
+	calculateFinalScore: function () {
+	    var array = this.interactableObjects,
+            finalScore = 0;
+	    for (var i = 0; i < array.length; i++) {
+	        finalScore += array[i].score;
+	    }
+	    return finalScore;
+	},
+    // here is the mehtod which will end the story if you have finished all 7 games and you have clicked finish button
 	endStory: function () {
-	    this.blackenScreen();
-	    alert(':] E PEDAL !!!!!!!!!!!!!!!!');
-	        var array = this.interactableObjects,
-                finalScore = 0;
-	        for (var i = 0; i < array.length; i++) {
-	            finalScore += array[i].score;
-	        }
-	        return finalScore;
+    
 	},
     addInteractableObject: function (iObject) {
         this.interactableObjects.push(iObject);
@@ -695,6 +513,214 @@ Story = Class.extend({
         for (var i = 0, len = this.interactableObjects.length; i < len; i++) {
             this.interactableObjects[i].drawObj();
         }
+    },
+    preloadSprites: function () {
+        //define sprites
+        var heroSpriteUpImage = null,
+    		heroSpriteDownImage = null,
+    		heroSpriteLeftImage = null,
+    		heroSpriteRightImage = null,
+
+    		elderSpriteUpImage = null,
+    		elderSpriteDownImage = null,
+    		elderSpriteLeftImage = null,
+    		elderSpriteRightImage = null,
+
+            dragonSpriteUpImage = null,
+            dragonSpriteDownImage = null,
+            dragonSpriteLeftImage = null,
+            dragonSpriteRightImage = null,
+
+            elfSpriteUpImage = null,
+            elfSpriteDownImage = null,
+            elfSpriteLeftImage = null,
+            elfSpriteRightImage = null,
+
+            banditSpriteUpImage = null,
+            banditSpriteDownImage = null,
+            banditSpriteLeftImage = null,
+            banditSpriteRightImage = null,
+
+            orcSpriteUpImage = null,
+            orcSpriteDownImage = null,
+            orcSpriteLeftImage = null,
+            orcSpriteRightImage = null,
+
+            elfGameLevel1Image = null,
+            elfGameLevel2Image = null,
+            elfGameLevel3Image = null,
+
+            elfGameCoinImage = null,
+
+    		lightningImage = null,
+
+            brownElfSpriteUpImage = null,
+            brownElfSpriteDownImage = null,
+            brownElfSpriteLeftImage = null,
+            brownElfSpriteRightImage = null,
+
+            castleGlowImage = null;
+        dwarfCampGlowImage = null;
+        treeGlowImage = null;
+        mageGlowImage = null;
+        dragonGlowImage = null;
+        banditGlowImage = null;
+        orcGlowImage = null;
+
+        pathFinderLevelOneImage = null;
+        pathFinderLevelTwoImage = null;
+        pathFinderLevelThreeImage = null;
+
+        pathFinderGreenBoardImage = null;
+        pathFinderYellowBoardImage = null;
+
+        this.sprites.push(heroSpriteUpImage);   // put images in array
+        this.sprites.push(heroSpriteDownImage);
+        this.sprites.push(heroSpriteLeftImage);
+        this.sprites.push(heroSpriteRightImage);
+
+        this.sprites.push(elderSpriteUpImage);
+        this.sprites.push(elderSpriteDownImage);
+        this.sprites.push(elderSpriteLeftImage);
+        this.sprites.push(elderSpriteRightImage);
+
+        this.sprites.push(dragonSpriteUpImage);
+        this.sprites.push(dragonSpriteDownImage);
+        this.sprites.push(dragonSpriteLeftImage);
+        this.sprites.push(dragonSpriteRightImage);
+
+        this.sprites.push(elfSpriteUpImage);
+        this.sprites.push(elfSpriteDownImage);
+        this.sprites.push(elfSpriteLeftImage);
+        this.sprites.push(elfSpriteRightImage);
+
+        this.sprites.push(banditSpriteUpImage);
+        this.sprites.push(banditSpriteDownImage);
+        this.sprites.push(banditSpriteLeftImage);
+        this.sprites.push(banditSpriteRightImage);
+
+        this.sprites.push(orcSpriteUpImage);
+        this.sprites.push(orcSpriteDownImage);
+        this.sprites.push(orcSpriteLeftImage);
+        this.sprites.push(orcSpriteRightImage);
+
+        this.sprites.push(elfGameLevel1Image);
+        this.sprites.push(elfGameLevel2Image);
+        this.sprites.push(elfGameLevel3Image);
+
+        this.sprites.push(elfGameCoinImage);
+
+        this.sprites.push(lightningImage);
+
+        this.sprites.push(brownElfSpriteUpImage);
+        this.sprites.push(brownElfSpriteDownImage);
+        this.sprites.push(brownElfSpriteLeftImage);
+        this.sprites.push(brownElfSpriteRightImage);
+
+        this.sprites.push(castleGlowImage);
+        this.sprites.push(dwarfCampGlowImage);
+        this.sprites.push(treeGlowImage);
+        this.sprites.push(mageGlowImage);
+        this.sprites.push(dragonGlowImage);
+        this.sprites.push(banditGlowImage);
+        this.sprites.push(orcGlowImage);
+
+        this.sprites.push(pathFinderLevelOneImage);
+        this.sprites.push(pathFinderLevelTwoImage);
+        this.sprites.push(pathFinderLevelThreeImage);
+
+        this.sprites.push(pathFinderGreenBoardImage);
+        this.sprites.push(pathFinderYellowBoardImage);
+
+        for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
+            this.sprites[i] = new Image();
+            this.sprites[i].src = arguments[i];
+        }
+
+        this.hero.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[0], story.hero, ctx);  // create Sprites
+        this.hero.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[1], story.hero, ctx);
+        this.hero.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], story.hero, ctx);
+        this.hero.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], story.hero, ctx);
+        this.hero.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], story.hero, ctx);
+
+        this.elder.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[4], story.elder, ctx);
+        this.elder.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[5], story.elder, ctx);
+        this.elder.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[6], story.elder, ctx);
+        this.elder.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[7], story.elder, ctx);
+        this.elder.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[5], story.elder, ctx);
+
+        this.dragon.spriteUp = new Sprite(384, 96, 4, 10, story.sprites[8], story.dragon, ctx);
+        this.dragon.spriteDown = new Sprite(384, 96, 4, 10, story.sprites[9], story.dragon, ctx);
+        this.dragon.spriteLeft = new Sprite(384, 96, 4, 10, story.sprites[10], story.dragon, ctx);
+        this.dragon.spriteRight = new Sprite(384, 96, 4, 10, story.sprites[11], story.dragon, ctx);
+        this.dragon.spriteIdle = new Sprite(96, 96, 1, 10, story.sprites[9], story.dragon, ctx);
+        this.dragon.getDestinationDelay = 500;
+
+        this.elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[12], story.elf, ctx);
+        this.elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[13], story.elf, ctx);
+        this.elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[14], story.elf, ctx);
+        this.elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[15], story.elf, ctx);
+        this.elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[13], story.elf, ctx);
+        this.elf.getDestinationDelay = 300;
+
+        this.bandit.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[16], story.bandit, ctx);
+        this.bandit.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[17], story.bandit, ctx);
+        this.bandit.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[18], story.bandit, ctx);
+        this.bandit.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[19], story.bandit, ctx);
+        this.bandit.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[17], story.bandit, ctx);
+        this.bandit.getDestinationDelay = 160;
+
+        this.orc.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[20], story.orc, ctx);
+        this.orc.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[21], story.orc, ctx);
+        this.orc.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[22], story.orc, ctx);
+        this.orc.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[23], story.orc, ctx);
+        this.orc.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[21], story.orc, ctx);
+        this.orc.getDestinationDelay = 248;
+
+        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, story.sprites[33], this.interactableObjects[0], ctx);
+        this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 4, story.sprites[34], this.interactableObjects[1], ctx);
+        this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 4, story.sprites[35], this.interactableObjects[2], ctx);
+        this.interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 2, story.sprites[36], this.interactableObjects[3], ctx);
+        this.interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 2, story.sprites[37], this.interactableObjects[4], ctx);
+        this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 4, story.sprites[38], this.interactableObjects[5], ctx);
+        this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 4, story.sprites[39], this.interactableObjects[6], ctx);
+    },
+
+    // ==== Portrait preloader ==== //
+
+    preloadPortraits: function () {
+        var heroPortrait = null,
+			elfPortrait = null,
+			elderPortrait = null,
+			kingPortrait = null,
+			dwarfPortrait = null,
+            banditPortrait = null,
+            dragonPortrait = null,
+            orcPortrait = null;
+
+        this.portraits.push(heroPortrait);
+        this.portraits.push(elderPortrait);
+        this.portraits.push(elfPortrait);
+        this.portraits.push(dwarfPortrait);
+        this.portraits.push(kingPortrait);
+        this.portraits.push(banditPortrait);
+        this.portraits.push(dragonPortrait);
+        this.portraits.push(orcPortrait);
+
+        for (var i = 0; i < arguments.length; i++) {
+            this.portraits[i] = new Image();
+            this.portraits[i].src = arguments[i];
+        }
+
+        this.hero.setImage(this.portraits[0]);
+        this.interactableObjects[3].setImage(this.portraits[1]);
+        this.interactableObjects[2].setImage(this.portraits[2]);
+        this.interactableObjects[1].setImage(this.portraits[3]);
+        this.interactableObjects[0].setImage(this.portraits[4]);
+        this.interactableObjects[5].setImage(this.portraits[5]);
+        this.interactableObjects[4].setImage(this.portraits[6]);
+        this.interactableObjects[6].setImage(this.portraits[7]);
+
     },
     checkRequestAnimationFrame: function(){
         if (!window.requestAnimationFrame) {
