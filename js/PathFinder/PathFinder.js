@@ -761,13 +761,13 @@ PathFinder = Game.extend({
         this.update();
     },
     endGame: function () {
+        this.score = 15000 / this.deaths;
         this.stopEvents = true;
         clearInterval(this.interval);
         cancelAnimationFrame(this.animation);
         this.removeGameFromPlot();
         this.gameOver = true;
 
-        return this.score;
     }
 
 
