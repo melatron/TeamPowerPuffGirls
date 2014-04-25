@@ -836,7 +836,8 @@ Story = Class.extend({
             'music/ElvesTown.mp3',
             'music/Necropolis.mp3',
             'music/KnightsFortress.mp3',
-            'music/ChaosCity.mp3'
+            'music/ChaosCity.mp3',
+            'source/scroll.mp3'
         );
     	this.soundTrack.preloadQuestSounds('source/rada.mp3');
     	//this.soundTrack.preloadSounds('source/rada.mp3');

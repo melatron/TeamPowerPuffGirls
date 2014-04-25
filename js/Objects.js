@@ -759,8 +759,19 @@ Game = Class.extend({
         this.objectives = null;
         
         this.scroll = $('#scroll');
+        
+        this.soundArray = null;
+        this.scrollSound = null;
+        
+        
 
     },
+    
+    loadSounds: function(){
+    	this.soundArray = story.soundTrack.getMainSoundsArray();
+    	this.scrollSound = this.soundArray[14];
+    },
+    
     start: function () {
 
     },
@@ -796,11 +807,18 @@ Game = Class.extend({
         this.gameBonuses = object;
     },
     addGameToPlot: function () {
+    	this.loadSounds();
         this.plot.fadeIn(1000);
         this.scroll.fadeIn(1000, this.openScroll);
+        var _this = this;
+        setTimeout(function(){
+        	console.log(this);
+        	_this.scrollSound.play();
+        }, 1200);
     },
     removeGameFromPlot: function () {
     	this.plot.fadeOut(1000);
+    	this.scrollSound.play();
         this.closeScroll();
     },
 
