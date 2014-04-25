@@ -5,7 +5,7 @@ RadoGame = Game.extend({
 		var game = this;
 		this.scroll = $('#scroll');
 		this.levels = [];            //array of levels
-		this.levelIndex = 2;
+		this.levelIndex = 0;
 		this.currentLevel = null;	//current level
 		this.passableBlocks = [];	//array of all passable blocks
 		this.impassableBlocks = [];	//array of all impassable blocks
@@ -39,6 +39,10 @@ RadoGame = Game.extend({
 	},
 	// ===== START METHOD ====== //
 	start: function(){
+		this.levelIndex = 0;
+		this.coinScore = 0;
+		this.deaths = 0;
+		this.gameOver = false;
 		this.getContext();
 		this.addGameToPlot();
 		this.createLevels();
@@ -46,6 +50,7 @@ RadoGame = Game.extend({
 		this.populateLevel(this.currentLevel);
 		this.addEventListeners();
 		this.mainLoop();
+		console.log(this.levelIndex);
 	},
 	
 	startNewLevel: function(){
@@ -53,7 +58,7 @@ RadoGame = Game.extend({
 		this.passableBlocks = [];
 		this.impassableBlocks = [];
 		this.finishBlocks = [];
-		this.startingBlock = null;
+		this.currentLevel = this.levels[this.levelIndex];
 		this.populateLevel(this.currentLevel);
 	},
 	
@@ -71,10 +76,12 @@ RadoGame = Game.extend({
 
 	endGame: function(){
 		this.score = Math.round(this.coinScore / this.deaths);
-		this.coinScore = 0;
 		this.removeGameFromPlot();
 		this.removeEventListeners();
 		this.gameOver = true;
+		this.passableBlocks = [];
+		this.impassableBlocks = [];
+		this.finishBlocks = [];
 	},
 
 	showScore:function(){
@@ -202,8 +209,6 @@ RadoGame = Game.extend({
 			if(this.levelIndex < this.levels.length - 1){
 				this.levelIndex++;
 				this.calculateCoinScore();
-				this.currentLevel = this.levels[this.levelIndex];
-				this.calculateCoinScore();
 				this.startNewLevel();
 				console.log(this.coinScore);
 			}
@@ -256,7 +261,7 @@ RadoGame = Game.extend({
 		this.updateCharacter();
 		this.checkLevelProgress();
 		
-/*		for(var i = 0; i < this.passableBlocks.length; i++){
+		/*for(var i = 0; i < this.passableBlocks.length; i++){
 			var temp = this.passableBlocks[i];
 			
 			if (temp.isActive){
@@ -277,8 +282,8 @@ RadoGame = Game.extend({
 			var temp = this.finishBlocks[k];
 			this.gameContext.fillStyle = 'rgba(89, 49, 143, 0.3)';
 			this.gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
-		}
-		*/
+		}*/
+		
 	},
 	
 	// ====== CONSTRUCTORS ===== //
