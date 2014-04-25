@@ -32,16 +32,14 @@ RadoGame = Game.extend({
 			game.gameContext.clearRect(0, 0, canvas.width, canvas.height);
 			game.updateLevel();
 			game.gameContext.restore();
+			console.log(game.currentLevel);
 			if(!game.gameOver){
 				game.animation = requestAnimationFrame(game.mainLoop);
 			}
 		};
 	},
 	// ===== START METHOD ====== //
-	start: function(){
-		this.levelIndex = 0;
-		this.coinScore = 0;
-		this.deaths = 0;
+	start: function(){		
 		this.gameOver = false;
 		this.getContext();
 		this.addGameToPlot();
@@ -50,11 +48,9 @@ RadoGame = Game.extend({
 		this.populateLevel(this.currentLevel);
 		this.addEventListeners();
 		this.mainLoop();
-		console.log(this.levelIndex);
 	},
 	
 	startNewLevel: function(){
-		console.log(this.coinScore);
 		this.passableBlocks = [];
 		this.impassableBlocks = [];
 		this.finishBlocks = [];
@@ -76,12 +72,19 @@ RadoGame = Game.extend({
 
 	endGame: function(){
 		this.score = Math.round(this.coinScore / this.deaths);
+		this.coinScore = 0;
+		this.deaths = 0;
+		for(var i = 0; i < this.levels.length; i++){
+			this.levels[i].isFinished = false;
+		}
+		this.levelIndex = 0;
 		this.removeGameFromPlot();
 		this.removeEventListeners();
-		this.gameOver = true;
 		this.passableBlocks = [];
 		this.impassableBlocks = [];
 		this.finishBlocks = [];
+		this.levels = [];
+		this.gameOver = true;
 	},
 
 	showScore:function(){
