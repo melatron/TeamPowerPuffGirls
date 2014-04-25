@@ -770,6 +770,10 @@ PathFinder = Game.extend({
         this.mainCharacter.y = this.startingPoint.y;
     },
     start: function () {
+        var instructions = '"Space": creates temporary platform. "c": creates permanent checkpoint. Get to the purple point!';
+        this.writeOnScroll(instructions, {
+            fontSize: '12px'
+        });
         this.addPlatformImages();
         this.stopEvents = false;
         this.mainCharacter.addSprites();

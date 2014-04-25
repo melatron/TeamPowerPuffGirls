@@ -37,12 +37,16 @@ RadoGame = Game.extend({
 			}
 		};
 	},
+	
 	// ===== START METHOD ====== //
-	start: function(){		
+	start: function () {
+	    var instructions = 'Use arrows to move. Avoid elves. Collect coins. Get the tree piece. Go!';
 		this.gameOver = false;
 		this.getContext();
 		this.addGameToPlot();
-		this.writeOnScroll();
+		this.writeOnScroll(instructions, {
+		    fontSize: '16px'
+		});
 		this.createLevels();
 		this.currentLevel = this.levels[this.levelIndex];
 		this.populateLevel(this.currentLevel);
@@ -290,15 +294,15 @@ RadoGame = Game.extend({
 		
 	},
 	
-	writeOnScroll: function(){
-		var id = $(this.scroll).attr('id');
-		$('#' + id + ' .bottom').html('Use arrows to move. Avoid elves. Collect coins. Get the tree piece. Go!');
-	},
-	
-	clearScroll: function(){
-		var id = $(this.scroll).attr('id');
-		$('#' + id + ' .bottom').html('');
-	},
+	//writeOnScroll: function(){
+	//	var id = $(this.scroll).attr('id');
+	//	$('#' + id + ' .bottom').html('Use arrows to move. Avoid elves. Collect coins. Get the tree piece. Go!');
+	//},
+	//
+	//clearScroll: function(){
+	//	var id = $(this.scroll).attr('id');
+	//	$('#' + id + ' .bottom').html('');
+	//},
 	
 	// ====== CONSTRUCTORS ===== //
 

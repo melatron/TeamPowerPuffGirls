@@ -826,6 +826,16 @@ Game = Class.extend({
         	$('#scroll').fadeOut(500);
         });
     },
+    //font-size: 16px;
+    writeOnScroll: function (instructions, fontSize) {
+        var id = $(this.scroll).attr('id');
+        $('#' + id + ' .bottom').css(fontSize).html(instructions);
+    },
+
+    clearScroll: function () {
+        var id = $(this.scroll).attr('id');
+        $('#' + id + ' .bottom').html('');
+    },
 
 });
 
