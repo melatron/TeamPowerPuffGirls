@@ -236,7 +236,7 @@ Story = Class.extend({
     // ---- Methods for preloading images ---- //
     addEvents: function () {
         this.stopEvents = false;
-        $('canvas').on('click', this, this.clickEvent);
+        $('#canvas').on('click', this, this.clickEvent);
         $(document).on('keyup', this, this.handleKeyPressed);
         $(document).on('mousemove', this, this.onMouseMove);
     },
@@ -306,7 +306,10 @@ Story = Class.extend({
         }
     },
     continueStoryButton: function () {
-    
+        if (this.buttons[3].checkIfClicked(x, y)) {
+            this.endGameScreenOn = false;
+            this.stopEvents = false;
+        }
     },
 
     onMouseMove: function (e) {
