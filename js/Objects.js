@@ -749,7 +749,8 @@ Game = Class.extend({
         var object = {
             bonusMoves : 0,
             bonusSpeed : 0,
-            bonusTime : 0
+            bonusTime: 0,
+            bonusCheckpoints: 0
         },
 
         item; 

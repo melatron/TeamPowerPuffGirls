@@ -97,7 +97,11 @@ var SquareGame = Game.extend({
     blueSquares:[],
     currentMap: [],
     movesCounter: 0,
-    activeLeader : null,
+    activeLeader: null,
+
+    objectives: {
+        moves: 300
+    },
 
     init: function () {
         this._super();
@@ -134,27 +138,18 @@ var SquareGame = Game.extend({
         this.plot.on('click', this , this.placeLeader);
     },
 
-
+    
     addGameToPlot : function () {
         var self = this;
-        setTimeout(function () {
-            self.plot.fadeIn(1000 , self.defineMapBoundaries());
-        }, 1000)
+        
+        self.plot.fadeIn(1000 , self.defineMapBoundaries());
+       
     },
-
+    
 
     pickLeader: function (e) {
       
-        //if(e.data.objectContext === e.data.gameContext.activeLeader){return;}
-        e.stopPropagation()
-       
-        if($(this).hasClass('selected')) {
-            return;
-        }
-
         e.data.gameContext.activeLeader = e.data.objectContext;
-
-
 
         // defines the array being moved
         if (e.data.objectContext.color === 'green') { e.data.gameContext.activeArray = e.data.gameContext.greenSquares }
@@ -355,7 +350,11 @@ var SquareGame = Game.extend({
         this.gameOver = true;
         this.plot.html(' ');
         this.removeGameFromPlot();
-        this.score = (300 - this.movesCounter)*10;
+        this.score = (300 - this.movesCounter) * 10;
+        
+        if ((this.objectives.moves - this.gameBonuses.bonusMoves) < this.movesCounter) {
+            this.getReward('sword');
+        }
     },
 
     start: function () {
@@ -363,5 +362,6 @@ var SquareGame = Game.extend({
         this.addGameToPlot();
         this.populateFirstMap();
         setTimeout(this.defineMapBoundaries(), 3000);
+        console.log('bonus moves' + this.gameBonuses.bonusMoves)
     }
 });
