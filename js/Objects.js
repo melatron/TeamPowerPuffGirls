@@ -610,6 +610,12 @@ function PlayList() {
                 break;
         }
     };
+    this.loadSound = function(url){
+    	var temp = new Audio();
+    	temp.src = url;
+    	
+    	return temp;
+    };
 }
 
 //======== GAME OBJECTS ==========//
