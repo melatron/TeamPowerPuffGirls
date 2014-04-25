@@ -24,6 +24,7 @@ RadoGame = Game.extend({
 		this.elves = [];
 		
 		this.animation = null;
+		
 		// -- MAIN LOOP -- //
 		
 		this.mainLoop = function(){
@@ -31,9 +32,9 @@ RadoGame = Game.extend({
 			game.gameContext.clearRect(0, 0, canvas.width, canvas.height);
 			game.updateLevel();
 			game.gameContext.restore();
-			game.animation = requestAnimationFrame(game.mainLoop);
-
-			
+			if(!game.gameOver){
+				game.animation = requestAnimationFrame(game.mainLoop);
+			}
 		};
 	},
 	
@@ -49,6 +50,7 @@ RadoGame = Game.extend({
 	},
 	
 	startNewLevel: function(){
+		console.log(this.coinScore);
 		this.passableBlocks = [];
 		this.impassableBlocks = [];
 		this.finishBlocks = [];
@@ -78,15 +80,14 @@ RadoGame = Game.extend({
 	},
 
 	showScore:function(){
-		this.gameContext.font = 'bold 20px Ariel';
+		this.gameContext.font = 'bold 14px Ariel';
 		this.gameContext.fillStyle = 'white';
-		this.gameContext.lineWidth = 2;
 		this.gameContext.save();
+		this.gameContext.globalAlpha = 0.8;
 		this.gameContext.fillStyle = 'black';
-		this.gameContext.fillRect(0, 0, 220, 25);
+		this.gameContext.fillRect(0, 5, 70, 19);
 		this.gameContext.restore();
-		this.gameContext.fillText('Deaths: ' + this.deaths, 10, 20);
-		this.gameContext.stroke();
+		this.gameContext.fillText('Deaths: ' + this.deaths, 5, 20);
 	},
 	
 	// ===== GET CONTEXT ====== //
@@ -114,8 +115,6 @@ RadoGame = Game.extend({
 	// ======= CREATING THE LEVELS ======== //
 	
 	createLevels: function(){
-		
-		
 		
 		this.levels.push(this.createLevel(
 				1,
@@ -186,7 +185,6 @@ RadoGame = Game.extend({
 				level.layout[row][col] = block;
 			}
 		}
-
 		this.createCoins();
 		this.createElves();
 		this.createMainCharacter(this.startingBlock.x, this.startingBlock.y);
@@ -212,8 +210,6 @@ RadoGame = Game.extend({
 				console.log(this.coinScore);
 			}
 			else{
-
-				cancelAnimationFrame(this.animation);
 				this.endGame();
 			}
 		}

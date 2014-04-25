@@ -674,13 +674,13 @@ Item = Class.extend({
     },
 
     pickItem: function (e) {
-        console.log('a')
+        console.log('a');
 
 
     },
 
     placeItem: function (e) {
-        console.log('b')
+        console.log('b');
 
 
     }
@@ -706,7 +706,7 @@ Inventory = Class.extend({
         var temp = new Item(name);
         for (var i = 0; i < this.slots.length; i++) {
             if (this.slots[i] == 0) {
-                temp.dom.appendTo($('.inventory-slot').eq(i))
+                temp.dom.appendTo($('.inventory-slot').eq(i));
                 this.slots[i] = temp;
                 break;
             };
@@ -761,7 +761,7 @@ Game = Class.extend({
 
                 for (var attribute in object) {
 
-                    object[attribute] += item[attribute]
+                    object[attribute] += item[attribute];
 
                 };
             };
@@ -773,14 +773,14 @@ Game = Class.extend({
         var self = this;
         setTimeout(function () {
             self.plot.fadeIn(1000);
-        }, 1000)
+        }, 1000);
         //this.plot.show();
     },
     removeGameFromPlot: function () {
         var self = this;
         setTimeout(function () {
             self.plot.fadeOut(1000);
-        }, 1000)
+        }, 1000);
         //this.plot.hide();
     },
 
@@ -805,6 +805,13 @@ Menu = Class.extend({
 			isExpanded: false
 		}];
 		
+		this.isGameStarted = false;
+		
+		this.mousePos = {
+				x: null,
+				y: null
+		};
+		
 		this.rainSound = null;
 		this.music = null;
 		this.thunderSound = null;
@@ -820,6 +827,7 @@ Menu = Class.extend({
 		this.addAnimations(0);
 		this.addAnimations(1);
 		this.addAnimations(2);
+		this.addTutorialAnimations();
 		this.addStartEvent();
 		this.manageSounds();
 		setTimeout(this.thunder, 500);
@@ -845,43 +853,45 @@ Menu = Class.extend({
 	},
 	
 	startGame: function(e){
-
-        e.data.rainSound.pause();
-        e.data.music.pause();
-        e.data.thunderSound.pause();
-		
-		e.data.hideMenu();
-		
-		setTimeout(function(){
-			$('#main').fadeIn(2000);
-		}, 2000);
-		
-		canvas = $("#canvas")[0];
-		ctx = canvas.getContext('2d');
-		story = new Story();
-		story.checkRequestAnimationFrame();
-
-		story.preloadEverything();
-
-		story.inventory.getItem('axe');
-		story.inventory.getItem('bow');
-		story.inventory.getItem('sword');
-		
-	    story.addEvents();
-	    
-	    story.mainLoop();
-
-	    //game = new TonyGame();
-	    //game.start();
-	    //elfGame = new RadoGame();
-	    //elfGame.start();
-	    //yolo = new PathFinder();
-	    //yolo.startGame();
+		if(!e.data.isGameStarted){
+			
+			e.data.isGameStarted = true;
+			e.data.rainSound.pause();
+			e.data.music.pause();
+			e.data.thunderSound.pause();
+			
+			e.data.hideMenu();
+			
+			setTimeout(function(){
+				$('#main').fadeIn(2000);
+			}, 2000);
+			
+			canvas = $("#canvas")[0];
+			ctx = canvas.getContext('2d');
+			story = new Story();
+			story.checkRequestAnimationFrame();
+			
+			story.preloadEverything();
+			
+			story.inventory.getItem('axe');
+			story.inventory.getItem('bow');
+			story.inventory.getItem('sword');
+			
+			story.addEvents();
+			
+			story.mainLoop();
+			
+			//game = new TonyGame();
+			//game.start();
+			//elfGame = new RadoGame();
+			//elfGame.start();
+			//yolo = new PathFinder();
+			//yolo.startGame();			
+		}
 	},
 	
 	manageSounds: function(){
 		$(this.rainSound).on('ended', this, function(e){
-            console.log(e.data);
 			e.data.rainSound.currentTime = 0;
 			e.data.rainSound.play();
 		});
@@ -891,8 +901,16 @@ Menu = Class.extend({
 		});
 		
 		$(this.thunderSound).on('ended', this, function(e){
-			e.data.rainSound.currentTime = 0;
-			e.data.rainSound.play();
+			setTimeout(e.data.thunder, 500);
+	        setTimeout(e.data.thunder, 6800);
+	        setTimeout(e.data.thunder, 16200);
+			e.data.thunderSound.currentTime = 0;
+			e.data.thunderSound.play();
+		});
+		
+		$(this.music).on('ended', this, function(e){
+			e.data.music.currentTIme = 0;
+			e.data.music.play();
 		});
 	},
 	
@@ -904,12 +922,56 @@ Menu = Class.extend({
 		$('#flash').show().fadeIn(50).fadeOut(20).fadeIn(50).fadeOut(1000);
 	},
 	
+	addTutorialAnimations: function(){
+		
+		$('.howTo .first .dropDownCell').on('mouseenter', this, function(e){
+			if(e.data.menuCells[1].isExpanded){
+				$('.tutorial.first').fadeIn(200);
+			}
+		});
+		
+		$('.howTo .first .dropDownCell').on('mouseleave', this, function(e){
+			if(e.data.menuCells[1].isExpanded){
+				$('.tutorial.first').fadeOut(200);
+			}
+		});
+		
+		$('.howTo .second .dropDownCell').on('mouseenter', this, function(e){
+			if(e.data.menuCells[1].isExpanded){
+				$('.tutorial.second').fadeIn(200);
+			}
+		});
+		
+		$('.howTo .second .dropDownCell').on('mouseleave', this, function(e){
+			if(e.data.menuCells[1].isExpanded){
+				$('.tutorial.second').fadeOut(200);
+			}
+		});
+		
+		$(document).on('mousemove', this, function(e){
+			e.data.mousePos.x = e.pageX;
+			e.data.mousePos.y = e.pageY;
+			
+			if($('.tutorial.first').css('display') != 'none'){
+				$('.tutorial.first').css({
+					'left': e.data.mousePos.x - 230,
+					'top': e.data.mousePos.y + 5
+				});
+			}
+			if($('.tutorial.second').css('display') != 'none'){
+				$('.tutorial.second').css({
+					'left': e.data.mousePos.x - 230,
+					'top': e.data.mousePos.y + 5
+				});
+			}
+		});
+	},
+	
 	addAnimations: function(index){
 		var elem = this.menuCells[index].class;
 		if(index != 2){
 			$(elem).on('click', this, function(e){
 				if(e.data.menuCells[index].isExpanded == false){
-					e.data.menuCells[index].isExpanded = true;
 					e.data.chainSound.play();
 					
 					$(elem + ' .first .dropDownCell').show();
@@ -929,11 +991,12 @@ Menu = Class.extend({
 		                    top: "70px"
 		                }, 1000, 'easeOutBounce', function(){
 		                    $(elem + ' .second').show();
-		                    $(elem + ' .second .dropDownCell').show()
+		                    $(elem + ' .second .dropDownCell').show();
 		                    setTimeout(function(){
 		                        $(elem + ' .second .dropDownCell').animate({
 		                            top: '70px'
 		                        }, 1000, 'easeOutBounce');
+		                        e.data.menuCells[index].isExpanded = true;
 		                    }, 200);
 		                });
 		            }, 200);

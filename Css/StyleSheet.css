@@ -234,6 +234,21 @@ body {
             margin-left: 119px;
             margin-top: -3px;
         }
+        
+        .tutorial{
+        	display: none;
+        	width: 200px;
+        	height: 150px;
+        	position: absolute;
+        	z-index: 10;
+        	border: 2px solid rgba(255, 255, 255, 0.5);
+        	border-radius: 10px;
+        }
+        
+        .tutorial.first{
+        	background-image: url(../source/menu/tutorial1.png);
+        }
+        
         #flash{
             width: 1024px;
             height: 768px;
@@ -273,7 +288,7 @@ body {
         	top: 0px;
             display: none;
             border-radius: 10px;
-            z-index: 10;
+            z-index: 9;
             border: 2px solid rgba(255, 255, 255, 0.5);
         }
         .menuText{
