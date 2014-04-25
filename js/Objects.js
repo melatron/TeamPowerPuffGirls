@@ -779,7 +779,7 @@ Game = Class.extend({
     },
     removeGameFromPlot: function () {
         this.plot.fadeOut(1000);
-        this.scroll.fadeOut(1400, this.openScroll);
+        this.closeScroll();
     },
 
     getReward: function (item) {            //item - the name of the item (string)
@@ -787,6 +787,7 @@ Game = Class.extend({
         story.inventory.getItem(item);
 
     },
+    
     // ========== SCROLL METHODS - OPEN & CLOSE ================ //
 
     openScroll: function () {
@@ -798,10 +799,13 @@ Game = Class.extend({
     },
 
     closeScroll: function () {
-        var id = $(this).attr('id');
+    	console.log(this.scroll);
+        var id = $(this.scroll).attr('id');
         $('#' + id + ' .bottom').animate({
             'top': '-120px'
-        }, 700, 'easeInOutBack');
+        }, 500, 'easeInOutBack', function(){
+        	$('#scroll').fadeOut(500);
+        });
     },
 });
 
@@ -867,46 +871,48 @@ Menu = Class.extend({
 	},
 	
 	startGame: function(e){
-
-        e.data.rainSound.pause();
-        e.data.music.pause();
-        e.data.thunderSound.pause();
-		
-		e.data.hideMenu();
-		
-		setTimeout(function(){
-			$('#main').fadeIn(2000);
-		}, 2000);
-		
-		canvas = $("#canvas")[0];
-		ctx = canvas.getContext('2d');
-		story = new Story();
-		story.checkRequestAnimationFrame();
-
-	     /* all quests are available */
-		story.interactableObjects[0].isAvailable = true;       
-		story.interactableObjects[1].isAvailable = true;
-		story.interactableObjects[2].isAvailable = true;
-		story.interactableObjects[3].isAvailable = true;
-		story.interactableObjects[4].isAvailable = true;
-		story.interactableObjects[5].isAvailable = true;
-		story.interactableObjects[6].isAvailable = true;
-
-		story.preloadEverything();
-
-		story.inventory.getItem('axe');
-		story.inventory.getItem('bow');
-		story.inventory.getItem('sword');
-	    story.addEvents();
-	    
-	    story.mainLoop();
-
-	    //game = new TonyGame();
-	    //game.start();
-	    //elfGame = new RadoGame();
-	    //elfGame.start();
-	    //yolo = new PathFinder();
-	    //yolo.startGame();
+		if (!this.isGameStarted){
+			this.isGameStarted = true;
+			e.data.rainSound.pause();
+			e.data.music.pause();
+			e.data.thunderSound.pause();
+			
+			e.data.hideMenu();
+			
+			setTimeout(function(){
+				$('#main').fadeIn(2000);
+			}, 2000);
+			
+			canvas = $("#canvas")[0];
+			ctx = canvas.getContext('2d');
+			story = new Story();
+			story.checkRequestAnimationFrame();
+			
+			/* all quests are available */
+			story.interactableObjects[0].isAvailable = true;       
+			story.interactableObjects[1].isAvailable = true;
+			story.interactableObjects[2].isAvailable = true;
+			story.interactableObjects[3].isAvailable = true;
+			story.interactableObjects[4].isAvailable = true;
+			story.interactableObjects[5].isAvailable = true;
+			story.interactableObjects[6].isAvailable = true;
+			
+			story.preloadEverything();
+			
+			story.inventory.getItem('axe');
+			story.inventory.getItem('bow');
+			story.inventory.getItem('sword');
+			story.addEvents();
+			
+			story.mainLoop();
+			
+			//game = new TonyGame();
+			//game.start();
+			//elfGame = new RadoGame();
+			//elfGame.start();
+			//yolo = new PathFinder();
+			//yolo.startGame();
+		}
 	},
 	
 	manageSounds: function(){

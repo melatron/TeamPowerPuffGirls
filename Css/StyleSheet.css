@@ -93,7 +93,10 @@ body {
 
 /*--------------------PATH FINDER GAME-------------------*/
 #pathFinder {
-    border:1px solid #000;
+	width: 630px;
+	height: 224px;
+	float: left;
+	border: 2px solid rgba(255, 255, 255, 0.4);
     display:none;
 }
 /*-----------------SQUARE GAME CSS--------------------*/
