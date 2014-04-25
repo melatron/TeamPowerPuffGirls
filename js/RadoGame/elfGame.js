@@ -42,6 +42,7 @@ RadoGame = Game.extend({
 		this.gameOver = false;
 		this.getContext();
 		this.addGameToPlot();
+		this.writeOnScroll();
 		this.createLevels();
 		this.currentLevel = this.levels[this.levelIndex];
 		this.populateLevel(this.currentLevel);
@@ -83,6 +84,7 @@ RadoGame = Game.extend({
 		this.impassableBlocks = [];
 		this.finishBlocks = [];
 		this.levels = [];
+		this.clearScroll();
 		this.gameOver = true;
 	},
 
@@ -286,6 +288,16 @@ RadoGame = Game.extend({
 			this.gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
 		}*/
 		
+	},
+	
+	writeOnScroll: function(){
+		var id = $(this.scroll).attr('id');
+		$('#' + id + ' .bottom').html('Use arrows to move. Avoid elves. Collect coins. Get the tree piece. Go!');
+	},
+	
+	clearScroll: function(){
+		var id = $(this.scroll).attr('id');
+		$('#' + id + ' .bottom').html('');
 	},
 	
 	// ====== CONSTRUCTORS ===== //
