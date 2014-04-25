@@ -376,7 +376,9 @@ Story = Class.extend({
             pathFinderLevelOneImage = null;
             pathFinderLevelTwoImage = null;
             pathFinderLevelThreeImage = null;
-
+            
+            pathFinderGreenBoardImage = null;
+            pathFinderYellowBoardImage = null;
     	
     	this.sprites.push(heroSpriteUpImage);   // put images in array
     	this.sprites.push(heroSpriteDownImage);
@@ -432,6 +434,9 @@ Story = Class.extend({
         this.sprites.push(pathFinderLevelOneImage);
         this.sprites.push(pathFinderLevelTwoImage);
         this.sprites.push(pathFinderLevelThreeImage);
+        
+        this.sprites.push(pathFinderGreenBoardImage);
+        this.sprites.push(pathFinderYellowBoardImag);
     	
 		for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
 			this.sprites[i] = new Image();
@@ -760,7 +765,10 @@ Story = Class.extend({
                 
                 'source/PathFinder/spriteLevel1.png',
                 'source/PathFinder/spriteLevel2.png',
-                'source/PathFinder/spriteLevel3.png'
+                'source/PathFinder/spriteLevel3.png',
+                
+                'source/PathFinder/greenBoard.png',
+                'source/PathFinder/yellowBoard.png'
 
     	);
     	
