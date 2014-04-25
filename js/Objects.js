@@ -621,7 +621,7 @@ Item = Class.extend({
         this.dom = $('<img class ="item" src="source/items/' + this.name + '.png">');
         this.dom.on('mouseenter', this, this.showAttributes);
         this.dom.on('mouseleave', this, this.hideAttributes);
-        this.dom.draggable();
+
         
     
         this.bonusTime = null;
@@ -874,10 +874,9 @@ Menu = Class.extend({
 
 		story.preloadEverything();
 
-		story.inventory.getItem('axe');
-		story.inventory.getItem('bow');
+		story.inventory.getItem('dagger');
+		story.inventory.getItem('ring');
 		story.inventory.getItem('sword');
-		story.inte
 	    story.addEvents();
 	    
 	    story.mainLoop();

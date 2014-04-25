@@ -1,4 +1,6 @@
-﻿var Square = Class.extend({
+﻿var Square = Class.extend({   
+    marginLeft: 204,
+    marginTop: 9,
 
     init: function (x, y, color, duty, index) {
         this.x = x;
@@ -6,13 +8,12 @@
         this.color = color;
         this.duty = duty;
         this.index = index;
-        
+
 
         this.dom = $('<div class="square"> </div>');
         this.dom.css({
-            left: (this.x) * 40 + 200 + 'px',
-            top: (this.y) * 40 + 5 + 'px',
-           //backgroundColor: this.color,
+            left: (this.x) * 40 + this.marginLeft + 'px',
+            top: (this.y) * 40 + this.marginTop + 'px',
         });
 
         if (this.duty === 'leader') {
@@ -30,15 +31,12 @@
 
     updatePosition: function () {
         this.dom.animate({
-            /*width: '26px',
-            height: '26px', */
-            left: (this.x) * 40 + 200 + 'px',
-            top: (this.y) * 40 + 5 + 'px',
+            left: (this.x) * 40 + this.marginLeft + 'px',
+            top: (this.y) * 40 + this.marginTop + 'px',
         }, 300);
     },
 
     followNext: function (nextObject) {
-
         this.x = nextObject.x;
         this.y = nextObject.y;
         this.updatePosition();
@@ -49,30 +47,27 @@
 
 var GreenSquare = Square.extend({
 
-    init: function (x, y, color, duty, index) { 
+    init: function (x, y, color, duty, index) {
         this._super(x, y, color, duty, index);
         this.dom.addClass('green');
     }
-
 });
 
 var RedSquare = Square.extend({
 
-    init: function (x, y, color, duty, index) {        
+    init: function (x, y, color, duty, index) {
         this._super(x, y, color, duty, index);
         this.dom.addClass('red');
     },
 
 });
 
-
 var YellowSquare = Square.extend({
 
-    init: function (x, y, color, duty, index) {        
+    init: function (x, y, color, duty, index) {
         this._super(x, y, color, duty, index);
         this.dom.addClass('yellow');
     }
-
 });
 
 var BlueSquare = Square.extend({
@@ -81,35 +76,31 @@ var BlueSquare = Square.extend({
         this._super(x, y, color, duty, index);
         this.dom.addClass('blue');
     }
-
 });
-
-
 
 
 var SquareGame = Game.extend({
 
-    activeArray: null,
     squareWidth: 40,
+    marginLeft: 204,
+    marginTop: 9,
+
+    activeArray: null,
     greenSquares: [],
     redSquares: [],
     yellowSquares: [],
-    blueSquares:[],
+    blueSquares: [],
     currentMap: [],
     movesCounter: 0,
     activeLeader: null,
 
-    objectives: {
-        moves: 300
-    },
 
     init: function () {
-        this._super();
-       
 
+        this._super();
+        this.objectives = { moves: 300 };
         this.plot = $('#square-game');
         this.gameOver = false;
-        
 
         this.firstMap = [[0, 0, 2, 2, 2, 2],
                          [2, 2, 2, 0, 0, 2],
@@ -131,24 +122,22 @@ var SquareGame = Game.extend({
             this.mapBoundaries = {
                 left: $('#square-game-map').offset().left,
                 top: $('#square-game-map').offset().top,
-                
+
             };
         };
 
-        this.plot.on('click', this , this.placeLeader);
+        this.plot.on('click', this, this.placeLeader);
     },
 
-    
-    addGameToPlot : function () {
-        var self = this;
-        
-        self.plot.fadeIn(1000 , self.defineMapBoundaries());
-       
+
+    addGameToPlot: function () {
+
+        this.plot.fadeIn(1000, this.defineMapBoundaries());
+
     },
-    
 
     pickLeader: function (e) {
-      
+        e.stopPropagation();
         e.data.gameContext.activeLeader = e.data.objectContext;
 
         // defines the array being moved
@@ -157,33 +146,29 @@ var SquareGame = Game.extend({
         if (e.data.objectContext.color === 'yellow') { e.data.gameContext.activeArray = e.data.gameContext.yellowSquares }
         if (e.data.objectContext.color === 'blue') { e.data.gameContext.activeArray = e.data.gameContext.blueSquares }
 
-        e.data.objectContext.dom.css({         
-            left: (e.data.objectContext.x) * 40 + 200 + 'px',
-            top: (e.data.objectContext.y) * 40 + 5 + 'px',
+        e.data.objectContext.dom.css({
+            left: (e.data.objectContext.x) * e.data.gameContext.squareWidth + e.data.gameContext.marginLeft + 'px',
+            top: (e.data.objectContext.y) * e.data.gameContext.squareWidth + e.data.gameContext.marginTop + 'px',
         });
 
-        $('.selected').removeClass('selected');
+        //$('.selected').removeClass('selected');
         e.data.objectContext.dom.addClass('selected');
-
+       
     },
 
 
     placeLeader: function (e) {
-        
-        if(e.data.activeLeader !== null){
-            console.log(e.pageX);
-            console.log(e.data.mapBoundaries.left)
-            
+
+        if (e.data.activeLeader !== null) {
+
             var mouseX = Math.floor((e.pageX - e.data.mapBoundaries.left) / e.data.squareWidth),
-                mouseY = Math.floor((e.pageY - e.data.mapBoundaries.top) / e.data.squareWidth);           
-            console.log(mouseX + ' ' + mouseY);
+                mouseY = Math.floor((e.pageY - e.data.mapBoundaries.top) / e.data.squareWidth);
+
             if (((mouseX == e.data.activeLeader.x && mouseY == (e.data.activeLeader.y + 1)) ||
                 (mouseX == e.data.activeLeader.x && mouseY == (e.data.activeLeader.y - 1)) ||
                 (mouseX == (e.data.activeLeader.x + 1) && mouseY == e.data.activeLeader.y) ||
                 (mouseX == (e.data.activeLeader.x - 1) && mouseY == e.data.activeLeader.y)) &&
                 (e.data.currentMap[mouseY][mouseX] == 1)) {
-
-                console.log('2');
 
                 e.data.followLeader(e.data);
                 e.data.activeLeader.x = mouseX;
@@ -192,32 +177,31 @@ var SquareGame = Game.extend({
                 e.data.currentMap[mouseY][mouseX] = 2;
                 e.data.movesCounter++;
 
-
-                //====CHECKS IF THE FIRST MAP IS OVER====//==== This will be moved to a standalone moethod 
-                if (e.data.currentMap == e.data.firstMap &&
-                    mouseX == 5 && mouseY == 5 && e.data.activeLeader.color == 'green') {
-
-                    console.log('first map is over in ' + e.data.movesCounter + ' moves');
-                    e.data.plot.html(' ');
-                    e.data.populateSecondMap();
-                };
-
-                //====CHECKS IF THE SECOND MAP IS OVER====//
-                if (e.data.currentMap == e.data.secondMap &&
-                    mouseX == 0 && mouseY == 0 && e.data.activeLeader.color == 'green') {
-
-                    console.log('good game in ' + e.data.movesCounter + ' moves!');
-                    e.data.endGame();
-                }
+                e.data.checkLevelProgress();
 
             };
-            
+
             e.data.activeLeader.dom.removeClass('selected');
         };
     },
 
     checkLevelProgress: function () {
+        //====CHECKS IF THE FIRST MAP IS OVER====/
+        if (this.currentMap == this.firstMap &&
+             this.activeLeader.x == 5 && this.activeLeader.y == 5 && this.activeLeader.color == 'green') {
 
+            this.plot.html(' ');
+            this.populateSecondMap();
+        };
+
+        //====CHECKS IF THE SECOND MAP IS OVER====//
+        if (this.currentMap == this.secondMap &&
+            this.activeLeader.x == 0 &&
+            this.activeLeader.y == 0 &&
+            this.activeLeader.color == 'green') {
+
+            this.endGame();
+        }
     },
 
     followLeader: function (that) {
@@ -232,7 +216,7 @@ var SquareGame = Game.extend({
             that.currentMap[lastY][lastX] = 1;
 
             //itterate through all the elements of the current array and activate the 'followNext' method
-            for (var i = (that.activeArray.length - 1) ; i > 0; i--) {                
+            for (var i = (that.activeArray.length - 1) ; i > 0; i--) {
                 that.activeArray[i].followNext(that.activeArray[i - 1]);
             };
         }
@@ -281,15 +265,15 @@ var SquareGame = Game.extend({
         };
     },
     // working test
-    drawPossibleMoves : function (objectContext) {
-        
+    drawPossibleMoves: function (objectContext) {
+
         var ctx = $('#square-game-map')[0].getContext('2d');
         ctx.beginPath();
         //ctx.strokeStyle = 'red';
-        ctx.moveTo(objectContext.x*40+20 , (objectContext.y*40 + 20));
-        ctx.lineTo((objectContext.x+1)*40+20, objectContext.y*40 + 20);
+        ctx.moveTo(objectContext.x * 40 + 20, (objectContext.y * 40 + 20));
+        ctx.lineTo((objectContext.x + 1) * 40 + 20, objectContext.y * 40 + 20);
         ctx.stroke();
-        console.log(objectContext.x);
+
     },
 
 
@@ -297,7 +281,7 @@ var SquareGame = Game.extend({
     populateFirstMap: function () {
 
         this.currentMap = this.firstMap;
-        
+
 
         this.createSquare(0, 1, 'green', 'leader', 0);
         this.createSquare(1, 1, 'green', 'filler', 1);
@@ -351,7 +335,7 @@ var SquareGame = Game.extend({
         this.plot.html(' ');
         this.removeGameFromPlot();
         this.score = (300 - this.movesCounter) * 10;
-        
+
         if ((this.objectives.moves - this.gameBonuses.bonusMoves) < this.movesCounter) {
             this.getReward('sword');
         }
@@ -362,6 +346,5 @@ var SquareGame = Game.extend({
         this.addGameToPlot();
         this.populateFirstMap();
         setTimeout(this.defineMapBoundaries(), 3000);
-        console.log('bonus moves' + this.gameBonuses.bonusMoves)
     }
 });
