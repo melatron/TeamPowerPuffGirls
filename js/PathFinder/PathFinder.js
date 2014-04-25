@@ -529,12 +529,12 @@ PathFinder = Game.extend({
     },
     checkIfDead: function () {
         if (this.mainCharacterDead) {
-            this.stopEvents = true;
+            //this.stopEvents = true;
             var self = this;
-            setTimeout(function () {
-                //self.mainCharacterDead = false;
-                self.stopEvents = false;
-            }, 500);
+            //setTimeout(function () {
+            //    //self.mainCharacterDead = false;
+            //    self.stopEvents = false;
+            //}, 500);
             if (this.createdBoxesPerm.length > 0) {
                 this.resetMainCharacter(this.createdBoxesPerm[this.createdBoxesPerm.length - 1].x, this.createdBoxesPerm[this.createdBoxesPerm.length - 1].y - this.mainCharacter.height);
             }
