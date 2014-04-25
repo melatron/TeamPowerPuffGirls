@@ -68,12 +68,12 @@ body {
 /*-----------------SQUARE GAME CSS--------------------*/
 
 #square-game{
-    width:420px;
-    height:260px;
+    width:640px;
+    height:250px;
     margin:auto;
     position:relative;
-    background-image: url(../source/square-game-background3.png);
-    background-size:260px 260px;
+    background-image: url(../source/square-game-background1.png);
+    background-size:640px 250px;
     background-position:center;
     background-repeat: no-repeat;
     display:none;
@@ -83,7 +83,7 @@ body {
     width:240px;
     height:240px;
     position:absolute;
-    margin:10px 0 0 90px;
+    margin:10px 0 0 200px;
     z-index:-1;
     
 }
@@ -154,7 +154,7 @@ body {
     margin-top: 19px;
     float:left;
     border-radius: 9px;
-    overflow:hidden;
+    /*overflow:hidden;*/
 }
 
  .item {

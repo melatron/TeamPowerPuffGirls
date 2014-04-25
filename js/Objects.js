@@ -621,7 +621,8 @@ Item = Class.extend({
         this.dom = $('<img class ="item" src="source/items/' + this.name + '.png">');
         this.dom.on('mouseenter', this, this.showAttributes);
         this.dom.on('mouseleave', this, this.hideAttributes);
-        this.dom.on('mousehold', this, this.pickItem);        
+        this.dom.draggable();
+        
     
         this.bonusTime = null;
         this.bonusMoves = null;
@@ -682,7 +683,6 @@ Item = Class.extend({
 
     placeItem: function (e) {
         console.log('b');
-
 
     }
 

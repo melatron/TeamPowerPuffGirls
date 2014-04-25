@@ -1,4 +1,4 @@
-﻿Square = Class.extend({
+﻿var Square = Class.extend({
 
     init: function (x, y, color, duty, index) {
         this.x = x;
@@ -10,8 +10,8 @@
 
         this.dom = $('<div class="square"> </div>');
         this.dom.css({
-            left: (this.x) * 40 + 92 + 'px',
-            top: (this.y) * 40 + 12 + 'px',
+            left: (this.x) * 40 + 200 + 'px',
+            top: (this.y) * 40 + 5 + 'px',
            //backgroundColor: this.color,
         });
 
@@ -32,8 +32,8 @@
         this.dom.animate({
             /*width: '26px',
             height: '26px', */
-            left: (this.x) * 40 + 92 + 'px',
-            top: (this.y) * 40 + 12 + 'px',
+            left: (this.x) * 40 + 200 + 'px',
+            top: (this.y) * 40 + 5 + 'px',
         }, 300);
     },
 
@@ -127,12 +127,19 @@ var SquareGame = Game.extend({
             this.mapBoundaries = {
                 left: $('#square-game-map').offset().left,
                 top: $('#square-game-map').offset().top,
-                right: $('#square-game-map').offset().left + 260,
-                bottom: $('#square-game-map').offset().top + 260
+                
             };
         };
 
         this.plot.on('click', this , this.placeLeader);
+    },
+
+
+    addGameToPlot : function () {
+        var self = this;
+        setTimeout(function () {
+            self.plot.fadeIn(1000 , self.defineMapBoundaries());
+        }, 1000)
     },
 
 
@@ -149,15 +156,15 @@ var SquareGame = Game.extend({
 
 
 
-        // define the array being moved
+        // defines the array being moved
         if (e.data.objectContext.color === 'green') { e.data.gameContext.activeArray = e.data.gameContext.greenSquares }
         if (e.data.objectContext.color === 'red') { e.data.gameContext.activeArray = e.data.gameContext.redSquares }
         if (e.data.objectContext.color === 'yellow') { e.data.gameContext.activeArray = e.data.gameContext.yellowSquares }
         if (e.data.objectContext.color === 'blue') { e.data.gameContext.activeArray = e.data.gameContext.blueSquares }
 
         e.data.objectContext.dom.css({         
-            left: (e.data.objectContext.x) * 40 + 92 + 'px',
-            top: (e.data.objectContext.y) * 40 + 12 + 'px',
+            left: (e.data.objectContext.x) * 40 + 200 + 'px',
+            top: (e.data.objectContext.y) * 40 + 5 + 'px',
         });
 
         $('.selected').removeClass('selected');
@@ -169,19 +176,20 @@ var SquareGame = Game.extend({
     placeLeader: function (e) {
         
         if(e.data.activeLeader !== null){
-            
-           // if(e.data.activeLeader.dom.attr('class')){  };
+            console.log(e.pageX);
+            console.log(e.data.mapBoundaries.left)
             
             var mouseX = Math.floor((e.pageX - e.data.mapBoundaries.left) / e.data.squareWidth),
-                mouseY = Math.floor((e.pageY - e.data.mapBoundaries.top) / e.data.squareWidth);
-
+                mouseY = Math.floor((e.pageY - e.data.mapBoundaries.top) / e.data.squareWidth);           
+            console.log(mouseX + ' ' + mouseY);
             if (((mouseX == e.data.activeLeader.x && mouseY == (e.data.activeLeader.y + 1)) ||
                 (mouseX == e.data.activeLeader.x && mouseY == (e.data.activeLeader.y - 1)) ||
                 (mouseX == (e.data.activeLeader.x + 1) && mouseY == e.data.activeLeader.y) ||
                 (mouseX == (e.data.activeLeader.x - 1) && mouseY == e.data.activeLeader.y)) &&
                 (e.data.currentMap[mouseY][mouseX] == 1)) {
 
-                 
+                console.log('2');
+
                 e.data.followLeader(e.data);
                 e.data.activeLeader.x = mouseX;
                 e.data.activeLeader.y = mouseY;
@@ -207,12 +215,8 @@ var SquareGame = Game.extend({
                     e.data.endGame();
                 }
 
-
-
             };
             
-            //e.data.gameContext.plot.unbind();
-            //e.data.objectContext.dom.on('click', e.data, e.data.gameContext.pickLeader);
             e.data.activeLeader.dom.removeClass('selected');
         };
     },
@@ -298,7 +302,7 @@ var SquareGame = Game.extend({
     populateFirstMap: function () {
 
         this.currentMap = this.firstMap;
-        this.defineMapBoundaries();
+        
 
         this.createSquare(0, 1, 'green', 'leader', 0);
         this.createSquare(1, 1, 'green', 'filler', 1);
@@ -351,22 +355,13 @@ var SquareGame = Game.extend({
         this.gameOver = true;
         this.plot.html(' ');
         this.removeGameFromPlot();
+        this.score = (300 - this.movesCounter)*10;
     },
 
     start: function () {
         this.calculateBonuses();
         this.addGameToPlot();
         this.populateFirstMap();
+        setTimeout(this.defineMapBoundaries(), 3000);
     }
 });
-
-
-
-/*  
-    linear-gradient(to left bottom, #5A607A 44%, #BEB5FF 100%);
-    */
-
-function checkEvent(dom, eq) {
-    var a = $('.' + dom)[eq].data('events');
-    console.log(a);
-}
