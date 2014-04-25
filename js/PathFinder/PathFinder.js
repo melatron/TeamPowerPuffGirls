@@ -92,8 +92,8 @@ MainCharacters = PFMovableObject.extend({
         else {
             this.spriteIdle.drawSprite();
         }
-        this.gameContext.fillStyle = "black";
-        this.gameContext.fillRect(this.x, this.y , this.width, this.height);
+        //this.gameContext.fillStyle = "black";
+        //this.gameContext.fillRect(this.x, this.y , this.width, this.height);
     },
     gravityAndFrictionUpdate: function (friction, gravity) {
         this.velX *= friction;
@@ -140,6 +140,7 @@ MainCharacters = PFMovableObject.extend({
 PathFinder = Game.extend({
     init: function () {
         var self = this;
+        this.stopEvents = false;
         this.canSpawnTemp = true;
         this.canSpawnPerm = true;
         this.width = 630;
@@ -187,12 +188,16 @@ PathFinder = Game.extend({
 
         this.animation = null;
         this.update = function () {
+            
             self.updateCharacter();
             self.gameContext.clearRect(0, 0, self.width, self.height);
+            
             self.colLoopCheck();
             //self.drawBackground();
             self.checkIfDead();
-            self.mainCharacter.drawCharacter();
+            if (!self.stopEvents) {
+                self.mainCharacter.drawCharacter();
+            }
             self.animation = requestAnimationFrame(self.update);
         };
     },
@@ -301,24 +306,31 @@ PathFinder = Game.extend({
         this.gameContext.fillStyle = "black";
 
         this.mainCharacter.grounded = false;
-        this.mainBlocks(this.mapBoxes, 'black');
-        this.mainBlocks(this.createdBoxesPerm, 'black');
-        this.mainBlocks(this.createdBoxesTemp, 'green');
+        this.mainBlocks(this.mapBoxes, 'black', false);
         this.bottomSpires(this.bottomSpikes, 'red');
         this.topSpires(this.topSpikes, 'purple');
-        this.verticalSpires(this.lightningOnInterval, this.lightningFlag, true);
         this.verticalSpires(this.verticalSpikes, true, false, "yellow");
-        this.movableBlocks(this.movableStepableObjects, "green");
         this.ballOfDeath(this.ballOfDeaths, "orange");
+
+        this.drawBackground();
+        this.mainBlocks(this.createdBoxesPerm, 'green', true);
+        this.mainBlocks(this.createdBoxesTemp, 'yellow', true);
+        
+        this.verticalSpires(this.lightningOnInterval, this.lightningFlag, true);
+        
+        this.movableBlocks(this.movableStepableObjects, "green");
+        
         this.finishBlock(this.finishBlocks, "Maroon")
         this.mainCharacter.move();
     },
-    mainBlocks: function (blocks, color) {
+    mainBlocks: function (blocks, color, flag) {
         this.gameContext.fillStyle = color;
         var len = blocks.length;
         for (var i = 0; i < len; i++) {
             if (blocks[i] != null) {
-                this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
+                if (flag) {
+                    this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
+                }
 
                 var dir = this.colCheck(this.mainCharacter, blocks[i]);
 
@@ -338,7 +350,7 @@ PathFinder = Game.extend({
         this.gameContext.fillStyle = color;
         var len = blocks.length;
         for (var i = 0; i < len; i++) {
-            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
+            //this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
 
             var dir = this.colCheck(this.mainCharacter, blocks[i]);
 
@@ -358,7 +370,7 @@ PathFinder = Game.extend({
         this.gameContext.fillStyle = color;
         var len = blocks.length;
         for (var i = 0; i < len; i++) {
-            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17); 
+            //this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17); 
 
             var dir = this.colCheck(this.mainCharacter, blocks[i]);
 
@@ -384,7 +396,7 @@ PathFinder = Game.extend({
                 }
                 else {
                     this.gameContext.fillStyle = color;
-                    this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
+                    //this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
                 }
                 var dir = this.colCheck(this.mainCharacter, blocks[i]);
                 if (dir === "l" || dir === "r") {
@@ -404,7 +416,7 @@ PathFinder = Game.extend({
         this.gameContext.fillStyle = color;
         var len = blocks.length;
         for (var i = 0; i < len; i++) {
-            this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
+            //this.gameContext.fillRect(blocks[i].x, blocks[i].y + 17, blocks[i].width, blocks[i].height - 17);
             var dir = this.colCheck(this.mainCharacter, blocks[i]);
             if (dir === "l" || dir === "r") {
                 this.mainCharacterDead = true;
@@ -517,11 +529,18 @@ PathFinder = Game.extend({
     },
     checkIfDead: function () {
         if (this.mainCharacterDead) {
+            this.stopEvents = true;
+            var self = this;
+            setTimeout(function () {
+                //self.mainCharacterDead = false;
+                self.stopEvents = false;
+            }, 500);
             if (this.createdBoxesPerm.length > 0) {
                 this.resetMainCharacter(this.createdBoxesPerm[this.createdBoxesPerm.length - 1].x, this.createdBoxesPerm[this.createdBoxesPerm.length - 1].y - this.mainCharacter.height);
             }
             else {
                 this.resetMainCharacter();
+
             }
             this.createdBoxesTemp = [];
             this.tempBoxCounder = 0;
@@ -546,7 +565,12 @@ PathFinder = Game.extend({
             if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39 || e.keyCode == 67) {
                 e.preventDefault();
             }
-            self.keys[e.keyCode] = true;
+            if (!self.stopEvents) {
+                self.keys[e.keyCode] = true;
+            }
+            else {
+                self.keys[e.keyCode] = false;
+            }
         });
         $(document).on('keyup', function (e) {
             if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39 || e.keyCode == 67) {
@@ -587,7 +611,7 @@ PathFinder = Game.extend({
         this.finishBlocks = [];
         switch (level) {
             case 0:
-                this.backGroundSprite = new Sprite(5040, 224, 8, 6, story.sprites[story.sprites.length - 1], { x: + 4.5, y: 0 }, this.gameContext);
+                this.backGroundSprite = new Sprite(5040, 224, 8, 6, story.sprites[40], { x: + 4.5, y: 0 }, this.gameContext);
                 this.startingPoint = { x: 20, y: 30 };
                 this.mapBoxes.push(new PFObjects(0, 0, 10, this.height));
                 this.mapBoxes.push(new PFObjects(0, this.height - 20, this.width, 50));
@@ -620,7 +644,7 @@ PathFinder = Game.extend({
                 break;
 
             case 1:
-
+                this.backGroundSprite = new Sprite(630, 224, 1, 6, story.sprites[41], { x: +4.5, y: 0 }, this.gameContext);
                 this.startingPoint = { x: 5, y: 10 };
                 this.mapBoxes.push(new PFObjects(0, 30, 50, this.height));
                 this.mapBoxes.push(new PFObjects(this.width - 50, 30, 50, this.height));
@@ -665,6 +689,7 @@ PathFinder = Game.extend({
                 break;
 
             case 2:
+                this.backGroundSprite = new Sprite(5040, 224, 8, 6, story.sprites[42], { x: +4.5, y: 0 }, this.gameContext);
                 this.lightningInterval(2500);
                 this.startingPoint = { x: 30, y: 170 };
 
@@ -683,6 +708,7 @@ PathFinder = Game.extend({
                 this.topSpikes.push(new PFObjects(10, 55, 500, 20));
                 this.verticalSpikes.push(new PFObjects(10, 60, 5, this.height - 60));
                 this.verticalSpikes.push(new PFObjects(135, 105, 5, this.height - 105));
+                this.verticalSpikes.push(new PFObjects(140, 105, 5, 50));
 
 
                 this.mapBoxes.push(new PFObjects(140, 130, 40, 90));
@@ -726,19 +752,21 @@ PathFinder = Game.extend({
         this.mainCharacter.y = this.startingPoint.y;
     },
     start: function () {
-        
+        this.stopEvents = false;
         this.mainCharacter.addSprites();
         this.gameOver = false;
-        this.startLevel(1);
+        this.startLevel(0);
         this.addEventListeners();
         this.addGameToPlot();
         this.update();
     },
     endGame: function () {
+        this.stopEvents = true;
         clearInterval(this.interval);
         cancelAnimationFrame(this.animation);
         this.removeGameFromPlot();
         this.gameOver = true;
+
         return this.score;
     }
 
