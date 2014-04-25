@@ -735,6 +735,8 @@ Game = Class.extend({
         this.plot = null;
         this.gameOver = false;
         this.objectives = null;
+        
+        this.scroll = $('#scroll');
 
     },
     start: function () {
@@ -773,16 +775,36 @@ Game = Class.extend({
     },
     addGameToPlot: function () {
         this.plot.fadeIn(1000);
+        this.scroll.fadeIn(1000, this.openScroll);
     },
     removeGameFromPlot: function () {
-        this.plot.fadeOut(1000);
+    	this.plot.fadeOut(1000);
+        this.closeScroll();
     },
 
     getReward: function (item) {            //item - the name of the item (string)
 
         story.inventory.getItem(item);
 
-    }
+    },
+    
+    openScroll: function () {
+        console.log(this);
+        var id = $(this).attr('id');
+        $('#' + id + ' .bottom').animate({
+            'top': '0px'
+        }, 1000, 'easeInOutBack');
+    },
+
+    closeScroll: function () {
+        var id = $(this.scroll).attr('id');
+        $('#' + id + ' .bottom').animate({
+            'top': '-120px'
+        }, 700, 'easeInOutBack', function(){
+        	$('#scroll').fadeOut(500);
+        });
+    },
+
 });
 
 Menu = Class.extend({
