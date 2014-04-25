@@ -3,7 +3,7 @@
 RadoGame = Game.extend({
 	init: function(){
 		var game = this;
-
+		this.scroll = $('#scroll');
 		this.levels = [];            //array of levels
 		this.levelIndex = 0;
 		this.currentLevel = null;	//current level
@@ -37,7 +37,6 @@ RadoGame = Game.extend({
 			}
 		};
 	},
-	
 	// ===== START METHOD ====== //
 	start: function(){
 		this.getContext();

@@ -140,6 +140,7 @@ MainCharacters = PFMovableObject.extend({
 PathFinder = Game.extend({
     init: function () {
         var self = this;
+        this.scroll = $('#scroll');
         this.stopEvents = false;
         this.canSpawnTemp = true;
         this.canSpawnPerm = true;

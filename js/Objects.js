@@ -735,6 +735,7 @@ Game = Class.extend({
         this.plot = null;
         this.gameOver = false;
         this.objectives = null;
+        this.scroll = $('#scroll'); // Scroll property - use this to HIDE and SHOW the scroll
 
     },
     start: function () {
@@ -773,16 +774,35 @@ Game = Class.extend({
     },
     addGameToPlot: function () {
         this.plot.fadeIn(1000);
+        console.log(this.scroll);
+        this.scroll.fadeIn(1000, this.openScroll);
     },
     removeGameFromPlot: function () {
         this.plot.fadeOut(1000);
+        this.scroll.fadeOut(1400, this.openScroll);
     },
 
     getReward: function (item) {            //item - the name of the item (string)
 
         story.inventory.getItem(item);
 
-    }
+    },
+    // ========== SCROLL METHODS - OPEN & CLOSE ================ //
+
+    openScroll: function () {
+        console.log(this);
+        var id = $(this).attr('id');
+        $('#' + id + ' .bottom').animate({
+            'top': '0px'
+        }, 1000, 'easeInOutBack');
+    },
+
+    closeScroll: function () {
+        var id = $(this).attr('id');
+        $('#' + id + ' .bottom').animate({
+            'top': '-120px'
+        }, 700, 'easeInOutBack');
+    },
 });
 
 Menu = Class.extend({
