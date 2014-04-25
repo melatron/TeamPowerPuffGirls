@@ -200,7 +200,9 @@ PathFinder = Game.extend({
             if (!self.stopEvents) {
                 self.mainCharacter.drawCharacter();
             }
-            self.animation = requestAnimationFrame(self.update);
+            if(!self.gameOver){
+            	self.animation = requestAnimationFrame(self.update);            	
+            }
         };
     },
     addPlatformImages: function () {
@@ -781,7 +783,6 @@ PathFinder = Game.extend({
         this.score = 15000 / this.deaths;
         this.stopEvents = true;
         clearInterval(this.interval);
-        cancelAnimationFrame(this.animation);
         this.removeGameFromPlot();
         this.gameOver = true;
 
