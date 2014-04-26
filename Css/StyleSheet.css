@@ -110,7 +110,7 @@ body {
 #square-game{
     width:640px;
     height:250px;
-    margin:auto;
+    float:left;
     position:relative;
     background-image: url(../source/square-game-background1.png);
     background-size:640px 250px;
