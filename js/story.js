@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 //Story = Class.extend({
@@ -736,6 +737,79 @@ function Story() {
     function loadMovableObjects() {
 
 
+=======
+var Story = function () {
+    var self = this;
+    var interactableObjects = [];
+    var stopEvents = false;
+    var inGame = false;
+
+    var canvas = $("#canvas")[0];
+    var ctx = canvas.getContext('2d');
+
+    var storyFinished = false;
+    var hero = new Heroes(0, 256, 32, 32, "hero");
+    var elder = null;
+    var dragon = null;
+    var elf = null;
+    var bandit = null;
+    var orc = null;
+        
+        
+    var gamesFinished = 0;
+    var gamesAmount = 6;
+    var buttons = [];
+    var toggleMusic = new ButtonsObject(0, 0, 40, 40, "ToggleMusic"),
+        finishGame = new ButtonsObject(984, 0, 40, 40, "FinishGame");
+    buttons.push(toggleMusic);
+    buttons.push(finishGame);
+    var endStoryScreenOn = false;
+
+        
+    //
+    var movableObjects = [];
+    var staticSpriteObjects = [];
+    var mainCanvas = $("#canvas")[0];
+        
+    // Hero have is not yet implemented!
+        
+
+    var soundTrack = null;
+
+    var animation = null;
+
+    var mousePos = {};
+
+    var mainLoop = function () {
+        ctx.save();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        elder.setRandomDestination();
+        dragon.setRandomDestination();
+        elf.setRandomDestination();
+        bandit.setRandomDestination();
+        orc.setRandomDestination();
+        hero.moveHeroToDestination();
+        drawInteractableObject();
+        checkIfSpeaking();
+        initializeCurrentQuest();
+        //hero.drawSpeechBubble();
+        soundTrack.startNextSong();
+        startGameAfterConversation();
+        checkIfGamePlayed();
+        checkIfFocused();
+        ctx.restore();
+        animation = requestAnimationFrame(mainLoop);
+        if (endStoryScreenOn) {
+            endStoryScreen();
+        }
+    };
+
+    var inventory = new Inventory();
+
+    var loadMovableObjects = function () {
+
+
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         elder = new AIMovableObject(790, 200, 32, 32, "theMage", interactableObjects[3], {
             x: 820,
             y: 200
@@ -782,8 +856,13 @@ function Story() {
             yMax: 100
         });
     };
+<<<<<<< HEAD
     function addCheckPoints() {
         var elfGame = new RadoGame(),
+=======
+    var addCheckPoints = function () {
+        var  elfGame = new RadoGame(),
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
              digitGame = new TonyGame(),
              squareGame = new SquareGame(),
              swapPuzzle = new SwapPuzzle(),
@@ -913,13 +992,21 @@ function Story() {
         interactableObjects.push(orcCamp);
     };
     // ---- Methods for preloading images ---- //
+<<<<<<< HEAD
     function addEvents() {
+=======
+    var addEvents = function () {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         stopEvents = false;
         $('#canvas').on('click', this, clickEvent);
         $(document).on('keyup', this, handleKeyPressed);
         $(document).on('mousemove', this, onMouseMove);
     };
+<<<<<<< HEAD
     function handleKeyPressed(ev) {
+=======
+    var handleKeyPressed = function (ev) {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (!stopEvents) {
             ev.preventDefault();
             switch (ev.keyCode) {
@@ -933,7 +1020,11 @@ function Story() {
             }
         }
     };
+<<<<<<< HEAD
     function clickEvent(ev) {
+=======
+    var clickEvent = function (ev) {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (!stopEvents) {
             //console.log('rado is a gay persona');
             var rect = mainCanvas.getBoundingClientRect(),
@@ -962,7 +1053,11 @@ function Story() {
         }
     };
     // Here is the functionallity of the buttons:
+<<<<<<< HEAD
     function pauseMusicButton(x, y) {
+=======
+    var pauseMusicButton = function (x, y) {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (buttons[0].checkIfClicked(x, y)) {
             if (buttons[0].toggled) {
                 soundTrack.pauseMainMusic();
@@ -972,26 +1067,42 @@ function Story() {
             }
         }
     };
+<<<<<<< HEAD
     function endStoryScreenButton(x, y) {
+=======
+    var endStoryScreenButton = function (x, y) {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (buttons[1].checkIfClicked(x, y)) {
             if (storyEnded) {
                 endStoryScreen();
             }
         }
     };
+<<<<<<< HEAD
     function endStoryButton() {
+=======
+    var endStoryButton= function () {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (buttons[2].checkIfClicked(x, y)) {
             endStory();
         }
     };
+<<<<<<< HEAD
     function continueStoryButton() {
+=======
+    var  continueStoryButton= function () {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (buttons[3].checkIfClicked(x, y)) {
             endStoryScreenOn = false;
             stopEvents = false;
         }
     };
 
+<<<<<<< HEAD
     function onMouseMove(e) {
+=======
+    var  onMouseMove= function (e) {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (!stopEvents) {
             var rect = mainCanvas.getBoundingClientRect();
             mousePos.x = e.clientX - rect.left;
@@ -999,6 +1110,7 @@ function Story() {
         }
     };
 
+<<<<<<< HEAD
     function checkIfFocused() {
         var i, temp, len = interactableObjects.length;
         for (i = 0; i < len; i++) {
@@ -1007,6 +1119,17 @@ function Story() {
                 (mousePos.y > temp.y && mousePos.y < temp.y + temp.height)) {
                 if (stopEvents == false && temp.isAvailable) {
                     if (temp.spriteGlow) {
+=======
+    var checkIfFocused= function(){
+        var i, temp, len = interactableObjects.length;
+        for(i = 0; i < len; i++){
+            temp = interactableObjects[i];
+            if((mousePos.x > temp.x && mousePos.x < temp.x + temp.width) && 
+                (mousePos.y > temp.y && mousePos.y < temp.y + temp.height))
+            {
+                if(stopEvents == false && temp.isAvailable){
+                    if(temp.spriteGlow){
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
                         temp.spriteGlow.drawSprite();
                     }
                 }
@@ -1016,7 +1139,11 @@ function Story() {
             }
         }
     };
+<<<<<<< HEAD
     function initializeCurrentQuest() {
+=======
+    var initializeCurrentQuest= function () {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (gamesFinished == 0) {
             interactableObjects[gamesFinished].spriteGlow.drawSprite();
         }
@@ -1026,8 +1153,13 @@ function Story() {
     };
 
 
+<<<<<<< HEAD
 
     function checkIfSpeaking() {
+=======
+ 
+    var checkIfSpeaking= function () {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         for (var i = 0; i < interactableObjects.length; i++) {
             if (interactableObjects[i].isInteracting) {
                 if (interactableObjects[i].isSpeaking && !(interactableObjects[i].speech.conversetionEnded)) {
@@ -1045,13 +1177,21 @@ function Story() {
             }
         }
     };
+<<<<<<< HEAD
     function blackenScreen() {
+=======
+    var blackenScreen= function () {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         ctx.save();
         ctx.globalAlpha = 0.7;
         ctx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
         ctx.restore();
     };
+<<<<<<< HEAD
     function changeSpeaker() {
+=======
+    var changeSpeaker= function () {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (hero.speakingTo != null && hero.speakingTo.isInteracting) {
             //console.log(hero.speech.conversetionEnded + " " + hero.speakingTo.speech.conversetionEnded + " " + hero.isSpeaking);
             if (hero.isSpeaking && !hero.speech.conversetionEnded) {
@@ -1087,14 +1227,22 @@ function Story() {
     /* This is the method that checks if the game is finished and starts the after game conversations.
        Also here we will add the end game logic which will darken the screen and asks you if you want to continue
        or you want to end the game! */
+<<<<<<< HEAD
     function checkIfGamePlayed() {
+=======
+    var checkIfGamePlayed= function () {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (hero.speakingTo && hero.speakingTo != null && hero.speakingTo.game) {
             if (hero.speakingTo.game.gameOver && hero.speakingTo.speech.conversetionEnded && hero.speech.conversetionEnded) {
                 stopEvents = false;
                 inGame = false;
                 hero.speakingTo.game.gameOver = false;
                 /*Here we will add the points from the finished game into the click point in which the game is.*/
+<<<<<<< HEAD
                 if (hero.speakingTo.score == 0) {
+=======
+                if(hero.speakingTo.score == 0) {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
                     gamesFinished++;
                     if (gamesFinished == gamesAmount) {
                         storyEnded = true;
@@ -1102,11 +1250,19 @@ function Story() {
                         stopEvents = true;
                     }
                 }
+<<<<<<< HEAD
                 if (hero.speakingTo.score < hero.speakingTo.game.score) {
                     hero.speakingTo.score = hero.speakingTo.game.score;
                 }
                 if (hero.speakingTo.progress.after) {
                     for (var i = 0; i < interactableObjects.length - 1; i++) {
+=======
+                if(hero.speakingTo.score < hero.speakingTo.game.score) {
+                    hero.speakingTo.score = hero.speakingTo.game.score;
+                }
+                if (hero.speakingTo.progress.after) {
+                    for (var i = 0; i < interactableObjects.length-1; i++){
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
                         if (interactableObjects[i] == hero.speakingTo) {
                             interactableObjects[i + 1].isAvailable = true;
                             break;
@@ -1121,6 +1277,7 @@ function Story() {
             }
         }
     };
+<<<<<<< HEAD
     //=============================================================================//
     // HERE WE SEE IF THE CONVERSATION HAS ENDED AND WE START THE FRICKING GAME !
     //=============================================================================//
@@ -1129,6 +1286,12 @@ function Story() {
         if (hero.speakingTo != null && hero.speech.conversetionEnded && hero.speakingTo.speech.conversetionEnded && !inGame) {
 
             if (hero.speakingTo.progress.before) {
+=======
+    var startGameAfterConversation= function(){
+        if (hero.speakingTo != null && hero.speech.conversetionEnded && hero.speakingTo.speech.conversetionEnded && !inGame) {
+            
+            if (hero.speakingTo.progress.before) { 
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
                 inGame = true;
                 hero.speakingTo.isSpeaking = false;
                 hero.isSpeaking = false;
@@ -1136,9 +1299,15 @@ function Story() {
                 hero.speakingTo.progress.after = true;
 
                 if (hero.speakingTo.game) {
+<<<<<<< HEAD
                     stopEvents = true;
                     bonuses = calculateBonuses();
                     hero.speakingTo.startGame(bonuses);
+=======
+                    //console.log('asdaskdalsdkalskdlaskdlakdlaskdlaksdlakdlaskdlakdlasdkalsdkaldkadkal');
+                    stopEvents = true;
+                    hero.speakingTo.startGame();
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
                 }
             }
             else if (hero.speakingTo.progress.after) {
@@ -1154,21 +1323,35 @@ function Story() {
 
                 if (hero.speakingTo.game) {
                     stopEvents = true;
+<<<<<<< HEAD
                     bonuses = calculateBonuses();
                     hero.speakingTo.startGame(bonuses);
+=======
+                    hero.speakingTo.startGame();
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
                 }
             }
         }
     };
     // here is the method which will draw the end game screen!
+<<<<<<< HEAD
     function endStoryScreen() {
+=======
+    var endStoryScreen = function () {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (endStoryScreenOn) {
             blackenScreen();
             buttons[2].drawButton();
             buttons[3].drawButton();
+<<<<<<< HEAD
         }
     };
     function calculateFinalScore() {
+=======
+        }   
+    };
+    var calculateFinalScore = function () {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         var array = interactableObjects,
             finalScore = 0;
         for (var i = 0; i < array.length; i++) {
@@ -1177,6 +1360,7 @@ function Story() {
         return finalScore;
     };
     // here is the mehtod which will end the this if you have finished all 7 games and you have clicked finish button
+<<<<<<< HEAD
     function endStory() {
 
     };
@@ -1190,6 +1374,21 @@ function Story() {
         staticSpriteObjects.push(sObject);
     };
     function searchInteractableObjectByName(name) {
+=======
+    var endStory= function () {
+    
+    };
+    var addInteractableObject = function (iObject) {
+        interactableObjects.push(iObject);
+    };
+    var addMovableObjects = function (mObject) {
+        movableObjects.push(mObject);
+    };
+    var addStaticSpriteObjects = function (sObject) {
+        staticSpriteObjects.push(sObject);
+    };
+    var searchInteractableObjectByName = function (name) {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         var array = interactableObjects;
         for (var i = 0; i < array.length; i++) {
             if (array[i].name == name) {
@@ -1197,7 +1396,11 @@ function Story() {
             }
         }
     };
+<<<<<<< HEAD
     function searchMovableObjectsByName(name) {
+=======
+    var searchMovableObjectsByName = function (name) {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         var array = movableObjects;
         for (var i = 0; i < array.length; i++) {
             if (array[i].name == name) {
@@ -1205,11 +1408,16 @@ function Story() {
             }
         }
     };
+<<<<<<< HEAD
     function drawInteractableObject() {
+=======
+    var drawInteractableObject = function () {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         for (var i = 0, len = interactableObjects.length; i < len; i++) {
             interactableObjects[i].drawObj();
         }
     };
+<<<<<<< HEAD
     /// Matei's Inventory methods for calculating the bonuses and 
     function calculateBonuses() {
         var object = {
@@ -1253,6 +1461,10 @@ function Story() {
     };
     function preloadSprites() {
 
+=======
+    var preloadSprites = function () {
+                          
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         hero.spriteUp = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(0), hero, ctx);  // create Sprites
         hero.spriteDown = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(1), hero, ctx);
         hero.spriteLeft = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(2), hero, ctx);
@@ -1304,8 +1516,13 @@ function Story() {
 
     // ==== Portrait preloader ==== //
 
+<<<<<<< HEAD
     function preloadPortraits() {
 
+=======
+    var preloadPortraits = function () {
+      
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
 
         hero.setImage(preloader.getPortraitByIndex(0));
         interactableObjects[3].setImage(preloader.getPortraitByIndex(1));
@@ -1317,7 +1534,11 @@ function Story() {
         interactableObjects[6].setImage(preloader.getPortraitByIndex(7));
 
     };
+<<<<<<< HEAD
     function checkRequestAnimationFrame() {
+=======
+    var checkRequestAnimationFrame = function(){
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         if (!window.requestAnimationFrame) {
 
             window.requestAnimationFrame = (function () {
@@ -1326,7 +1547,11 @@ function Story() {
                 window.mozRequestAnimationFrame || // comment out if FF4 is slow (it caps framerate at ~30fps: https://bugzilla.mozilla.org/show_bug.cgi?id=630127)
                 window.oRequestAnimationFrame ||
                 window.msRequestAnimationFrame ||
+<<<<<<< HEAD
                 function ( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
+=======
+                function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
 
                     window.setTimeout(callback, 1000 / 60);
 
@@ -1336,7 +1561,11 @@ function Story() {
 
         }
     };
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
     this.preloadEverything = function () {
         preloader.preloadEverything();
         addCheckPoints();
@@ -1345,8 +1574,13 @@ function Story() {
         soundTrack.startMainMusic();
         preloadSprites();
         preloadPortraits();
+<<<<<<< HEAD
 
 
+=======
+
+
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
         checkRequestAnimationFrame();
 
         /* all quests are available */
@@ -1368,4 +1602,15 @@ $(window).load(function () {
     menu = new Menu();
 
     menu.initializeMenu();
+<<<<<<< HEAD
 });
+=======
+});
+//window.onload = function () {
+//	
+//	menu = new Menu();
+//	
+//	menu.initializeMenu();
+//
+//};
+>>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
