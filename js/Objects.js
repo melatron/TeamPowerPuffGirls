@@ -531,30 +531,11 @@ Sprite = Class.extend({
 //======== PLAYLIST OBJECT ==========//
 
 function PlayList() {
-    var questSounds = [],
-        mainSounds = [],
-        sounds = [],
-        currentMainSongIndex = null;
-    this.preloadSounds = function () {
-        for (var i = 0; i < arguments.length; i++) {
-            sounds[i] = new Audio();
-            sounds[i].src = arguments[i];
-        }
-    };
-    this.preloadQuestSounds = function () {
-        for (var i = 0; i < arguments.length; i++) {
-            questSounds[i] = new Audio();
-            questSounds[i].src = arguments[i];
-        }
-    };
-    this.getMainSoundsArray = function(){
-    	return mainSounds;
-    };
-    this.preloadMainSounds = function () {
-        for (var i = 0; i < arguments.length; i++) {
-            mainSounds[i] = new Audio();
-            mainSounds[i].src = arguments[i];
-        }
+    var questSounds = preloader.returnQuestMusicArrayCopy(),
+        mainSounds = preloader.returnMainMusicArrayCopy(),
+        currentMainSongIndex = 0;
+ 
+    this.startMainMusic = function () {
         currentMainSongIndex = Math.floor((Math.random() * (mainSounds.length - 1)));
         mainSounds[currentMainSongIndex].play();
     };
@@ -775,8 +756,7 @@ var Game = Class.extend({
     },
     
     loadSounds: function(){
-    	this.soundArray = story.soundTrack.getMainSoundsArray();
-    	this.scrollSound = this.soundArray[14];
+        this.scrollSound = preloader.getGameSoundByIndex(0);
     },
     
     start: function () {
