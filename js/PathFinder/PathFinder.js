@@ -139,9 +139,11 @@ MainCharacters = PFMovableObject.extend({
 
 PathFinder = Game.extend({
     init: function () {
+        this._super();
+        //console.log(this.objectives);
         var self = this;
-        this.scroll = $('#scroll');
-        this.stopEvents = false;
+        //this.scroll = $('#scroll');
+        //this.stopEvents = false;
         this.canSpawnTemp = true;
         this.canSpawnPerm = true;
         this.width = 630;
@@ -176,8 +178,8 @@ PathFinder = Game.extend({
         this.ballOfDeaths = [];
         this.finishBlocks = [];
 
-        this.score = 0;
-        this.gameOver = false;
+        //this.score = 0;
+        //this.gameOver = false;
 
         this.backGroundSprite = null;
 
@@ -770,7 +772,7 @@ PathFinder = Game.extend({
         this.mainCharacter.y = this.startingPoint.y;
     },
     start: function () {
-        var instructions = '"Space": creates temporary platform. "c": creates permanent checkpoint. Get to the purple point!';
+        var instructions = '"Space": creates temporary platform. "c": creates permanent checkpoint. Get to the maroon point!';
         this.writeOnScroll(instructions, {
             fontSize: '12px'
         });

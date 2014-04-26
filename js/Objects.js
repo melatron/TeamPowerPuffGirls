@@ -1,6 +1,4 @@
-var ctx,
-    canvas,
-    story;
+var story;
 // ============== MAIN OBJECT CLASS ============//
 
 GameObject = Class.extend({
@@ -10,6 +8,8 @@ GameObject = Class.extend({
         this.height = height;
         this.x = x;
         this.y = y;
+        this.canvas = $("#canvas")[0];
+        this.ctx = this.canvas.getContext('2d');
     },
     getPosition: function () {
         var that = this;
@@ -42,7 +42,7 @@ ButtonsObject = GameObject.extend({
         }
     },
     drawButton: function () {
-        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+        this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 
 });
@@ -50,16 +50,20 @@ ButtonsObject = GameObject.extend({
 
 Portrait = Class.extend({
     init: function (x, y) {
+        this.canvas = $("#canvas")[0];
+        this.ctx = this.canvas.getContext('2d');
         this.x = x;
         this.y = y;
         this.image = null;
     },
     drawPortrait: function () {
-        ctx.drawImage(this.image, this.x, this.y, this.image.width, this.image.height);
+        this.ctx.drawImage(this.image, this.x, this.y, this.image.width, this.image.height);
     }
 });
 Speech = Class.extend({
     init: function (x, y) {
+        this.canvas = $("#canvas")[0];
+        this.ctx = this.canvas.getContext('2d');
         this.counter = 0; 	 	
         this.conversetionEnded = false; 
         this.x = x;
@@ -80,11 +84,11 @@ Speech = Class.extend({
         this.textArray.push(sentence);
     },
     drawSpeech: function () {
-        ctx.fillStyle = "black";
-        ctx.font = "12px Georgia";
+        this.ctx.fillStyle = "black";
+        this.ctx.font = "12px Georgia";
         var i, len = this.textArray[this.counter].length;
         for (i = 0; i < len; i++) {
-            ctx.fillText(this.textArray[this.counter][i], this.x, this.y + (i * this.wordsPixels), this.maxWidth); //draws part of the dialog
+            this.ctx.fillText(this.textArray[this.counter][i], this.x, this.y + (i * this.wordsPixels), this.maxWidth); //draws part of the dialog
         }
     }
 });
@@ -125,28 +129,28 @@ SpeakingObject = GameObject.extend({
                 _that = this;
 
             // Drawing the bubble >>>
-            ctx.save();
-            ctx.beginPath();
-            ctx.fillStyle = "rgb(215,199,147)";
-            ctx.lineWidth = "3";
+            this.ctx.save();
+            this.ctx.beginPath();
+            this.ctx.fillStyle = "rgb(215,199,147)";
+            this.ctx.lineWidth = "3";
         
-            ctx.moveTo(x + this.radius, y);
-            ctx.lineTo(r - this.radius * 2, y);
-            ctx.lineTo(r - this.radius / 2, y - 15);
-            ctx.lineTo(r - this.radius , y);
-            //ctx.lineTo(r - this.radius, y);
+            this.ctx.moveTo(x + this.radius, y);
+            this.ctx.lineTo(r - this.radius * 2, y);
+            this.ctx.lineTo(r - this.radius / 2, y - 15);
+            this.ctx.lineTo(r - this.radius , y);
+            //this.ctx.lineTo(r - this.radius, y);
         
-            ctx.quadraticCurveTo(r, y, r, y + this.radius);
-            ctx.lineTo(r, y + this.bubbleHeight - this.radius);
-            ctx.quadraticCurveTo(r, b, r - this.radius, b);
-            ctx.lineTo(x + this.radius, b);
-            ctx.quadraticCurveTo(x, b, x, b - this.radius);
-            ctx.lineTo(x, y + this.radius);
-            ctx.quadraticCurveTo(x, y, x + this.radius, y);
-            ctx.fill();
-            ctx.strokeStyle = "black";
-            ctx.stroke();
-            ctx.restore();
+            this.ctx.quadraticCurveTo(r, y, r, y + this.radius);
+            this.ctx.lineTo(r, y + this.bubbleHeight - this.radius);
+            this.ctx.quadraticCurveTo(r, b, r - this.radius, b);
+            this.ctx.lineTo(x + this.radius, b);
+            this.ctx.quadraticCurveTo(x, b, x, b - this.radius);
+            this.ctx.lineTo(x, y + this.radius);
+            this.ctx.quadraticCurveTo(x, y, x + this.radius, y);
+            this.ctx.fill();
+            this.ctx.strokeStyle = "black";
+            this.ctx.stroke();
+            this.ctx.restore();
             // Drawing the text inside the bubble >>>
             this.speech.drawSpeech();
             
@@ -357,12 +361,12 @@ ClickPoint = InteractableObject.extend({
         }
     },
     drawObj: function () {
-    	ctx.save();
-    	ctx.fillStyle = "rgba(20, 20, 20, 0.2)";   // Temporary bounding rect for click point
-        ctx.fillRect(this.x, this.y, this.width, this.height);//testing
-        ctx.fillStyle = "rgba(20, 20, 20, 0.7";
-        ctx.fillRect(this.arrivalPoint.x, this.arrivalPoint.y, 10, 10);
-        ctx.restore();
+    	this.ctx.save();
+    	this.ctx.fillStyle = "rgba(20, 20, 20, 0.2)";   // Temporary bounding rect for click point
+        this.ctx.fillRect(this.x, this.y, this.width, this.height);//testing
+        this.ctx.fillStyle = "rgba(20, 20, 20, 0.7";
+        this.ctx.fillRect(this.arrivalPoint.x, this.arrivalPoint.y, 10, 10);
+        this.ctx.restore();
     },
 
 
@@ -398,33 +402,33 @@ Heroes = MovableObject.extend({
                 y = this.speechY,
                 r = x + this.speech.maxWidth + 30,
                 b = y + this.bubbleHeight;
-            ctx.save();
-            ctx.beginPath();
-            ctx.fillStyle = "rgb(215,199,147)";
-            ctx.lineWidth = "3";
+            this.ctx.save();
+            this.ctx.beginPath();
+            this.ctx.fillStyle = "rgb(215,199,147)";
+            this.ctx.lineWidth = "3";
             //
-            ctx.moveTo(x + this.radius, y);
-            ctx.lineTo(x + this.radius / 2, y - 15);
-            ctx.lineTo(x + this.radius * 2, y);
-            ctx.lineTo(r - this.radius, y);
+            this.ctx.moveTo(x + this.radius, y);
+            this.ctx.lineTo(x + this.radius / 2, y - 15);
+            this.ctx.lineTo(x + this.radius * 2, y);
+            this.ctx.lineTo(r - this.radius, y);
             //
-            //ctx.moveTo(x + this.radius, y);
-            //ctx.lineTo(r - this.radius * 2, y);
-            //ctx.lineTo(r - this.radius / 2, y - 15);
-            //ctx.lineTo(r - this.radius, y);
-            //ctx.lineTo(r - this.radius, y);
+            //this.ctx.moveTo(x + this.radius, y);
+            //this.ctx.lineTo(r - this.radius * 2, y);
+            //this.ctx.lineTo(r - this.radius / 2, y - 15);
+            //this.ctx.lineTo(r - this.radius, y);
+            //this.ctx.lineTo(r - this.radius, y);
 
-            ctx.quadraticCurveTo(r, y, r, y + this.radius);
-            ctx.lineTo(r, y + this.bubbleHeight - this.radius);
-            ctx.quadraticCurveTo(r, b, r - this.radius, b);
-            ctx.lineTo(x + this.radius, b);
-            ctx.quadraticCurveTo(x, b, x, b - this.radius);
-            ctx.lineTo(x, y + this.radius);
-            ctx.quadraticCurveTo(x, y, x + this.radius, y);
-            ctx.fill();
-            ctx.strokeStyle = "black";
-            ctx.stroke();
-            ctx.restore();
+            this.ctx.quadraticCurveTo(r, y, r, y + this.radius);
+            this.ctx.lineTo(r, y + this.bubbleHeight - this.radius);
+            this.ctx.quadraticCurveTo(r, b, r - this.radius, b);
+            this.ctx.lineTo(x + this.radius, b);
+            this.ctx.quadraticCurveTo(x, b, x, b - this.radius);
+            this.ctx.lineTo(x, y + this.radius);
+            this.ctx.quadraticCurveTo(x, y, x + this.radius, y);
+            this.ctx.fill();
+            this.ctx.strokeStyle = "black";
+            this.ctx.stroke();
+            this.ctx.restore();
             // Drawing the text inside the bubble >>>
             this.speech.drawSpeech();
     }
@@ -744,23 +748,23 @@ Inventory = Class.extend({
 
 
 
-Game = Class.extend({
+var Game = Class.extend({
     init: function () {
                         
         this.gameBonuses = {            // object containing all the game bonuses (calculated at the start of each game)
-
+        
             bonusMoves : 0,
             bonusSpeed : 0,
             bonusTime : 0,
             bonusCheckpoints : 0
-
+        
         };                
                                                 
-        this.score = null;
+        this.score = 0;
         this.plot = null;
         this.gameOver = false;
         this.objectives = null;
-        
+        this.stopEvents = false;
         this.scroll = $('#scroll');
         
         this.soundArray = null;
@@ -934,29 +938,10 @@ Menu = Class.extend({
 				$('#main').fadeIn(2000);
 			}, 2000);
 			
-			canvas = $("#canvas")[0];
-			ctx = canvas.getContext('2d');
-			story = new Story();
-			story.checkRequestAnimationFrame();
 			
-			/* all quests are available */
-			story.interactableObjects[0].isAvailable = true;       
-			story.interactableObjects[1].isAvailable = true;
-			story.interactableObjects[2].isAvailable = true;
-			story.interactableObjects[3].isAvailable = true;
-			story.interactableObjects[4].isAvailable = true;
-			story.interactableObjects[5].isAvailable = true;
-			story.interactableObjects[6].isAvailable = true;
+			story = new Story();
 			
 			story.preloadEverything();
-			
-			story.inventory.getItem('dagger');
-			story.inventory.getItem('ring');
-			story.inventory.getItem('sword');
-			story.addEvents();
-			
-			story.mainLoop();
-			
 			//game = new TonyGame();
 			//game.start();
 			//elfGame = new RadoGame();

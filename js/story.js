@@ -1,19 +1,21 @@
 Story = Class.extend({
 
     init: function () {
-        var self = this,
-            elfGame = new RadoGame(),
-            digitGame = new TonyGame(),
-            squareGame = new SquareGame(),
-            swapPuzzle = new SwapPuzzle(),
-            pathFinder = new PathFinder(),
-            eightPuzzle = new EightPuzzle();
-        this.interactableObjects = new Array();
+        var self = this;
+        this.interactableObjects = [];
         this.stopEvents = false;
         this.inGame = false;
 
-        this.storyFinished = false;
-        
+        this.canvas = $("#canvas")[0];
+        this.ctx = this.canvas.getContext('2d');
+
+        this.thisFinished = false;
+        this.hero = new Heroes(0, 256, 32, 32, "hero");
+        this.elder = null;
+        this.dragon = null;
+        this.elf = null;
+        this.bandit = null;
+        this.orc = null;
         
         
         this.gamesFinished = 0;
@@ -25,141 +27,54 @@ Story = Class.extend({
         this.buttons.push(finishGame);
         this.endGameScreenOn = false;
 
-        var humanCastle = new ClickPoint(106, -13, 150, 140, "humanCastle",
-        													{
-        														x: 175,
-        														y: 150
-        													},
-            squareGame,
-            {                  // HERO SPEECH
-                before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
-            },
-            {                  //QUEST SPEECH
-                before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
-            }
-        	),
-            dwarfCamp = new ClickPoint(740, -5, 130, 130, "dwarfCamp", 
-            												{
-            													x: 655,
-            													y: 130
-            												}, digitGame,
-            {                  // HERO SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            },
-            {                  //QUEST SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            }
-            ),
-            treeOfLife = new ClickPoint(83, 372, 100, 100, "treeOfLife",{
-            													x: 175,
-            													y: 350
-            },
-            elfGame,
-            {                  // HERO SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            },
-            {                  //QUEST SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            }
-
-            ),
-            mage = new ClickPoint(800, 200, 50, 50, 'mage',
-            												{
-            													x: 810,
-            													y: 250
-            												}, swapPuzzle,
-            {                  // HERO SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            },
-            {                  //QUEST SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            }
-            ),
-            dragon = new ClickPoint(675, 300, 200, 200, 'dragon',
-                                                            {
-                                                                x: 660,
-                                                                y: 345
-                                                            },null,
-             {                  // HERO SPEECH
-                 before: " ",
-                 after: " ",
-                 done: " "
-             },
-            {                  //QUEST SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            }
-     
-            ),
-            bandit = new ClickPoint(451, 310, 100, 150, 'banditTavern',
-            												{
-            													x: 430,
-            													y: 355
-            												}, pathFinder,
-             {                  // HERO SPEECH
-                 before: " ",
-                 after: " ",
-                 done: " "
-             },
-            {                  //QUEST SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            }
-            ),
-            orcCamp = new ClickPoint(440, 22, 100, 100, 'orcCamp', 
-            												{
-            													x: 430,
-            													y: 140
-            												}, eightPuzzle,
-             {                  // HERO SPEECH
-                 before: " ",
-                 after: " ",
-                 done: " "
-             },
-            {                  //QUEST SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            }
-            );
-        this.interactableObjects.push(humanCastle);
-        this.interactableObjects.push(dwarfCamp);
-        this.interactableObjects.push(treeOfLife);
-        this.interactableObjects.push(mage);
-        this.interactableObjects.push(dragon);
-        this.interactableObjects.push(bandit);
-        this.interactableObjects.push(orcCamp);
+        
         //
-        this.movableObjects = new Array();
-        this.staticSpriteObjects = new Array();
+        this.movableObjects = [];
+        this.staticSpriteObjects = [];
         this.mainCanvas = document.getElementById("canvas");
         
-        this.sprites = new Array();
-        this.portraits = new Array();
+        this.sprites = [];
+        this.portraits = [];
         // Hero have is not yet implemented!
-        this.hero = new Heroes(0, 256, 32, 32, "hero");
         
+
+        this.soundTrack = new PlayList();
+
+        this.animation = null;
+
+        this.mousePos = {};
+
+        this.mainLoop = function () {
+            self.ctx.save();
+            self.ctx.clearRect(0, 0, canvas.width, canvas.height);
+            self.elder.setRandomDestination();
+            self.dragon.setRandomDestination();
+            self.elf.setRandomDestination();
+            self.bandit.setRandomDestination();
+            self.orc.setRandomDestination();
+            self.hero.moveHeroToDestination();
+            self.drawInteractableObject();
+            self.checkIfSpeaking();
+            //self.hero.drawSpeechBubble();
+            self.soundTrack.startNextSong();
+            self.startGameAfterConversation();
+            self.checkIfGamePlayed();
+            self.checkIfFocused();
+            self.ctx.restore();
+            self.animation = requestAnimationFrame(self.mainLoop);
+            if (self.endGameScreenOn) {
+                self.endthisScreen();
+            }
+        };
+
+        this.inventory = new Inventory();
+    },
+    loadMovableObjects: function () {
+        
+
         this.elder = new AIMovableObject(790, 200, 32, 32, "theMage", this.interactableObjects[3], {
-            x:820,
-            y:200
+            x: 820,
+            y: 200
         }, {
             xMin: 780,
             xMax: 820,
@@ -176,65 +91,163 @@ Story = Class.extend({
             yMax: 330
         });
         this.elf = new AIMovableObject(210, 300, 32, 32, "elf", this.interactableObjects[2], {
-        	x: 210,
-        	y: 300
+            x: 210,
+            y: 300
         }, {
-        	xMin: 200,
-        	xMax: 220,
-        	yMin: 300,
-        	yMax: 340
+            xMin: 200,
+            xMax: 220,
+            yMin: 300,
+            yMax: 340
         });
         this.bandit = new AIMovableObject(400, 400, 32, 32, 'bandit', this.interactableObjects[5], {
-        	x: 400,
-        	y: 400
+            x: 400,
+            y: 400
         }, {
-        	xMin: 390,
-        	xMax: 410,
-        	yMin: 390,
-        	yMax: 410
+            xMin: 390,
+            xMax: 410,
+            yMin: 390,
+            yMax: 410
         });
         this.orc = new AIMovableObject(370, 80, 32, 32, 'orc', this.interactableObjects[6], {
-        	x: 370,
-        	y: 75
+            x: 370,
+            y: 75
         }, {
-        	xMin: 360,
-        	xMax: 410,
-        	yMin: 75,
-        	yMax: 100
+            xMin: 360,
+            xMax: 410,
+            yMin: 75,
+            yMax: 100
         });
-
-        this.soundTrack = new PlayList();
-
-        this.animation = null;
-
-        this.mousePos = {};
-
-        this.mainLoop = function () {
-            ctx.save();
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            self.elder.setRandomDestination();
-            self.dragon.setRandomDestination();
-            self.elf.setRandomDestination();
-            self.bandit.setRandomDestination();
-            self.orc.setRandomDestination();
-            self.hero.moveHeroToDestination();
-            self.drawInteractableObject();
-            self.checkIfSpeaking();
-            //self.hero.drawSpeechBubble();
-            self.soundTrack.startNextSong();
-            self.startGameAfterConversation();
-            self.checkIfGamePlayed();
-            self.checkIfFocused();
-            ctx.restore();
-            self.animation = requestAnimationFrame(self.mainLoop);
-            if (self.endGameScreenOn) {
-                self.endStoryScreen();
-            }
-        };
-
-        this.inventory = new Inventory();
     },
-    
+    addCheckPoints: function () {
+       var  elfGame = new RadoGame(),
+            digitGame = new TonyGame(),
+            squareGame = new SquareGame(),
+            swapPuzzle = new SwapPuzzle(),
+            pathFinder = new PathFinder(),
+            eightPuzzle = new EightPuzzle();
+        var humanCastle = new ClickPoint(106, -13, 150, 140, "humanCastle",
+        													{
+        													    x: 175,
+        													    y: 150
+        													},
+            squareGame,
+            {                  // HERO SPEECH
+                before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
+                after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
+                done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
+            },
+            {                  //QUEST SPEECH
+                before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
+                after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
+                done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
+            }
+        	),
+            dwarfCamp = new ClickPoint(740, -5, 130, 130, "dwarfCamp",
+            												{
+            												    x: 655,
+            												    y: 130
+            												}, digitGame,
+            {                  // HERO SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            },
+            {                  //QUEST SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            }
+            ),
+            treeOfLife = new ClickPoint(83, 372, 100, 100, "treeOfLife", {
+                x: 175,
+                y: 350
+            },
+            elfGame,
+            {                  // HERO SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            },
+            {                  //QUEST SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            }
+
+            ),
+            mage = new ClickPoint(800, 200, 50, 50, 'mage',
+            												{
+            												    x: 810,
+            												    y: 250
+            												}, swapPuzzle,
+            {                  // HERO SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            },
+            {                  //QUEST SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            }
+            ),
+            dragon = new ClickPoint(675, 300, 200, 200, 'dragon',
+                                                            {
+                                                                x: 660,
+                                                                y: 345
+                                                            }, null,
+             {                  // HERO SPEECH
+                 before: " ",
+                 after: " ",
+                 done: " "
+             },
+            {                  //QUEST SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            }
+
+            ),
+            bandit = new ClickPoint(451, 310, 100, 150, 'banditTavern',
+            												{
+            												    x: 430,
+            												    y: 355
+            												}, pathFinder,
+             {                  // HERO SPEECH
+                 before: " ",
+                 after: " ",
+                 done: " "
+             },
+            {                  //QUEST SPEECH
+                before: " ",
+                after: " ",
+                done: " "
+            }
+            ),
+            orcCamp = new ClickPoint(440, 22, 100, 100, 'orcCamp',
+            												{
+            												    x: 430,
+            												    y: 140
+            												}, eightPuzzle,
+                 {                  // HERO SPEECH
+                     before: " ",
+                     after: " ",
+                     done: " "
+                 },
+                {                  //QUEST SPEECH
+                    before: " ",
+                    after: " ",
+                    done: " "
+                }
+            );
+        this.interactableObjects.push(humanCastle);
+        this.interactableObjects.push(dwarfCamp);
+        this.interactableObjects.push(treeOfLife);
+        this.interactableObjects.push(mage);
+        this.interactableObjects.push(dragon);
+        this.interactableObjects.push(bandit);
+        this.interactableObjects.push(orcCamp);
+    },
     // ---- Methods for preloading images ---- //
     addEvents: function () {
         this.stopEvents = false;
@@ -280,8 +293,8 @@ Story = Class.extend({
         }
         // here we will add events for the buttons that will apear when the end game screen is on !
         if (ev.data.endGameScreenOn && ev.data.stopEvents) {
-            ev.data.endStoryButton(mouseX, mouseY);
-            ev.data.continueStoryButton(mouseX, mouseY);
+            ev.data.endthisButton(mouseX, mouseY);
+            ev.data.continuethisButton(mouseX, mouseY);
         }
     },
     // Here is the functionallity of the buttons:
@@ -295,19 +308,19 @@ Story = Class.extend({
             }
         }
     },
-    endStoryScreenButton: function (x, y) {
+    endthisScreenButton: function (x, y) {
         if (this.buttons[1].checkIfClicked(x, y)) {
-            if (this.storyEnded) {
-                this.endStoryScreen();
+            if (this.thisEnded) {
+                this.endthisScreen();
             }
         }
     },
-    endStoryButton: function () {
+    endthisButton: function () {
         if (this.buttons[2].checkIfClicked(x, y)) {
-            this.endStory();
+            this.endthis();
         }
     },
-    continueStoryButton: function () {
+    continuethisButton: function () {
         if (this.buttons[3].checkIfClicked(x, y)) {
             this.endGameScreenOn = false;
             this.stopEvents = false;
@@ -363,10 +376,10 @@ Story = Class.extend({
 	    }
 	},
 	blackenScreen: function () {
-	    ctx.save();
-	    ctx.globalAlpha = 0.7;
-	    ctx.fillRect(0, 0, this.mainCanvas.width, this.mainCanvas.height);
-	    ctx.restore();
+	    this.ctx.save();
+	    this.ctx.globalAlpha = 0.7;
+	    this.ctx.fillRect(0, 0, this.mainCanvas.width, this.mainCanvas.height);
+	    this.ctx.restore();
 	},
 	changeSpeaker: function () {
 	    if (this.hero.speakingTo != null && this.hero.speakingTo.isInteracting) {
@@ -414,7 +427,7 @@ Story = Class.extend({
 	            if(this.hero.speakingTo.score == 0) {
 	                this.gamesFinished++;
 	                if (this.gamesFinished == this.gamesAmount) {
-	                    this.storyEnded = true;
+	                    this.thisEnded = true;
 	                    this.endGameScreenOn = true;
 	                    this.stopEvents = true;
 	                }
@@ -473,7 +486,7 @@ Story = Class.extend({
 	    }
 	},
     // here is the method which will draw the end game screen!
-	endStoryScreen: function () {
+	endthisScreen: function () {
 	    if (this.endGameScreenOn) {
 	        this.blackenScreen();
 	        this.buttons[2].drawButton();
@@ -488,8 +501,8 @@ Story = Class.extend({
 	    }
 	    return finalScore;
 	},
-    // here is the mehtod which will end the story if you have finished all 7 games and you have clicked finish button
-	endStory: function () {
+    // here is the mehtod which will end the this if you have finished all 7 games and you have clicked finish button
+	endthis: function () {
     
 	},
     addInteractableObject: function (iObject) {
@@ -645,53 +658,53 @@ Story = Class.extend({
             this.sprites[i].src = arguments[i];
         }
 
-        this.hero.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[0], story.hero, ctx);  // create Sprites
-        this.hero.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[1], story.hero, ctx);
-        this.hero.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], story.hero, ctx);
-        this.hero.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], story.hero, ctx);
-        this.hero.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], story.hero, ctx);
+        this.hero.spriteUp = new Sprite(96, 32, 3, 4, this.sprites[0], this.hero, this.ctx);  // create Sprites
+        this.hero.spriteDown = new Sprite(96, 32, 3, 4, this.sprites[1], this.hero, this.ctx);
+        this.hero.spriteLeft = new Sprite(96, 32, 3, 4, this.sprites[2], this.hero, this.ctx);
+        this.hero.spriteRight = new Sprite(96, 32, 3, 4, this.sprites[3], this.hero, this.ctx);
+        this.hero.spriteIdle = new Sprite(32, 32, 1, 4, this.sprites[1], this.hero, this.ctx);
 
-        this.elder.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[4], story.elder, ctx);
-        this.elder.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[5], story.elder, ctx);
-        this.elder.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[6], story.elder, ctx);
-        this.elder.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[7], story.elder, ctx);
-        this.elder.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[5], story.elder, ctx);
+        this.elder.spriteUp = new Sprite(96, 32, 3, 4, this.sprites[4], this.elder, this.ctx);
+        this.elder.spriteDown = new Sprite(96, 32, 3, 4, this.sprites[5], this.elder, this.ctx);
+        this.elder.spriteLeft = new Sprite(96, 32, 3, 4, this.sprites[6], this.elder, this.ctx);
+        this.elder.spriteRight = new Sprite(96, 32, 3, 4, this.sprites[7], this.elder, this.ctx);
+        this.elder.spriteIdle = new Sprite(32, 32, 1, 4, this.sprites[5], this.elder, this.ctx);
 
-        this.dragon.spriteUp = new Sprite(384, 96, 4, 10, story.sprites[8], story.dragon, ctx);
-        this.dragon.spriteDown = new Sprite(384, 96, 4, 10, story.sprites[9], story.dragon, ctx);
-        this.dragon.spriteLeft = new Sprite(384, 96, 4, 10, story.sprites[10], story.dragon, ctx);
-        this.dragon.spriteRight = new Sprite(384, 96, 4, 10, story.sprites[11], story.dragon, ctx);
-        this.dragon.spriteIdle = new Sprite(96, 96, 1, 10, story.sprites[9], story.dragon, ctx);
+        this.dragon.spriteUp = new Sprite(384, 96, 4, 10, this.sprites[8], this.dragon, this.ctx);
+        this.dragon.spriteDown = new Sprite(384, 96, 4, 10, this.sprites[9], this.dragon, this.ctx);
+        this.dragon.spriteLeft = new Sprite(384, 96, 4, 10, this.sprites[10], this.dragon, this.ctx);
+        this.dragon.spriteRight = new Sprite(384, 96, 4, 10, this.sprites[11], this.dragon, this.ctx);
+        this.dragon.spriteIdle = new Sprite(96, 96, 1, 10, this.sprites[9], this.dragon, this.ctx);
         this.dragon.getDestinationDelay = 500;
 
-        this.elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[12], story.elf, ctx);
-        this.elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[13], story.elf, ctx);
-        this.elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[14], story.elf, ctx);
-        this.elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[15], story.elf, ctx);
-        this.elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[13], story.elf, ctx);
+        this.elf.spriteUp = new Sprite(96, 32, 3, 4, this.sprites[12], this.elf, this.ctx);
+        this.elf.spriteDown = new Sprite(96, 32, 3, 4, this.sprites[13], this.elf, this.ctx);
+        this.elf.spriteLeft = new Sprite(96, 32, 3, 4, this.sprites[14], this.elf, this.ctx);
+        this.elf.spriteRight = new Sprite(96, 32, 3, 4, this.sprites[15], this.elf, this.ctx);
+        this.elf.spriteIdle = new Sprite(32, 32, 1, 4, this.sprites[13], this.elf, this.ctx);
         this.elf.getDestinationDelay = 300;
 
-        this.bandit.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[16], story.bandit, ctx);
-        this.bandit.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[17], story.bandit, ctx);
-        this.bandit.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[18], story.bandit, ctx);
-        this.bandit.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[19], story.bandit, ctx);
-        this.bandit.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[17], story.bandit, ctx);
+        this.bandit.spriteUp = new Sprite(96, 32, 3, 4, this.sprites[16], this.bandit, this.ctx);
+        this.bandit.spriteDown = new Sprite(96, 32, 3, 4, this.sprites[17], this.bandit, this.ctx);
+        this.bandit.spriteLeft = new Sprite(96, 32, 3, 4, this.sprites[18], this.bandit, this.ctx);
+        this.bandit.spriteRight = new Sprite(96, 32, 3, 4, this.sprites[19], this.bandit, this.ctx);
+        this.bandit.spriteIdle = new Sprite(32, 32, 1, 4, this.sprites[17], this.bandit, this.ctx);
         this.bandit.getDestinationDelay = 160;
 
-        this.orc.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[20], story.orc, ctx);
-        this.orc.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[21], story.orc, ctx);
-        this.orc.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[22], story.orc, ctx);
-        this.orc.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[23], story.orc, ctx);
-        this.orc.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[21], story.orc, ctx);
+        this.orc.spriteUp = new Sprite(96, 32, 3, 4, this.sprites[20], this.orc, this.ctx);
+        this.orc.spriteDown = new Sprite(96, 32, 3, 4, this.sprites[21], this.orc, this.ctx);
+        this.orc.spriteLeft = new Sprite(96, 32, 3, 4, this.sprites[22], this.orc, this.ctx);
+        this.orc.spriteRight = new Sprite(96, 32, 3, 4, this.sprites[23], this.orc, this.ctx);
+        this.orc.spriteIdle = new Sprite(32, 32, 1, 4, this.sprites[21], this.orc, this.ctx);
         this.orc.getDestinationDelay = 248;
 
-        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, story.sprites[33], this.interactableObjects[0], ctx);
-        this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 4, story.sprites[34], this.interactableObjects[1], ctx);
-        this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 4, story.sprites[35], this.interactableObjects[2], ctx);
-        this.interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 2, story.sprites[36], this.interactableObjects[3], ctx);
-        this.interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 2, story.sprites[37], this.interactableObjects[4], ctx);
-        this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 4, story.sprites[38], this.interactableObjects[5], ctx);
-        this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 4, story.sprites[39], this.interactableObjects[6], ctx);
+        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, this.sprites[33], this.interactableObjects[0], this.ctx);
+        this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 4, this.sprites[34], this.interactableObjects[1], this.ctx);
+        this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 4, this.sprites[35], this.interactableObjects[2], this.ctx);
+        this.interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 2, this.sprites[36], this.interactableObjects[3], this.ctx);
+        this.interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 2, this.sprites[37], this.interactableObjects[4], this.ctx);
+        this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 4, this.sprites[38], this.interactableObjects[5], this.ctx);
+        this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 4, this.sprites[39], this.interactableObjects[6], this.ctx);
     },
 
     // ==== Portrait preloader ==== //
@@ -750,7 +763,28 @@ Story = Class.extend({
         }
     },
     
-    preloadEverything: function(){
+    preloadEverything: function () {
+        this.addCheckPoints();
+        this.loadMovableObjects();
+        this.checkRequestAnimationFrame();
+
+        /* all quests are available */
+        this.interactableObjects[0].isAvailable = true;
+        this.interactableObjects[1].isAvailable = true;
+        this.interactableObjects[2].isAvailable = true;
+        this.interactableObjects[3].isAvailable = true;
+        this.interactableObjects[4].isAvailable = true;
+        this.interactableObjects[5].isAvailable = true;
+        this.interactableObjects[6].isAvailable = true;
+
+
+
+        this.inventory.getItem('dagger');
+        this.inventory.getItem('ring');
+        this.inventory.getItem('sword');
+        this.addEvents();
+
+        
     	this.preloadSprites(
     			'source/heroMoveUp.png',
     			'source/heroMoveDown.png',
@@ -839,108 +873,23 @@ Story = Class.extend({
             'music/ChaosCity.mp3',
             'source/scroll.mp3'
         );
-    	this.soundTrack.preloadQuestSounds('source/rada.mp3');
-    	//this.soundTrack.preloadSounds('source/rada.mp3');
+    	this.mainLoop();
     }
+
 });
 
 
-var story,
-    context,
-    mainLoop,
-    menu,
-    yolo;
+//  Everything after this paragraph has to be moved to the this class.
 
+$(window).load(function () {
+    menu = new Menu();
 
-//  Everything after this paragraph has to be moved to the story class.
-
-
-window.onload = function () {
-	
-	menu = new Menu();
-	
-	menu.initializeMenu();
-	
-	
-	/*canvas = $("#canvas")[0];
-	ctx = canvas.getContext('2d');
-	story = new Story();
-	story.checkRequestAnimationFrame();
-
-	story.preloadEverything();
-
-	story.inventory.getItem('axe');
-	story.inventory.getItem('bow');
-	story.inventory.getItem('sword');
-<<<<<<< HEAD
-
-
-	story.preloadSprites(
-			'source/heroMoveUp.png',
-			'source/heroMoveDown.png',
-			'source/heroMoveLeft.png',
-			'source/heroMoveRight.png',
-			
-			'source/elderMoveUp.png',
-			'source/elderMoveDown.png',
-			'source/elderMoveLeft.png',
-			'source/elderMoveRight.png',
-			
-            'source/dragonMoveUp.png',
-            'source/dragonMoveDown.png',
-            'source/dragonMoveLeft.png',
-            'source/dragonMoveRight.png',
-            
-            'source/elfMoveUp.png',
-            'source/elfMoveDown.png',
-            'source/elfMoveLeft.png',
-            'source/elfMoveRight.png',
-            
-            'source/banditMoveUp.png',
-            'source/banditMoveDown.png',
-            'source/banditMoveLeft.png',
-            'source/banditMoveRight.png',
-            
-            'source/orcMoveUp.png',
-            'source/orcMoveDown.png',
-            'source/orcMoveLeft.png',
-            'source/orcMoveRight.png',
-            
-            'source/elf game/spriteLevel1.png',
-            'source/elf game/spriteLevel2.png',
-            'source/elf game/spriteLevel3.png',
-            
-            'source/elf game/coinSprite.png',
-            
-            'source/lightning_width40px.png',
-
-            'source/brownElfMoveUp.png',
-            'source/brownElfMoveDown.png',
-            'source/brownElfMoveLeft.png',
-            'source/brownElfMoveRight.png',
-
-            'source/castleGlowSprite.png',
-            'source/dwarfGlowSprite.png',
-            'source/treeGlowSprite.png',
-            'source/defaultGlow.png',
-            'source/defaultGlow.png',
-            'source/banditCampGlowSprite.png',
-            'source/orcGlowSprite.png',
-            
-            'source/PathFinder/spriteLevel1.png'
-
-	);
-=======
->>>>>>> c8ef28d2416d1de5a13c80247f30a8d389bfa0e2
-	
-    story.addEvents();
-    
-    story.mainLoop();
-
-    //game = new TonyGame();
-    //game.start();
-    //elfGame = new RadoGame();
-    //elfGame.start();
-    yolo = new PathFinder();
-    yolo.startGame();*/
-};
+    menu.initializeMenu();
+});
+//window.onload = function () {
+//	
+//	menu = new Menu();
+//	
+//	menu.initializeMenu();
+//
+//};
