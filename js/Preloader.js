@@ -5,10 +5,6 @@ function Preloader(){
     var mainMusic = [];
     var questMusic = [];
 
-    this.preloadGameSounds = function(){
-        
-    };
-
     this.preloadEverything = function(){
         var a = ['music/Dirt.mp3',
             'music/Grass.mp3',
@@ -169,6 +165,7 @@ var a = (function () {
     function createInstance() {
         // Here we will put the public methods which will be needed for the game
         var object = {
+            preloadEverything: preloader.preloadEverything,
             getGameSoundByIndex: preloader.getGameSoundByIndex,
             getSpriteByIndex: preloader.getSpriteByIndex,
             getPortraitByIndex: preloader.getPortraitByIndex,
