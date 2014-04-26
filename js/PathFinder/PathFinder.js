@@ -72,9 +72,9 @@ MainCharacters = PFMovableObject.extend({
         this.gameContext = ctx;
     },
     addSprites: function () {
-        this.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this, this.gameContext);
-        this.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this, this.gameContext);
-        this.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this, this.gameContext);
+        this.spriteLeft = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(2), this, this.gameContext);
+        this.spriteRight = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(3), this, this.gameContext);
+        this.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(1), this, this.gameContext);
     },
     move: function () {
         if (this.grounded) {
@@ -165,7 +165,8 @@ PathFinder = Game.extend({
         this.interval = null;
         // Arrays
         this.checkPointCounter = 0;
-        this.checkPointMaxAmount = 10;
+        this.checkPoinAmount = 2;
+        this.checkPointMaxAmount = 2;
         this.tempBoxCounter = 0;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
@@ -178,6 +179,10 @@ PathFinder = Game.extend({
         this.ballOfDeaths = [];
         this.finishBlocks = [];
 
+
+        this.calculateBonuses();
+        console.log(this.gameBonuses);
+        this.checkPoinAmount += this.gameBonuses.checkpoints;
         //this.score = 0;
         //this.gameOver = false;
 
@@ -208,8 +213,8 @@ PathFinder = Game.extend({
         };
     },
     addPlatformImages: function () {
-        this.greenPlatform = story.sprites[43];
-        this.yellowPlatform = story.sprites[44];
+        this.greenPlatform = preloader.getSpriteByIndex(43);
+        this.yellowPlatform = preloader.getSpriteByIndex(44);
     },
     drawBackground: function () {
         if (this.backGroundSprite != null) {
@@ -617,7 +622,7 @@ PathFinder = Game.extend({
     startLevel: function (level) {
         var self = this;
         this.checkPointCounter = 0;
-        this.checkPointMaxAmount = 3;
+        this.checkPointMaxAmount = this.checkPoinAmount;
         this.tempBoxCounter = 0;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
@@ -631,7 +636,7 @@ PathFinder = Game.extend({
         this.finishBlocks = [];
         switch (level) {
             case 1:
-                this.backGroundSprite = new Sprite(5040, 224, 8, 6, story.sprites[40], { x: + 4.5, y: 0 }, this.gameContext);
+                this.backGroundSprite = new Sprite(5040, 224, 8, 6, preloader.getSpriteByIndex(40), { x: + 4.5, y: 0 }, this.gameContext);
                 this.startingPoint = { x: 20, y: 30 };
                 this.mapBoxes.push(new PFObjects(0, 0, 10, this.height));
                 this.mapBoxes.push(new PFObjects(0, this.height - 20, this.width, 50));
@@ -664,8 +669,9 @@ PathFinder = Game.extend({
                 break;
 
             case 0:
-                this.backGroundSprite = new Sprite(630, 224, 1, 6, story.sprites[41], { x: +4.5, y: 0 }, this.gameContext);
+                this.backGroundSprite = new Sprite(630, 224, 1, 6, preloader.getSpriteByIndex(41), { x: +4.5, y: 0 }, this.gameContext);
                 this.startingPoint = { x: 5, y: 10 };
+                this.mapBoxes.push(new PFObjects(-5, -5, 5, this.height));
                 this.mapBoxes.push(new PFObjects(0, 30, 50, this.height));
                 this.mapBoxes.push(new PFObjects(this.width - 50, 30, 50, this.height));
 
@@ -709,7 +715,7 @@ PathFinder = Game.extend({
                 break;
 
             case 2:
-                this.backGroundSprite = new Sprite(5040, 224, 8, 6, story.sprites[42], { x: +4.5, y: 0 }, this.gameContext);
+                this.backGroundSprite = new Sprite(5040, 224, 8, 6, preloader.getSpriteByIndex(42), { x: +4.5, y: 0 }, this.gameContext);
                 this.lightningInterval(2500);
                 this.startingPoint = { x: 30, y: 170 };
 
@@ -719,7 +725,7 @@ PathFinder = Game.extend({
                     x: self.lightning.x - 5,
                     y: self.lightning.y
                 }
-                this.lightning.sprite = new Sprite(320, 220, 8, 2, story.sprites[28], ligObj, this.gameContext);
+                this.lightning.sprite = new Sprite(320, 220, 8, 2, preloader.getSpriteByIndex(28), ligObj, this.gameContext);
 
                 this.movableStepableObjects.push(new MovablePlatforms(20, 50, 100, 20, 1.5, 25, 450, 0, 0));
                 this.movableStepableObjects.push(new MovablePlatforms(500, 50, 100, 20, 0.8, 0, 0, 50, 200));
@@ -776,6 +782,7 @@ PathFinder = Game.extend({
         this.writeOnScroll(instructions, {
             fontSize: '12px'
         });
+
         this.addPlatformImages();
         this.stopEvents = false;
         this.mainCharacter.addSprites();
