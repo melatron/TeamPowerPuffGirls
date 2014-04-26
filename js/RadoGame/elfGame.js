@@ -143,7 +143,7 @@ RadoGame = Game.extend({
 				)
 		);
 		
-		this.levels[0].sprite = new Sprite(1920, 224, 3, 10, story.sprites[24], this.levels[0], this.gameContext);
+		this.levels[0].sprite = new Sprite(1920, 224, 3, 10, preloader.getSpriteByIndex(24), this.levels[0], this.gameContext);
 		
 		this.levels.push(this.createLevel(
 				2,
@@ -157,7 +157,7 @@ RadoGame = Game.extend({
                  )
 		);
 		
-		this.levels[1].sprite = new Sprite(1920, 224, 3, 10, story.sprites[25], this.levels[1], this.gameContext);
+		this.levels[1].sprite = new Sprite(1920, 224, 3, 10, preloader.getSpriteByIndex(25), this.levels[1], this.gameContext);
 		
 		this.levels.push(this.createLevel(
 				3,
@@ -171,7 +171,7 @@ RadoGame = Game.extend({
                  )
 		);
 
-		this.levels[2].sprite = new Sprite(1920, 224, 3, 8, story.sprites[26], this.levels[2], this.gameContext);
+		this.levels[2].sprite = new Sprite(1920, 224, 3, 8, preloader.getSpriteByIndex(26), this.levels[2], this.gameContext);
 	},
 	
 	// ====== INSERTING BLOCKS IN MATRIX ======= //
@@ -337,11 +337,11 @@ RadoGame = Game.extend({
 				isCaught: false
 		};
 		
-		this.mainCharacter.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[0], this.mainCharacter, this.gameContext);  // create Sprites
-		this.mainCharacter.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[1], this.mainCharacter, this.gameContext);
-		this.mainCharacter.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[2], this.mainCharacter, this.gameContext);
-		this.mainCharacter.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[3], this.mainCharacter, this.gameContext);
-		this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[1], this.mainCharacter, this.gameContext);
+		this.mainCharacter.spriteUp = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(0), this.mainCharacter, this.gameContext);  // create Sprites
+		this.mainCharacter.spriteDown = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(1), this.mainCharacter, this.gameContext);
+		this.mainCharacter.spriteLeft = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(2), this.mainCharacter, this.gameContext);
+		this.mainCharacter.spriteRight = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(3), this.mainCharacter, this.gameContext);
+		this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(1), this.mainCharacter, this.gameContext);
 	},
 
 	createElf: function(type, width, height, movePatternType, direction, startBlock, endBlock, speed, radius){
@@ -395,18 +395,18 @@ RadoGame = Game.extend({
 		}
 
 		if(type == 'green'){
-			elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[12], elf, this.gameContext);
-			elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[13], elf, this.gameContext);
-			elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[14], elf, this.gameContext);
-			elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[15], elf, this.gameContext);
-			elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[13], elf, this.gameContext);
+			elf.spriteUp = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(12), elf, this.gameContext);
+			elf.spriteDown = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(13), elf, this.gameContext);
+			elf.spriteLeft = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(14), elf, this.gameContext);
+			elf.spriteRight = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(15), elf, this.gameContext);
+			elf.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(13), elf, this.gameContext);
 		}
 		else if (type == 'brown'){
-			elf.spriteUp = new Sprite(96, 32, 3, 4, story.sprites[29], elf, this.gameContext);
-			elf.spriteDown = new Sprite(96, 32, 3, 4, story.sprites[30], elf, this.gameContext);
-			elf.spriteLeft = new Sprite(96, 32, 3, 4, story.sprites[31], elf, this.gameContext);
-			elf.spriteRight = new Sprite(96, 32, 3, 4, story.sprites[32], elf, this.gameContext);
-			elf.spriteIdle = new Sprite(32, 32, 1, 4, story.sprites[30], elf, this.gameContext);
+			elf.spriteUp = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(29), elf, this.gameContext);
+			elf.spriteDown = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(30), elf, this.gameContext);
+			elf.spriteLeft = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(31), elf, this.gameContext);
+			elf.spriteRight = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(32), elf, this.gameContext);
+			elf.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(30), elf, this.gameContext);
 		}
 		
 
@@ -434,7 +434,7 @@ RadoGame = Game.extend({
 			isCollected: false
 		};
 		
-		coin.sprite = new Sprite(2048, 32, 64, 2, story.sprites[27], coin, this.gameContext);
+		coin.sprite = new Sprite(2048, 32, 64, 2, preloader.getSpriteByIndex(27), coin, this.gameContext);
 		
 		return coin;
 	},

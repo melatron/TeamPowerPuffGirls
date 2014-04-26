@@ -248,23 +248,26 @@ body {
 }
 
 #item-name {
-    color: white;
+    color: #D6E07B;
     font-family:Morpheus;
     font-size:14px;
-    line-height:40px;
-	padding-left:30px;
+    line-height:30px;
+	padding-left:40px;
     margin-right:auto;
 }
 
 #item-bonuses{
     color: white;
     font-family:Morpheus;
-    font-size:14px;
-    line-height:20px;
-
+    font-size:13px;
+    line-height:14px;
     width:200px;
     height:190px;
     padding:0px 20px 20px 10px;
+}
+
+.description {
+    color: #478FC9;
 }
 
 /* ======= MAIN MENU STYLE ========= */

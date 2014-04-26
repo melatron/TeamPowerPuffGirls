@@ -1,3 +1,5 @@
+
+
 Story = Class.extend({
 
     init: function () {
@@ -33,12 +35,10 @@ Story = Class.extend({
         this.staticSpriteObjects = [];
         this.mainCanvas = document.getElementById("canvas");
         
-        this.sprites = [];
-        this.portraits = [];
         // Hero have is not yet implemented!
         
 
-        this.soundTrack = new PlayList();
+        this.soundTrack = null;
 
         this.animation = null;
 
@@ -544,80 +544,69 @@ Story = Class.extend({
         }
     },
     preloadSprites: function () {
-        //define sprites
-       
 
-        for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
-            this.sprites[i] = new Image();
-            this.sprites[i].src = arguments[i];
-        }
+        this.hero.spriteUp = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(0), this.hero, this.ctx);  // create Sprites
+        this.hero.spriteDown = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(1), this.hero, this.ctx);
+        this.hero.spriteLeft = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(2), this.hero, this.ctx);
+        this.hero.spriteRight = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(3), this.hero, this.ctx);
+        this.hero.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(1), this.hero, this.ctx);
 
-        this.hero.spriteUp = new Sprite(96, 32, 3, 4, this.sprites[0], this.hero, this.ctx);  // create Sprites
-        this.hero.spriteDown = new Sprite(96, 32, 3, 4, this.sprites[1], this.hero, this.ctx);
-        this.hero.spriteLeft = new Sprite(96, 32, 3, 4, this.sprites[2], this.hero, this.ctx);
-        this.hero.spriteRight = new Sprite(96, 32, 3, 4, this.sprites[3], this.hero, this.ctx);
-        this.hero.spriteIdle = new Sprite(32, 32, 1, 4, this.sprites[1], this.hero, this.ctx);
+        this.elder.spriteUp = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(4), this.elder, this.ctx);
+        this.elder.spriteDown = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(5), this.elder, this.ctx);
+        this.elder.spriteLeft = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(6), this.elder, this.ctx);
+        this.elder.spriteRight = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(7), this.elder, this.ctx);
+        this.elder.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(5), this.elder, this.ctx);
 
-        this.elder.spriteUp = new Sprite(96, 32, 3, 4, this.sprites[4], this.elder, this.ctx);
-        this.elder.spriteDown = new Sprite(96, 32, 3, 4, this.sprites[5], this.elder, this.ctx);
-        this.elder.spriteLeft = new Sprite(96, 32, 3, 4, this.sprites[6], this.elder, this.ctx);
-        this.elder.spriteRight = new Sprite(96, 32, 3, 4, this.sprites[7], this.elder, this.ctx);
-        this.elder.spriteIdle = new Sprite(32, 32, 1, 4, this.sprites[5], this.elder, this.ctx);
-
-        this.dragon.spriteUp = new Sprite(384, 96, 4, 10, this.sprites[8], this.dragon, this.ctx);
-        this.dragon.spriteDown = new Sprite(384, 96, 4, 10, this.sprites[9], this.dragon, this.ctx);
-        this.dragon.spriteLeft = new Sprite(384, 96, 4, 10, this.sprites[10], this.dragon, this.ctx);
-        this.dragon.spriteRight = new Sprite(384, 96, 4, 10, this.sprites[11], this.dragon, this.ctx);
-        this.dragon.spriteIdle = new Sprite(96, 96, 1, 10, this.sprites[9], this.dragon, this.ctx);
+        this.dragon.spriteUp = new Sprite(384, 96, 4, 10, preloader.getSpriteByIndex(8), this.dragon, this.ctx);
+        this.dragon.spriteDown = new Sprite(384, 96, 4, 10, preloader.getSpriteByIndex(9), this.dragon, this.ctx);
+        this.dragon.spriteLeft = new Sprite(384, 96, 4, 10, preloader.getSpriteByIndex(10), this.dragon, this.ctx);
+        this.dragon.spriteRight = new Sprite(384, 96, 4, 10, preloader.getSpriteByIndex(11), this.dragon, this.ctx);
+        this.dragon.spriteIdle = new Sprite(96, 96, 1, 10, preloader.getSpriteByIndex(9), this.dragon, this.ctx);
         this.dragon.getDestinationDelay = 500;
 
-        this.elf.spriteUp = new Sprite(96, 32, 3, 4, this.sprites[12], this.elf, this.ctx);
-        this.elf.spriteDown = new Sprite(96, 32, 3, 4, this.sprites[13], this.elf, this.ctx);
-        this.elf.spriteLeft = new Sprite(96, 32, 3, 4, this.sprites[14], this.elf, this.ctx);
-        this.elf.spriteRight = new Sprite(96, 32, 3, 4, this.sprites[15], this.elf, this.ctx);
-        this.elf.spriteIdle = new Sprite(32, 32, 1, 4, this.sprites[13], this.elf, this.ctx);
+        this.elf.spriteUp = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(12), this.elf, this.ctx);
+        this.elf.spriteDown = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(13), this.elf, this.ctx);
+        this.elf.spriteLeft = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(14), this.elf, this.ctx);
+        this.elf.spriteRight = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(15), this.elf, this.ctx);
+        this.elf.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(13), this.elf, this.ctx);
         this.elf.getDestinationDelay = 300;
 
-        this.bandit.spriteUp = new Sprite(96, 32, 3, 4, this.sprites[16], this.bandit, this.ctx);
-        this.bandit.spriteDown = new Sprite(96, 32, 3, 4, this.sprites[17], this.bandit, this.ctx);
-        this.bandit.spriteLeft = new Sprite(96, 32, 3, 4, this.sprites[18], this.bandit, this.ctx);
-        this.bandit.spriteRight = new Sprite(96, 32, 3, 4, this.sprites[19], this.bandit, this.ctx);
-        this.bandit.spriteIdle = new Sprite(32, 32, 1, 4, this.sprites[17], this.bandit, this.ctx);
+        this.bandit.spriteUp = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(16), this.bandit, this.ctx);
+        this.bandit.spriteDown = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(17), this.bandit, this.ctx);
+        this.bandit.spriteLeft = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(18), this.bandit, this.ctx);
+        this.bandit.spriteRight = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(19), this.bandit, this.ctx);
+        this.bandit.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(17), this.bandit, this.ctx);
         this.bandit.getDestinationDelay = 160;
 
-        this.orc.spriteUp = new Sprite(96, 32, 3, 4, this.sprites[20], this.orc, this.ctx);
-        this.orc.spriteDown = new Sprite(96, 32, 3, 4, this.sprites[21], this.orc, this.ctx);
-        this.orc.spriteLeft = new Sprite(96, 32, 3, 4, this.sprites[22], this.orc, this.ctx);
-        this.orc.spriteRight = new Sprite(96, 32, 3, 4, this.sprites[23], this.orc, this.ctx);
-        this.orc.spriteIdle = new Sprite(32, 32, 1, 4, this.sprites[21], this.orc, this.ctx);
+        this.orc.spriteUp = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(20), this.orc, this.ctx);
+        this.orc.spriteDown = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(21), this.orc, this.ctx);
+        this.orc.spriteLeft = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(22), this.orc, this.ctx);
+        this.orc.spriteRight = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(23), this.orc, this.ctx);
+        this.orc.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(21), this.orc, this.ctx);
         this.orc.getDestinationDelay = 248;
 
-        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, this.sprites[33], this.interactableObjects[0], this.ctx);
-        this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 4, this.sprites[34], this.interactableObjects[1], this.ctx);
-        this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 4, this.sprites[35], this.interactableObjects[2], this.ctx);
-        this.interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 2, this.sprites[36], this.interactableObjects[3], this.ctx);
-        this.interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 2, this.sprites[37], this.interactableObjects[4], this.ctx);
-        this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 4, this.sprites[38], this.interactableObjects[5], this.ctx);
-        this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 4, this.sprites[39], this.interactableObjects[6], this.ctx);
+        this.interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, preloader.getSpriteByIndex(33), this.interactableObjects[0], this.ctx);
+        this.interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 4, preloader.getSpriteByIndex(34), this.interactableObjects[1], this.ctx);
+        this.interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 4, preloader.getSpriteByIndex(35), this.interactableObjects[2], this.ctx);
+        this.interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 2, preloader.getSpriteByIndex(36), this.interactableObjects[3], this.ctx);
+        this.interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 2, preloader.getSpriteByIndex(37), this.interactableObjects[4], this.ctx);
+        this.interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 4, preloader.getSpriteByIndex(38), this.interactableObjects[5], this.ctx);
+        this.interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 4, preloader.getSpriteByIndex(39), this.interactableObjects[6], this.ctx);
     },
 
     // ==== Portrait preloader ==== //
 
     preloadPortraits: function () {
-       
-        for (var i = 0; i < arguments.length; i++) {
-            this.portraits[i] = new Image();
-            this.portraits[i].src = arguments[i];
-        }
+      
 
-        this.hero.setImage(this.portraits[0]);
-        this.interactableObjects[3].setImage(this.portraits[1]);
-        this.interactableObjects[2].setImage(this.portraits[2]);
-        this.interactableObjects[1].setImage(this.portraits[3]);
-        this.interactableObjects[0].setImage(this.portraits[4]);
-        this.interactableObjects[5].setImage(this.portraits[5]);
-        this.interactableObjects[4].setImage(this.portraits[6]);
-        this.interactableObjects[6].setImage(this.portraits[7]);
+        this.hero.setImage(preloader.getPortraitByIndex(0));
+        this.interactableObjects[3].setImage(preloader.getPortraitByIndex(1));
+        this.interactableObjects[2].setImage(preloader.getPortraitByIndex(2));
+        this.interactableObjects[1].setImage(preloader.getPortraitByIndex(3));
+        this.interactableObjects[0].setImage(preloader.getPortraitByIndex(4));
+        this.interactableObjects[5].setImage(preloader.getPortraitByIndex(5));
+        this.interactableObjects[4].setImage(preloader.getPortraitByIndex(6));
+        this.interactableObjects[6].setImage(preloader.getPortraitByIndex(7));
 
     },
     checkRequestAnimationFrame: function(){
@@ -641,121 +630,29 @@ Story = Class.extend({
     },
     
     preloadEverything: function () {
+        preloader.preloadEverything();
         this.addCheckPoints();
         this.loadMovableObjects();
+        this.soundTrack = new PlayList();
+        this.soundTrack.startMainMusic();
+        this.preloadSprites();
+        this.preloadPortraits();
+
+        
         this.checkRequestAnimationFrame();
 
         /* all quests are available */
         this.interactableObjects[0].isAvailable = true;
-        this.interactableObjects[1].isAvailable = true;
-        this.interactableObjects[2].isAvailable = true;
-        this.interactableObjects[3].isAvailable = true;
-        this.interactableObjects[4].isAvailable = true;
-        this.interactableObjects[5].isAvailable = true;
-        this.interactableObjects[6].isAvailable = true;
-
-
-
+        var len = this.interactableObjects.length;
+        for (var i = 0; i < len; i++) {
+            this.interactableObjects[i].isAvailable = true;
+        };
         
         this.addEvents();
         this.mainLoop();
-
-        this.inventory.getItem('dagger');
-        this.inventory.getItem('ring');
-        this.inventory.getItem('sword');
-    	this.preloadSprites(
-    			'source/heroMoveUp.png',
-    			'source/heroMoveDown.png',
-    			'source/heroMoveLeft.png',
-    			'source/heroMoveRight.png',
-    			
-    			'source/elderMoveUp.png',
-    			'source/elderMoveDown.png',
-    			'source/elderMoveLeft.png',
-    			'source/elderMoveRight.png',
-    			
-                'source/dragonMoveUp.png',
-                'source/dragonMoveDown.png',
-                'source/dragonMoveLeft.png',
-                'source/dragonMoveRight.png',
-                
-                'source/elfMoveUp.png',
-                'source/elfMoveDown.png',
-                'source/elfMoveLeft.png',
-                'source/elfMoveRight.png',
-                
-                'source/banditMoveUp.png',
-                'source/banditMoveDown.png',
-                'source/banditMoveLeft.png',
-                'source/banditMoveRight.png',
-                
-                'source/orcMoveUp.png',
-                'source/orcMoveDown.png',
-                'source/orcMoveLeft.png',
-                'source/orcMoveRight.png',
-                
-                'source/elf game/spriteLevel1.png',
-                'source/elf game/spriteLevel2.png',
-                'source/elf game/spriteLevel3.png',
-                
-                'source/elf game/coinSprite.png',
-                
-                'source/lightning_width40px.png',
-
-                'source/brownElfMoveUp.png',
-                'source/brownElfMoveDown.png',
-                'source/brownElfMoveLeft.png',
-                'source/brownElfMoveRight.png',
-
-                'source/castleGlowSprite.png',
-                'source/dwarfGlowSprite.png',
-                'source/treeGlowSprite.png',
-                'source/defaultGlow.png',
-                'source/defaultGlow.png',
-                'source/banditCampGlowSprite.png',
-                'source/orcGlowSprite.png',
-                
-                'source/PathFinder/spriteLevel1.png',
-                'source/PathFinder/spriteLevel2.png',
-                'source/PathFinder/spriteLevel3.png',
-                
-                'source/PathFinder/greenBoard.png',
-                'source/PathFinder/yellowBoard.png'
-
-    	);
-    	
-    	this.preloadPortraits(
-    		'source/heroPortrait.png',
-    		'source/elderPortrait.png',
-    		'source/elfPortrait.png',
-    		'source/dwarfPortrait.png',
-    		'source/kingPortrait.png',
-            'source/banditPortrait.png',
-            'source/dragonPortrait.png',
-            'source/orcPortrait.png'
-    	);
-    	this.soundTrack.preloadMainSounds(
-            'music/Dirt.mp3',
-            'music/Grass.mp3',
-            'music/Rough.mp3',
-            'music/Swamp.mp3',
-            'music/Water.mp3',
-            'music/Snow.mp3',
-            'music/ElementalMetropolis.mp3',
-            'music/Sand.mp3',
-            'music/Volcanic.mp3',
-            'music/Wizards.mp3',
-            'music/ElvesTown.mp3',
-            'music/Necropolis.mp3',
-            'music/KnightsFortress.mp3',
-            'music/ChaosCity.mp3',
-            'source/scroll.mp3'
-        );
-    	
     }
 
 });
-
 
 //  Everything after this paragraph has to be moved to the this class.
 
@@ -764,10 +661,3 @@ $(window).load(function () {
 
     menu.initializeMenu();
 });
-//window.onload = function () {
-//	
-//	menu = new Menu();
-//	
-//	menu.initializeMenu();
-//
-//};
