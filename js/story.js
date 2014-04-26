@@ -355,11 +355,12 @@ Story = Class.extend({
         }
     },
     initializeCurrentQuest: function () {
-        if (this.interactableObjects[this.gamesFinished].isAvailable) {
-
+        if (this.gamesFinished == 0) {
              this.interactableObjects[this.gamesFinished].spriteGlow.drawSprite();
         }
-
+        else if (this.interactableObjects[this.gamesFinished - 1].progress.done) {
+             this.interactableObjects[this.gamesFinished].spriteGlow.drawSprite();
+        }
     },
 
 
