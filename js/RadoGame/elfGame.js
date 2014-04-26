@@ -52,6 +52,8 @@ RadoGame = Game.extend({
 		this.populateLevel(this.currentLevel);
 		this.addEventListeners();
 		this.mainLoop();
+		this.calculateBonuses();
+		console.log(this.gameBonuses);
 	},
 	
 	startNewLevel: function(){

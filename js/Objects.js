@@ -1106,5 +1106,29 @@ Menu = Class.extend({
 				'color': 'rgba(255, 255, 153, 1)'
 			});
 		});
-	}
+	},
+});
+
+Preloader = Class.extend({
+    init: function(){
+
+    },
+
+    preloadSounds: function(){
+
+    },
+
+    preloadSprites: function(){
+
+    },
+
+    preloadPortraits: function(){
+
+    },
+
+    getSoundByIndex: function(){
+
+    },
+
+    
 });
