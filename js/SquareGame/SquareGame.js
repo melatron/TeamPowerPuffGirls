@@ -358,14 +358,13 @@ var SquareGame = Game.extend({
                           [2, 0, 0, 0, 0, 1]];
     },
 
-    start: function () {
+    start: function (obj) {
+        this._super(obj);
         var instructions = '●Move orbs with the mouse.</br>●Get a green orb to the green exit.</br>●Finish in 300 moves.';
 
         this.writeOnScroll(instructions, {
             fontSize: '14px',
         })
-        this.calculateBonuses();
-        console.log(this.gameBonuses);
         this.addGameToPlot();
         this.populateFirstMap();
         setTimeout(this.defineMapBoundaries(), 2000);
