@@ -656,12 +656,13 @@ Story = Class.extend({
 
 
 
+        
+        this.addEvents();
+        this.mainLoop();
+
         this.inventory.getItem('dagger');
         this.inventory.getItem('ring');
         this.inventory.getItem('sword');
-        this.addEvents();
-
-        
     	this.preloadSprites(
     			'source/heroMoveUp.png',
     			'source/heroMoveDown.png',
@@ -750,7 +751,7 @@ Story = Class.extend({
             'music/ChaosCity.mp3',
             'source/scroll.mp3'
         );
-    	this.mainLoop();
+    	
     }
 
 });
