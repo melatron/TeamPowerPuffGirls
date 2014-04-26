@@ -1,6 +1,5 @@
 var ctx,
     canvas,
-    soundtrack,
     story;
 // ============== MAIN OBJECT CLASS ============//
 
@@ -528,8 +527,8 @@ Sprite = Class.extend({
 //======== PLAYLIST OBJECT ==========//
 
 function PlayList() {
-    var questSounds = new Array(),
-        mainSounds = new Array(),
+    var questSounds = [],
+        mainSounds = [],
         sounds = [],
         currentMainSongIndex = null;
     this.preloadSounds = function () {
