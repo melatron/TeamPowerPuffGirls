@@ -941,12 +941,8 @@ function Menu() {
                 $('#main').fadeIn(2000);
             }, 2000);
 			
-<<<<<<< HEAD
 			
             var story = new Story();
-=======
-			story = new Story();
->>>>>>> 42776b6c80c44e60d510483c51291beaed4282a1
 			
             story.preloadEverything();
             //game = new TonyGame();
@@ -1116,29 +1112,3 @@ function Menu() {
     };
 };
 
-<<<<<<< HEAD
-Preloader = Class.extend({
-    init: function(){
-
-    },
-
-    preloadSounds: function(){
-
-    },
-
-    preloadSprites: function(){
-
-    },
-
-    preloadPortraits: function(){
-
-    },
-
-    getSoundByIndex: function(){
-
-    },
-
-
-});
-=======
->>>>>>> b7877dbff3c979f62681b0cb4c475ea7753456c2
