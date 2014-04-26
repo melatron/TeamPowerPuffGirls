@@ -643,7 +643,7 @@ Item = Class.extend({
             this.time = 120;
             this.checkpoints = 1;
             this.lives = 0;
-            this.descirption = 'This item increases your time for reaction dramatically!!'
+            this.description = 'This item increases your time for reaction dramatically!!'
         };
 
         if (this.type === 'ring') {
@@ -656,12 +656,13 @@ Item = Class.extend({
         };
 
         if (this.type === 'sword') {
-            this.name = "Sword of Might??"
+            this.name = "Useless Sword"
             this.moves = 0;
             this.speed = 0;
             this.time = 0;
             this.checkpoints = 0;
             this.lives = 0;
+            this.description = "You'll get nothing from this item. Exept the false sense of security.."
         };
 
         if (this.type === "boots") {
@@ -671,6 +672,7 @@ Item = Class.extend({
             this.time = 180;
             this.checkpoints = 0;
             this.lives = 0;
+            
         }
 
         if (this.type === "armor") {
@@ -680,6 +682,7 @@ Item = Class.extend({
             this.time = 0;
             this.checkpoints = 0;
             this.lives = 50;
+            this.description = "This armor is almost impenetrable."
         }
 
         if (this.type === "potion") {
@@ -719,7 +722,7 @@ Item = Class.extend({
             temp += '<p>Additional Lives: ' + e.data.lives + '</p>';
         };
 
-        temp += '<p class = "description">' + e.data.description + '</p>'
+        temp += '<p class = "description">' + e.data.description + '</p>';
 
         $('#item-bonuses').html(temp);
     },
