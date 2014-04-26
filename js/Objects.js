@@ -1,4 +1,4 @@
-var story;
+
 // ============== MAIN OBJECT CLASS ============//
 
 GameObject = Class.extend({
@@ -229,7 +229,7 @@ InteractableObject = SpeakingObject.extend({
         console.log(this.game.gameOver);
         if (!this.game.gameOver) {
             //this.calculateItemBonuses(bonuses);
-            this.game.start();
+            this.game.start(bonuses);
         }
     },
     calculateItemBonuses: function (bonuses) {
@@ -735,7 +735,7 @@ Inventory = Class.extend({
     name: "inventory",
     init: function () {
         this.slots = [0, 0, 0, 0, 0, 0];
-
+        var self = this;
 
         $('.inventory-slot').droppable({
             tolerance: 'pointer',
@@ -744,13 +744,13 @@ Inventory = Class.extend({
 
                 var oldSlotIndex = ui.draggable.parent().attr('slot'),
                     newSlotIndex = $(this).attr('slot'),
-                    item = story.inventory.slots[oldSlotIndex];
+                    item = self.slots[oldSlotIndex];
 
-                if (story.inventory.slots[newSlotIndex] === 0) {
-                    story.inventory.slots[oldSlotIndex] = 0;
+                if (self.slots[newSlotIndex] === 0) {
+                    self.slots[oldSlotIndex] = 0;
                     ui.draggable.appendTo($(this));
                     ui.draggable.css({ zIndex: '0' });
-                    story.inventory.slots[newSlotIndex] = item;
+                    self.slots[newSlotIndex] = item;
                 };
             }
         });
@@ -810,41 +810,16 @@ var Game = Class.extend({
         this.scrollSound = preloader.getGameSoundByIndex(0);
     },
     
-    start: function () {
-
+    start: function (obj) {
+        console.log(obj);
+        this.gameBonuses = obj;
     },
     endGame: function () {
 
     },
 
     //WORK IN PROGRESS
-    calculateBonuses: function () {
-       var object = {
-           moves : 0,
-           speed : 0,
-           time : 0,
-           checkpoints: 0,
-           lives : 0
-       },
-
-       item; 
-
-       for(var i in story.inventory.slots){ 
-            
-           if(story.inventory.slots[i] !== 0){
-
-               var item = story.inventory.slots[i];
-
-               for (var attribute in object) {
-
-                   object[attribute] += item[attribute];
-
-               };
-           };
-       };
-
-       this.gameBonuses = object;
-   },
+    
     addGameToPlot: function () {
     	this.loadSounds();
         this.plot.fadeIn(1000);
@@ -861,20 +836,7 @@ var Game = Class.extend({
         this.closeScroll();
     },
 
-    /*[19:04:25] Матей:*/
-    getReward: function (type) {
-       //adds an item to the inventory if it's not already
-       //type - string (ex. : 'sword' / 'ring' / 'dagger') 
-       for(var index in story.inventory.slots){
-           if(story.inventory.slots[index] !== 0 &&
-              story.inventory.slots[index].type === type )
-           {
-               return;
-           };
-       };
-        
-       story.inventory.getItem(type);
-   },
+  
     
     openScroll: function () {
         console.log(this);
@@ -905,248 +867,248 @@ var Game = Class.extend({
 
 });
 
-Menu = Class.extend({
-	init: function(){
-		this.mainWrapper = $('#mainMenuWrapper');
-		this.menuCells = [{
-			class: '.highScores',
-			isExpanded: false
-		}, {
-			class: '.howTo',
-			isExpanded: false
-		},{
-			class: '.begin',
-			isExpanded: false
-		}];
-		
-		this.isGameStarted = false;
-		
-		this.mousePos = {
-				x: null,
-				y: null
-		};
-		
-		this.rainSound = null;
-		this.music = null;
-		this.thunderSound = null;
-		this.chainSound = null;
-	},
+function Menu() {
+    this.isGameStarted = false;
+    var self = this,
+        isMenuInitialize = false,
+
+        mainWrapper = $('#mainMenuWrapper'),
+        menuCells = [{
+        class: '.highScores',
+        isExpanded: false
+    }, {
+        class: '.howTo',
+        isExpanded: false
+    },{
+        class: '.begin',
+        isExpanded: false
+    }],
+	    mousePos = {
+        x: null,
+        y: null
+        },
+        rainSound = null,
+        music = null,
+        thunderSound = null,
+        chainSound = null;
+    
+    this.initializeMenu = function (){
+        if (!self.isGameStarted) {
+            $('#main').hide();
+            preloadSounds();
+            rainSound.play();
+            thunderSound.play();
+            music.play();
+            addAnimations(0);
+            addAnimations(1);
+            addAnimations(2);
+            addTutorialAnimations();
+            addStartEvent();
+            manageSounds();
+            setTimeout(thunder, 500);
+            setTimeout(thunder, 6800);
+            setTimeout(thunder, 16200);
+        }
+    };
 	
-	initializeMenu: function(){
-		$('#main').hide();
-		this.preloadSounds();
-        this.rainSound.play();
-        this.thunderSound.play();
-        this.music.play();
-		this.addAnimations(0);
-		this.addAnimations(1);
-		this.addAnimations(2);
-		this.addTutorialAnimations();
-		this.addStartEvent();
-		this.manageSounds();
-		setTimeout(this.thunder, 500);
-        setTimeout(this.thunder, 6800);
-        setTimeout(this.thunder, 16200);
-	},
+    function preloadSounds(){
+        rainSound = new Audio();
+        rainSound.src = 'source/menu/rain.mp3';
+        music = new Audio();
+        music.src = 'source/menu/birthOfAHero.mp3';
+        thunderSound = new Audio();
+        thunderSound.src = 'source/menu/thunder.mp3';
+        chainSound = new Audio();
+        chainSound.src = 'source/menu/chains.mp3';
+    };
 	
-	preloadSounds: function(){
-		this.rainSound = new Audio();
-		this.rainSound.src = 'source/menu/rain.mp3';
-		this.music = new Audio();
-		this.music.src = 'source/menu/birthOfAHero.mp3';
-		this.thunderSound = new Audio();
-		this.thunderSound.src = 'source/menu/thunder.mp3';
-		this.chainSound = new Audio();
-		this.chainSound.src = 'source/menu/chains.mp3';
-	},
-	
-	addStartEvent: function(){
-		var elem = $('.menuCell.begin');
+    function addStartEvent(){
+        var elem = $('.menuCell.begin');
 		
-		elem.on('click', this, this.startGame);
-	},
+        elem.on('click', startGame);
+    };
 	
-	startGame: function(e){
-		if(e.data.isGameStarted == false){
-			e.data.isGameStarted = true;
-			e.data.rainSound.pause();
-			e.data.music.pause();
-			e.data.thunderSound.pause();
+    function startGame(e){
+        if(self.isGameStarted == false){
+            self.isGameStarted = true;
+            rainSound.pause();
+            music.pause();
+            thunderSound.pause();
 			
-			e.data.hideMenu();
+            hideMenu();
 			
-			setTimeout(function(){
-				$('#main').fadeIn(2000);
-			}, 2000);
+            setTimeout(function(){
+                $('#main').fadeIn(2000);
+            }, 2000);
 			
 			
-			story = new Story();
+            var story = new Story();
 			
-			story.preloadEverything();
-			//game = new TonyGame();
-			//game.start();
-			//elfGame = new RadoGame();
-			//elfGame.start();
-			//yolo = new PathFinder();
-			//yolo.startGame();
-		}
-	},
+            story.preloadEverything();
+            //game = new TonyGame();
+            //game.start();
+            //elfGame = new RadoGame();
+            //elfGame.start();
+            //yolo = new PathFinder();
+            //yolo.startGame();
+        }
+    };
 	
-	manageSounds: function(){
-		$(this.rainSound).on('ended', this, function(e){
-			e.data.rainSound.currentTime = 0;
-			e.data.rainSound.play();
-		});
+    function manageSounds(){
+        $(rainSound).on('ended', function(e){
+            rainSound.currentTime = 0;
+            rainSound.play();
+        });
 		
-		$(this.chainSound).on('ended', this, function(e){
-			e.data.chainSound.currentTime = 0;
-		});
+        $(chainSound).on('ended', function(e){
+            chainSound.currentTime = 0;
+        });
 		
-		$(this.thunderSound).on('ended', this, function(e){
-			setTimeout(e.data.thunder, 500);
-	        setTimeout(e.data.thunder, 6800);
-	        setTimeout(e.data.thunder, 16200);
-			e.data.thunderSound.currentTime = 0;
-			e.data.thunderSound.play();
-		});
+        $(thunderSound).on('ended', function(e){
+            setTimeout(thunder, 500);
+            setTimeout(thunder, 6800);
+            setTimeout(thunder, 16200);
+            thunderSound.currentTime = 0;
+            thunderSound.play();
+        });
 		
-		$(this.music).on('ended', this, function(e){
-			e.data.music.currentTIme = 0;
-			e.data.music.play();
-		});
-	},
+        $(music).on('ended', function(e){
+            music.currentTIme = 0;
+            music.play();
+        });
+    };
 	
-	hideMenu: function(){
-		this.mainWrapper.fadeOut(2000);
-	},
+    function hideMenu(){
+        mainWrapper.fadeOut(2000);
+    };
 	
-	thunder: function(){
-		$('#flash').show().fadeIn(50).fadeOut(20).fadeIn(50).fadeOut(1000);
-	},
+    function thunder(){
+        $('#flash').show().fadeIn(50).fadeOut(20).fadeIn(50).fadeOut(1000);
+    };
 	
-	addTutorialAnimations: function(){
+    function addTutorialAnimations(){
 		
-		$('.howTo .first .dropDownCell').on('mouseenter', this, function(e){
-			if(e.data.menuCells[1].isExpanded){
-				$('.tutorial.first').fadeIn(200);
-			}
-		});
+        $('.howTo .first .dropDownCell').on('mouseenter', function(e){
+            if(menuCells[1].isExpanded){
+                $('.tutorial.first').fadeIn(200);
+            }
+        });
 		
-		$('.howTo .first .dropDownCell').on('mouseleave', this, function(e){
-			if(e.data.menuCells[1].isExpanded){
-				$('.tutorial.first').fadeOut(200);
-			}
-		});
+        $('.howTo .first .dropDownCell').on('mouseleave', function(e){
+            if(menuCells[1].isExpanded){
+                $('.tutorial.first').fadeOut(200);
+            }
+        });
 		
-		$('.howTo .second .dropDownCell').on('mouseenter', this, function(e){
-			if(e.data.menuCells[1].isExpanded){
-				$('.tutorial.second').fadeIn(200);
-			}
-		});
+        $('.howTo .second .dropDownCell').on('mouseenter', function(e){
+            if(menuCells[1].isExpanded){
+                $('.tutorial.second').fadeIn(200);
+            }
+        });
 		
-		$('.howTo .second .dropDownCell').on('mouseleave', this, function(e){
-			if(e.data.menuCells[1].isExpanded){
-				$('.tutorial.second').fadeOut(200);
-			}
-		});
+        $('.howTo .second .dropDownCell').on('mouseleave', function(e){
+            if(menuCells[1].isExpanded){
+                $('.tutorial.second').fadeOut(200);
+            }
+        });
 		
-		$(document).on('mousemove', this, function(e){
-			e.data.mousePos.x = e.pageX;
-			e.data.mousePos.y = e.pageY;
+        $(document).on('mousemove', function(e){
+            mousePos.x = e.pageX;
+            mousePos.y = e.pageY;
 			
-			if($('.tutorial.first').css('display') != 'none'){
-				$('.tutorial.first').css({
-					'left': e.data.mousePos.x - 230,
-					'top': e.data.mousePos.y + 5
-				});
-			}
-			if($('.tutorial.second').css('display') != 'none'){
-				$('.tutorial.second').css({
-					'left': e.data.mousePos.x - 230,
-					'top': e.data.mousePos.y + 5
-				});
-			}
-		});
-	},
+            if($('.tutorial.first').css('display') != 'none'){
+                $('.tutorial.first').css({
+                    'left': mousePos.x - 230,
+                    'top': mousePos.y + 5
+                });
+            }
+            if($('.tutorial.second').css('display') != 'none'){
+                $('.tutorial.second').css({
+                    'left': mousePos.x - 230,
+                    'top': mousePos.y + 5
+                });
+            }
+        });
+    };
 	
-	addAnimations: function(index){
-		var elem = this.menuCells[index].class;
-		if(index != 2){
-			$(elem).on('click', this, function(e){
-				if(e.data.menuCells[index].isExpanded == false){
-					e.data.chainSound.play();
+     function addAnimations(index){
+        var elem = menuCells[index].class;
+        if(index != 2){
+            $(elem).on('click', function(e){
+                if(menuCells[index].isExpanded == false){
+                    chainSound.play();
 					
-					$(elem + ' .first .dropDownCell').show();
+                    $(elem + ' .first .dropDownCell').show();
 
-		            $(elem + ' .first').show().animate({
-		                top: "100px"
-		            }, 1000, 'easeOutBounce');
-		            $(elem + ' .second').animate({
-		                top: "170px"
-		            }, 1000, 'easeOutBounce');
-		            $(elem + ' .third').animate({
-		            	top: '170px'
-		            }, 1000, 'easeOutBounce');
+                    $(elem + ' .first').show().animate({
+                        top: "100px"
+                    }, 1000, 'easeOutBounce');
+                    $(elem + ' .second').animate({
+                        top: "170px"
+                    }, 1000, 'easeOutBounce');
+                    $(elem + ' .third').animate({
+                        top: '170px'
+                    }, 1000, 'easeOutBounce');
 
-		            setTimeout(function(){
-		                $(elem + ' .second').animate({
-		                        top: '270px'
-		                	}, 1000, 'easeOutBounce');
-		                $(elem + ' .third').animate({
-	                        	top: '340px'
-	                    	}, 1000, 'easeOutBounce');
-		                $(elem + ' .first .dropDownCell').show().animate({
-		                    top: '70px'
-		                }, 1000, 'easeOutBounce', function(){
-		                    $(elem + ' .second').show();
-		                    $(elem + ' .second .dropDownCell').show();
-		                    setTimeout(function(){
-		                        $(elem + ' .second .dropDownCell').animate({
-		                            top: '70px'
-		                        }, 1000, 'easeOutBounce', function(){
-		                        	$(elem + ' .third').show();
-		                        	$(elem + ' .third .dropDownCell').show();
-		                        	$(elem + ' .third').animate({
-		                        		top: '440px'
-		                        	}, 1000, 'easeOutBounce');
-		                        	setTimeout(function(){
-		                        		$(elem + ' .third .dropDownCell').animate({
-		                        			top:'70px'
-		                        		}, 1000, 'easeOutBounce');
-		                        	}, 200);
-		                        });
-		                        e.data.menuCells[index].isExpanded = true;
-		                    }, 200);
-		                });
-		            }, 200);
+                    setTimeout(function(){
+                        $(elem + ' .second').animate({
+                            top: '270px'
+                        }, 1000, 'easeOutBounce');
+                        $(elem + ' .third').animate({
+                            top: '340px'
+                        }, 1000, 'easeOutBounce');
+                        $(elem + ' .first .dropDownCell').show().animate({
+                            top: '70px'
+                        }, 1000, 'easeOutBounce', function(){
+                            $(elem + ' .second').show();
+                            $(elem + ' .second .dropDownCell').show();
+                            setTimeout(function(){
+                                $(elem + ' .second .dropDownCell').animate({
+                                    top: '70px'
+                                }, 1000, 'easeOutBounce', function(){
+                                    $(elem + ' .third').show();
+                                    $(elem + ' .third .dropDownCell').show();
+                                    $(elem + ' .third').animate({
+                                        top: '440px'
+                                    }, 1000, 'easeOutBounce');
+                                    setTimeout(function(){
+                                        $(elem + ' .third .dropDownCell').animate({
+                                            top:'70px'
+                                        }, 1000, 'easeOutBounce');
+                                    }, 200);
+                                });
+                                menuCells[index].isExpanded = true;
+                            }, 200);
+                        });
+                    }, 200);
 		            
 		            
-				}
-			});
-		}
+                }
+            });
+        }
 		
-		$(elem).mouseenter({
-			_this: this,
-			index: index
-		}, function(e){
-			$(elem).css({
-				'background-color': 'rgba(184, 184, 148, 0.8)',
-				'color': 'rgba(15, 15, 10, 1)'
-			});
-			$(elem + ' .dropDownCell').css({
-				'color': 'rgba(255, 255, 153, 1)'
-			});
-		});
+        $(elem).mouseenter({
+            _this: this,
+            index: index
+        }, function(e){
+            $(elem).css({
+                'background-color': 'rgba(184, 184, 148, 0.8)',
+                'color': 'rgba(15, 15, 10, 1)'
+            });
+            $(elem + ' .dropDownCell').css({
+                'color': 'rgba(255, 255, 153, 1)'
+            });
+        });
 		
-		$(elem).mouseleave({
-			_this: this,
-			index: index
-		}, function(e){
-			$(elem).css({
-				'background-color': 'rgba(0, 0, 0, 0.5)',
-				'color': 'rgba(255, 255, 153, 1)'
-			});
-		});
-	},
-});
+        $(elem).mouseleave({
+            _this: this,
+            index: index
+        }, function(e){
+            $(elem).css({
+                'background-color': 'rgba(0, 0, 0, 0.5)',
+                'color': 'rgba(255, 255, 153, 1)'
+            });
+        });
+    };
+};
 

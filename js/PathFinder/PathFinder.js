@@ -180,9 +180,7 @@ PathFinder = Game.extend({
         this.finishBlocks = [];
 
 
-        this.calculateBonuses();
-        console.log(this.gameBonuses);
-        this.checkPoinAmount += this.gameBonuses.checkpoints;
+        
         //this.score = 0;
         //this.gameOver = false;
 
@@ -622,7 +620,7 @@ PathFinder = Game.extend({
     startLevel: function (level) {
         var self = this;
         this.checkPointCounter = 0;
-        this.checkPointMaxAmount = this.checkPoinAmount;
+        this.checkPointMaxAmount = 2 + this.gameBonuses.checkpoints;
         this.tempBoxCounter = 0;
         this.mapBoxes = [];
         this.createdBoxesPerm = [];
@@ -777,16 +775,18 @@ PathFinder = Game.extend({
         this.mainCharacter.x = this.startingPoint.x;
         this.mainCharacter.y = this.startingPoint.y;
     },
-    start: function () {
+    start: function (obj) {
+        this._super(obj);
         var instructions = '"Space": creates temporary platform. "c": creates permanent checkpoint. Get to the maroon point!';
         this.writeOnScroll(instructions, {
             fontSize: '12px'
         });
-
         this.addPlatformImages();
         this.stopEvents = false;
         this.mainCharacter.addSprites();
         this.gameOver = false;
+        ////
+        ////
         this.startLevel(0);
         this.addEventListeners();
         this.addGameToPlot();
