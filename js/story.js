@@ -9,7 +9,7 @@ Story = Class.extend({
         this.canvas = $("#canvas")[0];
         this.ctx = this.canvas.getContext('2d');
 
-        this.thisFinished = false;
+        this.storyFinished = false;
         this.hero = new Heroes(0, 256, 32, 32, "hero");
         this.elder = null;
         this.dragon = null;
@@ -25,7 +25,7 @@ Story = Class.extend({
             finishGame = new ButtonsObject(984, 0, 40, 40, "FinishGame");
         this.buttons.push(toggleMusic);
         this.buttons.push(finishGame);
-        this.endGameScreenOn = false;
+        this.endStoryScreenOn = false;
 
         
         //
@@ -55,6 +55,7 @@ Story = Class.extend({
             self.hero.moveHeroToDestination();
             self.drawInteractableObject();
             self.checkIfSpeaking();
+            self.initializeCurrentQuest();
             //self.hero.drawSpeechBubble();
             self.soundTrack.startNextSong();
             self.startGameAfterConversation();
@@ -62,8 +63,8 @@ Story = Class.extend({
             self.checkIfFocused();
             self.ctx.restore();
             self.animation = requestAnimationFrame(self.mainLoop);
-            if (self.endGameScreenOn) {
-                self.endthisScreen();
+            if (self.endStoryScreenOn) {
+                self.endStoryScreen();
             }
         };
 
@@ -292,9 +293,9 @@ Story = Class.extend({
             ev.data.pauseMusicButton(mouseX, mouseY);
         }
         // here we will add events for the buttons that will apear when the end game screen is on !
-        if (ev.data.endGameScreenOn && ev.data.stopEvents) {
-            ev.data.endthisButton(mouseX, mouseY);
-            ev.data.continuethisButton(mouseX, mouseY);
+        if (ev.data.endStoryScreenOn && ev.data.stopEvents) {
+            ev.data.endStoryButton(mouseX, mouseY);
+            ev.data.continueStoryButton(mouseX, mouseY);
         }
     },
     // Here is the functionallity of the buttons:
@@ -308,21 +309,21 @@ Story = Class.extend({
             }
         }
     },
-    endthisScreenButton: function (x, y) {
+    endStoryScreenButton: function (x, y) {
         if (this.buttons[1].checkIfClicked(x, y)) {
-            if (this.thisEnded) {
-                this.endthisScreen();
+            if (this.storyEnded) {
+                this.endStoryScreen();
             }
         }
     },
-    endthisButton: function () {
+    endStoryButton: function () {
         if (this.buttons[2].checkIfClicked(x, y)) {
-            this.endthis();
+            this.endStory();
         }
     },
-    continuethisButton: function () {
+    continueStoryButton: function () {
         if (this.buttons[3].checkIfClicked(x, y)) {
-            this.endGameScreenOn = false;
+            this.endStoryScreenOn = false;
             this.stopEvents = false;
         }
     },
@@ -353,7 +354,13 @@ Story = Class.extend({
             }
         }
     },
+    initializeCurrentQuest: function () {
+        if (this.interactableObjects[this.gamesFinished].isAvailable) {
 
+             this.interactableObjects[this.gamesFinished].spriteGlow.drawSprite();
+        }
+
+    },
 
 
  
@@ -427,8 +434,8 @@ Story = Class.extend({
 	            if(this.hero.speakingTo.score == 0) {
 	                this.gamesFinished++;
 	                if (this.gamesFinished == this.gamesAmount) {
-	                    this.thisEnded = true;
-	                    this.endGameScreenOn = true;
+	                    this.storyEnded = true;
+	                    this.endStoryScreenOn = true;
 	                    this.stopEvents = true;
 	                }
 	            }
@@ -436,7 +443,7 @@ Story = Class.extend({
 	              this.hero.speakingTo.score = this.hero.speakingTo.game.score;
 	            }
 	            if (this.hero.speakingTo.progress.after) {
-	                for (var i = 0; i < this.interactableObjects.length; i++){
+	                for (var i = 0; i < this.interactableObjects.length-1; i++){
 	                    if (this.interactableObjects[i] == this.hero.speakingTo) {
 	                        this.interactableObjects[i + 1].isAvailable = true;
 	                        break;
@@ -486,8 +493,8 @@ Story = Class.extend({
 	    }
 	},
     // here is the method which will draw the end game screen!
-	endthisScreen: function () {
-	    if (this.endGameScreenOn) {
+	endStoryScreen: function () {
+	    if (this.endStoryScreenOn) {
 	        this.blackenScreen();
 	        this.buttons[2].drawButton();
 	        this.buttons[3].drawButton();
@@ -502,7 +509,7 @@ Story = Class.extend({
 	    return finalScore;
 	},
     // here is the mehtod which will end the this if you have finished all 7 games and you have clicked finish button
-	endthis: function () {
+	endStory: function () {
     
 	},
     addInteractableObject: function (iObject) {
