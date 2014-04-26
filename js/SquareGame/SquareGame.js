@@ -1,4 +1,4 @@
-﻿var Square = Class.extend({   
+﻿var Square = Class.extend({
     marginLeft: 204,
     marginTop: 9,
 
@@ -148,7 +148,7 @@ var SquareGame = Game.extend({
 
         $('.selected').removeClass('selected');
         e.data.objectContext.dom.addClass('selected');
-       
+
     },
 
 
@@ -275,8 +275,13 @@ var SquareGame = Game.extend({
 
 
     populateFirstMap: function () {
+
         this.currentMap = this.firstMap;
-        
+        this.greenSquares = [];
+        this.redSquares = [];
+        this.yellowSquares = [];
+        this.blueSquares = [];
+
         this.createSquare(0, 1, 'green', 'leader', 0);
         this.createSquare(1, 1, 'green', 'filler', 1);
         this.createSquare(2, 1, 'green', 'leader', 2);
@@ -301,6 +306,7 @@ var SquareGame = Game.extend({
 
     populateSecondMap: function () {
         this.plot.css('background-image', 'url(source/square-game-background2.png)')
+
         this.currentMap = this.secondMap;
         this.greenSquares = [];
         this.redSquares = [];
@@ -330,9 +336,26 @@ var SquareGame = Game.extend({
         this.removeGameFromPlot();
         this.score = (300 - this.movesCounter) * 10;
 
-        if (this.movesCounter < (this.objectives.moves - this.gameBonuses.bonusMoves)) {
+        if (this.movesCounter < (this.objectives.moves - this.gameBonuses.moves)) {
             this.getReward('sword');
         }
+
+        this.plot.css('background-image', 'url(source/square-game-background1.png)')
+
+        this.firstMap = [[0, 0, 2, 2, 2, 2],
+                         [2, 2, 2, 0, 0, 2],
+                         [2, 0, 1, 0, 0, 2],
+                         [2, 2, 1, 2, 2, 2],
+                         [0, 2, 0, 2, 0, 0],
+                         [1, 2, 1, 2, 2, 1]],
+
+
+        this.secondMap = [[1, 1, 1, 1, 2, 1],
+                          [0, 0, 0, 0, 2, 0],
+                          [2, 2, 2, 2, 2, 0],
+                          [0, 0, 1, 0, 2, 0],
+                          [2, 2, 2, 2, 2, 1],
+                          [2, 0, 0, 0, 0, 1]];
     },
 
     start: function () {
@@ -342,6 +365,7 @@ var SquareGame = Game.extend({
             fontSize: '14px',
         })
         this.calculateBonuses();
+        console.log(this.gameBonuses);
         this.addGameToPlot();
         this.populateFirstMap();
         setTimeout(this.defineMapBoundaries(), 2000);

@@ -643,10 +643,10 @@ Story = Class.extend({
 
         /* all quests are available */
         this.interactableObjects[0].isAvailable = true;
-        //var len = this.interactableObjects.length;
-        //for (var i = 0; i < len; i++) {
-        //    this.interactableObjects[i].isAvailable = true;
-        //};
+        var len = this.interactableObjects.length;
+        for (var i = 0; i < len; i++) {
+            this.interactableObjects[i].isAvailable = true;
+        };
         
         this.addEvents();
         this.mainLoop();
