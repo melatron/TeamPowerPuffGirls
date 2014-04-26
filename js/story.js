@@ -1,3 +1,5 @@
+
+
 Story = Class.extend({
 
     init: function () {
@@ -640,17 +642,17 @@ Story = Class.extend({
         this.checkRequestAnimationFrame();
 
         /* all quests are available */
-        var len = this.interactableObjects.length;
-        for (var i = 0; i < len; i++) {
-            this.interactableObjects[i].isAvailable = true;
-        };
+        this.interactableObjects[0].isAvailable = true;
+        //var len = this.interactableObjects.length;
+        //for (var i = 0; i < len; i++) {
+        //    this.interactableObjects[i].isAvailable = true;
+        //};
         
         this.addEvents();
         this.mainLoop();
     }
 
 });
-
 
 //  Everything after this paragraph has to be moved to the this class.
 
@@ -659,10 +661,3 @@ $(window).load(function () {
 
     menu.initializeMenu();
 });
-//window.onload = function () {
-//	
-//	menu = new Menu();
-//	
-//	menu.initializeMenu();
-//
-//};
