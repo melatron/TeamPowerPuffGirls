@@ -43,6 +43,7 @@ var Jewel = EmptySlot.extend({
 });
 var EightPuzzle = Game.extend({
     init: function () {
+        this._super();
         _this = this;
         this.canvasLoop = null;
         this.stopEvents = false;

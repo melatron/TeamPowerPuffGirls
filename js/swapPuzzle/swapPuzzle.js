@@ -64,7 +64,8 @@ MoveableRightBox = MoveableBox.extend({
 
 SwapPuzzle = Game.extend({
     init: function () {
-        this.moveableBoxes = new Array(); 
+        this._super();
+        this.moveableBoxes = []; 
         _self = this;
         this.canvas = null;       //$("#swapPuzzleCanvas");
         this.context = null;      //canvas.getContext("2d");
@@ -72,8 +73,8 @@ SwapPuzzle = Game.extend({
         this.reverseButton;
         this.swapPuzzleLoop;
         this.reverseParameters = {
-            position: new Array(),
-            lastPosition: new Array,
+            position: [],
+            lastPosition: [],
             reversesDone: 0
         }
         this.plot = $('#swapPuzzle');

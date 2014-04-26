@@ -537,121 +537,7 @@ Story = Class.extend({
     },
     preloadSprites: function () {
         //define sprites
-        var heroSpriteUpImage = null,
-    		heroSpriteDownImage = null,
-    		heroSpriteLeftImage = null,
-    		heroSpriteRightImage = null,
-
-    		elderSpriteUpImage = null,
-    		elderSpriteDownImage = null,
-    		elderSpriteLeftImage = null,
-    		elderSpriteRightImage = null,
-
-            dragonSpriteUpImage = null,
-            dragonSpriteDownImage = null,
-            dragonSpriteLeftImage = null,
-            dragonSpriteRightImage = null,
-
-            elfSpriteUpImage = null,
-            elfSpriteDownImage = null,
-            elfSpriteLeftImage = null,
-            elfSpriteRightImage = null,
-
-            banditSpriteUpImage = null,
-            banditSpriteDownImage = null,
-            banditSpriteLeftImage = null,
-            banditSpriteRightImage = null,
-
-            orcSpriteUpImage = null,
-            orcSpriteDownImage = null,
-            orcSpriteLeftImage = null,
-            orcSpriteRightImage = null,
-
-            elfGameLevel1Image = null,
-            elfGameLevel2Image = null,
-            elfGameLevel3Image = null,
-
-            elfGameCoinImage = null,
-
-    		lightningImage = null,
-
-            brownElfSpriteUpImage = null,
-            brownElfSpriteDownImage = null,
-            brownElfSpriteLeftImage = null,
-            brownElfSpriteRightImage = null,
-
-            castleGlowImage = null;
-        dwarfCampGlowImage = null;
-        treeGlowImage = null;
-        mageGlowImage = null;
-        dragonGlowImage = null;
-        banditGlowImage = null;
-        orcGlowImage = null;
-
-        pathFinderLevelOneImage = null;
-        pathFinderLevelTwoImage = null;
-        pathFinderLevelThreeImage = null;
-
-        pathFinderGreenBoardImage = null;
-        pathFinderYellowBoardImage = null;
-
-        this.sprites.push(heroSpriteUpImage);   // put images in array
-        this.sprites.push(heroSpriteDownImage);
-        this.sprites.push(heroSpriteLeftImage);
-        this.sprites.push(heroSpriteRightImage);
-
-        this.sprites.push(elderSpriteUpImage);
-        this.sprites.push(elderSpriteDownImage);
-        this.sprites.push(elderSpriteLeftImage);
-        this.sprites.push(elderSpriteRightImage);
-
-        this.sprites.push(dragonSpriteUpImage);
-        this.sprites.push(dragonSpriteDownImage);
-        this.sprites.push(dragonSpriteLeftImage);
-        this.sprites.push(dragonSpriteRightImage);
-
-        this.sprites.push(elfSpriteUpImage);
-        this.sprites.push(elfSpriteDownImage);
-        this.sprites.push(elfSpriteLeftImage);
-        this.sprites.push(elfSpriteRightImage);
-
-        this.sprites.push(banditSpriteUpImage);
-        this.sprites.push(banditSpriteDownImage);
-        this.sprites.push(banditSpriteLeftImage);
-        this.sprites.push(banditSpriteRightImage);
-
-        this.sprites.push(orcSpriteUpImage);
-        this.sprites.push(orcSpriteDownImage);
-        this.sprites.push(orcSpriteLeftImage);
-        this.sprites.push(orcSpriteRightImage);
-
-        this.sprites.push(elfGameLevel1Image);
-        this.sprites.push(elfGameLevel2Image);
-        this.sprites.push(elfGameLevel3Image);
-
-        this.sprites.push(elfGameCoinImage);
-
-        this.sprites.push(lightningImage);
-
-        this.sprites.push(brownElfSpriteUpImage);
-        this.sprites.push(brownElfSpriteDownImage);
-        this.sprites.push(brownElfSpriteLeftImage);
-        this.sprites.push(brownElfSpriteRightImage);
-
-        this.sprites.push(castleGlowImage);
-        this.sprites.push(dwarfCampGlowImage);
-        this.sprites.push(treeGlowImage);
-        this.sprites.push(mageGlowImage);
-        this.sprites.push(dragonGlowImage);
-        this.sprites.push(banditGlowImage);
-        this.sprites.push(orcGlowImage);
-
-        this.sprites.push(pathFinderLevelOneImage);
-        this.sprites.push(pathFinderLevelTwoImage);
-        this.sprites.push(pathFinderLevelThreeImage);
-
-        this.sprites.push(pathFinderGreenBoardImage);
-        this.sprites.push(pathFinderYellowBoardImage);
+       
 
         for (var i = 0; i < arguments.length; i++) {  // create image objects and define src
             this.sprites[i] = new Image();
@@ -710,24 +596,7 @@ Story = Class.extend({
     // ==== Portrait preloader ==== //
 
     preloadPortraits: function () {
-        var heroPortrait = null,
-			elfPortrait = null,
-			elderPortrait = null,
-			kingPortrait = null,
-			dwarfPortrait = null,
-            banditPortrait = null,
-            dragonPortrait = null,
-            orcPortrait = null;
-
-        this.portraits.push(heroPortrait);
-        this.portraits.push(elderPortrait);
-        this.portraits.push(elfPortrait);
-        this.portraits.push(dwarfPortrait);
-        this.portraits.push(kingPortrait);
-        this.portraits.push(banditPortrait);
-        this.portraits.push(dragonPortrait);
-        this.portraits.push(orcPortrait);
-
+       
         for (var i = 0; i < arguments.length; i++) {
             this.portraits[i] = new Image();
             this.portraits[i].src = arguments[i];
