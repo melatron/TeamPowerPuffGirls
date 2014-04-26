@@ -938,7 +938,6 @@ Menu = Class.extend({
 				$('#main').fadeIn(2000);
 			}, 2000);
 			
-			
 			story = new Story();
 			
 			story.preloadEverything();
@@ -1130,5 +1129,5 @@ Preloader = Class.extend({
 
     },
 
-    
+
 });
