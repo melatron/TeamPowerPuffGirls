@@ -71,6 +71,14 @@ body {
 	height: 256px;
 	float: left;
 }
+/*-----------------BOSSFIGHT CSS--------------------*/
+
+#BossFightDiv{
+	width: 1024px;
+	height: 512px;
+	display: none;
+}
+
 /*-----------------TONY GAME CSS--------------------*/
 #Game6561{
     width: 380px;
