@@ -1017,11 +1017,15 @@ function Story() {
         }
     };
     function initializeCurrentQuest() {
-        if (gamesFinished == 0) {
-            interactableObjects[gamesFinished].spriteGlow.drawSprite();
-        }
-        else if (interactableObjects[gamesFinished - 1].progress.done) {
-            interactableObjects[gamesFinished].spriteGlow.drawSprite();
+        var temp = interactableObjects[gamesFinished];
+        if (!((mousePos.x > temp.x && mousePos.x < temp.x + temp.width) &&
+                (mousePos.y > temp.y && mousePos.y < temp.y + temp.height))) {
+            if (gamesFinished == 0) {
+                temp.spriteGlow.drawSprite();
+            }
+            else if (interactableObjects[gamesFinished - 1].progress.done) {
+                temp.spriteGlow.drawSprite();
+            }
         }
     };
 

@@ -81,22 +81,29 @@ var EightPuzzle = Game.extend({
         this.getEmptySlot();
         $(document).on('keydown', this, this.listenKeyEvents);
         this.update();
-        console.log("asd");
     },
     endGame: function () {
         _this.gameOver = true;
         _this.removeGameFromPlot();
         _this.stopEvents = true;
-        _this.score = Math.floor(30000 / _this.movesDone);
-        console.log(_this.score);
+        
+        
+        if (_this.movesDone < 25) {
+            _this.score = 1000;
+        }
+        else {
+            _this.score = 1000 - (_this.movesDone - 25) * 20
+
+            _this.score = (_this.score < 0) ? 0 : _this.score;
+        }
 
         // add condition : if you've done well in the game get the reward
-        if (true) {
+        if (_this.score > 420) {
             _this.getReward('boots');
         }
     },
     addBonuses: function (bonuses) {
-
+        this.movesDone = this.movesDone - this.gameBonuses.bonusMoves;
     },
     createTableArray: function () {
         var startArray = new Array(),

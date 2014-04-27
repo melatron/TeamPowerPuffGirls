@@ -102,15 +102,15 @@ SwapPuzzle = Game.extend({
         $("#swapPuzzleCanvas").off();
 
         this.score = (this.reverseParameters.reversesDone) ?
-            Math.floor(1000 / this.reverseParameters.reversesDone) : 1500;
+            Math.floor(500 / this.reverseParameters.reversesDone) : 750;
 
         // add condition : if you've done well in the game get the reward
-        if (true) {
+        if (this.score > 499) {
             this.getReward('ring');
         }
     },
     addBonuses: function (bonuses) {
-
+    
     },
     createMoveableBoxes: function () {
         var x = 5,
