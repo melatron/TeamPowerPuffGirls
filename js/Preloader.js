@@ -86,7 +86,8 @@ function Preloader(){
 
                 'source/square-glow.png',
                 
-                'source/dragonGlowSprite.png']; //47
+                'source/dragonGlowSprite.png',
+                'source/sound-on.png',]; //47
 
         for (var i = 0; i < b.length; i++) {  // create image objects and define src
             sprites[i] = new Image();

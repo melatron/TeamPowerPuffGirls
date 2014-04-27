@@ -402,7 +402,7 @@ var SquareGame = Game.extend({
         this._super(obj, getReward);
         this.getReward = getReward;
 
-        var instructions = '●Move orbs with the mouse.</br>●Get a green orb to the green exit.</br>●Finish in under 300 moves.';
+        var instructions = '●Move gems with the mouse.</br>●Get a green gem to the green exit.</br>●Finish in under 250 moves.';
 
         this.writeOnScroll(instructions, {
             fontSize: '13px',
@@ -419,7 +419,7 @@ var SquareGame = Game.extend({
         this.plot.html(' ');
         this.removeGameFromPlot();
 
-        if (this.movesCounter < 300) {
+        if (this.movesCounter < 250) {
             this.score = (250 - this.movesCounter) * 5;
         } else {
             this.score = 0;

@@ -937,9 +937,9 @@ function Story() {
         if (!stopEvents) {
             //console.log('rado is a gay persona');
             var rect = mainCanvas.getBoundingClientRect(),
-                    mouseX = ev.clientX - rect.left,
-                    mouseY = ev.clientY - rect.top,
-                    currentObject;
+                mouseX = ev.clientX - rect.left,
+                mouseY = ev.clientY - rect.top,
+                currentObject;
 
             console.log("Mouse X: " + mouseX + " Mouse Y: " + mouseY);
 
