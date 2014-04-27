@@ -803,9 +803,7 @@ PathFinder = Game.extend({
 
         // add condition : if you've done well in the game get the reward
         if (true) {
-
             this.getReward('armor');
-
         }
     },
 

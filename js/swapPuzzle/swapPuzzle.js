@@ -79,8 +79,9 @@ SwapPuzzle = Game.extend({
         }
         this.plot = $('#swapPuzzle');
     },
-    start: function (obj) {
-        this._super(obj);
+    start: function (obj, getReward) {
+        this._super(obj, getReward);
+        this.getReward = getReward;
         this.addGameToPlot();
         this.canvas = $("#swapPuzzleCanvas")[0];
         this.context = this.canvas.getContext("2d");
@@ -102,6 +103,11 @@ SwapPuzzle = Game.extend({
 
         this.score = (this.reverseParameters.reversesDone) ?
             Math.floor(1000 / this.reverseParameters.reversesDone) : 1500;
+
+        // add condition : if you've done well in the game get the reward
+        if (true) {
+            this.getReward('ring');
+        }
     },
     addBonuses: function (bonuses) {
 
