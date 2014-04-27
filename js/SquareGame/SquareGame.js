@@ -81,24 +81,28 @@ var BlueSquare = Square.extend({
 
 var SquareGame = Game.extend({
 
-    squareWidth: 40,
-    marginLeft: 207,
-    marginTop: 12,
-
-    activeArray: null,
-    greenSquares: [],
-    redSquares: [],
-    yellowSquares: [],
-    blueSquares: [],
-    currentMap: [],
-    movesCounter: 0,
-    activeLeader: null,
-
-
     init: function () {
+        
+        this.squareWidth = 40;
+        this.marginLeft = 207;
+        this.marginTop = 12;
 
-        this.mapContext = $('#square-game-map')[0].getContext('2d');        
+        this.activeArray = null;
+        this.activeLeader = null;
+
+        this.greenSquares = [];
+        this.redSquares = [];
+        this.yellowSquares = [];
+        this.blueSquares = [];
+        this.currentMap = [];
+
+        this.movesCounter = 0;
+
+        this.canvas = $('#square-game-map')[0];
+        this.mapContext = this.canvas.getContext('2d');
+
         this._super();
+
         this.objectives = { moves: 300 };
         this.plot = $('#square-game');
         this.gameOver = false;
@@ -265,29 +269,55 @@ var SquareGame = Game.extend({
     // working test
     drawPossibleMoves: function () {
 
-         
+        
         var   selectedX = ((parseInt($('.square.selected').css('left')) - this.marginLeft) / this.squareWidth),
               selectedY = ((parseInt($('.square.selected').css('top')) - this.marginTop) / this.squareWidth);
-       
-        this.mapContext.clearRect(0, 0, 240, 240);
-        console.log(selectedX);
-        console.log(selectedY);
 
-        this.mapContext.save();
-        this.mapContext.beginPath();
+        this.mapContext.clearRect(0, 0, 240, 260);
+        this.drawMovesCounter();
+        this.mapContext.fillStyle = 'yellow';
 
-        if ((selectedY < 5) && this.currentMap[selectedY+1][selectedX] === 1) {
-            //this.mapContext.moveTo((selectedX * 40) + 20, (selectedY * 40) + 20);
-            this.mapContext.fillStyle = 'yellow';
-            this.mapContext.fillRect((selectedX * 40) + 19, (selectedY * 40) + 18, 2, 40);
-        }
-        //ctx.strokeStyle = 'red';
-        //mapContext.moveTo(objectContext.x * 40 + 20, (objectContext.y * 40 + 20));
-        //mapContext.lineTo((objectContext.x + 1) * 40 + 20, objectContext.y * 40 + 20);
-        //mapContext.stroke();
+        if (selectedX && selectedY) {
 
+            if ((selectedY + 1) <= 5 && this.currentMap[selectedY + 1][selectedX] === 1) {
+               
+                this.mapContext.fillRect((selectedX * 40) + 19, (selectedY * 40) + 20, 2, 40);
+            };
+
+            if ((selectedY - 1) >= 0 && this.currentMap[selectedY - 1][selectedX] === 1) {
+
+                this.mapContext.fillRect((selectedX * 40) + 19, (selectedY * 40) + 20, 2, -40);
+            };
+
+            if ((selectedX + 1) <= 5 && this.currentMap[selectedY][selectedX + 1] === 1) {
+
+                this.mapContext.fillRect((selectedX * 40) + 20, (selectedY * 40) + 19, 40, 2);
+            };
+
+            if ((selectedX - 1) >= 0 && this.currentMap[selectedY][selectedX - 1] === 1) {
+
+                this.mapContext.fillRect((selectedX * 40) + 20, (selectedY * 40) + 19, -40, 2);
+            };
+
+        };
     },
 
+    drawMovesCounter: function () {
+        if (this.currentMap === this.firstMap) {
+            this.mapContext.save();
+            this.mapContext.fillStyle = 'white';
+            this.mapContext.font = '13px Morpheus';
+            this.mapContext.fillText('Moves: ' + this.movesCounter, 10, 25);
+            this.mapContext.restore();
+        } else {
+            this.mapContext.save();
+            this.mapContext.fillStyle = 'white';
+            this.mapContext.font = '13px Morpheus';
+            this.mapContext.fillText('Moves: ' + this.movesCounter, 10, 65);
+            this.mapContext.restore();
+        }
+        
+    },
 
 
     populateFirstMap: function () {
@@ -328,7 +358,7 @@ var SquareGame = Game.extend({
         this.redSquares = [];
         this.yellowSquares = [];
         this.blueSquares = [];
-
+        $(this.canvas).appendTo(this.plot);
 
         this.createSquare(4, 0, 'red', 'leader', 0);
         this.createSquare(4, 1, 'red', 'filler', 1);
@@ -382,13 +412,14 @@ var SquareGame = Game.extend({
 
     start: function (obj) {
         this._super(obj);
-        var instructions = '●Move orbs with the mouse.</br>●Get a green orb to the green exit.</br>●Finish in 300 moves.';
+        var instructions = '●Move orbs with the mouse.</br>●Get a green orb to the green exit.</br>●Finish in under 300 moves.';
 
         this.writeOnScroll(instructions, {
-            fontSize: '14px',
+            fontSize: '13px',
         })
         this.addGameToPlot();
         this.populateFirstMap();
         setTimeout(this.defineMapBoundaries(), 2000);
+        this.drawMovesCounter();
     }
 });

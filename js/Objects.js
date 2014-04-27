@@ -617,7 +617,7 @@ Item = Class.extend({
         this.dom.draggable({
             start: function () {
                 self.hideAttributes();
-                $(this).css({ zIndex: '1' })
+                $(this).css({ zIndex: '2' })
             },
 
             stop: function (ev, ui) {
@@ -751,10 +751,10 @@ Inventory = Class.extend({
 
                 if (self.slots[newSlotIndex] === 0) {
                     self.slots[oldSlotIndex] = 0;
-                    ui.draggable.appendTo($(this));
-                    ui.draggable.css({ zIndex: '0' });
+                    ui.draggable.appendTo($(this));                   
                     self.slots[newSlotIndex] = item;
                 };
+                ui.draggable.css({ zIndex: '0' });
             }
         });
 
