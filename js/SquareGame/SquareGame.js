@@ -1,6 +1,6 @@
 ﻿var Square = Class.extend({
-    marginLeft: 204,
-    marginTop: 9,
+    marginLeft: 207,
+    marginTop: 12,
 
     init: function (x, y, color, duty, index) {
         this.x = x;
@@ -82,8 +82,8 @@ var BlueSquare = Square.extend({
 var SquareGame = Game.extend({
 
     squareWidth: 40,
-    marginLeft: 204,
-    marginTop: 9,
+    marginLeft: 207,
+    marginTop: 12,
 
     activeArray: null,
     greenSquares: [],
@@ -97,6 +97,7 @@ var SquareGame = Game.extend({
 
     init: function () {
 
+        this.mapContext = $('#square-game-map')[0].getContext('2d');        
         this._super();
         this.objectives = { moves: 300 };
         this.plot = $('#square-game');
@@ -148,7 +149,7 @@ var SquareGame = Game.extend({
 
         $('.selected').removeClass('selected');
         e.data.objectContext.dom.addClass('selected');
-
+        e.data.gameContext.drawPossibleMoves();
     },
 
 
@@ -178,6 +179,7 @@ var SquareGame = Game.extend({
 
             e.data.activeLeader.dom.removeClass('selected');
             e.data.activeLeader = null;
+            e.data.drawPossibleMoves();
         };
     },
 
@@ -261,14 +263,28 @@ var SquareGame = Game.extend({
         };
     },
     // working test
-    drawPossibleMoves: function (objectContext) {
+    drawPossibleMoves: function () {
 
-        var ctx = $('#square-game-map')[0].getContext('2d');
-        ctx.beginPath();
+         
+        var   selectedX = ((parseInt($('.square.selected').css('left')) - this.marginLeft) / this.squareWidth),
+              selectedY = ((parseInt($('.square.selected').css('top')) - this.marginTop) / this.squareWidth);
+       
+        this.mapContext.clearRect(0, 0, 240, 240);
+        console.log(selectedX);
+        console.log(selectedY);
+
+        this.mapContext.save();
+        this.mapContext.beginPath();
+
+        if ((selectedY < 5) && this.currentMap[selectedY+1][selectedX] === 1) {
+            //this.mapContext.moveTo((selectedX * 40) + 20, (selectedY * 40) + 20);
+            this.mapContext.fillStyle = 'yellow';
+            this.mapContext.fillRect((selectedX * 40) + 19, (selectedY * 40) + 18, 2, 40);
+        }
         //ctx.strokeStyle = 'red';
-        ctx.moveTo(objectContext.x * 40 + 20, (objectContext.y * 40 + 20));
-        ctx.lineTo((objectContext.x + 1) * 40 + 20, objectContext.y * 40 + 20);
-        ctx.stroke();
+        //mapContext.moveTo(objectContext.x * 40 + 20, (objectContext.y * 40 + 20));
+        //mapContext.lineTo((objectContext.x + 1) * 40 + 20, objectContext.y * 40 + 20);
+        //mapContext.stroke();
 
     },
 
@@ -334,7 +350,13 @@ var SquareGame = Game.extend({
         this.gameOver = true;
         this.plot.html(' ');
         this.removeGameFromPlot();
-        this.score = (300 - this.movesCounter) * 10;
+
+        if (this.movesCounter < 300) {
+            this.score = (300 - this.movesCounter) * 4;
+        } else {
+            this.score = 0;
+        }
+        
 
         if (this.movesCounter < (this.objectives.moves - this.gameBonuses.moves)) {
             this.getReward('sword');

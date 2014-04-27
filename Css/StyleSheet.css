@@ -121,20 +121,17 @@ body {
 }
 
 #square-game-map {
-    width:240px;
-    height:240px;
     position:absolute;
     margin:10px 0 0 200px;
-    z-index:-1;
-    
+    z-index:0;
+  
 }
 
 .square {
-    border-radius: 0px;
     position: absolute;
-    width:32px;
-    height:32px;
-    background-size:32px 32px;
+    width:26px;
+    height:26px;
+    background-size:26px 26px;
 
 }
 
