@@ -9,11 +9,10 @@ body {
 	background-image:url(../source/mainBorder.png);
 	margin-left: auto;
 	margin-right: auto;
-	padding-top:120px;
+	padding-top: 120px;
 }
 
 #main{
-
 	width: 1024px;
 	height: 768px;
 	margin-left: 120px;
@@ -73,11 +72,13 @@ body {
 }
 /*-----------------BOSSFIGHT CSS--------------------*/
 
-#BossFightDiv{
+/* #BossFightDiv{
 	width: 1024px;
 	height: 512px;
 	display: none;
-}
+	position: absolute;
+	
+} */
 
 /*-----------------TONY GAME CSS--------------------*/
 #Game6561{
