@@ -389,7 +389,7 @@ var SquareGame = Game.extend({
         
 
         if (this.movesCounter < (this.objectives.moves - this.gameBonuses.moves)) {
-            this.getReward('sword');
+            this.getReward('potion');
         }
 
         this.plot.css('background-image', 'url(source/square-game-background1.png)')
@@ -410,8 +410,11 @@ var SquareGame = Game.extend({
                           [2, 0, 0, 0, 0, 1]];
     },
 
-    start: function (obj) {
+    start: function (obj, getReward) {   
         this._super(obj);
+
+        this.getReward = getReward;
+
         var instructions = '●Move orbs with the mouse.</br>●Get a green orb to the green exit.</br>●Finish in under 300 moves.';
 
         this.writeOnScroll(instructions, {

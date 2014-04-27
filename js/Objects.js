@@ -225,11 +225,11 @@ InteractableObject = SpeakingObject.extend({
         };
     },
 
-    startGame: function (bonuses) {
+    startGame: function (bonuses, getReward) {
         console.log(this.game.gameOver);
         if (!this.game.gameOver) {
             //this.calculateItemBonuses(bonuses);
-            this.game.start(bonuses);
+            this.game.start(bonuses , getReward);
         }
     },
     calculateItemBonuses: function (bonuses) {
@@ -813,7 +813,8 @@ var Game = Class.extend({
         this.scrollSound = preloader.getGameSoundByIndex(0);
     },
     
-    start: function (obj) {
+    start: function (obj, getReward) {
+        this.getReward = getReward;
         console.log(obj);
         this.gameBonuses = obj;
     },

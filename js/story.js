@@ -1138,7 +1138,7 @@ function Story() {
                 if (hero.speakingTo.game) {
                     stopEvents = true;
                     bonuses = calculateBonuses();
-                    hero.speakingTo.startGame(bonuses);
+                    hero.speakingTo.startGame(bonuses, getReward);
                 }
             }
             else if (hero.speakingTo.progress.after) {
@@ -1155,7 +1155,7 @@ function Story() {
                 if (hero.speakingTo.game) {
                     stopEvents = true;
                     bonuses = calculateBonuses();
-                    hero.speakingTo.startGame(bonuses);
+                    hero.speakingTo.startGame(bonuses , getReward);
                 }
             }
         }
