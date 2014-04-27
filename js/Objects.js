@@ -28,7 +28,7 @@ GameObject = Class.extend({
 });
 // ================== Buttons =============== //
 ButtonsObject = GameObject.extend({
-    init: function myfunction(x, y, width, height, name, image) {
+    init: function (x, y, width, height, name, image) {
         this._super(x, y, width, height, name);
         this.image = image;
         this.toggled = false;
@@ -42,6 +42,7 @@ ButtonsObject = GameObject.extend({
         }
     },
     drawButton: function () {
+
         this.ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
     }
 
@@ -726,8 +727,9 @@ Item = Class.extend({
         if (e.data.lives !== 0) {
             temp += '<p>Additional Lives: ' + e.data.lives + '</p>';
         };
-
-        temp += '<p class = "description">' + e.data.description + '</p>';
+        if (e.data.description !== null) {
+            temp += '<p class = "description">' + e.data.description + '</p>';
+        };
 
         $('#item-bonuses').html(temp);
     },

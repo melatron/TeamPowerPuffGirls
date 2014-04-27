@@ -686,10 +686,11 @@ function Story() {
         gamesFinished = 0,
         gamesAmount = 6,
         buttons = [],
-        toggleMusic = new ButtonsObject(0, 0, 40, 40, "ToggleMusic"),
+        toggleMusic =null,
         finishGame = new ButtonsObject(984, 0, 40, 40, "FinishGame");
-    buttons.push(toggleMusic);
-    buttons.push(finishGame);
+    //buttons.push(toggleMusic);
+    //buttons.push(finishGame);
+
     var endStoryScreenOn = false,
 
         movableObjects = [],
@@ -727,12 +728,12 @@ function Story() {
             if (endStoryScreenOn) {
                 endStoryScreen();
             }
+
+            drawMusicButton();
     };
 
     var inventory = new Inventory();
-    inventory.getItem('dagger');
-    inventory.getItem('armor');
-    inventory.getItem('sword');
+
 
     function loadMovableObjects() {
 
@@ -999,12 +1000,14 @@ function Story() {
     };
     // Here is the functionallity of the buttons:
     function pauseMusicButton(x, y) {
-        if (buttons[0].checkIfClicked(x, y)) {
-            if (buttons[0].toggled) {
+        if (toggleMusic.checkIfClicked(x, y)) {
+            if (toggleMusic.toggled) {
                 soundTrack.pauseMainMusic();
+                toggleMusic.image = preloader.getSpriteByIndex(48);
             }
             else {
                 soundTrack.resumeMainMusic();
+                toggleMusic.image = preloader.getSpriteByIndex(47);
             }
         }
     };
@@ -1204,6 +1207,13 @@ function Story() {
             }
         }
     };
+
+    function drawMusicButton() {
+
+        buttons[0].drawButton();
+
+    }
+
     // here is the method which will draw the end game screen!
     function endStoryScreen() {
         if (endStoryScreenOn) {
@@ -1294,6 +1304,11 @@ function Story() {
         };
 
         inventory.getItem(type);
+    };
+
+    function preloadButtons() {
+        toggleMusic = new ButtonsObject(0, 0, 40, 40, "ToggleMusic", preloader.getSpriteByIndex(47));        
+        buttons.push(toggleMusic);
     };
     function preloadSprites() {
 
@@ -1406,7 +1421,7 @@ function Story() {
         soundTrack.startMainMusic();
         preloadSprites();
         preloadPortraits();
-
+        preloadButtons();
 
         checkRequestAnimationFrame();
 
