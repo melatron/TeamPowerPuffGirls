@@ -781,6 +781,7 @@ PathFinder = Game.extend({
         this.writeOnScroll(instructions, {
             fontSize: '12px'
         });
+        this.deaths = 0;
         this.addPlatformImages();
         this.stopEvents = false;
         this.mainCharacter.addSprites();
@@ -793,14 +794,15 @@ PathFinder = Game.extend({
         this.update();
     },
     endGame: function () {
-        this.score = 15000 / this.deaths;
+        this.score = 250000 / this.deaths;
         this.stopEvents = true;
         clearInterval(this.interval);
         this.removeGameFromPlot();
         this.gameOver = true;
+        this.currentLevel = 0;
 
         // add condition : if you've done well in the game get the reward
-        if (true) {
+        if (this.deaths < 30) {
             this.getReward('armor');
         }
     },
