@@ -39,7 +39,9 @@ RadoGame = Game.extend({
 	},
 	
 	// ===== START METHOD ====== //
-	start: function () {
+	start: function (obj, getReward) {
+	    this._super(obj, getReward);
+	    this.getReward = getReward;
 	    var instructions = 'Use arrows to move. Avoid elves. Collect coins. Get the tree piece. Go!';
 		this.gameOver = false;
 		this.getContext();
@@ -51,8 +53,7 @@ RadoGame = Game.extend({
 		this.currentLevel = this.levels[this.levelIndex];
 		this.populateLevel(this.currentLevel);
 		this.addEventListeners();
-		this.mainLoop();
-		this.calculateBonuses();
+		this.mainLoop();		
 		console.log(this.gameBonuses);
 	},
 	
@@ -92,6 +93,13 @@ RadoGame = Game.extend({
 		this.levels = [];
 		this.clearScroll();
 		this.gameOver = true;
+
+        // add condition : if you've done well in the game get the reward
+		if (true) {
+
+		    this.getReward('sword');
+
+		}
 	},
 
 	showScore:function(){
