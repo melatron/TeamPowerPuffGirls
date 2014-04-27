@@ -269,16 +269,14 @@ var SquareGame = Game.extend({
     // working test
     drawPossibleMoves: function () {
 
-        
-        var   selectedX = ((parseInt($('.square.selected').css('left')) - this.marginLeft) / this.squareWidth),
-              selectedY = ((parseInt($('.square.selected').css('top')) - this.marginTop) / this.squareWidth);
-
         this.mapContext.clearRect(0, 0, 240, 260);
         this.drawMovesCounter();
-        this.mapContext.fillStyle = 'yellow';
-        console.log(preloader.getSpriteByIndex(45))
-        if (selectedX && selectedY) {
 
+        if ($('.square.selected')[0]) {
+
+            var   selectedX = ((parseInt($('.square.selected').css('left')) - this.marginLeft) / this.squareWidth),
+                  selectedY = ((parseInt($('.square.selected').css('top')) - this.marginTop) / this.squareWidth);
+            
             if ((selectedY + 1) <= 5 && this.currentMap[selectedY + 1][selectedX] === 1) {
                
                 this.mapContext.drawImage(
@@ -322,7 +320,6 @@ var SquareGame = Game.extend({
                     40
                 );
             };
-
         };
     },
 
