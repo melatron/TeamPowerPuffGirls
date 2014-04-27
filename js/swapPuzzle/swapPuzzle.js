@@ -72,16 +72,23 @@ SwapPuzzle = Game.extend({
         this.background;
         this.reverseButton;
         this.swapPuzzleLoop;
-        this.reverseParameters = {
-            position: [],
-            lastPosition: [],
-            reversesDone: 0
-        }
+        this.reverseParameters = null;
         this.plot = $('#swapPuzzle');
     },
     start: function (obj, getReward) {
         this._super(obj, getReward);
         this.getReward = getReward;
+        this.reverseParameters = {
+            position: [],
+            lastPosition: [],
+            reversesDone: 0
+        }
+
+        var instructions = 'Click on the gems to move them.Your goal is to swap their places.If you are stuck use the reverse button in top left corner.';
+        this.writeOnScroll(instructions, {
+            fontSize: '12px'
+        });
+
         this.addGameToPlot();
         this.canvas = $("#swapPuzzleCanvas")[0];
         this.context = this.canvas.getContext("2d");

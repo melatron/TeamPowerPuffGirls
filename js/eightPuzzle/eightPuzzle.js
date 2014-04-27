@@ -76,6 +76,12 @@ var EightPuzzle = Game.extend({
     start: function (obj, getReward) {
         this._super(obj, getReward);
         this.getReward = getReward;
+
+        var instructions = 'Use the arrow keys to solve the puzzle.';
+        this.writeOnScroll(instructions, {
+            fontSize: '12px'
+        });
+
         this.addGameToPlot();
         this.createTableArray();
         this.getEmptySlot();
