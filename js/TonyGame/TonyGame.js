@@ -60,7 +60,7 @@ TonyGame = Game.extend({
         this.removeNodes();
 
         // add condition : if you've done well in the game get the reward
-        if (true) {
+        if (this.score >= 300) {
             this.getReward('dagger');
         }
     },
@@ -175,13 +175,16 @@ TonyGame = Game.extend({
                 }
                 else {
                     if (zeroes <= 0 && isOver) {
-                        console.log(zeroes);
+                        //console.log(zeroes);
                         if (this.checkIfBoxCanMove(i, j)) {
                             isOver = false;
                         }
                     }
                     if (this.matrix[i][j].value > this.highestValue) {
                         this.highestValue = this.matrix[i][j].value;
+                        if (this.highestValue == 1024) {
+                            this.endGame();
+                        }
                     }
                     this.matrix[i][j].proceed();
                 }
