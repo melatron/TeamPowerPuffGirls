@@ -45,6 +45,7 @@ var EightPuzzle = Game.extend({
     init: function () {
         this._super();
         _this = this;
+        this.movesDone = 0;
         this.canvasLoop = null;
         this.stopEvents = false;
         this.canvas = null;
@@ -62,25 +63,31 @@ var EightPuzzle = Game.extend({
         this.update = function () {
             _this.drawTableArray();
             if (_this.isGameOver()) {
-                setTimeout(_this.endGame,700);
-                cancelAnimationFrame(this.animation);
+                setTimeout(_this.endGame, 1000);
+                cancelAnimationFrame(_this.animation);
             }
-            _this.animation = requestAnimationFrame(_this.update);
+            else {
+                _this.animation = requestAnimationFrame(_this.update);
+            }
+            
         };
 
     },
-    start: function () {
-        this.gameOver = false;
+    start: function (obj) {
+        this._super(obj);
         this.addGameToPlot();
         this.createTableArray();
         this.getEmptySlot();
         $(document).on('keydown', this, this.listenKeyEvents);
         this.update();
+        console.log("asd");
     },
     endGame: function () {
         _this.gameOver = true;
         _this.removeGameFromPlot();
         _this.stopEvents = true;
+        _this.score = Math.floor(30000 / _this.movesDone);
+        console.log(_this.score);
 
     },
     addBonuses: function (bonuses) {
@@ -140,6 +147,7 @@ var EightPuzzle = Game.extend({
 
         this.emptySlotPosition[0] = c;
         this.emptySlotPosition[1] = d;
+        this.movesDone++;
     },
     swapTop: function () {
         var i = this.emptySlotPosition[0],

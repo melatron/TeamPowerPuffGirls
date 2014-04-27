@@ -79,7 +79,8 @@ SwapPuzzle = Game.extend({
         }
         this.plot = $('#swapPuzzle');
     },
-    start: function () {
+    start: function (obj) {
+        this._super(obj);
         this.addGameToPlot();
         this.canvas = $("#swapPuzzleCanvas")[0];
         this.context = this.canvas.getContext("2d");
@@ -99,7 +100,8 @@ SwapPuzzle = Game.extend({
         clearInterval(this.swapPuzzleLoop);
         $("#swapPuzzleCanvas").off();
 
-        return Math.floor(100 / this.reverseParameters.reversesDone);
+        this.score = (this.reverseParameters.reversesDone) ?
+            Math.floor(1000 / this.reverseParameters.reversesDone) : 1500;
     },
     addBonuses: function (bonuses) {
 
