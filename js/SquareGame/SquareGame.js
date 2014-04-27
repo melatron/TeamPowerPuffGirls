@@ -397,6 +397,23 @@ var SquareGame = Game.extend({
         this.createSquare(3, 4, 'green', 'leader', 2);
     },
 
+    start: function (obj, getReward) {
+
+        this._super(obj, getReward);
+        this.getReward = getReward;
+
+        var instructions = '●Move orbs with the mouse.</br>●Get a green orb to the green exit.</br>●Finish in under 300 moves.';
+
+        this.writeOnScroll(instructions, {
+            fontSize: '13px',
+        })
+
+        this.addGameToPlot();
+        this.populateFirstMap();
+        setTimeout(this.defineMapBoundaries(), 2000);
+        this.drawMovesCounter();
+    },
+
     endGame: function () {
         this.gameOver = true;
         this.plot.html(' ');
@@ -430,22 +447,7 @@ var SquareGame = Game.extend({
             this.getReward('potion');
 
         }
-    },
-
-    start: function (obj, getReward) {
-
-        this._super(obj, getReward);
-        this.getReward = getReward;
-
-        var instructions = '●Move orbs with the mouse.</br>●Get a green orb to the green exit.</br>●Finish in under 300 moves.';
-
-        this.writeOnScroll(instructions, {
-            fontSize: '13px',
-        })
-
-        this.addGameToPlot();
-        this.populateFirstMap();
-        setTimeout(this.defineMapBoundaries(), 2000);
-        this.drawMovesCounter();
     }
+
+
 });

@@ -39,7 +39,9 @@ TonyGame = Game.extend({
                        [0, 0, 0, 0],
                        [0, 0, 0, 0]];
     },
-    start: function () {
+    start: function (obj, getReward) {
+        this._super(obj, getReward);
+        this.getReward = getReward;
         this.stopEvents = false;
         this.addGameToPlot();
         this.putStartingNumbers();
@@ -56,6 +58,11 @@ TonyGame = Game.extend({
         this.score = this.highestValue;
         this.highestValue = 4;
         this.removeNodes();
+
+        // add condition : if you've done well in the game get the reward
+        if (true) {
+            this.getReward('dagger');
+        }
     },
     addBonuses: function (bonuses) {
 
