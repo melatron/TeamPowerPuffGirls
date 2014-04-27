@@ -855,7 +855,7 @@ function Story() {
                 done: " "
             }
             ),
-            dragon = new ClickPoint(675, 300, 200, 200, 'dragon',
+            dragon = new ClickPoint(644, 413, 200, 200, 'dragon',
                                                             {
                                                                 x: 660,
                                                                 y: 345
@@ -1301,7 +1301,7 @@ function Story() {
         interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 4, preloader.getSpriteByIndex(34), interactableObjects[1], ctx);
         interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 4, preloader.getSpriteByIndex(35), interactableObjects[2], ctx);
         interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 2, preloader.getSpriteByIndex(36), interactableObjects[3], ctx);
-        interactableObjects[4].spriteGlow = new Sprite(960, 40, 24, 2, preloader.getSpriteByIndex(37), interactableObjects[4], ctx);
+        interactableObjects[4].spriteGlow = new Sprite(2500, 100, 10, 4, preloader.getSpriteByIndex(46), interactableObjects[4], ctx);
         interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 4, preloader.getSpriteByIndex(38), interactableObjects[5], ctx);
         interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 4, preloader.getSpriteByIndex(39), interactableObjects[6], ctx);
     };

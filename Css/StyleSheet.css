@@ -72,13 +72,11 @@ body {
 }
 /*-----------------BOSSFIGHT CSS--------------------*/
 
-/* #BossFightDiv{
-	width: 1024px;
-	height: 512px;
+ #BossFightCanvas{
 	display: none;
 	position: absolute;
 	
-} */
+} 
 
 /*-----------------TONY GAME CSS--------------------*/
 #Game6561{
