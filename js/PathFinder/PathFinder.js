@@ -8,11 +8,9 @@
 });
 PFMovableObject = PFObjects.extend({
     init: function (x, y, width, height, speed) {
+        this._super(x,y,width,height);
         this.gameOver = false;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        
         this.speed = speed;
         this.moveLeft = false;
         this.moveRight = false;
