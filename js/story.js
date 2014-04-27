@@ -669,6 +669,7 @@ function Story() {
         interactableObjects = [],
         stopEvents = false,
         inGame = false,
+        initializeCurrentQuestCounter = 0,
 
         canvas = $("#canvas")[0],
         ctx = canvas.getContext('2d'),
@@ -713,7 +714,7 @@ function Story() {
             bandit.setRandomDestination();
             orc.setRandomDestination();
             hero.moveHeroToDestination();
-            drawInteractableObject();
+            //drawInteractableObject();
             checkIfSpeaking();
             initializeCurrentQuest();
             //hero.drawSpeechBubble();
@@ -736,7 +737,7 @@ function Story() {
     function loadMovableObjects() {
 
 
-        elder = new AIMovableObject(790, 200, 32, 32, "theMage", interactableObjects[3], {
+        elder = new AIMovableObject(790, 200, 32, 32, "mage", searchInteractableObjectByName("mage"), {
             x: 820,
             y: 200
         }, {
@@ -745,7 +746,7 @@ function Story() {
             yMin: 200,
             yMax: 240
         });
-        dragon = new AIMovableObject(730, 330, 96, 96, "dragon", interactableObjects[4], {
+        dragon = new AIMovableObject(730, 330, 96, 96, "dragon", searchInteractableObjectByName("dragon"), {
             x: 780,
             y: 300
         }, {
@@ -754,7 +755,7 @@ function Story() {
             yMin: 260,
             yMax: 330
         });
-        elf = new AIMovableObject(210, 300, 32, 32, "elf", interactableObjects[2], {
+        elf = new AIMovableObject(210, 300, 32, 32, "treeOfLife", searchInteractableObjectByName("treeOfLife"), {
             x: 210,
             y: 300
         }, {
@@ -763,7 +764,7 @@ function Story() {
             yMin: 300,
             yMax: 340
         });
-        bandit = new AIMovableObject(400, 400, 32, 32, 'bandit', interactableObjects[5], {
+        bandit = new AIMovableObject(400, 400, 32, 32, 'banditTavern', searchInteractableObjectByName("banditTavern"), {
             x: 400,
             y: 400
         }, {
@@ -772,7 +773,7 @@ function Story() {
             yMin: 390,
             yMax: 410
         });
-        orc = new AIMovableObject(370, 80, 32, 32, 'orc', interactableObjects[6], {
+        orc = new AIMovableObject(370, 80, 32, 32, 'orcCamp', searchInteractableObjectByName("orcCamp"), {
             x: 370,
             y: 75
         }, {
@@ -804,13 +805,18 @@ function Story() {
                 before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
                 after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
                 done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
+            },
+            {
+                x: 192,
+                y: 62,
+                r: 58,
             }
             ),
             dwarfCamp = new ClickPoint(740, -5, 130, 130, "dwarfCamp",
                                                             {
                                                                 x: 655,
                                                                 y: 130
-                                                            }, digitGame,
+                                                            }, eightPuzzle,
             {                  // HERO SPEECH
                 before: " ",
                 after: " ",
@@ -820,6 +826,11 @@ function Story() {
                 before: " ",
                 after: " ",
                 done: " "
+            },
+            {
+                x: 798,
+                y: 45,
+                r: 47,
             }
             ),
             treeOfLife = new ClickPoint(83, 372, 100, 100, "treeOfLife", {
@@ -836,6 +847,11 @@ function Story() {
                 before: " ",
                 after: " ",
                 done: " "
+            },
+            {
+                x: 120,
+                y: 425,
+                r: 40,
             }
 
             ),
@@ -843,7 +859,7 @@ function Story() {
                                                             {
                                                                 x: 810,
                                                                 y: 250
-                                                            }, swapPuzzle,
+                                                            }, digitGame,
             {                  // HERO SPEECH
                 before: " ",
                 after: " ",
@@ -853,6 +869,11 @@ function Story() {
                 before: " ",
                 after: " ",
                 done: " "
+            },
+            {
+                x: 810,
+                y: 225,
+                r: 35,
             }
             ),
             dragon = new ClickPoint(644, 413, 200, 200, 'dragon',
@@ -869,6 +890,11 @@ function Story() {
                 before: " ",
                 after: " ",
                 done: " "
+            },
+            {
+                x: 772,
+                y: 530,
+                r: 110,
             }
 
             ),
@@ -886,13 +912,18 @@ function Story() {
                 before: " ",
                 after: " ",
                 done: " "
+            },
+            {
+                x: 493,
+                y: 396,
+                r: 35,
             }
             ),
             orcCamp = new ClickPoint(440, 22, 100, 100, 'orcCamp',
                                                             {
                                                                 x: 430,
                                                                 y: 140
-                                                            }, eightPuzzle,
+                                                            }, swapPuzzle,
                  {                  // HERO SPEECH
                      before: " ",
                      after: " ",
@@ -902,15 +933,20 @@ function Story() {
                     before: " ",
                     after: " ",
                     done: " "
-                }
+                },
+            {
+                x: 471,
+                y: 78,
+                r: 30,
+            }
             );
-        interactableObjects.push(humanCastle);
-        interactableObjects.push(dwarfCamp);
-        interactableObjects.push(treeOfLife);
-        interactableObjects.push(mage);
-        interactableObjects.push(dragon);
-        interactableObjects.push(bandit);
-        interactableObjects.push(orcCamp);
+        interactableObjects.push(orcCamp); //6
+        interactableObjects.push(humanCastle);//0
+        interactableObjects.push(dwarfCamp);//1
+        interactableObjects.push(mage);    //3
+        interactableObjects.push(treeOfLife);//2
+        interactableObjects.push(bandit);  //5
+        interactableObjects.push(dragon);  //4
     };
     // ---- Methods for preloading images ---- //
     function addEvents() {
@@ -1002,31 +1038,35 @@ function Story() {
     function checkIfFocused() {
         var i, temp, len = interactableObjects.length;
         for (i = 0; i < len; i++) {
-            temp = interactableObjects[i];
-            if ((mousePos.x > temp.x && mousePos.x < temp.x + temp.width) &&
-                (mousePos.y > temp.y && mousePos.y < temp.y + temp.height)) {
-                if (stopEvents == false && temp.isAvailable) {
+            temp = interactableObjects[i];                                 
+            if (Math.pow(temp.circle.x - mousePos.x,2) + Math.pow(temp.circle.y - mousePos.y,2) < Math.pow(temp.circle.r,2)) {                                    //((temp.x + (60) - mousePos.x)
+                if (stopEvents == false && temp.isAvailable) { 
                     if (temp.spriteGlow) {
                         temp.spriteGlow.drawSprite();
                     }
                 }
             }
-            else if (temp.spriteGlow) {
+        }
+    };
+    function resetGlowFrameCounter() {
+        var i, temp, len = interactableObjects.length;
+        for (i = 0; i < len; i++) {
+            if (Math.pow(temp.circle.x - mousePos.x, 2) + Math.pow(temp.circle.y - mousePos.y, 2) = Math.pow(temp.circle.r, 2)) {
                 temp.spriteGlow.frameCounter = 6;
             }
         }
-    };
+    }
     function initializeCurrentQuest() {
+
         var temp = interactableObjects[gamesFinished];
-        if (!((mousePos.x > temp.x && mousePos.x < temp.x + temp.width) &&
-                (mousePos.y > temp.y && mousePos.y < temp.y + temp.height))) {
-            if (gamesFinished == 0) {
+        
+            if (gamesFinished == 0 && temp.spriteGlow) {
                 temp.spriteGlow.drawSprite();
             }
-            else if (interactableObjects[gamesFinished - 1].progress.done) {
+            else if (interactableObjects[gamesFinished - 1].progress.done && temp.spriteGlow) {
                 temp.spriteGlow.drawSprite();
             }
-        }
+        
     };
 
 
@@ -1297,13 +1337,21 @@ function Story() {
         orc.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(21), orc, ctx);
         orc.getDestinationDelay = 248;
 
-        interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, preloader.getSpriteByIndex(33), interactableObjects[0], ctx);
-        interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 4, preloader.getSpriteByIndex(34), interactableObjects[1], ctx);
-        interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 4, preloader.getSpriteByIndex(35), interactableObjects[2], ctx);
-        interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 2, preloader.getSpriteByIndex(36), interactableObjects[3], ctx);
-        interactableObjects[4].spriteGlow = new Sprite(2500, 100, 10, 4, preloader.getSpriteByIndex(46), interactableObjects[4], ctx);
-        interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 4, preloader.getSpriteByIndex(38), interactableObjects[5], ctx);
-        interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 4, preloader.getSpriteByIndex(39), interactableObjects[6], ctx);
+        searchInteractableObjectByName("humanCastle").spriteGlow = new Sprite(1700, 140, 10, 4, preloader.getSpriteByIndex(33), searchInteractableObjectByName("humanCastle"), ctx);
+        searchInteractableObjectByName("dwarfCamp").spriteGlow = new Sprite(1200, 100, 10, 4, preloader.getSpriteByIndex(34), searchInteractableObjectByName("dwarfCamp"), ctx);
+        searchInteractableObjectByName("treeOfLife").spriteGlow = new Sprite(850, 100, 10, 4, preloader.getSpriteByIndex(35), searchInteractableObjectByName("treeOfLife"), ctx);
+        searchInteractableObjectByName("mage").spriteGlow = new Sprite(960, 40, 24, 2, preloader.getSpriteByIndex(36), searchInteractableObjectByName("mage"), ctx);
+        searchInteractableObjectByName("dragon").spriteGlow = new Sprite(2500, 100, 10, 4, preloader.getSpriteByIndex(46), searchInteractableObjectByName("dragon"), ctx);
+        searchInteractableObjectByName("banditTavern").spriteGlow = new Sprite(900, 135, 10, 4, preloader.getSpriteByIndex(38), searchInteractableObjectByName("banditTavern"), ctx);
+        searchInteractableObjectByName("orcCamp").spriteGlow = new Sprite(800, 100, 10, 4, preloader.getSpriteByIndex(39), searchInteractableObjectByName("orcCamp"), ctx);
+
+        //interactableObjects[0].spriteGlow = new Sprite(1700, 140, 10, 4, preloader.getSpriteByIndex(33), interactableObjects[0], ctx);
+        //interactableObjects[1].spriteGlow = new Sprite(1200, 100, 10, 4, preloader.getSpriteByIndex(34), interactableObjects[1], ctx);
+        //interactableObjects[2].spriteGlow = new Sprite(850, 100, 10, 4, preloader.getSpriteByIndex(35), interactableObjects[2], ctx);
+        //interactableObjects[3].spriteGlow = new Sprite(960, 40, 24, 2, preloader.getSpriteByIndex(36), interactableObjects[3], ctx);
+        //interactableObjects[4].spriteGlow = new Sprite(2500, 100, 10, 4, preloader.getSpriteByIndex(46), interactableObjects[4], ctx);
+        //interactableObjects[5].spriteGlow = new Sprite(900, 135, 10, 4, preloader.getSpriteByIndex(38), interactableObjects[5], ctx);
+        //interactableObjects[6].spriteGlow = new Sprite(800, 100, 10, 4, preloader.getSpriteByIndex(39), interactableObjects[6], ctx);
     };
 
     // ==== Portrait preloader ==== //
@@ -1312,13 +1360,22 @@ function Story() {
 
 
         hero.setImage(preloader.getPortraitByIndex(0));
-        interactableObjects[3].setImage(preloader.getPortraitByIndex(1));
-        interactableObjects[2].setImage(preloader.getPortraitByIndex(2));
-        interactableObjects[1].setImage(preloader.getPortraitByIndex(3));
-        interactableObjects[0].setImage(preloader.getPortraitByIndex(4));
-        interactableObjects[5].setImage(preloader.getPortraitByIndex(5));
-        interactableObjects[4].setImage(preloader.getPortraitByIndex(6));
-        interactableObjects[6].setImage(preloader.getPortraitByIndex(7));
+
+        searchInteractableObjectByName("mage").setImage(preloader.getPortraitByIndex(1));
+        searchInteractableObjectByName("treeOfLife").setImage(preloader.getPortraitByIndex(2));
+        searchInteractableObjectByName("dwarfCamp").setImage(preloader.getPortraitByIndex(3));
+        searchInteractableObjectByName("humanCastle").setImage(preloader.getPortraitByIndex(4));
+        searchInteractableObjectByName("banditTavern").setImage(preloader.getPortraitByIndex(5));
+        searchInteractableObjectByName("dragon").setImage(preloader.getPortraitByIndex(6));
+        searchInteractableObjectByName("orcCamp").setImage(preloader.getPortraitByIndex(7));
+
+        //interactableObjects[3].setImage(preloader.getPortraitByIndex(1));
+        //interactableObjects[2].setImage(preloader.getPortraitByIndex(2));
+        //interactableObjects[1].setImage(preloader.getPortraitByIndex(3));
+        //interactableObjects[0].setImage(preloader.getPortraitByIndex(4));
+        //interactableObjects[5].setImage(preloader.getPortraitByIndex(5));
+        //interactableObjects[4].setImage(preloader.getPortraitByIndex(6));
+        //interactableObjects[6].setImage(preloader.getPortraitByIndex(7));
 
     };
     function checkRequestAnimationFrame() {

@@ -345,10 +345,15 @@ MovableObject = SpeakingObject.extend({
 //=== Click point object ====//
 
 ClickPoint = InteractableObject.extend({
-    init: function (x, y, width, height, name, arrivalPoint, game, heroDialogs, questDialogs) {
+    init: function (x, y, width, height, name, arrivalPoint, game, heroDialogs, questDialogs, circle) {
         this._super(x, y, width, height, name, game, heroDialogs, questDialogs);
         this.arrivalPoint = arrivalPoint;
         this.isAvailable = false;
+        this.circle = {
+            x: circle.x,
+            y: circle.y,
+            r: circle.r
+        }
         
     },
 
@@ -356,7 +361,7 @@ ClickPoint = InteractableObject.extend({
 
     checkIfClicked: function (mouseX, mouseY) {
         // if x between this x and this.x + this.width AND if y between this.y and this.y+this.height
-        if ((mouseX > this.x && mouseX < (this.x + this.width)) && (mouseY > this.y && mouseY < (this.y + this.height))) {
+        if (Math.pow(this.circle.x - mouseX, 2) + Math.pow(this.circle.y - mouseY, 2) < Math.pow(this.circle.r, 2)) {
             return true;
         }
     },
