@@ -276,27 +276,51 @@ var SquareGame = Game.extend({
         this.mapContext.clearRect(0, 0, 240, 260);
         this.drawMovesCounter();
         this.mapContext.fillStyle = 'yellow';
-
+        console.log(preloader.getSpriteByIndex(45))
         if (selectedX && selectedY) {
 
             if ((selectedY + 1) <= 5 && this.currentMap[selectedY + 1][selectedX] === 1) {
                
-                this.mapContext.fillRect((selectedX * 40) + 19, (selectedY * 40) + 20, 2, 40);
+                this.mapContext.drawImage(
+                    preloader.getSpriteByIndex(45),
+                    selectedX * 40,
+                    (selectedY + 1) * 40,
+                    40,
+                    40
+                );
             };
 
             if ((selectedY - 1) >= 0 && this.currentMap[selectedY - 1][selectedX] === 1) {
 
-                this.mapContext.fillRect((selectedX * 40) + 19, (selectedY * 40) + 20, 2, -40);
+                this.mapContext.drawImage(
+                    preloader.getSpriteByIndex(45),
+                    selectedX * 40,
+                    (selectedY - 1) * 40,
+                    40,
+                    40
+                );
             };
 
             if ((selectedX + 1) <= 5 && this.currentMap[selectedY][selectedX + 1] === 1) {
 
-                this.mapContext.fillRect((selectedX * 40) + 20, (selectedY * 40) + 19, 40, 2);
+                this.mapContext.drawImage(
+                    preloader.getSpriteByIndex(45),
+                    (selectedX + 1) * 40,
+                    selectedY * 40,
+                    40,
+                    40
+                );
             };
 
             if ((selectedX - 1) >= 0 && this.currentMap[selectedY][selectedX - 1] === 1) {
 
-                this.mapContext.fillRect((selectedX * 40) + 20, (selectedY * 40) + 19, -40, 2);
+                this.mapContext.drawImage(
+                    preloader.getSpriteByIndex(45),
+                    (selectedX - 1) * 40,
+                    selectedY * 40,
+                    40,
+                    40
+                );
             };
 
         };

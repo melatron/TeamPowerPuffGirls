@@ -82,7 +82,9 @@ function Preloader(){
                 'source/PathFinder/spriteLevel3.png',
                 
                 'source/PathFinder/greenBoard.png',
-                'source/PathFinder/yellowBoard.png'];
+                'source/PathFinder/yellowBoard.png',
+
+                'source/square-glow.png'];
 
         for (var i = 0; i < b.length; i++) {  // create image objects and define src
             sprites[i] = new Image();
