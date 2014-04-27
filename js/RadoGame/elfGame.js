@@ -236,7 +236,6 @@ RadoGame = Game.extend({
 	
 	determineLocation: function(obj){
 		var activeBlocks = new Array(),
-			char = obj,
 			charBox = {
 				x: obj.x + 6,
 				y: obj.y + 28,
@@ -270,41 +269,7 @@ RadoGame = Game.extend({
 		this.updateElves();
 		this.updateCharacter();
 		this.checkLevelProgress();
-		
-		/*for(var i = 0; i < this.passableBlocks.length; i++){
-			var temp = this.passableBlocks[i];
-			
-			if (temp.isActive){
-				this.gameContext.save();
-				this.gameContext.strokeStyle = 'red';
-				this.gameContext.strokeRect(temp.x, temp.y, temp.width, temp.height);
-				this.gameContext.restore();
-			}
-			else{
-				this.gameContext.strokeRect(temp.x, temp.y, temp.width, temp.height);				
-			}
-		}
-		for(var j = 0; j < this.impassableBlocks.length; j++){
-			var temp = this.impassableBlocks[j];
-			this.gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
-		}
-		for(var k = 0; k < this.finishBlocks.length; k++){
-			var temp = this.finishBlocks[k];
-			this.gameContext.fillStyle = 'rgba(89, 49, 143, 0.3)';
-			this.gameContext.fillRect(temp.x, temp.y, temp.width, temp.height);
-		}*/
-		
 	},
-	
-	//writeOnScroll: function(){
-	//	var id = $(this.scroll).attr('id');
-	//	$('#' + id + ' .bottom').html('Use arrows to move. Avoid elves. Collect coins. Get the tree piece. Go!');
-	//},
-	//
-	//clearScroll: function(){
-	//	var id = $(this.scroll).attr('id');
-	//	$('#' + id + ' .bottom').html('');
-	//},
 	
 	// ====== CONSTRUCTORS ===== //
 
@@ -344,13 +309,13 @@ RadoGame = Game.extend({
 		this.mainCharacter.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(1), this.mainCharacter, this.gameContext);
 	},
 
-	createElf: function(type, width, height, movePatternType, direction, startBlock, endBlock, speed, radius){
+	createElf: function(type, movePatternType, direction, startBlock, endBlock, speed, radius){
 		var elf = {
 			startBlock: startBlock,
 			x: startBlock.x,
 			y: startBlock.y - 10,
-			width: width,
-			height: height,
+			width: 32,
+			height: 32,
 			speed: speed,
 			moveUp: false,
 			moveDown: false,
@@ -391,7 +356,7 @@ RadoGame = Game.extend({
 				}
 
 				elf.activeBlocks = [];
-			}
+			};
 		}
 
 		if(type == 'green'){
@@ -448,8 +413,6 @@ RadoGame = Game.extend({
 		
 		level1.elves[0] = this.createElf (
 				'green',
-				32, 
-				32, 
 				'linear', 
 				'horizontal', 
 				level1.layout[1][12], 
@@ -458,8 +421,6 @@ RadoGame = Game.extend({
 				);
 		level1.elves[1] = this.createElf (
 				'green',
-				32,
-				32,
 				'linear',
 				'horizontal',
 				level1.layout[2][18],
@@ -468,8 +429,6 @@ RadoGame = Game.extend({
 		);
 		level1.elves[2] = this.createElf(
 				'green',
-				32,
-				32,
 				'linear',
 				'horizontal',
 				level1.layout[4][12],
@@ -478,8 +437,6 @@ RadoGame = Game.extend({
 		);
 		level1.elves[3] = this.createElf(
 				'green',
-				32,
-				32,
 				'circular',
 				'clockwise',
 				level1.layout[1][1],
@@ -488,8 +445,6 @@ RadoGame = Game.extend({
 			);
 		level1.elves[4] = this.createElf(
 				'green',
-				32,
-				32,
 				'circular',
 				'clockwise',
 				level1.layout[1][4],
@@ -498,8 +453,6 @@ RadoGame = Game.extend({
 			);
 		level1.elves[5] = this.createElf(
 				'green',
-				32,
-				32,
 				'circular',
 				'clockwise',
 				level1.layout[1][7],
@@ -508,8 +461,6 @@ RadoGame = Game.extend({
 			);
 		level2.elves[0] = this.createElf(
 				'green',
-				32,
-				32,
 				'circular',
 				'clockwise',
 				level2.layout[2][2],
@@ -518,8 +469,6 @@ RadoGame = Game.extend({
 			);
 		level2.elves[1] = this.createElf(
 				'brown',
-				32,
-				32,
 				'circular',
 				'clockwise',
 				level2.layout[2][4],
@@ -528,8 +477,6 @@ RadoGame = Game.extend({
 			);
 		level2.elves[2] = this.createElf(
 				'green',
-				32,
-				32,
 				'circular',
 				'clockwise',
 				level2.layout[4][2],
@@ -538,8 +485,6 @@ RadoGame = Game.extend({
 			);
 		level2.elves[3] = this.createElf(
 				'brown',
-				32,
-				32,
 				'circular',
 				'clockwise',
 				level2.layout[4][4],
@@ -548,8 +493,6 @@ RadoGame = Game.extend({
 			);
 		level2.elves[4] = this.createElf(
 				'green',
-				32,
-				32,
 				'circular',
 				'counterClockwise',
 				level2.layout[4][6],
@@ -558,8 +501,6 @@ RadoGame = Game.extend({
 			);
 		level2.elves[5] = this.createElf(
 				'green',
-				32,
-				32,
 				'circular',
 				'clockwise',
 				level2.layout[2][8],
@@ -568,8 +509,6 @@ RadoGame = Game.extend({
 			);
 		level2.elves[6] = this.createElf(
 				'brown',
-				32,
-				32,
 				'linear',
 				'horizontal',
 				level2.layout[5][8],
@@ -578,8 +517,6 @@ RadoGame = Game.extend({
 			);
 		level2.elves[7] = this.createElf(
 				'green',
-				32,
-				32,
 				'linear',
 				'horizontal',
 				level2.layout[4][11],
@@ -588,8 +525,6 @@ RadoGame = Game.extend({
 			);
 		level2.elves[8] = this.createElf(
 				'brown',
-				32,
-				32,
 				'circular',
 				'clockwise',
 				level2.layout[2][10],
@@ -598,8 +533,6 @@ RadoGame = Game.extend({
 			);
 		level2.elves[9] = this.createElf(
 				'green',
-				32,
-				32,
 				'follow',
 				null,
 				level2.layout[5][14],
@@ -609,8 +542,6 @@ RadoGame = Game.extend({
 			);
 		level3.elves[0] = this.createElf(
 				'green',
-				32,
-				32,
 				'linear',
 				'vertical',
 				level3.layout[2][2],
@@ -620,8 +551,6 @@ RadoGame = Game.extend({
 			);
 		level3.elves[1] = this.createElf(
 				'green',
-				32,
-				32,
 				'linear',
 				'vertical',
 				level3.layout[3][3],
@@ -630,8 +559,6 @@ RadoGame = Game.extend({
 			);
 		level3.elves[2] = this.createElf(
 				'brown',
-				32,
-				32,
 				'follow',
 				null,
 				level3.layout[5][3],
@@ -641,8 +568,6 @@ RadoGame = Game.extend({
 			);
 		level3.elves[3] = this.createElf(
 				'brown',
-				32,
-				32,
 				'follow',
 				null,
 				level3.layout[3][8],
@@ -652,8 +577,6 @@ RadoGame = Game.extend({
 			);
 		level3.elves[4] = this.createElf(
 				'brown',
-				32,
-				32,
 				'follow',
 				null,
 				level3.layout[3][11],
@@ -663,8 +586,6 @@ RadoGame = Game.extend({
 			);
 		level3.elves[5] = this.createElf(
 				'brown',
-				32,
-				32,
 				'follow',
 				null,
 				level3.layout[5][8],
@@ -674,8 +595,6 @@ RadoGame = Game.extend({
 			);
 		level3.elves[6] = this.createElf(
 				'brown',
-				32,
-				32,
 				'follow',
 				null,
 				level3.layout[5][16],
@@ -685,8 +604,6 @@ RadoGame = Game.extend({
 			);
 		level3.elves[7] = this.createElf(
 				'brown',
-				32,
-				32,
 				'follow',
 				null,
 				level3.layout[2][18],
@@ -696,8 +613,6 @@ RadoGame = Game.extend({
 			);
 		level3.elves[8] = this.createElf(
 				'brown',
-				32,
-				32,
 				'follow',
 				null,
 				level3.layout[3][18],
@@ -729,8 +644,7 @@ RadoGame = Game.extend({
 	// ============== LEVEL UPDATE METHODS ================= //
 
 	updateElves: function(){
-		var i,
-			len = this.currentLevel.elves.length;
+		var i, len = this.currentLevel.elves.length;
 		
 		for(i = 0; i < len; i++){
 			this.updateElf(this.currentLevel.elves[i]);
@@ -787,7 +701,7 @@ RadoGame = Game.extend({
 			if(direction == 'horizontal'){
 				if(elf.x >= end.x){
 					elf.moveLeft = true;
-					elf.moveRight = false
+					elf.moveRight = false;
 				}
 				else if(elf.x <= start.x){
 					elf.moveLeft = false;
@@ -864,23 +778,13 @@ RadoGame = Game.extend({
 				circle = {
 					x: elf.startBlock.x + elf.width/2,
 					y: elf.startBlock.y + elf.height/2,
-					radius: elf.movePattern.radius
-				};
+					radius: radius
+				},
+				isInSight = this.detectCircleIntersection(char, circle),
+				row, col, len = level.layout.length;
 
-			
-
-			/*this.gameContext.save();
-			this.gameContext.strokeStyle = 'red';
-			this.gameContext.beginPath();
-			this.gameContext.moveTo(line.x1, line.y1);
-			this.gameContext.lineTo(line.x2, line.y2);
-			this.gameContext.stroke();
-			this.gameContext.restore();*/
-
-			var isInSight = this.detectCircleIntersection(char, circle);
-
-			for(var row = 0; row < level.layout.length; row++){
-				for(var col = 0; col < level.layout[row].length; col++){
+			for(row = 0; row < len; row++){
+				for(col = 0; col < level.layout[row].length; col++){
 					var temp = level.layout[row][col];
 					if(this.detectLineIntersection(temp, line)){
 						if(temp.type == 0 || isInSight == false){
@@ -916,7 +820,7 @@ RadoGame = Game.extend({
 				bottom: false,
 				left: false,
 				right: false
-		}
+		},
 			char = obj,						// object that will be tested
 			charBox = {						// object bounding rect
 				x: char.x + 6,
@@ -970,7 +874,7 @@ RadoGame = Game.extend({
 			
 			if(temp.row != 0 && temp.col != 0) upperLeft = layout[temp.row - 1][temp.col - 1];
 			
-			if(temp.col != 0 && temp.col < layout[0].length - 1) upperRight = layout[temp.row - 1][temp.col + 1];
+			if(temp.row != 0 && temp.col < layout[0].length - 1) upperRight = layout[temp.row - 1][temp.col + 1];
 			
 			if(temp.col != 0 && temp.row < layout.length - 1) lowerLeft = layout[temp.row + 1][temp.col - 1];
 			
@@ -1136,14 +1040,11 @@ RadoGame = Game.extend({
 	        maxX = line.x1;
 	    }
 	    
-	    if (maxX > rect.x + rect.width)
-	        maxX = rect.x + rect.width;
+	    if (maxX > rect.x + rect.width) maxX = rect.x + rect.width;
 	    
-	    if (minX < rect.x)
-	        minX = rect.x;
+	    if (minX < rect.x) minX = rect.x;
 	    
-	    if (minX > maxX)
-	        return false;
+	    if (minX > maxX) return false;
 	    
 	    var minY = line.y1;
 	    var maxY = line.y2;
@@ -1163,14 +1064,11 @@ RadoGame = Game.extend({
 	        minY = tmp;
 	    }
 	    
-	    if (maxY > rect.y + rect.height)
-	        maxY = rect.y + rect.height;
+	    if (maxY > rect.y + rect.height) maxY = rect.y + rect.height;
 	    
-	    if (minY < rect.y)
-	        minY = rect.y;
+	    if (minY < rect.y)  minY = rect.y;
 	    
-	    if (minY > maxY)
-	        return false;
+	    if (minY > maxY) return false;
 	    
 	    return true;
 	},
@@ -1179,20 +1077,13 @@ RadoGame = Game.extend({
 		var distX = Math.abs(circle.x - rect.x - rect.width / 2);
 	    var distY = Math.abs(circle.y - rect.y - rect.height / 2);
 
-	    if (distX > (rect.width / 2 + circle.radius)) {
-	        return false;
-	    }
-	    if (distY > (rect.height / 2 + circle.radius)) {
-	        return false;
-	    }
+	    if (distX > (rect.width / 2 + circle.radius)) return false;
+	    
+	    if (distY > (rect.height / 2 + circle.radius)) return false;
 
-	    if (distX <= (rect.width / 2)) {
-	        return true;
-	    }
-	    if (distY <= (rect.height / 2)) {
-	        return true;
-	    }
-
+	    if (distX <= (rect.width / 2)) return true;
+	    
+	    if (distY <= (rect.height / 2)) return true;
 	},
 	
 	areOverlapping: function(obj1, obj2, offsetX1, offsetY1, offsetX2, offsetY2){
