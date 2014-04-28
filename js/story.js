@@ -1074,12 +1074,13 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
             stopEvents = false;
         }
     };
+    //=========Global variable - function that ends the game instantly ! // for the purposes of this presentation only==========//
 
     testFn = function testEndgameScreen () {
         storyEnded = true;
-        //endStoryScreenOn = true;
         stopEvents = true;
     };
+
 
     function calculateFinalScore() {
         var array = interactableObjects,
@@ -1304,7 +1305,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
             buttons[3].drawButton();
         };
     };
-    //=========global test function for the endgame button//will be deleted soon==========//
+   
     
    
     function addInteractableObject(iObject) {
