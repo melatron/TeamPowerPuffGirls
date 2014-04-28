@@ -40,11 +40,11 @@ RadoGame = Game.extend({
 	},
 	
 	// ===== START METHOD ====== //
-	start: function (obj, getReward) {
+	start: function (obj) {
 	    this.stopEvents = false;
 
-	    this._super(obj, getReward);
-	    this.getReward = getReward;
+	    this._super(obj);
+
 	    var instructions = 'Use arrows to move. Avoid elves. Collect coins. Get the tree piece. Go!';
 		this.gameOver = false;
 		this.getContext();
@@ -99,8 +99,8 @@ RadoGame = Game.extend({
 		this.stopEvents = true;
 
         // add condition : if you've done well in the game get the reward
-		if (true) {
-		    this.getReward('sword');
+		if (this.deaths < 40) {
+		    this.rewardItem = 'sword';
 		}
 	},
 
