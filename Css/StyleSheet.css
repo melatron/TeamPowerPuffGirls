@@ -3,6 +3,13 @@ body {
     cursor: url(../source/cursor.cur), auto;
 }
 
+div{
+	-moz-user-select: none; 
+	-webkit-user-select: none; 
+	-ms-user-select:none; 
+	user-select:none;
+}
+
 #borderDiv{
 	width: 1260px;
 	height: 880px;
