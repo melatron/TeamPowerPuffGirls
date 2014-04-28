@@ -732,9 +732,6 @@ function Story() {
     };
 
     var inventory = new Inventory();
-    inventory.getItem('sword');
-    inventory.getItem('ring');
-    inventory.getItem('boots');
 
 
     function loadMovableObjects() {
@@ -980,6 +977,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
         $('#canvas').on('click', this, clickEvent);
         $(document).on('keyup', this, handleKeyPressed);
         $(document).on('mousemove', this, onMouseMove);
+        inventory.addDroppable();
     };
     function addGameEvents() {
         var i, temp, len = interactableObjects.length;
@@ -1291,7 +1289,6 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
         }
         if(storyEnded && !endStoryScreenOn){
             buttons[0].drawButton();
-            //buttons[1].drawButton();
             finishGameSprite.drawSprite();
         };
 
@@ -1478,6 +1475,8 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
         //interactableObjects[6].setImage(preloader.getPortraitByIndex(7));
 
     };
+
+
     function checkRequestAnimationFrame() {
         if (!window.requestAnimationFrame) {
 
@@ -1508,7 +1507,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
         preloadButtons();
         preloadSprites();
         preloadPortraits();
-        
+
 
         checkRequestAnimationFrame();
 

@@ -622,6 +622,7 @@ Item = Class.extend({
 
         this.dom.draggable({
             start: function () {
+                console.log('a');
                 self.hideAttributes();
                 $(this).css({ zIndex: '2' });
             },
@@ -678,8 +679,8 @@ Item = Class.extend({
             this.time = 180;
             this.checkpoints = 0;
             this.lives = 0;
-            
-        }
+
+        };
 
         if (this.type === "armor") {
             this.name = "Shiny Armor";
@@ -689,7 +690,7 @@ Item = Class.extend({
             this.checkpoints = 0;
             this.lives = 50;
             this.description = "This armor is almost impenetrable.";
-        }
+        };
 
         if (this.type === "potion") {
             this.name = "Potion of Agility";
@@ -698,7 +699,7 @@ Item = Class.extend({
             this.time = 300;
             this.checkpoints = 0;
             this.lives = 0;
-        }
+        };
     },
 
     showAttributes: function (e) {
@@ -747,23 +748,30 @@ Inventory = Class.extend({
         this.slots = [0, 0, 0, 0, 0, 0];
         var self = this;
 
-        $('.inventory-slot').droppable({
-            tolerance: 'pointer',
+        this.addDroppable = function () {
+            console.log('added droppables');
 
-            drop: function (ev, ui) {
+            $('.inventory-slot').droppable({
+                tolerance: 'pointer',
 
-                var oldSlotIndex = ui.draggable.parent().attr('slot'),
-                    newSlotIndex = $(this).attr('slot'),
-                    item = self.slots[oldSlotIndex];
+                drop: function (ev, ui) {
 
-                if (self.slots[newSlotIndex] === 0) {
-                    self.slots[oldSlotIndex] = 0;
-                    ui.draggable.appendTo($(this));                   
-                    self.slots[newSlotIndex] = item;
-                };
-                ui.draggable.css({ zIndex: '0' });
-            }
-        });
+                    var oldSlotIndex = ui.draggable.parent().attr('slot'),
+                        newSlotIndex = $(this).attr('slot'),
+
+                        item = self.slots[oldSlotIndex];
+
+                    if (self.slots[newSlotIndex] === 0) {
+                        self.slots[oldSlotIndex] = 0;
+                        ui.draggable.appendTo($(this));
+                        self.slots[newSlotIndex] = item;
+                    };
+                    ui.draggable.css({ zIndex: '0' });
+                    console.log($(this));
+                }
+                
+            });
+        };
 
     },
 
