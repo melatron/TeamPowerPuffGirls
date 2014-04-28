@@ -816,8 +816,8 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
                 ['No, havent heard anything', ' on this side of the chambers.'],
                 ['Well sire, this', 'is the only part', ' of the chambers i have', 'any pleasure in visiting.', ' "His look accidentally wanders', 'at the queens dormitory"'],
                 ['Oh, theres nothing tiresome', ' about it your highness.']],
-                after: [],
-                done: []
+                after: [''],
+                done: ['']
             },
             {                  //QUEST SPEECH
                 before: [['...'], ['Rise and spare me the',' pleasantries, i am in no mood', ' for your groveling.'],
@@ -826,8 +826,8 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
                 ['I didnt mention that they', ' were coming from this', ' side "Insert name here".'],
                 ['Dont you get tired', 'of visiting the same', 'rooms over and over?', ' "said the king with', 'a spiteful tone"'],
                 ['Why you insolent wench!', 'GUARDS!! Take this arrogant', 'sard to the dungeons, i shall', ' be there as soon as i figure', ' a proper form of', 'punishment!']],
-                after: [],
-                done: []
+                after: [''],
+                done: ['']
             },
             {
                 x: 192,
