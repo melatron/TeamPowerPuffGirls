@@ -956,7 +956,7 @@ function Story() {
         $(document).on('keyup', this, handleKeyPressed);
         $(document).on('mousemove', this, onMouseMove);
     };
-    function addGameEents() {
+    function addGameEvents() {
         var i, temp, len = interactableObjects.length;
         for (i = 0; i < len-1; i++) {
             temp = interactableObjects[i];
@@ -1440,7 +1440,7 @@ function Story() {
         };
 
         addEvents();
-        addGameEents();
+        addGameEvents();
         mainLoop();
     };
 

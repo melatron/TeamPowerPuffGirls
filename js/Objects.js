@@ -806,7 +806,7 @@ var Game = Class.extend({
         this.plot = null;
         this.gameOver = false;
         this.objectives = null;
-        this.stopEvents = false;
+        this.stopEvents = true;
         this.scroll = $('#scroll');
         
         this.soundArray = null;
@@ -826,9 +826,10 @@ var Game = Class.extend({
         this.getReward = getReward;
         console.log(obj);
         this.gameBonuses = obj;
+        this.stopEvents = false;
     },
     endGame: function () {
-
+        this.stopEvents = true;
     },
 
     //WORK IN PROGRESS

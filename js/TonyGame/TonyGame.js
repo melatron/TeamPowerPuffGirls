@@ -28,7 +28,7 @@ TonyGame = Game.extend({
     init: function () {
         this._super();
         //this.scroll = $('#scroll');
-        //this.stopEvents = false;
+        this.stopEvents = true;
         this.length = 4;
         //this.score = 0;
         this.highestValue = 4;
@@ -42,7 +42,7 @@ TonyGame = Game.extend({
     start: function (obj, getReward) {
         this._super(obj, getReward);
         this.getReward = getReward;
-        this.stopEvents = true;
+        this.stopEvents = false;
         this.addGameToPlot();
         this.putStartingNumbers();
         //this.addEventListeners();
@@ -229,7 +229,7 @@ TonyGame = Game.extend({
             }
         }
     },
-    addEventlisteners: function () {
+    addEventListeners: function () {
         $(document).on("keydown", this, this.listenKeyEvents);
     },
     move: function (direction) {
