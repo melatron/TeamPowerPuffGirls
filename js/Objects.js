@@ -815,7 +815,9 @@ var Game = Class.extend({
         
 
     },
-    
+    addEventListeners: function(){
+
+    },
     loadSounds: function(){
         this.scrollSound = preloader.getGameSoundByIndex(0);
     },

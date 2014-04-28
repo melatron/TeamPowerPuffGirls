@@ -25,18 +25,26 @@ var Jewel = EmptySlot.extend({
         };
     },
     
-    drawJewel: function (ctx) {
+    drawJewel: function (ctx, game) {
+        var game = game;
         if (this.newCoordinates.x < this.coordinates.x) {
             this.newCoordinates.x += 5;
+            game.animationEnded = false;
         }
         else if (this.newCoordinates.x > this.coordinates.x){
             this.newCoordinates.x -= 5;
+            game.animationEnded = false;
         }
         if (this.newCoordinates.y < this.coordinates.y) {
             this.newCoordinates.y += 5;
+            game.animationEnded = false;
         }
         else if (this.newCoordinates.y > this.coordinates.y) {
             this.newCoordinates.y -= 5;
+            game.animationEnded = false;
+        }
+        else if (this.newCoordinates.x == this.coordinates.x && this.newCoordinates.y == this.coordinates.y) {
+            game.animationEnded = true;
         }
         ctx.drawImage(this.image,this.newCoordinates.x, this.newCoordinates.y, this.size.w, this.size.h);
     }
@@ -47,14 +55,15 @@ var EightPuzzle = Game.extend({
         _this = this;
         this.movesDone = 0;
         this.canvasLoop = null;
-        this.stopEvents = false;
+        this.stopEvents = true;
         this.canvas = null;
         this.context = null;
-        this.tableArray = new Array();
-        this.emptySlotPosition = new Array();
+        this.tableArray = [];
+        this.emptySlotPosition = [];
         this.tableState = new TableState();
         this.gameOver = false;
         this.plot = $('#eightPuzzle');
+        this.animationEnded = false;
 
         this.canvas = $("#eightPuzzleCanvas")[0];
         this.context = this.canvas.getContext("2d");
@@ -62,9 +71,10 @@ var EightPuzzle = Game.extend({
         this.animation = null;
         this.update = function () {
             _this.drawTableArray();
-            if (_this.isGameOver()) {
+            if (_this.isGameOver() && _this.animationEnded) {
                 setTimeout(_this.endGame, 1000);
                 cancelAnimationFrame(_this.animation);
+                console.log("a");
             }
             else {
                 _this.animation = requestAnimationFrame(_this.update);
@@ -76,7 +86,9 @@ var EightPuzzle = Game.extend({
     start: function (obj, getReward) {
         this._super(obj, getReward);
         this.getReward = getReward;
-
+        this.stopEvents = false;
+        this.tableArray = [];
+        this.emptySlotPosition = [];
         var instructions = 'Use the arrow keys to solve the puzzle.';
         this.writeOnScroll(instructions, {
             fontSize: '12px'
@@ -85,7 +97,7 @@ var EightPuzzle = Game.extend({
         this.addGameToPlot();
         this.createTableArray();
         this.getEmptySlot();
-        $(document).on('keydown', this, this.listenKeyEvents);
+        
         this.update();
     },
     endGame: function () {
@@ -111,14 +123,17 @@ var EightPuzzle = Game.extend({
     addBonuses: function (bonuses) {
         this.movesDone = this.movesDone - this.gameBonuses.bonusMoves;
     },
+    addEventListeners: function () {
+        $(document).on('keydown', this, this.listenKeyEvents);
+    },
     createTableArray: function () {
-        var startArray = new Array(),
+        var startArray = [],
             x = 250,
             y = 20;
         var initialState = this.tableState.getRandomState();
 
         for (var i = 0; i < 3; i++) {
-            this.tableArray[i] = new Array();
+            this.tableArray[i] = [];
             for (var j = 0; j < 3; j++) {
                 if (initialState[i][j] == 9) {
                     this.tableArray[i].push(new EmptySlot(x, y, initialState[i][j]));
@@ -140,7 +155,7 @@ var EightPuzzle = Game.extend({
 
         for (var i = 0; i < 3; i++) {
             for (var j = 0; j < 3; j++) {
-                this.tableArray[i][j].drawJewel(this.context)
+                this.tableArray[i][j].drawJewel(this.context, this);
             }
         }
     },
@@ -166,6 +181,7 @@ var EightPuzzle = Game.extend({
         this.emptySlotPosition[0] = c;
         this.emptySlotPosition[1] = d;
         this.movesDone++;
+        this.animationEnded = false;
     },
     swapTop: function () {
         var i = this.emptySlotPosition[0],

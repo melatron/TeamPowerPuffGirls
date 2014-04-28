@@ -956,6 +956,14 @@ function Story() {
         $(document).on('keyup', this, handleKeyPressed);
         $(document).on('mousemove', this, onMouseMove);
     };
+    function addGameEents() {
+        var i, temp, len = interactableObjects.length;
+        for (i = 0; i < len-1; i++) {
+            temp = interactableObjects[i];
+            console.log(temp);
+            temp.game.addEventListeners();
+        }
+    };
     function handleKeyPressed(ev) {
         if (!stopEvents) {
             ev.preventDefault();
@@ -1432,6 +1440,7 @@ function Story() {
         };
 
         addEvents();
+        addGameEents();
         mainLoop();
     };
 

@@ -42,10 +42,10 @@ TonyGame = Game.extend({
     start: function (obj, getReward) {
         this._super(obj, getReward);
         this.getReward = getReward;
-        this.stopEvents = false;
+        this.stopEvents = true;
         this.addGameToPlot();
         this.putStartingNumbers();
-        this.addEvents();
+        //this.addEventListeners();
     },
     endGame: function () {
         this.gameOver = true;
@@ -229,7 +229,7 @@ TonyGame = Game.extend({
             }
         }
     },
-    addEvents: function () {
+    addEventlisteners: function () {
         $(document).on("keydown", this, this.listenKeyEvents);
     },
     move: function (direction) {

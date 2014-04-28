@@ -82,7 +82,8 @@ var BlueSquare = Square.extend({
 var SquareGame = Game.extend({
 
     init: function () {
-        
+        this.stopEvents = true;
+
         this.squareWidth = 40;
         this.marginLeft = 207;
         this.marginTop = 12;
@@ -131,29 +132,33 @@ var SquareGame = Game.extend({
             };
         };
 
+        
+    },
+    addEventListeners: function () {
         this.plot.on('click', this, this.placeLeader);
     },
 
 
-
     pickLeader: function (e) {
-        e.stopPropagation();
-        e.data.gameContext.activeLeader = e.data.objectContext;
+        if (!e.data.stopEvents) {
+            e.stopPropagation();
+            e.data.gameContext.activeLeader = e.data.objectContext;
 
-        // defines the array being moved
-        if (e.data.objectContext.color === 'green') { e.data.gameContext.activeArray = e.data.gameContext.greenSquares }
-        if (e.data.objectContext.color === 'red') { e.data.gameContext.activeArray = e.data.gameContext.redSquares }
-        if (e.data.objectContext.color === 'yellow') { e.data.gameContext.activeArray = e.data.gameContext.yellowSquares }
-        if (e.data.objectContext.color === 'blue') { e.data.gameContext.activeArray = e.data.gameContext.blueSquares }
+            // defines the array being moved
+            if (e.data.objectContext.color === 'green') { e.data.gameContext.activeArray = e.data.gameContext.greenSquares }
+            if (e.data.objectContext.color === 'red') { e.data.gameContext.activeArray = e.data.gameContext.redSquares }
+            if (e.data.objectContext.color === 'yellow') { e.data.gameContext.activeArray = e.data.gameContext.yellowSquares }
+            if (e.data.objectContext.color === 'blue') { e.data.gameContext.activeArray = e.data.gameContext.blueSquares }
 
-        e.data.objectContext.dom.css({
-            left: (e.data.objectContext.x) * e.data.gameContext.squareWidth + e.data.gameContext.marginLeft + 'px',
-            top: (e.data.objectContext.y) * e.data.gameContext.squareWidth + e.data.gameContext.marginTop + 'px',
-        });
+            e.data.objectContext.dom.css({
+                left: (e.data.objectContext.x) * e.data.gameContext.squareWidth + e.data.gameContext.marginLeft + 'px',
+                top: (e.data.objectContext.y) * e.data.gameContext.squareWidth + e.data.gameContext.marginTop + 'px',
+            });
 
-        $('.selected').removeClass('selected');
-        e.data.objectContext.dom.addClass('selected');
-        e.data.gameContext.drawPossibleMoves();
+            $('.selected').removeClass('selected');
+            e.data.objectContext.dom.addClass('selected');
+            e.data.gameContext.drawPossibleMoves();
+        }
     },
 
 
@@ -398,6 +403,7 @@ var SquareGame = Game.extend({
     },
 
     start: function (obj, getReward) {
+        this.stopEvents = false;
 
         this._super(obj, getReward);
         this.getReward = getReward;
@@ -415,6 +421,8 @@ var SquareGame = Game.extend({
     },
 
     endGame: function () {
+        this.stopEvents = true;
+
         this.gameOver = true;
         this.plot.html(' ');
         this.removeGameFromPlot();
