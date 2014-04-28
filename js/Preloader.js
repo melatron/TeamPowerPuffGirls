@@ -91,7 +91,8 @@ function Preloader(){
                 'source/sound-off.png',
                 'source/winbutton.png',
                 'source/winbutton-sprite.png',
-                'source/continue-button.png']; //51
+                'source/continue-button.png',
+                'source/quit-button.png']; //51
 
         for (var i = 0; i < b.length; i++) {  // create image objects and define src
             sprites[i] = new Image();
