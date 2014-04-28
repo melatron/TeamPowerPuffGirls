@@ -276,7 +276,18 @@ body {
 }
 
 /* ======= MAIN MENU STYLE ========= */
-
+        #epilogue{
+            position: absolute;
+            background-color: rgba(255, 255, 255,0.4);
+            width: 1024px;
+            height: 768px;
+            display: none;
+        }
+        .menuCell.nameInput{
+            position: absolute;
+            top: 200px;
+            left: 450px;
+        }
 		#mainMenuWrapper{
             width: 1024px;
             height: 768px;

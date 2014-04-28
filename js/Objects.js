@@ -921,6 +921,7 @@ function Menu() {
             addAnimations(0);
             addAnimations(1);
             addAnimations(2);
+            showEpilogue();
             addTutorialAnimations();
             addStartEvent();
             manageSounds();
@@ -947,18 +948,20 @@ function Menu() {
     };
 	
     function addStartEvent(){
-        var elem = $('.menuCell.begin');
+        var elem = $('#play');
 		
         elem.on('click', startGame);
     };
 	
     function showEpilogue(){
-        
-    },
+        $('.menuCell.begin').on('click', function(){
+            $('#epilogue').fadeIn(1000);
+            console.log('hello');
+        });
+    };
 
     function startGame(e){
         if(self.isGameStarted == false){
-            var userName = prompt('Please enter your name: ', 'DragonSlayer');
             self.isGameStarted = true;
             rainSound.pause();
             music.pause();
