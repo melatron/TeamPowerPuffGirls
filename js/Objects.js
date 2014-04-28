@@ -886,6 +886,8 @@ function Menu() {
     var self = this,
         isMenuInitialize = false,
 
+        server = null,
+
         mainWrapper = $('#mainMenuWrapper'),
         menuCells = [{
         class: '.highScores',
@@ -908,7 +910,10 @@ function Menu() {
     
     this.initializeMenu = function (){
         if (!self.isGameStarted) {
+            server = new ServerObject();
+
             $('#main').hide();
+            fillHallOFFame();
             preloadSounds();
             rainSound.play();
             thunderSound.play();
@@ -924,7 +929,11 @@ function Menu() {
             setTimeout(thunder, 16200);
         }
     };
-	
+    function fillHallOFFame() {
+        var dropDownCells = $(".highScores .dropDownCell");
+
+        console.log(server.getHighScore());
+    };
     function preloadSounds(){
         rainSound = new Audio();
         rainSound.src = 'source/menu/rain.mp3';
@@ -1126,51 +1135,81 @@ function Menu() {
     };
 };
 
-function ServerObject(){
-    this.title = "Quest Game";
-    this.limit = 15;
-    this.offset = 0;
-    this.isHighScore = function (score) {
-        $.ajax({
-            url: "server/index.php?is-high-score&gameId=" + this.title,
-            data: {
-                score: score,
-            }
-        }).done(function (data) {
-            console.log(data);
-            return data;
-        }).fail(function () {
-            alert("sorry");
-        })
-    }
+var ServerObject = Class.extend({
+    init: function () {
+        this.baseUrl = 'http://bashibozuk.eu/games-score/?route=high-score/';
+        this.gameId = 'c81e728d9d4c2f636f067f89cc14862c';
+        this.currentScore = null;
+    },
+    //servrerObject.callmethod('is-high-score', {'callback': 'serverObject.onIsHighScore', 'score' : 100})
+    callMethod: function (methodName, params) {
+        var $scriptTag = $('#api-script');
+        var src = this.baseUrl + methodName + '&jsonp=1';
 
-    this.getHighScore = function () {
-        $.ajax({
-            url: "server/index.php?get-high-score&gameId="+this.title,
-            data: {
-                limit: this.limit,
-                offset: this.offset,
-            }
-        }).done(function (data) {
-            console.log(data);
-            return data;
-        }).fail(function () {
-            alert("sorry");
-        })
-    }
+        for (var i in params) {
+            src += '&' + i + '=' + encodeURIComponent(params[i]);
+        }
 
-    this.saveHighScore = function (score,player) {
-        $.ajax({
-            url: "server/index.php?save-high-score&gameId=" + this.title,
-            data: {
+        src += '&_=' + Date.now();
+
+        if (!$scriptTag.length) {
+            $('<script>').attr({
+                'id': 'api-script',
+                'src': src
+            }).appendTo($('head'));
+        } else {
+            $scriptTag.attr('src', src);
+        }
+    },
+
+    getHighScore: function(){
+        var actionName = "get-high-score",
+            params = {
+                gameId: this.gameId,
+                limit: 15,
+                offset: 0,
+                callback: "serverObject.onGetHighScore",
+            };
+
+        this.callMethod(actionName,params)
+
+        
+    },
+
+    displayErrors: function (errors) {
+        alert(errors.join("\n"));
+    },
+
+    onGetHighScore: function () {
+        console.log(arguments);
+    },
+
+    isHighScore: function (score) {
+        var actionName = "is-high-score",
+            params = {
+                gameId: this.gameId,
                 score: score,
-                player: player,
-            }
-        }).done(function (data) {
-            console.log(data);
-            return data;
-        }).fail(function () {
-            alert("sorry");
-        })
-    }
-}
+                callback: "serverObject.onIsHighScore",
+            };
+
+        this.currentScore = score;
+        this.callMethod(actionName, params)
+
+
+    },
+
+    onIsHighScore: function (data) {
+        if (data.errors.length) {
+            return this.displayErrors(data.errors);
+        }
+
+        if (data.data === true) {
+            // save hightscore
+        } else {
+            this.currentScore = null;
+        }
+    },
+
+})
+
+window.serverObject = new ServerObject();

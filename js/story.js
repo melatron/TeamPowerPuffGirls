@@ -732,7 +732,7 @@ function Story() {
     };
 
     var inventory = new Inventory();
-    var sevrer = new ServerObject();
+    
 
     function loadMovableObjects() {
 
@@ -1456,6 +1456,7 @@ function Story() {
 
         }
     };
+    
 
     this.preloadEverything = function () {
         preloader.preloadEverything();
@@ -1475,6 +1476,8 @@ function Story() {
         for (var i = 0; i < len; i++) {
             interactableObjects[i].isAvailable = true;
         };
+
+        
         addEvents();
         addGameEvents();
         mainLoop();
