@@ -839,12 +839,12 @@ function Story() {
             },
             elfGame,
             {                  // HERO SPEECH
-                before: " ",
+                before: [['What!?', 'Who!?'], ["I'll just go ahead and chop off", "a piece of that little", "fruit tree over there"], ["Just a little bit!", "You won't even notice it ..."], ["If you catch me!"]],
                 after: " ",
                 done: " "
             },
             {                  //QUEST SPEECH
-                before: " ",
+                before: [['Halt!!', 'Who dares to enter', 'the sacred forest of Nazareth, ', 'son of Nazgul Almighty!'], ['Go away!', 'Outsiders are NOT', 'welcome here!'], ["Excuse me?", "That's the tree of life!", "It's our sacred heritage"], ["If you as much as", "breathe on that tree,", "WE WILL ANIHILATE YOU!!!"]],
                 after: " ",
                 done: " "
             },
@@ -925,7 +925,7 @@ function Story() {
                                                                 y: 140
                                                             }, swapPuzzle,
                  {                  // HERO SPEECH
-                     before: [["Kogar,you fat orc!", "How are you!?"], ["You know I wouldn't ask ","if I did't need it.."], ["Sure. Let's get", "to work.."], ],
+                     before: [["Kogar, you fat orc!", "How are you!?"], ["You know I wouldn't ask ","if I did't need it.."], ["Sure. Let's get", "to work.."], ],
                      after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
                      done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
                  },
