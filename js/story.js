@@ -732,7 +732,7 @@ function Story() {
     };
 
     var inventory = new Inventory();
-
+    var sevrer = new ServerObject();
 
     function loadMovableObjects() {
 
@@ -925,14 +925,14 @@ function Story() {
                                                                 y: 140
                                                             }, swapPuzzle,
                  {                  // HERO SPEECH
-                     before: " ",
-                     after: " ",
-                     done: " "
+                     before: [["Kogar,you fat orc!", "How are you!?"], ["You know I wouldn't ask ","if I did't need it.."], ["Sure. Let's get", "to work.."], ],
+                     after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
+                     done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
                  },
                 {                  //QUEST SPEECH
-                    before: " ",
-                    after: " ",
-                    done: " "
+                    before: [["Hey old friend it's been","a while since you","last came here hm?"], ["Hahaha! You need", "money? Am I Right?"], ["I don't want to hear about", "it! If you help me with those", " gems I'll give you money.."], ],
+                    after: [["Nicely done ", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
+                    done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
                 },
             {
                 x: 471,
