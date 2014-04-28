@@ -686,7 +686,6 @@ function Story() {
         gamesFinished = 0,
         gamesAmount = 6,
         buttons = [],
-        finishGame = null,
         finishGameSprite = null;
     
 
@@ -722,13 +721,14 @@ function Story() {
             startGameAfterConversation();
             checkIfGamePlayed();
             checkIfFocused();
+            drawButtons();
             ctx.restore();
             animation = requestAnimationFrame(mainLoop);
             if (storyEnded) {
                 drawEndScreen();
             };
            
-            drawButtons();
+            
     };
 
     var inventory = new Inventory();
@@ -1026,6 +1026,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
             
         };
         // here we will add events for the buttons that will apear when the end game screen is on !
+
         pauseMusicButton(mouseX, mouseY);
 
         if (storyEnded) {
@@ -1054,9 +1055,9 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
     };
     function endStoryScreenButton(x, y) {
         if (buttons[1].checkIfClicked(x, y)) {            
-            drawEndScreen();
+
             endStoryScreenOn=true;
- 
+
         }
     };
     function endStoryButton(x, y) {
