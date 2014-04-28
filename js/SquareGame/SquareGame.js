@@ -140,9 +140,10 @@ var SquareGame = Game.extend({
         this.plot.on('click', this, this.placeLeader);
     },
 
-    cheatEvent : function(e) {
-        if (e.pageX > 200 && e.pageX < 220 && e.pageY > 600 && e.pageY < 620) {
-            console.log('a');
+    cheatEvent: function (e) {
+        console.log(e.pageX + ' ' + e.pageY);
+        if (e.pageX > 445 && e.pageX < 465 && e.pageY > 665 && e.pageY < 685) {
+            e.data.endGame();
         };
     },
 

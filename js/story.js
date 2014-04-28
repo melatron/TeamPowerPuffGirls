@@ -732,7 +732,10 @@ function Story() {
     };
 
     var inventory = new Inventory();
-    
+    inventory.getItem('sword');
+    inventory.getItem('ring');
+    inventory.getItem('boots');
+
 
     function loadMovableObjects() {
 
