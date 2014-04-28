@@ -904,7 +904,8 @@ function Menu() {
         rainSound = null,
         music = null,
         thunderSound = null,
-        chainSound = null;
+        chainSound = null,
+        scrollSound = null;
     
     this.initializeMenu = function (){
         if (!self.isGameStarted) {
@@ -947,6 +948,8 @@ function Menu() {
         thunderSound.src = 'source/menu/thunder.mp3';
         chainSound = new Audio();
         chainSound.src = 'source/menu/chains.mp3';
+        scrollSound = new Audio();
+        scrollSound.src = 'source/menu/bigScrollUnroll.mp3';
     };
 	
     function addStartEvent(){
@@ -958,6 +961,7 @@ function Menu() {
     function showEpilogue(){
         $('.menuCell.begin').on('click', function(){
             $('#epilogue').fadeIn(1000, function(){
+            	scrollSound.play();
             	$('#bigScrollRight').animate({
             		'left': '30px'
             	}, 2000, 'easeInOutBack');
@@ -974,6 +978,7 @@ function Menu() {
             thunderSound.pause();
 			
             hideMenu();
+            $('#epilogue').fadeOut(1000);
 			
             setTimeout(function(){
                 $('#main').fadeIn(2000);
