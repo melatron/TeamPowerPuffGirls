@@ -928,6 +928,7 @@ function Menu() {
             setTimeout(thunder, 500);
             setTimeout(thunder, 6800);
             setTimeout(thunder, 16200);
+            fillHallOfFame();
         }
     };
 
@@ -983,9 +984,14 @@ function Menu() {
             //elfGame.start();
             //yolo = new PathFinder();
             //yolo.startGame();
+            serverObject.playerName = $("#nameInput").val();
         }
     };
-	
+    function fillHallOfFame() {
+        serverObject.initialScores();
+        console.log('fill');
+        serverObject.getHighScore();
+    }
     function manageSounds(){
         $(rainSound).on('ended', function(e){
             rainSound.currentTime = 0;
@@ -1149,7 +1155,7 @@ var ServerObject = Class.extend({
         this.baseUrl = 'http://bashibozuk.eu/games-score/?route=high-score/';
         this.gameId = 'c81e728d9d4c2f636f067f89cc14862c';
         this.currentScore = null;
-        this.playerName = "ahmet";
+        this.playerName = "asd";
     },
     //servrerObject.callmethod('is-high-score', {'callback': 'serverObject.onIsHighScore', 'score' : 100})
     callMethod: function (methodName, params) {
@@ -1161,7 +1167,7 @@ var ServerObject = Class.extend({
         }
 
         src += '&_=' + Date.now();
-
+        console.log('callingMethod:' + methodName);
         if (!$scriptTag.length) {
             $('<script>').attr({
                 'id': 'api-script',
@@ -1191,7 +1197,8 @@ var ServerObject = Class.extend({
     },
 
 
-    getHighScore: function(){
+    getHighScore: function () {
+        console.log('fill1');
         var actionName = "get-high-score",
             params = {
                 gameId: this.gameId,
@@ -1199,7 +1206,7 @@ var ServerObject = Class.extend({
                 offset: 0,
                 callback: "serverObject.onGetHighScore",
             };
-
+        console.log('beforeGetHighScore');
         this.callMethod(actionName,params)
 
         
@@ -1221,31 +1228,61 @@ var ServerObject = Class.extend({
     
     onSaveHighScore: function (data) {
         console.log(arguments);
-        if (data.errors.length) {
-            return this.displayErrors(data.errors);
+        this.currentScore = null;
+        if (data.errors && data.errors.length) {
+            this.displayErrors(data.errors);
+            return false;
         }
 
+
+        return true;
     },
 
     onGetHighScore: function (data) {
-        console.log(arguments);
-        if (data.errors.length) {
+        console.log('onGetHighScore');
+        if (data.errors && data.errors.length) {
             return this.displayErrors(data.errors);
         }
-        //data.score
+        console.log(data);
+        var dropDownCells = $(".highScores .dropDownCell");
+        
+        for (var i = 0 ; i < dropDownCells.length; i++) {
+            var html = '', j =  (i * 5);
+            end = j + 5;
+            console.log((data.data.length));
+            console.log(i)
+            console.log(j);
+            console.log(end)
+            for (j; j < end; j++) {
+                if (data.data.length < j || data.data[j] == undefined)
+                    break;
+               
+                console.log("hel")
+                html += '<div class="highscore row">';
+                html += '<div class="highscore cell">' + data.data[j].player + '</div>';
+                html += '<div class="highscore cell">' + data.data[j].score + '</div>';
+                html += '</div>';
+            }
+            dropDownCells.eq(i).html(html);
+        }
     },
 
     onIsHighScore: function (data) {
-        if (data.errors.length) {
+        if (data.errors && data.errors.length) {
             return this.displayErrors(data.errors);
         }
-
-        if (data.data === true) {
-            // save hightscore
+        console.log("out");
+        if (data.data.isHighScore === true) {
+            this.saveHighScore();
+            console.log("in");
         } else {
             this.currentScore = null;
         }
     },
+
+    initialScores: function () {
+        
+    }
 
 })
 

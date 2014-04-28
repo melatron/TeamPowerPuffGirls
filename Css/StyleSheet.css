@@ -377,3 +377,19 @@ body {
             float: left;
             margin-right: 90px;
         }
+        .highscore.row {
+            clear:both;
+            margin: 0px;
+            height: 20px;
+            top: -2px;
+        }
+
+        .highscore.cell {
+            float: left;
+            height: 20px;
+            font-size: 18px;
+        }
+        .highScores .dropDownCell{
+            padding-top: 0px;
+            height: 100px;
+        }
