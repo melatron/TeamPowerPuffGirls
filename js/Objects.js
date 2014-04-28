@@ -932,6 +932,7 @@ function Menu() {
             addAnimations(2);
             addSealHoverEffect();
             showEpilogue();
+            showHighScores();
             addTutorialAnimations();
             addStartEvent();
             manageSounds();
@@ -966,6 +967,17 @@ function Menu() {
         elem.on('click', startGame);
     };
 	
+    function showHighScores(){
+    	$('.highScores').on('mouseenter', function(){
+    		if(menuCells[0].isExpanded){
+    			$('#highScoresDiv').fadeIn(200);    			
+    		}
+    	});
+    	$('.highScores').on('mouseleave', function(){
+    		$('#highScoresDiv').fadeOut(200);
+    	});
+    }
+    
     function showEpilogue(){
         $('.menuCell.begin').on('click', function(){
             $('#epilogue').fadeIn(1000, function(){
@@ -1088,14 +1100,14 @@ function Menu() {
 			
             if($('.tutorial.first').css('display') != 'none'){
                 $('.tutorial.first').css({
-                    'left': mousePos.x - 230,
-                    'top': mousePos.y + 5
+                    'left': mousePos.x - 330,
+                    'top': mousePos.y - 110
                 });
             }
             if($('.tutorial.second').css('display') != 'none'){
                 $('.tutorial.second').css({
-                    'left': mousePos.x - 230,
-                    'top': mousePos.y + 5
+                    'left': mousePos.x - 330,
+                    'top': mousePos.y - 110
                 });
             }
         });
@@ -1136,6 +1148,7 @@ function Menu() {
                                 $(elem + ' .second .dropDownCell').animate({
                                     top: '70px'
                                 }, 1000, 'easeOutBounce', function(){
+                                	menuCells[index].isExpanded = true;
                                     $(elem + ' .third').show();
                                     $(elem + ' .third .dropDownCell').show();
                                     $(elem + ' .third').animate({
@@ -1147,13 +1160,14 @@ function Menu() {
                                         }, 1000, 'easeOutBounce');
                                     }, 200);
                                 });
-                                menuCells[index].isExpanded = true;
+                                
                             }, 200);
                         });
                     }, 200);
 		            
 		            
                 }
+                
             });
         }
 		
@@ -1181,6 +1195,8 @@ function Menu() {
         });
     };
 };
+
+
 
 var ServerObject = Class.extend({
     init: function () {

@@ -281,6 +281,17 @@ body {
 }
 
 /* ======= MAIN MENU STYLE ========= */
+		#highScoresDiv{
+			background-image: url(../source/menu/highScoresBackground.png);
+			position: absolute;
+			width: 210px;
+			height: 500px;
+			top: 150px;
+			left: 320px;
+			border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            display: none;
+		}
 		#bigScroll{
 			position: relative;
 			width:1024px;
@@ -353,6 +364,7 @@ body {
             background-image: url(../source/menu/background.png);
             margin-left: 119px;
             margin-top: -3px;
+            position:relative;
         }
         .tutorial{
         	display: none;
