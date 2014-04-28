@@ -380,7 +380,7 @@ ClickPoint = InteractableObject.extend({
 
 //=== Hero objects ====//
 
-Heroes = MovableObject.extend({
+Hero = MovableObject.extend({
     init: function (x, y, width, height, name) {
         this._super(x, y, width, height, name);
         this.isInteracting = false;
@@ -1126,3 +1126,51 @@ function Menu() {
     };
 };
 
+function ServerObject(){
+    this.title = "Quest Game";
+    this.limit = 15;
+    this.offset = 0;
+    this.isHighScore = function (score) {
+        $.ajax({
+            url: "server/index.php?is-high-score&gameId=" + this.title,
+            data: {
+                score: score,
+            }
+        }).done(function (data) {
+            console.log(data);
+            return data;
+        }).fail(function () {
+            alert("sorry");
+        })
+    }
+
+    this.getHighScore = function () {
+        $.ajax({
+            url: "server/index.php?get-high-score&gameId="+this.title,
+            data: {
+                limit: this.limit,
+                offset: this.offset,
+            }
+        }).done(function (data) {
+            console.log(data);
+            return data;
+        }).fail(function () {
+            alert("sorry");
+        })
+    }
+
+    this.saveHighScore = function (score,player) {
+        $.ajax({
+            url: "server/index.php?save-high-score&gameId=" + this.title,
+            data: {
+                score: score,
+                player: player,
+            }
+        }).done(function (data) {
+            console.log(data);
+            return data;
+        }).fail(function () {
+            alert("sorry");
+        })
+    }
+}

@@ -12,7 +12,7 @@
 //        this.ctx = this.canvas.getContext('2d');
 //
 //        this.storyFinished = false;
-//        this.hero = new Heroes(0, 256, 32, 32, "hero");
+//        this.hero = new Hero(0, 256, 32, 32, "hero");
 //        this.elder = null;
 //        this.dragon = null;
 //        this.elf = null;
@@ -675,7 +675,7 @@ function Story() {
         ctx = canvas.getContext('2d'),
        
         storyFinished = false,
-        hero = new Heroes(0, 256, 32, 32, "hero"),
+        hero = new Hero(0, 256, 32, 32, "hero"),
         elder = null,
         dragon = null,
         elf = null,
@@ -1457,7 +1457,6 @@ function Story() {
         for (var i = 0; i < len; i++) {
             interactableObjects[i].isAvailable = true;
         };
-
         addEvents();
         addGameEvents();
         mainLoop();
