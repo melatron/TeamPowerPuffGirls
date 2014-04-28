@@ -1378,8 +1378,8 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
     function preloadButtons() {
         var toggleMusic = new ButtonsObject(965, 465, 40, 40, "ToggleMusic", preloader.getSpriteByIndex(47)),   
             finishGame = new ButtonsObject(960, 400, 50, 50, "FinishGame", preloader.getSpriteByIndex(49)),         
-            continueButton = new ButtonsObject(550,250,220,100,"ContinueStory", preloader.getSpriteByIndex(52));
-            endButton = new ButtonsObject(250,250,220,100,"EndStory", preloader.getSpriteByIndex(51)),
+            continueButton = new ButtonsObject(550,250,220,100,"ContinueStory", preloader.getSpriteByIndex(52)),
+            endButton = new ButtonsObject(250,250,220,100,"EndStory", preloader.getSpriteByIndex(51));
 
         buttons.push(toggleMusic);       
         buttons.push(finishGame);        
