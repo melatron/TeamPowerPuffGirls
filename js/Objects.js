@@ -354,7 +354,7 @@ ClickPoint = InteractableObject.extend({
             x: circle.x,
             y: circle.y,
             r: circle.r
-        }
+        };
         
     },
 
@@ -623,7 +623,7 @@ Item = Class.extend({
         this.dom.draggable({
             start: function () {
                 self.hideAttributes();
-                $(this).css({ zIndex: '2' })
+                $(this).css({ zIndex: '2' });
             },
 
             stop: function (ev, ui) {
@@ -649,7 +649,7 @@ Item = Class.extend({
             this.time = 120;
             this.checkpoints = 1;
             this.lives = 0;
-            this.description = 'This item increases your time for reaction dramatically!!'
+            this.description = 'This item increases your time for reaction dramatically!!';
         };
 
         if (this.type === 'ring') {
@@ -662,17 +662,17 @@ Item = Class.extend({
         };
 
         if (this.type === 'sword') {
-            this.name = "Useless Sword"
+            this.name = "Useless Sword";
             this.moves = 0;
             this.speed = 0;
             this.time = 0;
             this.checkpoints = 0;
             this.lives = 0;
-            this.description = "You'll get nothing from this item. Exept the false sense of security.."
+            this.description = "You'll get nothing from this item. Exept the false sense of security..";
         };
 
         if (this.type === "boots") {
-            this.name = "Boots of Speed"
+            this.name = "Boots of Speed";
             this.moves = 35;
             this.speed = 1;
             this.time = 180;
@@ -682,17 +682,17 @@ Item = Class.extend({
         }
 
         if (this.type === "armor") {
-            this.name = "Shiny Armor"
+            this.name = "Shiny Armor";
             this.moves = 0;
             this.speed = 0;
             this.time = 0;
             this.checkpoints = 0;
             this.lives = 50;
-            this.description = "This armor is almost impenetrable."
+            this.description = "This armor is almost impenetrable.";
         }
 
         if (this.type === "potion") {
-            this.name = "Potion of Agility"
+            this.name = "Potion of Agility";
             this.moves = 120;
             this.speed = 0;
             this.time = 300;
@@ -956,7 +956,11 @@ function Menu() {
 	
     function showEpilogue(){
         $('.menuCell.begin').on('click', function(){
-            $('#epilogue').fadeIn(1000);
+            $('#epilogue').fadeIn(1000, function(){
+            	$('#bigScrollRight').animate({
+            		'left': '30px'
+            	}, 2000, 'easeInOutBack');
+            });
             console.log('hello');
         });
     };
@@ -1191,7 +1195,7 @@ var ServerObject = Class.extend({
             };
 
         this.currentScore = score;
-        this.callMethod(actionName, params)
+        this.callMethod(actionName, params);
 
 
     },
@@ -1207,7 +1211,7 @@ var ServerObject = Class.extend({
                 callback: "serverObject.onGetHighScore",
             };
         console.log('beforeGetHighScore');
-        this.callMethod(actionName,params)
+        this.callMethod(actionName, params);
 
         
     },
@@ -1221,7 +1225,7 @@ var ServerObject = Class.extend({
                 callback: "serverObject.onSaveHighScore",
             };
 
-        this.callMethod(actionName, params)
+        this.callMethod(actionName, params);
 
 
     },
@@ -1250,14 +1254,14 @@ var ServerObject = Class.extend({
             var html = '', j =  (i * 5);
             end = j + 5;
             console.log((data.data.length));
-            console.log(i)
+            console.log(i);
             console.log(j);
-            console.log(end)
+            console.log(end);
             for (j; j < end; j++) {
                 if (data.data.length < j || data.data[j] == undefined)
                     break;
                
-                console.log("hel")
+                console.log("hel");
                 html += '<div class="highscore row">';
                 html += '<div class="highscore cell">' + data.data[j].player + '</div>';
                 html += '<div class="highscore cell">' + data.data[j].score + '</div>';
@@ -1284,6 +1288,6 @@ var ServerObject = Class.extend({
         
     }
 
-})
+});
 
 window.serverObject = new ServerObject();
