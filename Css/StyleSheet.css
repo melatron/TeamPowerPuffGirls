@@ -358,6 +358,15 @@ body {
             z-index: 10;
             overflow: hidden;
         }
+        #seal{
+        	position: absolute;
+        	width:110px;
+        	height:107px;
+        	background-image: url(../source/menu/playButtonIdle.png);
+        	top: 600px;
+        	left: 720px;
+        	border: 1px sold green;
+        }
         .menuCell.nameInput{
             position: absolute;
             top: 200px;

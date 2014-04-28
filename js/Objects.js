@@ -921,6 +921,7 @@ function Menu() {
             addAnimations(0);
             addAnimations(1);
             addAnimations(2);
+            addSealHoverEffect();
             showEpilogue();
             addTutorialAnimations();
             addStartEvent();
@@ -949,7 +950,7 @@ function Menu() {
     };
 	
     function addStartEvent(){
-        var elem = $('#play');
+        var elem = $('#seal');
 		
         elem.on('click', startGame);
     };
@@ -1027,6 +1028,20 @@ function Menu() {
     function thunder(){
         $('#flash').show().fadeIn(50).fadeOut(20).fadeIn(50).fadeOut(1000);
     };
+    
+    function addSealHoverEffect(){
+    	$('#seal').on('mouseenter', function(){
+    		console.log('hello');
+    		$('#seal').css({
+    			'background-image': 'url(source/menu/playButtonActive.png)'
+    		});
+    	});
+    	$('#seal').on('mouseleave', function(){
+    		$('#seal').css({
+    			'background-image': 'url(source/menu/playButtonIdle.png)'
+    		});
+    	});
+    }
 	
     function addTutorialAnimations(){
 		
