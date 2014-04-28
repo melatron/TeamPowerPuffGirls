@@ -406,9 +406,9 @@ var SquareGame = Game.extend({
     start: function (obj) {
         
         this._super(obj);
-
+        //this.gameOver = false;
         this.stopEvents = false;
-        this.gameOver = false;
+        
 
         var instructions = '●Move gems with the mouse.</br>●Get a green gem to the green exit.</br>●Finish in under 250 moves.';
 
