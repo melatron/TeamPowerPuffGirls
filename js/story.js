@@ -1122,7 +1122,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
     function resetGlowFrameCounter() {
         var i, temp, len = interactableObjects.length;
         for (i = 0; i < len; i++) {
-            if (Math.pow(temp.circle.x - mousePos.x, 2) + Math.pow(temp.circle.y - mousePos.y, 2) = Math.pow(temp.circle.r, 2)) {
+            if (Math.pow(temp.circle.x - mousePos.x, 2) + Math.pow(temp.circle.y - mousePos.y, 2) == Math.pow(temp.circle.r, 2)) {
                 temp.spriteGlow.frameCounter = 6;
             }
         }
