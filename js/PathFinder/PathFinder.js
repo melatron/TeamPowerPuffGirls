@@ -800,7 +800,7 @@ PathFinder = Game.extend({
         this.removeGameFromPlot();
         this.gameOver = true;
         this.currentLevel = 0;
-
+        console.log(this.deaths);
         // add condition : if you've done well in the game get the reward
         if (this.deaths < 30) {
             this.getReward('armor');

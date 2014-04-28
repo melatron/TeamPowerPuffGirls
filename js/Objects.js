@@ -908,7 +908,9 @@ function Menu() {
     
     this.initializeMenu = function (){
         if (!self.isGameStarted) {
+            $('#mainMenuWrapper').show();
             $('#main').hide();
+            removeAllEvents();
             preloadSounds();
             rainSound.play();
             thunderSound.play();
@@ -924,7 +926,11 @@ function Menu() {
             setTimeout(thunder, 16200);
         }
     };
-	
+    function removeAllEvents() {
+        $('*').off();
+        $(document).off();
+        $(window).off();
+    };
     function preloadSounds(){
         rainSound = new Audio();
         rainSound.src = 'source/menu/rain.mp3';
