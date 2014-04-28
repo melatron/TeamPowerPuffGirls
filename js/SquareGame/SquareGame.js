@@ -82,6 +82,8 @@ var BlueSquare = Square.extend({
 var SquareGame = Game.extend({
 
     init: function () {
+        this._super();
+
         this.stopEvents = true;
 
         this.squareWidth = 40;
@@ -101,8 +103,7 @@ var SquareGame = Game.extend({
 
         this.canvas = $('#square-game-map')[0];
         this.mapContext = this.canvas.getContext('2d');
-
-        this._super();
+        
 
         this.objectives = { moves: 300 };
         this.plot = $('#square-game');
@@ -402,10 +403,9 @@ var SquareGame = Game.extend({
         this.createSquare(3, 4, 'green', 'leader', 2);
     },
 
-    start: function (obj, getReward) {
+    start: function (obj) {
         
-        this._super(obj, getReward);
-        this.getReward = getReward;
+        this._super(obj);
 
         this.stopEvents = false;
         this.gameOver = false;
@@ -455,10 +455,11 @@ var SquareGame = Game.extend({
                           [2, 0, 0, 0, 0, 1]];
 
         if (this.movesCounter < (this.objectives.moves - this.gameBonuses.moves)) {
-            this.getReward('potion');
+            this.rewardItem = 'potion';
         }
 
         this.movesCounter = 0;
+        console.log(this.rewardItem);
     }
 
 

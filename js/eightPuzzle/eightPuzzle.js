@@ -83,9 +83,9 @@ var EightPuzzle = Game.extend({
         };
 
     },
-    start: function (obj, getReward) {
-        this._super(obj, getReward);
-        this.getReward = getReward;
+    start: function (obj) {
+        this._super(obj);
+
         this.stopEvents = false;
         this.tableArray = [];
         this.emptySlotPosition = [];
@@ -116,9 +116,9 @@ var EightPuzzle = Game.extend({
         }
 
         // add condition : if you've done well in the game get the reward
-        if (_this.score > 420) {
-            _this.getReward('boots');
-        }
+        if (_this.score > 300) {
+            _this.rewardItem = 'boots';
+        };
     },
     addBonuses: function (bonuses) {
         this.movesDone = this.movesDone - this.gameBonuses.bonusMoves;

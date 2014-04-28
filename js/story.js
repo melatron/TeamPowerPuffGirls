@@ -1184,13 +1184,16 @@ function Story() {
                 stopEvents = false;
                 inGame = false;
                 hero.speakingTo.game.gameOver = false;
+                getReward(hero.speakingTo.game.rewardItem);
                 /*Here we will add the points from the finished game into the click point in which the game is.*/
                 if (hero.speakingTo.score == 0) {
                     gamesFinished++;
+
                     if (gamesFinished == gamesAmount) {
                         storyEnded = true;
                         //endStoryScreenOn = true;
                         stopEvents = true;
+
                     }
                 }
                 if (hero.speakingTo.score < hero.speakingTo.game.score) {
@@ -1335,14 +1338,17 @@ function Story() {
     };
     
 
-    function getReward(type) {
+    function getReward(rewardItem) {
         //adds an item to the inventory if it's not already
-        //type - string (ex. : 'sword' / 'ring' / 'dagger') 
-        for (var index in inventory.slots) {
-            if (inventory.slots[index] !== 0 &&
-               inventory.slots[index].type === type) {
-                return;
-            };
+        //type - string (ex. : 'sword' / 'ring' / 'dagger')
+		if (rewardItem !== null) {
+	        for (var index in inventory.slots) {
+	            if (inventory.slots[index] !== 0 &&
+	               inventory.slots[index].type === rewardItem) {
+	                return;
+	            };
+	        };
+	        inventory.getItem(rewardItem);
         };
     };
 

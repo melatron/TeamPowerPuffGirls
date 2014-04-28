@@ -773,9 +773,8 @@ PathFinder = Game.extend({
         this.mainCharacter.x = this.startingPoint.x;
         this.mainCharacter.y = this.startingPoint.y;
     },
-    start: function (obj, getReward) {
-        this._super(obj, getReward);
-        this.getReward = getReward;
+    start: function (obj) {
+        this._super(obj);
         
         var instructions = '"Space": creates temporary platform. "c": creates permanent checkpoint. Get to the maroon point!';
         this.writeOnScroll(instructions, {
@@ -802,8 +801,8 @@ PathFinder = Game.extend({
         this.currentLevel = 0;
         console.log(this.deaths);
         // add condition : if you've done well in the game get the reward
-        if (this.deaths < 30) {
-            this.getReward('armor');
+        if (this.deaths < 45) {
+            this.rewardItem='armor';
         }
     },
 
