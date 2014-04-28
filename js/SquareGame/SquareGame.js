@@ -203,7 +203,7 @@ var SquareGame = Game.extend({
             this.activeLeader.color == 'green') {
 
             this.endGame();
-        }
+        };
     },
 
     followLeader: function (that) {
@@ -398,7 +398,7 @@ var SquareGame = Game.extend({
     },
 
     start: function (obj, getReward) {
-
+        this.gameOver = false;
         this._super(obj, getReward);
         this.getReward = getReward;
 
@@ -415,8 +415,11 @@ var SquareGame = Game.extend({
     },
 
     endGame: function () {
+
         this.gameOver = true;
         this.plot.html(' ');
+        $(this.canvas).appendTo(this.plot);
+
         this.removeGameFromPlot();
 
         if (this.movesCounter < 250) {
@@ -443,10 +446,10 @@ var SquareGame = Game.extend({
                           [2, 0, 0, 0, 0, 1]];
 
         if (this.movesCounter < (this.objectives.moves - this.gameBonuses.moves)) {
-
             this.getReward('potion');
-
         }
+
+        this.movesCounter = 0;
     }
 
 

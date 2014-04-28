@@ -88,7 +88,9 @@ function Preloader(){
                 
                 'source/dragonGlowSprite.png',
                 'source/sound-on.png',
-                'source/sound-off.png']; //48
+                'source/sound-off.png',
+                'source/winbutton.png',
+                'source/winbutton-sprite.png']; //50
 
         for (var i = 0; i < b.length; i++) {  // create image objects and define src
             sprites[i] = new Image();

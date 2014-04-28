@@ -687,12 +687,12 @@ function Story() {
         gamesAmount = 6,
         buttons = [],
         toggleMusic =null,
-        finishGame = new ButtonsObject(984, 0, 40, 40, "FinishGame");
-    //buttons.push(toggleMusic);
-    //buttons.push(finishGame);
+        finishGame = null,
+        finishGameSprite = null;
+    
 
     var endStoryScreenOn = false,
-
+        storyEnded = false;
         movableObjects = [],
         staticSpriteObjects = [],
         mainCanvas = $("#canvas")[0],
@@ -728,8 +728,8 @@ function Story() {
             if (endStoryScreenOn) {
                 endStoryScreen();
             }
-
-            drawMusicButton();
+           
+            drawButtons();
     };
 
     var inventory = new Inventory();
@@ -1208,20 +1208,33 @@ function Story() {
         }
     };
 
-    function drawMusicButton() {
-
-        buttons[0].drawButton();
+    function drawButtons() {
+        if (!storyEnded) {
+            buttons[0].drawButton();
+            buttons[1].drawButton();
+        }else{
+            buttons[0].drawButton();
+            finishGameSprite.drawSprite();
+        };
 
     }
 
     // here is the method which will draw the end game screen!
     function endStoryScreen() {
-        if (endStoryScreenOn) {
+        if (endStoryScreenOn) {            
             blackenScreen();
             buttons[2].drawButton();
             buttons[3].drawButton();
         }
     };
+    //=========global test function for the endgame button//will be deleted soon==========//
+    
+    testFn = function testEndgameScreen () {
+        storyEnded = true;
+        //endStoryScreenOn = true;
+        //stopEvents = true;
+    };
+
     function calculateFinalScore() {
         var array = interactableObjects,
             finalScore = 0;
@@ -1307,8 +1320,11 @@ function Story() {
     };
 
     function preloadButtons() {
-        toggleMusic = new ButtonsObject(0, 0, 40, 40, "ToggleMusic", preloader.getSpriteByIndex(47));        
+        toggleMusic = new ButtonsObject(965, 465, 40, 40, "ToggleMusic", preloader.getSpriteByIndex(47));        
         buttons.push(toggleMusic);
+        finishGame = new ButtonsObject(960, 400, 50, 50, "FinishGame", preloader.getSpriteByIndex(49));
+        //console.log(finishGame.x);
+        buttons.push(finishGame);
     };
     function preloadSprites() {
 
@@ -1351,6 +1367,8 @@ function Story() {
         orc.spriteRight = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(23), orc, ctx);
         orc.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(21), orc, ctx);
         orc.getDestinationDelay = 248;
+
+        finishGameSprite = new Sprite(600, 60, 10, 6, preloader.getSpriteByIndex(50), finishGame, ctx);
 
         searchInteractableObjectByName("humanCastle").spriteGlow = new Sprite(1700, 140, 10, 4, preloader.getSpriteByIndex(33), searchInteractableObjectByName("humanCastle"), ctx);
         searchInteractableObjectByName("dwarfCamp").spriteGlow = new Sprite(1200, 100, 10, 4, preloader.getSpriteByIndex(34), searchInteractableObjectByName("dwarfCamp"), ctx);
@@ -1419,9 +1437,10 @@ function Story() {
         loadMovableObjects();
         soundTrack = new PlayList();
         soundTrack.startMainMusic();
+        preloadButtons();
         preloadSprites();
         preloadPortraits();
-        preloadButtons();
+        
 
         checkRequestAnimationFrame();
 
