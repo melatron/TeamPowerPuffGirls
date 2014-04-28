@@ -90,7 +90,8 @@ function Preloader(){
                 'source/sound-on.png',
                 'source/sound-off.png',
                 'source/winbutton.png',
-                'source/winbutton-sprite.png']; //50
+                'source/winbutton-sprite.png',
+                'source/continue-button.png']; //51
 
         for (var i = 0; i < b.length; i++) {  // create image objects and define src
             sprites[i] = new Image();

@@ -686,7 +686,6 @@ function Story() {
         gamesFinished = 0,
         gamesAmount = 6,
         buttons = [],
-        toggleMusic =null,
         finishGame = null,
         finishGameSprite = null;
     
@@ -725,9 +724,9 @@ function Story() {
             checkIfFocused();
             ctx.restore();
             animation = requestAnimationFrame(mainLoop);
-            if (endStoryScreenOn) {
-                endStoryScreen();
-            }
+            if (storyEnded) {
+                drawEndScreen();
+            };
            
             drawButtons();
     };
@@ -979,12 +978,14 @@ function Story() {
         }
     };
     function clickEvent(ev) {
-        if (!stopEvents) {
-            //console.log('rado is a gay persona');
-            var rect = mainCanvas.getBoundingClientRect(),
+        var rect = mainCanvas.getBoundingClientRect(),
                 mouseX = ev.clientX - rect.left,
                 mouseY = ev.clientY - rect.top,
                 currentObject;
+
+        if (!stopEvents) {
+            //console.log('rado is a gay persona');
+            
 
             console.log("Mouse X: " + mouseX + " Mouse Y: " + mouseY);
 
@@ -998,43 +999,53 @@ function Story() {
                     }
                 }
             }
-            pauseMusicButton(mouseX, mouseY);
-        }
+           
+            
+        };
         // here we will add events for the buttons that will apear when the end game screen is on !
-        if (endStoryScreenOn && stopEvents) {
+        pauseMusicButton(mouseX, mouseY);
+
+        if (storyEnded) {
+
+            endStoryScreenButton(mouseX,mouseY);
+        };
+        if (endStoryScreenOn) {
+            
             endStoryButton(mouseX, mouseY);
-            continueStoryButton(mouseX, mouseY);
-        }
+            continueStoryButton(mouseX, mouseY);          
+        };
+        
     };
     // Here is the functionallity of the buttons:
     function pauseMusicButton(x, y) {
-        if (toggleMusic.checkIfClicked(x, y)) {
-            if (toggleMusic.toggled) {
+        if (buttons[0].checkIfClicked(x, y)) {
+            if (buttons[0].toggled) {
                 soundTrack.pauseMainMusic();
-                toggleMusic.image = preloader.getSpriteByIndex(48);
+                buttons[0].image = preloader.getSpriteByIndex(48);
             }
             else {
                 soundTrack.resumeMainMusic();
-                toggleMusic.image = preloader.getSpriteByIndex(47);
+                buttons[0].image = preloader.getSpriteByIndex(47);
             }
         }
     };
     function endStoryScreenButton(x, y) {
-        if (buttons[1].checkIfClicked(x, y)) {
-            if (storyEnded) {
-                endStoryScreen();
-            }
+        if (buttons[1].checkIfClicked(x, y)) {            
+            drawEndScreen();
+            endStoryScreenOn=true;
+ 
         }
     };
-    function endStoryButton() {
+    function endStoryButton(x, y) {
         if (buttons[2].checkIfClicked(x, y)) {
             endStory();
         }
     };
-    function continueStoryButton() {
+    function continueStoryButton(x, y) {
         if (buttons[3].checkIfClicked(x, y)) {
             endStoryScreenOn = false;
             stopEvents = false;
+            storyEnded = false;
         }
     };
 
@@ -1153,7 +1164,7 @@ function Story() {
                     gamesFinished++;
                     if (gamesFinished == gamesAmount) {
                         storyEnded = true;
-                        endStoryScreenOn = true;
+                        //endStoryScreenOn = true;
                         stopEvents = true;
                     }
                 }
@@ -1220,27 +1231,29 @@ function Story() {
         if (!storyEnded) {
             buttons[0].drawButton();
             buttons[1].drawButton();
-        }else{
+        }
+        if(storyEnded && !endStoryScreenOn){
             buttons[0].drawButton();
+            //buttons[1].drawButton();
             finishGameSprite.drawSprite();
         };
 
     }
 
     // here is the method which will draw the end game screen!
-    function endStoryScreen() {
+    function drawEndScreen() {
         if (endStoryScreenOn) {            
             blackenScreen();
             buttons[2].drawButton();
             buttons[3].drawButton();
-        }
+        };
     };
     //=========global test function for the endgame button//will be deleted soon==========//
     
     testFn = function testEndgameScreen () {
         storyEnded = true;
         //endStoryScreenOn = true;
-        //stopEvents = true;
+        stopEvents = true;
     };
 
     function calculateFinalScore() {
@@ -1328,11 +1341,16 @@ function Story() {
     };
 
     function preloadButtons() {
-        toggleMusic = new ButtonsObject(965, 465, 40, 40, "ToggleMusic", preloader.getSpriteByIndex(47));        
-        buttons.push(toggleMusic);
-        finishGame = new ButtonsObject(960, 400, 50, 50, "FinishGame", preloader.getSpriteByIndex(49));
-        //console.log(finishGame.x);
-        buttons.push(finishGame);
+        var toggleMusic = new ButtonsObject(965, 465, 40, 40, "ToggleMusic", preloader.getSpriteByIndex(47)),   
+            finishGame = new ButtonsObject(960, 400, 50, 50, "FinishGame", preloader.getSpriteByIndex(49)),
+            endButton = new ButtonsObject(250,250,250,80,"EndStory", preloader.getSpriteByIndex(51)),
+            continueButton = new ButtonsObject(550,250,250,80,"ContinueStory", preloader.getSpriteByIndex(51));
+
+        buttons.push(toggleMusic);       
+        buttons.push(finishGame);        
+        buttons.push(endButton);
+        buttons.push(continueButton);
+
     };
     function preloadSprites() {
 
@@ -1376,7 +1394,7 @@ function Story() {
         orc.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(21), orc, ctx);
         orc.getDestinationDelay = 248;
 
-        finishGameSprite = new Sprite(600, 60, 10, 6, preloader.getSpriteByIndex(50), finishGame, ctx);
+        finishGameSprite = new Sprite(600, 60, 10, 6, preloader.getSpriteByIndex(50), buttons[1], ctx);
 
         searchInteractableObjectByName("humanCastle").spriteGlow = new Sprite(1700, 140, 10, 4, preloader.getSpriteByIndex(33), searchInteractableObjectByName("humanCastle"), ctx);
         searchInteractableObjectByName("dwarfCamp").spriteGlow = new Sprite(1200, 100, 10, 4, preloader.getSpriteByIndex(34), searchInteractableObjectByName("dwarfCamp"), ctx);
