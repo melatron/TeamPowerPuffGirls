@@ -798,13 +798,13 @@ function Story() {
             squareGame,
             {                  // HERO SPEECH
                 before: [['Ah, my lord!', '(Stuttering voice) *bows*']],
-                after: [],
-                done: []
+                after: [['']],
+                done: [['']]
             },
             {                  //QUEST SPEECH
                 before: [['...']],
-                after: [],
-                done: []
+                after: [['']],
+                done: [['']]
             },
             {
                 x: 192,
