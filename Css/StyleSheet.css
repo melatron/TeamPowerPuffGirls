@@ -235,7 +235,12 @@ body {
 /* item attributes */
 @font-face {
     font-family: Morpheus;
-    src : url(../source/MORPHEUS.TTF);
+    src: url(../source/MORPHEUS.TTF);
+}
+
+@font-face {
+    font-family: Script;
+    src: url(../source/Script.TTF);
 }
 
 #item-attributes {
@@ -276,43 +281,6 @@ body {
 }
 
 /* ======= MAIN MENU STYLE ========= */
-/* #scroll{
-	float: right;
-	position: relative;
-	width: 150px;
-	height: 224px;
-	margin-right: 5px;
-	margin-top: 35px;
-    display: none;
-}
-#scroll .top{
-	background-image: url(../source/scrollTop.png);
-	width: 150px;
-	height: 29px;
-	position: absolute;
-	top: -5px;
-	z-index: 10;
-}
-#scroll .bottom{
-	background-image: url(../source/scrollBottom.png);
-	width: 110px;
-	height: 164px;
-	position: absolute;
-	top: -120px;
-	z-index: 1;
-	padding-left: 25px;
-	padding-right: 10px;
-	padding-top: 20px;
-	font-family: Morpheus;
-	font-size: 16px;
-	font-weight: bold;
-}
-#bottomScrollWrapper{
-	overflow: hidden;
-	position: relative;
-	width: inherit;
-	height: inherit;
-} */
 		#bigScroll{
 			position: relative;
 			width:1024px;
@@ -363,14 +331,20 @@ body {
         	width:110px;
         	height:107px;
         	background-image: url(../source/menu/playButtonIdle.png);
-        	top: 600px;
-        	left: 720px;
+        	top: 570px;
+        	left: 20px;
         	border: 1px sold green;
         }
-        .menuCell.nameInput{
-            position: absolute;
-            top: 200px;
-            left: 450px;
+        #nameInput{
+        	position: absolute;
+        	left: 590px;
+        	top: 570px;
+        	border: 0;
+        	background: transparent;
+        	font-family: Script;
+        	font-size: 80px;
+        	font-weight: 300;
+        	width: 250px;
         }
 		#mainMenuWrapper{
             width: 1024px;
