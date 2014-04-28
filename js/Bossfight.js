@@ -289,7 +289,7 @@ Bossfight = Game.extend({
     addEventListeners: function () {
 
         var self = this;
-        $('#pathFinderCanvas').on('click', this, this.clickEvent);
+        //$('#pathFinderCanvas').on('click', this, this.clickEvent);
         $(document).on('keydown', function (e) {
             if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39 || e.keyCode == 67) {
                 e.preventDefault();

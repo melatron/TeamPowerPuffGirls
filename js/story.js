@@ -790,6 +790,20 @@ function Story() {
              swapPuzzle = new SwapPuzzle(),
              pathFinder = new PathFinder(),
              eightPuzzle = new EightPuzzle();
+        /*
+        You: Ah, my lord! (Stuttering voice) "bows"
+King: Rise and spare me the pleasantries, i am in no mood for your groveling.
+You: Yes of course, my liege.
+King: Would you be so kind as to explain what you are doing in the royal chambers at this time of day/night?
+You: I was merely telling some war stories with the royal guard sir, they were quite anxious to hear of my recent exploits. 
+King: You wouldn't have happened to have heard some rather disturbingly loud moaning sounds while you were walking around the chambers, did you?
+You: No, haven't heard anything on this side of the chambers.
+King: I didn't mention that they were coming from this side "Insert name here". 
+You: Well sire, this is the only part of the chambers i have any pleasure in visiting. "His look accidentally wanders at the queen's dormitory"
+King: Don't you get tired of visiting the same rooms over and over? "said the king with a spiteful tone"
+You: Oh, there's nothing tiresome about it your highness.
+King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, i shall be there as soon as i figure a proper form of punishment!
+        */
         var humanCastle = new ClickPoint(106, -13, 150, 140, "humanCastle",
                                                             {
                                                                 x: 175,
@@ -797,12 +811,21 @@ function Story() {
                                                             },
             squareGame,
             {                  // HERO SPEECH
-                before: [['Ah, my lord!', '(Stuttering voice) *bows*']],
+                before: [['Ah, my lord!', '(Stuttering voice) *bows*'], ['Yes of course, my liege.'], 
+                    ['I was merely telling some','war stories with the', 'royal guard sir, ','they were quite anxious to', 'hear of my recent exploits. '],
+                ['No, havent heard anything', ' on this side of the chambers.'],
+                ['Well sire, this', 'is the only part', ' of the chambers i have', 'any pleasure in visiting.', ' "His look accidentally wanders', 'at the queens dormitory"'],
+                ['Oh, theres nothing tiresome', ' about it your highness.']],
                 after: [],
                 done: []
             },
             {                  //QUEST SPEECH
-                before: [['...']],
+                before: [['...'], ['Rise and spare me the',' pleasantries, i am in no mood', ' for your groveling.'],
+                    ['Would you be so kind', 'as to explain',' what you are doing', 'in the royal chambers',' at this time of day?'],
+                ['You wouldnt have', 'happened to have heard', 'some rather disturbingly', ' loud moaning sounds', ' while you were walking', 'around the chambers,','did you?'],
+                ['I didnt mention that they', ' were coming from this', ' side "Insert name here".'],
+                ['Dont you get tired', 'of visiting the same', 'rooms over and over?', ' "said the king with', 'a spiteful tone"'],
+                ['Why you insolent wench!', 'GUARDS!! Take this arrogant', 'sard to the dungeons, i shall', ' be there as soon as i figure', ' a proper form of', 'punishment!']],
                 after: [],
                 done: []
             },
