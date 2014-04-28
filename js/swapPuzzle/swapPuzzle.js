@@ -110,7 +110,6 @@ SwapPuzzle = Game.extend({
         this.stopEvents = true;
         this.removeGameFromPlot();
         clearInterval(this.swapPuzzleLoop);
-        $("#swapPuzzleCanvas").off();
 
         this.score = (this.reverseParameters.reversesDone) ?
             Math.floor(500 / this.reverseParameters.reversesDone) : 750;

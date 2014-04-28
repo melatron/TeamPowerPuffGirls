@@ -1141,6 +1141,7 @@ var ServerObject = Class.extend({
         this.baseUrl = 'http://bashibozuk.eu/games-score/?route=high-score/';
         this.gameId = 'c81e728d9d4c2f636f067f89cc14862c';
         this.currentScore = null;
+        this.playerName = "ahmet";
     },
     //servrerObject.callmethod('is-high-score', {'callback': 'serverObject.onIsHighScore', 'score' : 100})
     callMethod: function (methodName, params) {
@@ -1163,26 +1164,8 @@ var ServerObject = Class.extend({
         }
     },
 
-    getHighScore: function(){
-        var actionName = "get-high-score",
-            params = {
-                gameId: this.gameId,
-                limit: 15,
-                offset: 0,
-                callback: "serverObject.onGetHighScore",
-            };
-
-        this.callMethod(actionName,params)
-
-        
-    },
-
     displayErrors: function (errors) {
         alert(errors.join("\n"));
-    },
-
-    onGetHighScore: function () {
-        console.log(arguments);
     },
 
     isHighScore: function (score) {
@@ -1197,6 +1180,51 @@ var ServerObject = Class.extend({
         this.callMethod(actionName, params)
 
 
+    },
+
+
+    getHighScore: function(){
+        var actionName = "get-high-score",
+            params = {
+                gameId: this.gameId,
+                limit: 15,
+                offset: 0,
+                callback: "serverObject.onGetHighScore",
+            };
+
+        this.callMethod(actionName,params)
+
+        
+    },
+
+    saveHighScore: function () {
+        var actionName = "save-high-score",
+            params = {
+                gameId: this.gameId,
+                player: this.playerName,
+                score: this.currentScore,
+                callback: "serverObject.onSaveHighScore",
+            };
+
+        this.callMethod(actionName, params)
+
+
+    },
+    
+    onSaveHighScore: function (data) {
+        console.log(arguments);
+        if (data.errors.length) {
+            return this.displayErrors(data.errors);
+        }
+
+    },
+
+    onGetHighScore: function (data) {
+        console.log(arguments);
+        if (data.errors.length) {
+            return this.displayErrors(data.errors);
+        }
+        //data.score
     },
 
     onIsHighScore: function (data) {

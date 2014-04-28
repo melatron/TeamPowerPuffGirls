@@ -219,7 +219,6 @@ var EightPuzzle = Game.extend({
         return gameOver;
     },
     listenKeyEvents: function (e) {
-        console.log('hello');
         if (!e.data.stopEvents) {
             switch (e.keyCode) {
                 case 37:
