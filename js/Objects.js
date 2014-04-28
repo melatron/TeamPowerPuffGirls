@@ -621,8 +621,7 @@ Item = Class.extend({
         var self = this;
 
         this.dom.draggable({
-            start: function () {
-                console.log('a');
+            start: function () {              
                 self.hideAttributes();
                 $(this).css({ zIndex: '2' });
             },
@@ -660,6 +659,7 @@ Item = Class.extend({
             this.time = 0;
             this.checkpoints = 0;
             this.lives = 30;
+            this.description = 'Wearing this ring just feels right.';
         };
 
         if (this.type === 'sword') {
@@ -669,7 +669,7 @@ Item = Class.extend({
             this.time = 0;
             this.checkpoints = 0;
             this.lives = 0;
-            this.description = "You'll get nothing from this item. Exept the false sense of security..";
+            this.description = "You'll get nothing from this item. Exept the false sense of security...";
         };
 
         if (this.type === "boots") {
@@ -683,13 +683,13 @@ Item = Class.extend({
         };
 
         if (this.type === "armor") {
-            this.name = "Shiny Armor";
+            this.name = "Scrappy Armor";
             this.moves = 0;
             this.speed = 0;
             this.time = 0;
             this.checkpoints = 0;
             this.lives = 50;
-            this.description = "This armor is almost impenetrable.";
+            this.description = "This was a great armor once. Not anymore tho..";
         };
 
         if (this.type === "potion") {
@@ -699,6 +699,8 @@ Item = Class.extend({
             this.time = 300;
             this.checkpoints = 0;
             this.lives = 0;
+            this.description = "Not as tasty as you would like it to be, but it does help a great deal.";
+
         };
     },
 
