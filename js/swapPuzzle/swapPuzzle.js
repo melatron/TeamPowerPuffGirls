@@ -74,10 +74,12 @@ SwapPuzzle = Game.extend({
         this.swapPuzzleLoop;
         this.reverseParameters = null;
         this.plot = $('#swapPuzzle');
+        this.stopEvents = true;
     },
     start: function (obj, getReward) {
         this._super(obj, getReward);
         this.getReward = getReward;
+        this.stopEvents = false;
         this.reverseParameters = {
             position: [],
             lastPosition: [],
@@ -99,11 +101,14 @@ SwapPuzzle = Game.extend({
             "source/puzzleBackground.png",
             "source/reverse_button.png"
             );
-        $("#swapPuzzleCanvas").on('click', this, this.checkIfClicked);
         this.swapPuzzleLoop = setInterval(this.puzzleswapPuzzleLoop, 30);
+    },
+    addEventListeners: function () {
+        $("#swapPuzzleCanvas").on('click', this, this.checkIfClicked);
     },
     endGame: function () {
         this.gameOver = true;
+        this.stopEvents = true;
         this.removeGameFromPlot();
         clearInterval(this.swapPuzzleLoop);
         $("#swapPuzzleCanvas").off();
@@ -164,23 +169,25 @@ SwapPuzzle = Game.extend({
         }
     },
     checkIfClicked: function (ev) {
-        var rect = ev.data.canvas.getBoundingClientRect(),
-            mouseX = ev.clientX - rect.left,
-            mouseY = ev.clientY - rect.top;
+        if (!ev.data.stopEvents) {
+            var rect = ev.data.canvas.getBoundingClientRect(),
+                mouseX = ev.clientX - rect.left,
+                mouseY = ev.clientY - rect.top;
 
-        console.log("Mouse X: " + mouseX + " Mouse Y: " + mouseY);
+            console.log("Mouse X: " + mouseX + " Mouse Y: " + mouseY);
 
-        if ((mouseX > 0 && mouseX < (0 + 20)) && (mouseY > 0 && mouseY < (0 + 20))) {
-            ev.data.reverseSwap();
-        }
-        else {
-            for (var i = 0; i < ev.data.moveableBoxes.length; i++) {  // check if clicked
-                if (ev.data.moveableBoxes[i].isClicked(mouseX, mouseY)) {
-                    ev.data.onClick(i);
-                    if (ev.data.moveableBoxes[i] instanceof MoveableRightBox) {
-                        console.log(ev.data.moveableBoxes[i]);
+            if ((mouseX > 0 && mouseX < (0 + 20)) && (mouseY > 0 && mouseY < (0 + 20))) {
+                ev.data.reverseSwap();
+            }
+            else {
+                for (var i = 0; i < ev.data.moveableBoxes.length; i++) {  // check if clicked
+                    if (ev.data.moveableBoxes[i].isClicked(mouseX, mouseY)) {
+                        ev.data.onClick(i);
+                        if (ev.data.moveableBoxes[i] instanceof MoveableRightBox) {
+                            console.log(ev.data.moveableBoxes[i]);
+                        }
+                        console.log(i);
                     }
-                    console.log(i);
                 }
             }
         }

@@ -20,6 +20,7 @@ RadoGame = Game.extend({
 		this.coinScore = 0;
 		this.score = 0;
 		this.gameOver = false;
+		this.stopEvents = true;
 
 		this.elves = [];
 		
@@ -40,6 +41,8 @@ RadoGame = Game.extend({
 	
 	// ===== START METHOD ====== //
 	start: function (obj, getReward) {
+	    this.stopEvents = false;
+
 	    this._super(obj, getReward);
 	    this.getReward = getReward;
 	    var instructions = 'Use arrows to move. Avoid elves. Collect coins. Get the tree piece. Go!';
@@ -52,7 +55,7 @@ RadoGame = Game.extend({
 		this.createLevels();
 		this.currentLevel = this.levels[this.levelIndex];
 		this.populateLevel(this.currentLevel);
-		this.addEventListeners();
+		//this.addEventListeners();
 		this.mainLoop();		
 		console.log(this.gameBonuses);
 	},
@@ -93,6 +96,7 @@ RadoGame = Game.extend({
 		this.levels = [];
 		this.clearScroll();
 		this.gameOver = true;
+		this.stopEvents = true;
 
         // add condition : if you've done well in the game get the reward
 		if (true) {
@@ -1279,61 +1283,65 @@ RadoGame = Game.extend({
 	
 	// ============ EVENT HANDLERS ============ //
 	
-	onKeyDown:function(e){
-		var char = e.data.mainCharacter;
+	onKeyDown: function (e) {
+	    if (!e.data.stopEvents) {
+	        var char = e.data.mainCharacter;
 
-		if(e.keyCode == 38){
-			char.moveUp = true;
-			char.isMoving = true;
-			char.isKeyUpPressed = true;
-			e.preventDefault();
-		}
-		if(e.keyCode == 40){
-			char.moveDown = true;
-			char.isMoving = true;
-			char.isKeyDownPressed = true;
-			e.preventDefault();
-		}
-		if(e.keyCode == 37){
-			char.moveLeft = true;
-			char.isMoving = true;
-			char.isKeyLeftPressed = true;
-			e.preventDefault();
-		}
-		if(e.keyCode == 39){
-			char.moveRight = true;
-			char.isMoving = true;
-			char.isKeyRightPressed = true;
-			e.preventDefault();
-		}
+	        if (e.keyCode == 38) {
+	            char.moveUp = true;
+	            char.isMoving = true;
+	            char.isKeyUpPressed = true;
+	            e.preventDefault();
+	        }
+	        if (e.keyCode == 40) {
+	            char.moveDown = true;
+	            char.isMoving = true;
+	            char.isKeyDownPressed = true;
+	            e.preventDefault();
+	        }
+	        if (e.keyCode == 37) {
+	            char.moveLeft = true;
+	            char.isMoving = true;
+	            char.isKeyLeftPressed = true;
+	            e.preventDefault();
+	        }
+	        if (e.keyCode == 39) {
+	            char.moveRight = true;
+	            char.isMoving = true;
+	            char.isKeyRightPressed = true;
+	            e.preventDefault();
+	        }
+	    }
 	},
 
-	onKeyUp: function(e){
-		var char = e.data.mainCharacter;
-		e.preventDefault();
-		if(e.keyCode == 38){
-			char.isMoving = false;
-			char.moveUp = false;
-			char.isKeyUpPressed = false;
-		}
-		if(e.keyCode == 40){
-			char.isMoving = false;
-			char.moveDown = false;
-			char.isKeyDownPressed = false;
-		}
-		if(e.keyCode == 37){
-			char.isMoving = false;
-			char.moveLeft = false;
-			char.isKeyLeftPressed = false;
-		}
-		if(e.keyCode == 39){
-			char.isMoving = false;
-			char.moveRight = false;
-			char.isKeyRightPressed = false;
-		}
+	onKeyUp: function (e) {
+	    if (!e.data.stopEvents) {
+	        var char = e.data.mainCharacter;
+	        e.preventDefault();
+	        if (e.keyCode == 38) {
+	            char.isMoving = false;
+	            char.moveUp = false;
+	            char.isKeyUpPressed = false;
+	        }
+	        if (e.keyCode == 40) {
+	            char.isMoving = false;
+	            char.moveDown = false;
+	            char.isKeyDownPressed = false;
+	        }
+	        if (e.keyCode == 37) {
+	            char.isMoving = false;
+	            char.moveLeft = false;
+	            char.isKeyLeftPressed = false;
+	        }
+	        if (e.keyCode == 39) {
+	            char.isMoving = false;
+	            char.moveRight = false;
+	            char.isKeyRightPressed = false;
+	        }
+	    }
 	},
 
-	addEventListeners: function(){
+	addEventListeners: function () {
 		$(window).on('keydown', this, this.onKeyDown);
 		$(window).on('keyup', this, this.onKeyUp);
 	},

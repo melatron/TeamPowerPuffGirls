@@ -141,7 +141,7 @@ PathFinder = Game.extend({
         //console.log(this.objectives);
         var self = this;
         //this.scroll = $('#scroll');
-        //this.stopEvents = false;
+        this.stopEvents = true;
         this.canSpawnTemp = true;
         this.canSpawnPerm = true;
         this.width = 630;
@@ -582,8 +582,8 @@ PathFinder = Game.extend({
         
         var self = this;
         $('#pathFinderCanvas').on('click', this, this.clickEvent);
-        $(document).on('keydown', function (e) {
-            if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39 || e.keyCode == 67) {
+        $(document).on('keydown',this, function (e) {
+            if ((e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39 || e.keyCode == 67) && !e.data.stopEvents) {
                 e.preventDefault();
             }
             if (!self.stopEvents) {
@@ -593,8 +593,8 @@ PathFinder = Game.extend({
                 self.keys[e.keyCode] = false;
             }
         });
-        $(document).on('keyup', function (e) {
-            if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39 || e.keyCode == 67) {
+        $(document).on('keyup', this, function (e) {
+            if ((e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 32 || e.keyCode == 39 || e.keyCode == 67) && !e.data.stopEvents) {
                 e.preventDefault();
             }
             self.keys[e.keyCode] = false;
@@ -789,7 +789,7 @@ PathFinder = Game.extend({
         ////
         ////
         this.startLevel(0);
-        this.addEventListeners();
+        //this.addEventListeners();
         this.addGameToPlot();
         this.update();
     },
