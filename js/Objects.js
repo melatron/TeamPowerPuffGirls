@@ -86,7 +86,7 @@ Speech = Class.extend({
     },
     drawSpeech: function () {
         this.ctx.fillStyle = "black";
-        this.ctx.font = "12px Georgia";
+        this.ctx.font = "bold 12px Georgia";
         var i, len = this.textArray[this.counter].length;
         for (i = 0; i < len; i++) {
             this.ctx.fillText(this.textArray[this.counter][i], this.x, this.y + (i * this.wordsPixels), this.maxWidth); //draws part of the dialog
@@ -952,8 +952,13 @@ function Menu() {
         elem.on('click', startGame);
     };
 	
+    function showEpilogue(){
+        
+    },
+
     function startGame(e){
         if(self.isGameStarted == false){
+            var userName = prompt('Please enter your name: ', 'DragonSlayer');
             self.isGameStarted = true;
             rainSound.pause();
             music.pause();

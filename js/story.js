@@ -797,14 +797,14 @@ function Story() {
                                                             },
             squareGame,
             {                  // HERO SPEECH
-                before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
+                before: [['Ah, my lord!', '(Stuttering voice) *bows*']],
+                after: [],
+                done: []
             },
             {                  //QUEST SPEECH
-                before: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
+                before: [['...']],
+                after: [],
+                done: []
             },
             {
                 x: 192,
@@ -840,12 +840,12 @@ function Story() {
             elfGame,
             {                  // HERO SPEECH
                 before: [['What!?', 'Who!?'], ["I'll just go ahead and chop off", "a piece of that little", "fruit tree over there"], ["Just a little bit!", "You won't even notice it ..."], ["If you catch me!"]],
-                after: " ",
+                after: [],
                 done: " "
             },
             {                  //QUEST SPEECH
                 before: [['Halt!!', 'Who dares to enter', 'the sacred forest of Nazareth, ', 'son of Nazgul Almighty!'], ['Go away!', 'Outsiders are NOT', 'welcome here!'], ["Excuse me?", "That's the tree of life!", "It's our sacred heritage"], ["If you as much as", "breathe on that tree,", "WE WILL ANIHILATE YOU!!!"]],
-                after: " ",
+                after: [],
                 done: " "
             },
             {
@@ -930,7 +930,7 @@ function Story() {
                      done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
                  },
                 {                  //QUEST SPEECH
-                    before: [["Hey old friend it's been","a while since you","last came here hm?"], ["Hahaha! You need", "money? Am I Right?"], ["I don't want to hear about", "it! If you help me with those", " gems I'll give you money.."], ],
+                    before: [["Hey old friend! it's been","a while since you","last came here, hm?"], ["Hahaha! You need", "money? Am I Right?"], ["I don't want to hear about", "it! If you help me with those", " gems I'll give you money.."], ],
                     after: [["Nicely done ", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
                     done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
                 },
