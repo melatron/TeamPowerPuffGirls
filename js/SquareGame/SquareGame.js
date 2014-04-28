@@ -136,9 +136,15 @@ var SquareGame = Game.extend({
     },
 
     addEventListeners: function () {
+        this.plot.on('click', this, this.cheatEvent);
         this.plot.on('click', this, this.placeLeader);
     },
 
+    cheatEvent : function(e) {
+        if (e.pageX > 200 && e.pageX < 220 && e.pageY > 600 && e.pageY < 620) {
+            console.log('a');
+        };
+    },
 
     pickLeader: function (e) {
         if (!e.data.stopEvents) {
