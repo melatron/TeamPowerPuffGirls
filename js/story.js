@@ -863,13 +863,13 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
             elfGame,
             {                  // HERO SPEECH
                 before: [['What!?', 'Who!?'], ["I'll just go ahead and chop off", "a piece of that little", "fruit tree over there"], ["Just a little bit!", "You won't even notice it ..."], ["If you catch me!"]],
-                after: [],
-                done: " "
+                after: [["Thanks for the", "tinder, greenies!", "Hahahaha!"]],
+                done: [["Uh oh .."]]
             },
             {                  //QUEST SPEECH
                 before: [['Halt!!', 'Who dares to enter', 'the sacred forest of Nazareth, ', 'son of Nazgul Almighty!'], ['Go away!', 'Outsiders are NOT', 'welcome here!'], ["Excuse me?", "That's the tree of life!", "It's our sacred heritage"], ["If you as much as", "breathe on that tree,", "WE WILL ANIHILATE YOU!!!"]],
-                after: [],
-                done: " "
+                after: [["After him!", "AFTER HIM, YOU FOOLS!"]],
+                done: [["You again!?", "GET HIM!!"]]
             },
             {
                 x: 120,
