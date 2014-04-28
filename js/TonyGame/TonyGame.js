@@ -39,13 +39,12 @@ TonyGame = Game.extend({
                        [0, 0, 0, 0],
                        [0, 0, 0, 0]];
     },
-    start: function (obj, getReward) {
-        this._super(obj, getReward);
+    start: function (obj) {
+        this._super(obj);
         var instructions = 'Use the arrow keys to merge the equivalent stones!';
         this.writeOnScroll(instructions, {
             fontSize: '17px'
         });
-        this.getReward = getReward;
         this.stopEvents = false;
         this.addGameToPlot();
         this.putStartingNumbers();
@@ -59,13 +58,14 @@ TonyGame = Game.extend({
                        [0, 0, 0, 0],
                        [0, 0, 0, 0],
                        [0, 0, 0, 0]];
+
         this.score = this.highestValue;
         this.highestValue = 4;
         this.removeNodes();
 
         // add condition : if you've done well in the game get the reward
         if (this.score >= 300) {
-            this.getReward('dagger');
+            this.rewardItem = 'dagger';
         }
     },
     addBonuses: function (bonuses) {

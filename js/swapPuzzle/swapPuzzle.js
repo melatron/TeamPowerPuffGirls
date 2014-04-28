@@ -76,9 +76,8 @@ SwapPuzzle = Game.extend({
         this.plot = $('#swapPuzzle');
         this.stopEvents = true;
     },
-    start: function (obj, getReward) {
-        this._super(obj, getReward);
-        this.getReward = getReward;
+    start: function (obj) {
+        this._super(obj);
         this.stopEvents = false;
         this.reverseParameters = {
             position: [],
@@ -118,7 +117,7 @@ SwapPuzzle = Game.extend({
 
         // add condition : if you've done well in the game get the reward
         if (this.score > 499) {
-            this.getReward('ring');
+            this.rewardItem = 'ring';
         }
     },
     addBonuses: function (bonuses) {
