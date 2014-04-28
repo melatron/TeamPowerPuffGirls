@@ -41,6 +41,10 @@ TonyGame = Game.extend({
     },
     start: function (obj, getReward) {
         this._super(obj, getReward);
+        var instructions = 'Use the arrow keys to merge the equivalent stones!';
+        this.writeOnScroll(instructions, {
+            fontSize: '17px'
+        });
         this.getReward = getReward;
         this.stopEvents = false;
         this.addGameToPlot();

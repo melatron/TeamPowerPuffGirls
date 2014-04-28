@@ -1045,8 +1045,33 @@ function Story() {
         if (buttons[3].checkIfClicked(x, y)) {
             endStoryScreenOn = false;
             stopEvents = false;
-            storyEnded = false;
         }
+    };
+
+    testFn = function testEndgameScreen () {
+        storyEnded = true;
+        //endStoryScreenOn = true;
+        stopEvents = true;
+    };
+
+    function calculateFinalScore() {
+        var array = interactableObjects,
+            finalScore = 0;
+        for (var i = 0; i < array.length; i++) {
+            finalScore += array[i].score;
+        }
+        return finalScore;
+    };
+    // here is the mehtod which will end the this if you have finished all 7 games and you have clicked finish button
+    function endStory() {
+        clearInterval(this.mainLoop);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stopEvents = true;
+        menu.isGameStarted = false;
+        $('#main').fadeOut(2000, function () {
+            menu.initializeMenu();
+            console.log(menu);
+        });
     };
 
     function onMouseMove(e) {
@@ -1250,24 +1275,7 @@ function Story() {
     };
     //=========global test function for the endgame button//will be deleted soon==========//
     
-    testFn = function testEndgameScreen () {
-        storyEnded = true;
-        //endStoryScreenOn = true;
-        stopEvents = true;
-    };
-
-    function calculateFinalScore() {
-        var array = interactableObjects,
-            finalScore = 0;
-        for (var i = 0; i < array.length; i++) {
-            finalScore += array[i].score;
-        }
-        return finalScore;
-    };
-    // here is the mehtod which will end the this if you have finished all 7 games and you have clicked finish button
-    function endStory() {
-
-    };
+   
     function addInteractableObject(iObject) {
         interactableObjects.push(iObject);
     };
@@ -1336,8 +1344,6 @@ function Story() {
                 return;
             };
         };
-
-        inventory.getItem(type);
     };
 
     function preloadButtons() {

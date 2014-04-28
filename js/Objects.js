@@ -886,8 +886,6 @@ function Menu() {
     var self = this,
         isMenuInitialize = false,
 
-        server = null,
-
         mainWrapper = $('#mainMenuWrapper'),
         menuCells = [{
         class: '.highScores',
@@ -910,10 +908,12 @@ function Menu() {
     
     this.initializeMenu = function (){
         if (!self.isGameStarted) {
-            server = new ServerObject();
 
             $('#main').hide();
-            fillHallOFFame();
+
+            $('#mainMenuWrapper').show();
+            $('#main').hide();
+            removeAllEvents();
             preloadSounds();
             rainSound.play();
             thunderSound.play();
@@ -929,10 +929,11 @@ function Menu() {
             setTimeout(thunder, 16200);
         }
     };
-    function fillHallOFFame() {
-        var dropDownCells = $(".highScores .dropDownCell");
 
-        console.log(server.getHighScore());
+    function removeAllEvents() {
+        $('*').off();
+        $(document).off();
+        $(window).off();
     };
     function preloadSounds(){
         rainSound = new Audio();
