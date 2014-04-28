@@ -692,7 +692,7 @@ function Story() {
     
 
     var endStoryScreenOn = false,
-        storyEnded = false;
+        storyEnded = false,
         movableObjects = [],
         staticSpriteObjects = [],
         mainCanvas = $("#canvas")[0],
