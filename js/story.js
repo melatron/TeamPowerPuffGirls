@@ -142,169 +142,173 @@ You: Oh, there's nothing tiresome about it your highness.
 King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, i shall be there as soon as i figure a proper form of punishment!
         */
         var humanCastle = new ClickPoint(106, -13, 150, 140, "humanCastle",
-                                                            {
-                                                                x: 175,
-                                                                y: 150
-                                                            },
-            squareGame,
+                                                           {
+                                                               x: 175,
+                                                               y: 150
+                                                           },
+           squareGame,
+           {                  // HERO SPEECH
+               before: [['Ah, my lord!', '(Stuttering voice) *bows*'], ['Yes of course, my liege.'],
+                   ['I was merely telling some','war stories with the', 'royal guard sir, ','they were quite anxious to', 'hear of my recent exploits. '],
+               ['No, havent heard anything', ' on this side of the chambers.'],
+               ['Well sire, this', 'is the only part', ' of the chambers i have', 'any pleasure in visiting.', ' *His look accidentally wanders', 'at the queens dormitory*'],
+               ['Oh, theres nothing tiresome', ' about it your highness.']],
+               after: [["Hell yes!", "I still got it!"]],
+               done: [["Oh, well ..."]]
+           },
+           {                  //QUEST SPEECH
+               before: [['...'], ['Rise and spare me the',' pleasantries, i am in no mood', ' for your groveling.'],
+                   ['Would you be so kind', 'as to explain',' what you are doing', 'in the royal chambers',' at this time of day?'],
+               ['You wouldnt have', 'happened to have heard', 'some rather disturbingly', ' loud moaning sounds', ' while you were walking', 'around the chambers,','did you?'],
+               ['I didnt mention that they', ' were coming from this', ' side "Insert name here".'],
+               ['Dont you get tired', 'of visiting the same', 'rooms over and over?', ' "said the king with', 'a spiteful tone"'],
+               ['Why you insolent wench!', 'GUARDS!! Take this arrogant', 'sard to the dungeons, i shall', ' be there as soon as i figure', ' a proper form of', 'punishment!']],
+               after: [["After him!", "AFTER HIM, YOU FOOLS !!"]],
+               done: [["You! Off to the prison with you, ", "scumbag!"]]
+           },
+           {
+               x: 192,
+               y: 62,
+               r: 58,
+           }
+           ),
+           dwarfCamp = new ClickPoint(740, -5, 130, 130, "dwarfCamp",
+                                                           {
+                                                               x: 655,
+                                                               y: 130
+                                                           }, eightPuzzle,
+           {                  // HERO SPEECH
+               before: [["A taller and more ", "handsome version of ", "your father!"],["I come seeking refuge in ", "your local tavern and to ", "earn some coin, won't be ", "any trouble of course."],["Thank you.", "I will be on my way then."],["I am always up for a challenge,", "especially if it involves coins ", "and profit."]],
+               after: [["Well, I am too modest to boast. ", "Who is this person you speak of? ", "Where can they be found?"], ["Alright, I hope this is ", "not just a wild ", "goose chase."]],
+               done: [["Piece of cake!"]]
+           },
+           {                  //QUEST SPEECH
+               before: [["Hold!", "Who goes there?"],["Why you son of a ", "motherless ogre!! Speak your ", "business before I leave ", "you tongueless!"],["Aye, fine... You better not ", "be causing any. The Irongate ", "watch will have you out on your face ",  "in the mud before you even ", "try anything!"],
+                        ["Before you go laddy, ", "I challenge you to play a game to prove your worth. ", "I might be able to point you ", "in the right direction if you ", "wish to make some profit.", "That is, should you succeed."],["Okay, ", "here is what you have ", "to do..."]],
+               after: [["Well well, I am impressed... ", "Few people have ever completed the challenge. ", "Perhaps there is someone who ", "might make use of your talents ", "after all."],["There is a wizard, ", "he is not far from this place. ", "Travel south and you should be ", "able to find him, or rather ", "he will likely find you."]],
+               done: [["Want another go at my challenge?", "Go ahead, I dare you!"]]
+           },
+           {
+               x: 798,
+               y: 45,
+               r: 47,
+           }
+           ),
+           treeOfLife = new ClickPoint(83, 372, 100, 100, "treeOfLife", {
+               x: 175,
+               y: 350
+           },
+           elfGame,
+           {                  // HERO SPEECH
+               before: [["I only want a small piece, ", "just enough to slay a ", "dragon with it."], ["There must be a way ", "I can get a small piece, ", "surely?"], ["*The hero simply proceeds to ", "quickly chop off a small ", "piece and starts running ", "as the elves begin to ", "chase*"]],
+               after: [["Thanks for the tinder, ", "bitchachos!!!"]],
+               done: [["Uhh..", " not ... me?"], ["Uh oh ..."]]
+           },
+           {                  //QUEST SPEECH
+               before: [["Defiler!! ", "Get away from our ", "sacred tree!!"], ["Stand back or you will ", "suffer the consequences."], ["Don't you dare.."]],
+               after: [["Be gone and never ", "come back to these lands ", "or it will be your ", "last!"]],
+               done: [["What was that!?"], ["GET HIM !!"]]
+           },
+           {
+               x: 120,
+               y: 425,
+               r: 40,
+           }
+ 
+           ),
+           mage = new ClickPoint(800, 200, 50, 50, 'mage',
+                                                           {
+                                                               x: 810,
+                                                               y: 250
+                                                           }, digitGame,
+           {                  // HERO SPEECH
+               before: [["Who the heck are you? ", "Turn off the lights and ", "special effects!"], ["Too long, did not listen. ", "You are the wizard ", "I assume?"],
+                        ["I seek passage through ", "these lands and I was told that ", "you might be able to pay me, ", "provided that I assist you with ", "some chore?"], ["Do I have to ", "kill someone?"],
+                        ["You want me to kill the ", "dragon that has been flying ", "around?"], ["*Laughs with an amused look ", "on his face* Well okay then, ", "I guess I will be going..."],
+                        ["How do you want me to ", "slay a dragon, when ", "the royal guards could not ", "do it?"]],
+               after: [["So what now? ", "We have the magical ", "hocus-pocus stone. ", "How does that help?"], ["What?"], ["Here we go again."]],
+               done: [["..."], ["What's up, ol'timer?"], ["Ugh .. sure."]]
+           },
+           {                  //QUEST SPEECH
+               before: [["You there, ", "yes you!"], ["Much courage lays in you. ", "Hidden underneath a shell ", "of selfishness it is."], ["Depends on what you ", "mean by wizard, for some I am ", "simply a crazy old hobo ", "with a staff."],
+                        ["If it is coin you seek, ", "then maybe your sword can speak. ", "There is a small task that you ", "might be able to aid me with."], ["Not someone, something. ", "You have no doubt heard of ", "the dragon, have you not?"],
+                        ["Why yes, there is ", "good coin involved for ", "brave dragon slayers such as ", "yourself."], ["*The mage summons a large and ", "thick wall of ice, blocking ", "the path of the hero.* ", "Please, do consider my ", "offer."],
+                        ["First you must help me ", "merge the stones of a ", "thousand truths."]],
+               after: [["I am glad I did not ", "misjudge you. You did well ", "merging the stones!"], ["Now that we know you are ", "not a complete imbecile when it comes ", "to magic, there is one more thing ", "that needs to be done before ", "you face the dragon."],
+                       ["Travel you must, to the ",  "land of the elves. There you will need to ", "chop off a small piece from their ", "sacred tree for the next part of ", "the plan. *The mage ", "suddenly vanishes*"]],
+               done: [["BOO!"], ["Oh, it's *you* ..."], ["I need help with ", "my stones again.", "Care to help?"]]
+           },
+           {
+               x: 810,
+               y: 225,
+               r: 35,
+           }
+           ),
+           dragon = new ClickPoint(644, 413, 200, 200, 'dragon',
+                                                           {
+                                                               x: 660,
+                                                               y: 345
+                                                           }, null,
             {                  // HERO SPEECH
-                before: [['Ah, my lord!', '(Stuttering voice) *bows*'], ['Yes of course, my liege.'], 
-                    ['I was merely telling some','war stories with the', 'royal guard sir, ','they were quite anxious to', 'hear of my recent exploits. '],
-                ['No, havent heard anything', ' on this side of the chambers.'],
-                ['Well sire, this', 'is the only part', ' of the chambers i have', 'any pleasure in visiting.', ' "His look accidentally wanders', 'at the queens dormitory"'],
-                ['Oh, theres nothing tiresome', ' about it your highness.']],
-                after: [],
-                done: []
+                before: [[""]],
+                after: [[""]],
+                done: [[""]]
             },
-            {                  //QUEST SPEECH
-                before: [['...'], ['Rise and spare me the',' pleasantries, i am in no mood', ' for your groveling.'],
-                    ['Would you be so kind', 'as to explain',' what you are doing', 'in the royal chambers',' at this time of day?'],
-                ['You wouldnt have', 'happened to have heard', 'some rather disturbingly', ' loud moaning sounds', ' while you were walking', 'around the chambers,','did you?'],
-                ['I didnt mention that they', ' were coming from this', ' side "Insert name here".'],
-                ['Dont you get tired', 'of visiting the same', 'rooms over and over?', ' "said the king with', 'a spiteful tone"'],
-                ['Why you insolent wench!', 'GUARDS!! Take this arrogant', 'sard to the dungeons, i shall', ' be there as soon as i figure', ' a proper form of', 'punishment!']],
-                after: [],
-                done: []
-            },
-            {
-                x: 192,
-                y: 62,
-                r: 58,
-            }
-            ),
-            dwarfCamp = new ClickPoint(740, -5, 130, 130, "dwarfCamp",
-                                                            {
-                                                                x: 655,
-                                                                y: 130
-                                                            }, eightPuzzle,
+           {                  //QUEST SPEECH
+               before: [[""]],
+               after: [[""]],
+               done: [[""]]
+           },
+           {
+               x: 772,
+               y: 530,
+               r: 110,
+           }
+ 
+           ),
+           bandit = new ClickPoint(451, 310, 100, 150, 'banditTavern',
+                                                           {
+                                                               x: 430,
+                                                               y: 355
+                                                           }, pathFinder,
             {                  // HERO SPEECH
-                before: " ",
-                after: " ",
-                done: " "
+                before: [["Is that any way to ", "treat an old friend?"], ["I came for practice, ", "I need training."]],
+                after: [["The dragon will not be ", "as hospitable as you guys."], ["Farewell my friend, ", "I will see you around!"]],
+                done: [["This is gonna be", " interesting .."]]
             },
-            {                  //QUEST SPEECH
-
-                before: [["Hold!", "Who goes there?"],["Why you son of a ", "motherless ogre!! Speak your ", "business before I leave ", "you tongueless!"],["Aye, fine... You better not ", "be causing any. The Irongate ", "watch will have you out on your face ",  "in the mud before you even ", "try anything!"],
-                         ["Before you go laddy, ", "I challenge you to play a", "game to prove your worth. ", "I might be able to point you ", "in the right direction if you ", "wish to make some profit.", "That is, should you succeed."],["Okay, ", "here is what you have ", "to do..."]],
-                after: [["Well well, I am impressed... ", "Few people have ever completed the challenge. ", "Perhaps there is someone who ", "might make use of your talents ", "after all."],["There is a wizard, ", "he is not far from this place. ", "Travel south and you should be ", "able to find him, or rather ", "he will likely find you."]],
-                done: [["Want another go at my challenge?", "Go ahead, I dare you!"]]
-
-            },
-            {
-                x: 798,
-                y: 45,
-                r: 47,
-            }
-            ),
-            treeOfLife = new ClickPoint(83, 372, 100, 100, "treeOfLife", {
-                x: 175,
-                y: 350
-            },
-            elfGame,
-            {                  // HERO SPEECH
-                before: [['What!?', 'Who!?'], ["I'll just go ahead and chop off", "a piece of that little", "fruit tree over there"], ["Just a little bit!", "You won't even notice it ..."], ["If you catch me!"]],
-                after: [],
-                done: " "
-            },
-            {                  //QUEST SPEECH
-                before: [['Halt!!', 'Who dares to enter', 'the sacred forest of Nazareth, ', 'son of Nazgul Almighty!'], ['Go away!', 'Outsiders are NOT', 'welcome here!'], ["Excuse me?", "That's the tree of life!", "It's our sacred heritage"], ["If you as much as", "breathe on that tree,", "WE WILL ANIHILATE YOU!!!"]],
-                after: [],
-                done: " "
-            },
-            {
-                x: 120,
-                y: 425,
-                r: 40,
-            }
-
-            ),
-            mage = new ClickPoint(800, 200, 50, 50, 'mage',
-                                                            {
-                                                                x: 810,
-                                                                y: 250
-                                                            }, digitGame,
-            {                  // HERO SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            },
-            {                  //QUEST SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            },
-            {
-                x: 810,
-                y: 225,
-                r: 35,
-            }
-            ),
-            dragon = new ClickPoint(644, 413, 200, 200, 'dragon',
-                                                            {
-                                                                x: 660,
-                                                                y: 345
-                                                            }, null,
-             {                  // HERO SPEECH
-                 before: " ",
-                 after: " ",
-                 done: " "
-             },
-            {                  //QUEST SPEECH
-                before: " ",
-                after: " ",
-                done: " "
-            },
-            {
-                x: 772,
-                y: 530,
-                r: 110,
-            }
-
-            ),
-            bandit = new ClickPoint(451, 310, 100, 150, 'banditTavern',
-                                                            {
-                                                                x: 430,
-                                                                y: 355
-                                                            }, pathFinder,
-             {                  // HERO SPEECH
-                 before: " ",
-                 after: " ",
-                 done: " "
-             },
-            {                  //QUEST SPEECH
-                before: [["You've got a lot of ", "guts coming back here."], ["Why are you here you scumbag? ", "Even the people in this place ", "aren't fond of you and that ", "is saying something."], 
-                         ["Practice? Well I", "guess we can help you", "out for old times sake.", "*The bandit winks at ", "the two guards to open the ", "gates to the training grounds for ", "the hero*."]],
-                after: [["Just like old times. ", "I hope it was not too ", "hard for you?"], ["Dragon? What dragon? ", "You did not say anything about ", "a dragon!?"]],
-                done: [["Want another go?", "Step right up!"]]
-
-            },
-            {
-                x: 493,
-                y: 396,
-                r: 35,
-            }
-            ),
-            orcCamp = new ClickPoint(440, 22, 100, 100, 'orcCamp',
-                                                            {
-                                                                x: 430,
-                                                                y: 140
-                                                            }, swapPuzzle,
-                 {                  // HERO SPEECH
-                     before: [["Kogar, you fat orc!", "How are you!?"], ["You know I wouldn't ask ","if I did't need it.."], ["Sure. Let's get", "to work.."], ],
-                     after: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                     done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
-                 },
-                {                  //QUEST SPEECH
-                    before: [["Hey old friend! it's been","a while since you","last came here, hm?"], ["Hahaha! You need", "money? Am I Right?"], ["I don't want to hear about", "it! If you help me with those", " gems I'll give you money.."], ],
-                    after: [["Nicely done ", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ],
-                    done: [["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ["hello mister", "I'll try to help", "Farewell"], ]
+           {                  //QUEST SPEECH
+               before: [["You've got a lot of ", "guts coming back here."], ["Why are you here you scumbag? ", "Even the people in this place ", "aren't fond of you and that ", "is saying something."],
+                        ["Practice? Well I guess", " we can help you out ", "for old times sake.", "*The bandit winks at ", "the two guards to open the ", "gates to the training grounds", "for the hero*."]],
+               after: [["Just like old times. ", "I hope it was not too ", "hard for you?"], ["Dragon? What dragon? ", "You did not say anything about ", "a dragon!?"]],
+               done: [["Want another go?", "Step right up!"]]
+           },
+           {
+               x: 493,
+               y: 396,
+               r: 35,
+           }
+           ),
+           orcCamp = new ClickPoint(440, 22, 100, 100, 'orcCamp',
+                                                           {
+                                                               x: 430,
+                                                               y: 140
+                                                           }, swapPuzzle,
+                {                  // HERO SPEECH
+                    before: [["Kogar, you fat orc!", "How are you!?"], ["You know I wouldn't ask ","if I did't need it.."], ["Sure. Let's get", "to work.."], ],
+                    after: [["I guess I'm a pro when", "it comes to valuables ..."],["Uhh .. see you later,", "I guess .. you brain-dead orc"], ["*Starts running*"]],
+                    done: [["Woah, what happened??"], ["*sigh*", "Let me see ..."]]
                 },
-            {
-                x: 471,
-                y: 78,
-                r: 30,
-            }
-            );
+               {                  //QUEST SPEECH
+                   before: [["Hey old friend! it's been","a while since you","last came here, hm?"], ["Hahaha! You need", "money? Am I Right?"], ["I don't want to hear about", "it! If you help me with those", " gems I'll give you money.."], ],
+                   after: [["Woah! I've been banging my ", "ugly head for hours over", "those gems."], ["*Kogat seems too entices ", "with his gems to remember you", "were ever there.*"], ["What was that?"]],
+                   done: [["*crying*"], ["*sobs*", "My gems .. they are all ", "messed up again", "*sobs*"]]
+               },
+           {
+               x: 471,
+               y: 78,
+               r: 30,
+           }
+           );
         interactableObjects.push(orcCamp); //6
         interactableObjects.push(humanCastle);//0
         interactableObjects.push(dwarfCamp);//1
