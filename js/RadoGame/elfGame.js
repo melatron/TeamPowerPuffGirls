@@ -16,7 +16,7 @@ RadoGame = Game.extend({
 		this.canvas = $('#elf-game-canvas')[0];
 		this.gameContext = $('#elf-game-canvas')[0].getContext('2d');
 		this.mainCharacter = {};
-		this.deaths = 0;
+		this.deaths = 1;
 		this.coinScore = 0;
 		this.score = 0;
 		this.gameOver = false;
@@ -83,7 +83,7 @@ RadoGame = Game.extend({
 	endGame: function(){
 		this.score = Math.round(this.coinScore / this.deaths);
 		this.coinScore = 0;
-		this.deaths = 0;
+		this.deaths = 1;
 		for(var i = 0; i < this.levels.length; i++){
 			this.levels[i].isFinished = false;
 		}
@@ -112,7 +112,7 @@ RadoGame = Game.extend({
 		this.gameContext.fillStyle = 'black';
 		this.gameContext.fillRect(0, 5, 70, 19);
 		this.gameContext.restore();
-		this.gameContext.fillText('Deaths: ' + this.deaths, 5, 20);
+		this.gameContext.fillText('Deaths: ' + (this.deaths - 1), 5, 20);
 	},
 	
 	// ===== GET CONTEXT ====== //
