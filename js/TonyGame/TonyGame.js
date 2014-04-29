@@ -230,7 +230,7 @@ TonyGame = Game.extend({
                     e.preventDefault();
                     e.data.move("down");
                     break;
-                case 32:
+                case 89:
                     e.data.endGame();
                     break;
             }
