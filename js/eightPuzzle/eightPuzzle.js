@@ -131,7 +131,7 @@ var EightPuzzle = Game.extend({
             x = 250,
             y = 20;
         var initialState = this.tableState.getRandomState();
-
+        this.tableArray = new Array();
         for (var i = 0; i < 3; i++) {
             this.tableArray[i] = [];
             for (var j = 0; j < 3; j++) {
