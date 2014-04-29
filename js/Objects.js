@@ -1255,8 +1255,9 @@ var ServerObject = Class.extend({
                 'id': 'api-script',
                 'src': src
             }).appendTo($('head'));
+        } else {
+            $scriptTag.attr('src', src);
         }
-        $scriptTag.attr('src', src);
         
     },
 
@@ -1340,7 +1341,8 @@ var ServerObject = Class.extend({
             if (i < 3) {
                 dropDownCells.eq(i).html(html);
             } else {
-                highScoresDiv.html(html);
+                var divHtml = highScoresDiv.html();
+                highScoresDiv.html(divHtml+html);
             }
         }
     },
