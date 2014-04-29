@@ -436,7 +436,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
     };
     // here is the mehtod which will end the this if you have finished all 7 games and you have clicked finish button
     function endStory() {
-        playList.pauseMainMusic();
+        soundTrack.pauseMainMusic();
         clearInterval(this.mainLoop);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         stopEvents = true;
@@ -471,7 +471,8 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
     function resetGlowFrameCounter() {
         var i, temp, len = interactableObjects.length;
         for (i = 0; i < len; i++) {
-            if (Math.pow(temp.circle.x - mousePos.x, 2) + Math.pow(temp.circle.y - mousePos.y, 2) = Math.pow(temp.circle.r, 2)) {
+            temp = interactableObjects[i];
+            if (Math.pow(temp.circle.x - mousePos.x, 2) + Math.pow(temp.circle.y - mousePos.y, 2) == Math.pow(temp.circle.r, 2)) {
                 temp.spriteGlow.frameCounter = 6;
             }
         }
@@ -562,12 +563,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
                 if (hero.speakingTo.score == 0) {
                     gamesFinished++;
 
-                    if (gamesFinished == gamesAmount) {
-                        storyEnded = true;
-                        //endStoryScreenOn = true;
-                        stopEvents = true;
-
-                    }
+                    
                 }
                 if (hero.speakingTo.score < hero.speakingTo.game.score) {
                     hero.speakingTo.score = hero.speakingTo.game.score;
@@ -579,8 +575,15 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
                             break;
                         }
                     }
+
                     hero.prepareObjectForSpeaking(hero.speakingTo);
                     hero.speakingTo.prepareObjectForSpeaking("");
+                    if (gamesFinished == gamesAmount) {
+                        storyEnded = true;
+                        //endStoryScreenOn = true;
+                        stopEvents = true;
+
+                    }
                 }
                 else {
                     hero.speakingTo = null;
