@@ -620,20 +620,22 @@ Item = Class.extend({
 
         var self = this;
 
-        this.dom.draggable({
-            start: function () {              
-                self.hideAttributes();
-                $(this).css({ zIndex: '2' });
-            },
+        this.addDraggable = function(){
+            this.dom.draggable({
+                start: function () {              
+                    self.hideAttributes();
+                    $(this).css({ zIndex: '2' });
+                },
 
-            stop: function (ev, ui) {
-                $(this).css({
-                    left: '0px',
-                    top: '0px'
-                });
-            }
-        });
-
+                stop: function (ev, ui) {
+                    $(this).css({
+                        left: '0px',
+                        top: '0px'
+                    });
+                }
+            });
+            console.log('added ' + self);
+        };
 
         this.time = null;
         this.moves = null;
@@ -702,6 +704,8 @@ Item = Class.extend({
             this.description = "Not as tasty as you would like it to be, but it does help a great deal.";
 
         };
+
+        this.addDraggable();
     },
 
     showAttributes: function (e) {
@@ -769,7 +773,7 @@ Inventory = Class.extend({
                         self.slots[newSlotIndex] = item;
                     };
                     ui.draggable.css({ zIndex: '0' });
-                    console.log($(this));
+                    item.addDraggable();
                 }
                 
             });
