@@ -3,6 +3,13 @@ body {
     cursor: url(../source/cursor.cur), auto;
 }
 
+div{
+	-moz-user-select: none; 
+	-webkit-user-select: none; 
+	-ms-user-select:none; 
+	user-select:none;
+}
+
 #borderDiv{
 	width: 1260px;
 	height: 880px;
@@ -235,7 +242,12 @@ body {
 /* item attributes */
 @font-face {
     font-family: Morpheus;
-    src : url(../source/MORPHEUS.TTF);
+    src: url(../source/MORPHEUS.TTF);
+}
+
+@font-face {
+    font-family: Script;
+    src: url(../source/Script.TTF);
 }
 
 #item-attributes {
@@ -276,18 +288,82 @@ body {
 }
 
 /* ======= MAIN MENU STYLE ========= */
+		#highScoresDiv{
+			background-image: url(../source/menu/highScoresBackground.png);
+			position: absolute;
+			width: 210px;
+			height: 500px;
+			top: 150px;
+			left: 320px;
+			border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            display: none;
+		}
+		#bigScroll{
+			position: relative;
+			width:1024px;
+			height: 768px;
+			top: 20px;
+			left: 10px;
+		}
+		#bigScrollLeft{
+			background-image: url(../source/menu/bigScrollLeft.png);
+			width:112px;
+			height:709px;
+			z-index: 10;
+			float:left;
+			position: absolute;
+			top: 30px;
+			left: 20px;
+		}
+		#bigScrollRight{
+			background-image: url(../source/menu/bigScrollRight.png);
+			width: 927px;
+			height: 735px;
+			position: absolute;
+			float:left;
+			left: -650px;
+		}
+		
+		#bigScrollRightWrapper{
+			overflow: hidden;
+			position: relative;
+			width: inherit;
+			height: inherit;
+			float:left;
+			z-index: 1;
+			left: 30px;
+			top: -5px;
+		}
+		
         #epilogue{
             position: absolute;
-            background-color: rgba(255, 255, 255,0.4);
+            background-image: url(../source/menu/bigScrollBackground.png);
             width: 1024px;
             height: 768px;
             display: none;
             z-index: 10;
+            overflow: hidden;
         }
-        .menuCell.nameInput{
-            position: absolute;
-            top: 200px;
-            left: 450px;
+        #seal{
+        	position: absolute;
+        	width:110px;
+        	height:107px;
+        	background-image: url(../source/menu/playButtonIdle.png);
+        	top: 570px;
+        	left: 20px;
+        	border: 1px sold green;
+        }
+        #nameInput{
+        	position: absolute;
+        	left: 590px;
+        	top: 570px;
+        	border: 0;
+        	background: transparent;
+        	font-family: Script;
+        	font-size: 80px;
+        	font-weight: 300;
+        	width: 250px;
         }
 		#mainMenuWrapper{
             width: 1024px;
@@ -295,6 +371,7 @@ body {
             background-image: url(../source/menu/background.png);
             margin-left: 119px;
             margin-top: -3px;
+            position:relative;
         }
         .tutorial{
         	display: none;

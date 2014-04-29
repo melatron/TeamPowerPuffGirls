@@ -354,7 +354,7 @@ ClickPoint = InteractableObject.extend({
             x: circle.x,
             y: circle.y,
             r: circle.r
-        }
+        };
         
     },
 
@@ -621,9 +621,9 @@ Item = Class.extend({
         var self = this;
 
         this.dom.draggable({
-            start: function () {
+            start: function () {              
                 self.hideAttributes();
-                $(this).css({ zIndex: '2' })
+                $(this).css({ zIndex: '2' });
             },
 
             stop: function (ev, ui) {
@@ -649,7 +649,7 @@ Item = Class.extend({
             this.time = 120;
             this.checkpoints = 1;
             this.lives = 0;
-            this.description = 'This item increases your time for reaction dramatically!!'
+            this.description = 'This item increases your time for reaction dramatically!!';
         };
 
         if (this.type === 'ring') {
@@ -659,46 +659,49 @@ Item = Class.extend({
             this.time = 0;
             this.checkpoints = 0;
             this.lives = 30;
+            this.description = 'Wearing this ring just feels right.';
         };
 
         if (this.type === 'sword') {
-            this.name = "Useless Sword"
+            this.name = "Useless Sword";
             this.moves = 0;
             this.speed = 0;
             this.time = 0;
             this.checkpoints = 0;
             this.lives = 0;
-            this.description = "You'll get nothing from this item. Exept the false sense of security.."
+            this.description = "You'll get nothing from this item. Exept the false sense of security...";
         };
 
         if (this.type === "boots") {
-            this.name = "Boots of Speed"
+            this.name = "Boots of Speed";
             this.moves = 35;
             this.speed = 1;
             this.time = 180;
             this.checkpoints = 0;
             this.lives = 0;
-            
-        }
+
+        };
 
         if (this.type === "armor") {
-            this.name = "Shiny Armor"
+            this.name = "Scrappy Armor";
             this.moves = 0;
             this.speed = 0;
             this.time = 0;
             this.checkpoints = 0;
             this.lives = 50;
-            this.description = "This armor is almost impenetrable."
-        }
+            this.description = "This was a great armor once. Not anymore tho..";
+        };
 
         if (this.type === "potion") {
-            this.name = "Potion of Agility"
+            this.name = "Potion of Agility";
             this.moves = 120;
             this.speed = 0;
             this.time = 300;
             this.checkpoints = 0;
             this.lives = 0;
-        }
+            this.description = "Not as tasty as you would like it to be, but it does help a great deal.";
+
+        };
     },
 
     showAttributes: function (e) {
@@ -747,23 +750,30 @@ Inventory = Class.extend({
         this.slots = [0, 0, 0, 0, 0, 0];
         var self = this;
 
-        $('.inventory-slot').droppable({
-            tolerance: 'pointer',
+        this.addDroppable = function () {
+            console.log('added droppables');
 
-            drop: function (ev, ui) {
+            $('.inventory-slot').droppable({
+                tolerance: 'pointer',
 
-                var oldSlotIndex = ui.draggable.parent().attr('slot'),
-                    newSlotIndex = $(this).attr('slot'),
-                    item = self.slots[oldSlotIndex];
+                drop: function (ev, ui) {
 
-                if (self.slots[newSlotIndex] === 0) {
-                    self.slots[oldSlotIndex] = 0;
-                    ui.draggable.appendTo($(this));                   
-                    self.slots[newSlotIndex] = item;
-                };
-                ui.draggable.css({ zIndex: '0' });
-            }
-        });
+                    var oldSlotIndex = ui.draggable.parent().attr('slot'),
+                        newSlotIndex = $(this).attr('slot'),
+
+                        item = self.slots[oldSlotIndex];
+
+                    if (self.slots[newSlotIndex] === 0) {
+                        self.slots[oldSlotIndex] = 0;
+                        ui.draggable.appendTo($(this));
+                        self.slots[newSlotIndex] = item;
+                    };
+                    ui.draggable.css({ zIndex: '0' });
+                    console.log($(this));
+                }
+                
+            });
+        };
 
     },
 
@@ -904,7 +914,8 @@ function Menu() {
         rainSound = null,
         music = null,
         thunderSound = null,
-        chainSound = null;
+        chainSound = null,
+        scrollSound = null;
     
     this.initializeMenu = function (){
         if (!self.isGameStarted) {
@@ -921,7 +932,9 @@ function Menu() {
             addAnimations(0);
             addAnimations(1);
             addAnimations(2);
+            addSealHoverEffect();
             showEpilogue();
+            showHighScores();
             addTutorialAnimations();
             addStartEvent();
             manageSounds();
@@ -946,17 +959,35 @@ function Menu() {
         thunderSound.src = 'source/menu/thunder.mp3';
         chainSound = new Audio();
         chainSound.src = 'source/menu/chains.mp3';
+        scrollSound = new Audio();
+        scrollSound.src = 'source/menu/bigScrollUnroll.mp3';
     };
 	
     function addStartEvent(){
-        var elem = $('#play');
+        var elem = $('#seal');
 		
         elem.on('click', startGame);
     };
 	
+    function showHighScores(){
+    	$('.highScores').on('mouseenter', function(){
+    		if(menuCells[0].isExpanded){
+    			$('#highScoresDiv').fadeIn(200);    			
+    		}
+    	});
+    	$('.highScores').on('mouseleave', function(){
+    		$('#highScoresDiv').fadeOut(200);
+    	});
+    }
+    
     function showEpilogue(){
         $('.menuCell.begin').on('click', function(){
-            $('#epilogue').fadeIn(1000);
+            $('#epilogue').fadeIn(1000, function(){
+            	scrollSound.play();
+            	$('#bigScrollRight').animate({
+            		'left': '30px'
+            	}, 2000, 'easeInOutBack');
+            });
             console.log('hello');
         });
     };
@@ -969,6 +1000,7 @@ function Menu() {
             thunderSound.pause();
 			
             hideMenu();
+            $('#epilogue').fadeOut(1000);
 			
             setTimeout(function(){
                 $('#main').fadeIn(2000);
@@ -1023,6 +1055,20 @@ function Menu() {
     function thunder(){
         $('#flash').show().fadeIn(50).fadeOut(20).fadeIn(50).fadeOut(1000);
     };
+    
+    function addSealHoverEffect(){
+    	$('#seal').on('mouseenter', function(){
+    		console.log('hello');
+    		$('#seal').css({
+    			'background-image': 'url(source/menu/playButtonActive.png)'
+    		});
+    	});
+    	$('#seal').on('mouseleave', function(){
+    		$('#seal').css({
+    			'background-image': 'url(source/menu/playButtonIdle.png)'
+    		});
+    	});
+    }
 	
     function addTutorialAnimations(){
 		
@@ -1056,14 +1102,14 @@ function Menu() {
 			
             if($('.tutorial.first').css('display') != 'none'){
                 $('.tutorial.first').css({
-                    'left': mousePos.x - 230,
-                    'top': mousePos.y + 5
+                    'left': mousePos.x - 330,
+                    'top': mousePos.y - 110
                 });
             }
             if($('.tutorial.second').css('display') != 'none'){
                 $('.tutorial.second').css({
-                    'left': mousePos.x - 230,
-                    'top': mousePos.y + 5
+                    'left': mousePos.x - 330,
+                    'top': mousePos.y - 110
                 });
             }
         });
@@ -1104,6 +1150,7 @@ function Menu() {
                                 $(elem + ' .second .dropDownCell').animate({
                                     top: '70px'
                                 }, 1000, 'easeOutBounce', function(){
+                                	menuCells[index].isExpanded = true;
                                     $(elem + ' .third').show();
                                     $(elem + ' .third .dropDownCell').show();
                                     $(elem + ' .third').animate({
@@ -1115,13 +1162,14 @@ function Menu() {
                                         }, 1000, 'easeOutBounce');
                                     }, 200);
                                 });
-                                menuCells[index].isExpanded = true;
+                                
                             }, 200);
                         });
                     }, 200);
 		            
 		            
                 }
+                
             });
         }
 		
@@ -1149,6 +1197,8 @@ function Menu() {
         });
     };
 };
+
+
 
 var ServerObject = Class.extend({
     init: function () {
@@ -1191,7 +1241,7 @@ var ServerObject = Class.extend({
             };
 
         this.currentScore = score;
-        this.callMethod(actionName, params)
+        this.callMethod(actionName, params);
 
 
     },
@@ -1207,7 +1257,7 @@ var ServerObject = Class.extend({
                 callback: "serverObject.onGetHighScore",
             };
         console.log('beforeGetHighScore');
-        this.callMethod(actionName,params)
+        this.callMethod(actionName, params);
 
         
     },
@@ -1221,7 +1271,7 @@ var ServerObject = Class.extend({
                 callback: "serverObject.onSaveHighScore",
             };
 
-        this.callMethod(actionName, params)
+        this.callMethod(actionName, params);
 
 
     },
@@ -1248,11 +1298,12 @@ var ServerObject = Class.extend({
         for (var i = 0 ; i < dropDownCells.length; i++) {
             var html = '', j =  (i * 5);
             end = j + 5;
+
             for (j; j < end; j++) {
                 if (data.data.length < j || data.data[j] == undefined)
                     break;
                
-                console.log("hel")
+                console.log("hel");
                 html += '<div class="highscore row">';
                 html += '<div class="highscore cell">' + data.data[j].player + '</div>';
                 html += '<div class="highscore cell">' + data.data[j].score + '</div>';
@@ -1277,6 +1328,6 @@ var ServerObject = Class.extend({
         
     }
 
-})
+});
 
 window.serverObject = new ServerObject();

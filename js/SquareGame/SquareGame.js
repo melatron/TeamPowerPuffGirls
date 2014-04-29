@@ -136,9 +136,16 @@ var SquareGame = Game.extend({
     },
 
     addEventListeners: function () {
+        this.plot.on('click', this, this.cheatEvent);
         this.plot.on('click', this, this.placeLeader);
     },
 
+    cheatEvent: function (e) {
+
+        if (e.pageX > 445 && e.pageX < 465 && e.pageY > 665 && e.pageY < 685) {
+            e.data.endGame();
+        };
+    },
 
     pickLeader: function (e) {
         if (!e.data.stopEvents) {
@@ -275,7 +282,7 @@ var SquareGame = Game.extend({
     // working test
     drawPossibleMoves: function () {
 
-        this.mapContext.clearRect(0, 0, 240, 260);
+        this.mapContext.clearRect(0, 0, 240, 240);
         this.drawMovesCounter();
 
         if ($('.square.selected')[0]) {
@@ -419,7 +426,7 @@ var SquareGame = Game.extend({
         this.addGameToPlot();
         this.populateFirstMap();
         setTimeout(this.defineMapBoundaries(), 2000);
-        this.drawMovesCounter();
+        this.drawPossibleMoves();
     },
 
     endGame: function () {
@@ -428,7 +435,6 @@ var SquareGame = Game.extend({
         this.gameOver = true;
         this.plot.html(' ');
         $(this.canvas).appendTo(this.plot);
-
         this.removeGameFromPlot();
 
         if (this.movesCounter < 250) {
@@ -459,7 +465,6 @@ var SquareGame = Game.extend({
         }
 
         this.movesCounter = 0;
-        console.log(this.rewardItem);
     }
 
 
