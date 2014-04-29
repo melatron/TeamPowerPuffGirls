@@ -577,12 +577,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
 
                     hero.prepareObjectForSpeaking(hero.speakingTo);
                     hero.speakingTo.prepareObjectForSpeaking("");
-                    if (gamesFinished == gamesAmount) {
-                        storyEnded = true;
-                        //endStoryScreenOn = true;
-                        stopEvents = true;
-
-                    }
+                    
                 }
                 else {
                     hero.speakingTo = null;
@@ -611,6 +606,12 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
                 }
             }
             else if (hero.speakingTo.progress.after) {
+                if (gamesFinished == gamesAmount) {
+                    storyEnded = true;
+                    //endStoryScreenOn = true;
+                    stopEvents = true;
+
+                }
                 hero.speakingTo.progress.after = false;
                 hero.speakingTo.progress.done = true;
                 hero.speakingTo = null;
