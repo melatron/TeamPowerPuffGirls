@@ -1340,8 +1340,18 @@ RadoGame = Game.extend({
 	        }
 	    }
 	},
-
+	clickEvent: function (ev) {
+	    if (!ev.data.stopEvents) {
+	        console.log('hello');
+	        var rect = ev.data.canvas.getBoundingClientRect(),
+                mouseX = ev.clientX - rect.left,
+                mouseY = ev.clientY - rect.top;
+	        ev.data.mainCharacter.x = mouseX; 
+	        ev.data.mainCharacter.y = mouseY;
+	    }
+	},
 	addEventListeners: function () {
+	    $('#elf-game-canvas').on('click', this, this.clickEvent);
 		$(window).on('keydown', this, this.onKeyDown);
 		$(window).on('keyup', this, this.onKeyUp);
 	},

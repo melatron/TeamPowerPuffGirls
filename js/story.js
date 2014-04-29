@@ -436,6 +436,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
     };
     // here is the mehtod which will end the this if you have finished all 7 games and you have clicked finish button
     function endStory() {
+        playList.pauseMainMusic();
         clearInterval(this.mainLoop);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         stopEvents = true;
@@ -858,7 +859,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
         /* all quests are available */
         var len = interactableObjects.length;
         for (var i = 0; i < len; i++) {
-            interactableObjects[i].isAvailable = true;
+            interactableObjects[0].isAvailable = true;
         };
 
         //var yolo = new Bossfight();
