@@ -89,7 +89,7 @@ RadoGame = Game.extend({
 		}
 		this.levelIndex = 0;
 		this.removeGameFromPlot();
-		this.removeEventListeners();
+		/*this.removeEventListeners();*/
 		this.passableBlocks = [];
 		this.impassableBlocks = [];
 		this.finishBlocks = [];

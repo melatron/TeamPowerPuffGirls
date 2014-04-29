@@ -949,14 +949,7 @@ function Menu() {
             rainSound.play();
             thunderSound.play();
             music.play();
-            addAnimations(0);
-            addAnimations(1);
-            addAnimations(2);
-            addSealHoverEffect();
-            showEpilogue();
-            showHighScores();
-            addTutorialAnimations();
-            addStartEvent();
+            addAnimations();
             manageSounds();
             setTimeout(thunder, 500);
             setTimeout(thunder, 6800);
@@ -986,7 +979,11 @@ function Menu() {
     function addStartEvent(){
         var elem = $('#seal');
 		
-        elem.on('click', startGame);
+        elem.on('click', function(){
+            $('#bigScrollRight').animate({
+                    'left': '-650px'
+                }, 2000, 'easeInOutBack', startGame);
+        });
     };
 	
     function showHighScores(){
@@ -1011,6 +1008,12 @@ function Menu() {
             console.log('hello');
         });
     };
+
+    function hideEpilogue(){
+        $('#bigScrollRight').animate({
+                    'left': '-650px'
+                }, 2000, 'easeInOutBack');
+    }
 
     function startGame(e){
         if(self.isGameStarted == false){
@@ -1089,6 +1092,17 @@ function Menu() {
     	});
     }
 	
+    function addAnimations(){
+        addCellAnimations(0);
+        addCellAnimations(1);
+        addCellAnimations(2);
+        addSealHoverEffect();
+        showEpilogue();
+        showHighScores();
+        addTutorialAnimations();
+        addStartEvent();
+    }
+
     function addTutorialAnimations(){
 		
         $('.howTo .first .dropDownCell').on('mouseenter', function(e){
@@ -1118,7 +1132,6 @@ function Menu() {
         $(document).on('mousemove', function(e){
             mousePos.x = e.pageX;
             mousePos.y = e.pageY;
-			
             if($('.tutorial.first').css('display') != 'none'){
                 $('.tutorial.first').css({
                     'left': mousePos.x - 330,
@@ -1134,7 +1147,7 @@ function Menu() {
         });
     };
 	
-     function addAnimations(index){
+     function addCellAnimations(index){
         var elem = menuCells[index].class;
         if(index != 2){
             $(elem).on('click', function(e){

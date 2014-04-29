@@ -85,7 +85,7 @@ SwapPuzzle = Game.extend({
             reversesDone: 0
         }
 
-        var instructions = 'Click on the gems to move them.Your goal is to swap their places.Press "Z" to reverse your moves.';
+        var instructions = 'Click on the gems to move them. Your goal is to swap their places. Press "Z" to reverse your moves.';
         this.writeOnScroll(instructions, {
             fontSize: '12px'
         });
