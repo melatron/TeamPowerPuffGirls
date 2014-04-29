@@ -289,7 +289,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
            ),
            orcCamp = new ClickPoint(440, 22, 100, 100, 'orcCamp',
                                                            {
-                                                               x: 430,
+                                                               x: 438,
                                                                y: 140
                                                            }, swapPuzzle,
                 {                  // HERO SPEECH
