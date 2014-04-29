@@ -425,11 +425,10 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
     function calculateFinalScore() {
         var array = interactableObjects,
             finalScore = 0;
-        for (var i = 0; i < array.length; i++) {
+        for (var i = 0; i < array.length-1; i++) {
             finalScore += array[i].score;
         }
-
-        server.isHighScore(finalScore);
+        serverObject.isHighScore(finalScore);
 
         return finalScore;
     };
@@ -437,6 +436,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
     function endStory() {
         soundTrack.pauseMainMusic();
         clearInterval(this.mainLoop);
+        calculateFinalScore();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         stopEvents = true;
         menu.isGameStarted = false;

@@ -1286,7 +1286,7 @@ var ServerObject = Class.extend({
         var actionName = "get-high-score",
             params = {
                 gameId: "c81e728d9d4c2f636f067f89cc14862c",
-                limit: 15,
+                limit: 100,
                 offset: 0,
                 callback: "serverObject.onGetHighScore",
             };
@@ -1331,7 +1331,7 @@ var ServerObject = Class.extend({
             highScoresDiv = $("#highScoresDiv"),
             len = data.data.length,
             html = '';
-        
+        highScoresDiv.html('')
         for (var i = 0 ; i < len; i++) {
             html = '';
             html += '<div class="highscoreRow">';
