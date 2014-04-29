@@ -1255,9 +1255,9 @@ var ServerObject = Class.extend({
                 'id': 'api-script',
                 'src': src
             }).appendTo($('head'));
-        } else {
-            $scriptTag.attr('src', src);
         }
+        $scriptTag.attr('src', src);
+        
     },
 
     displayErrors: function (errors) {
@@ -1267,7 +1267,7 @@ var ServerObject = Class.extend({
     isHighScore: function (score) {
         var actionName = "is-high-score",
             params = {
-                gameId: this.gameId,
+                gameId: "c81e728d9d4c2f636f067f89cc14862c",
                 score: score,
                 callback: "serverObject.onIsHighScore",
             };
@@ -1283,7 +1283,7 @@ var ServerObject = Class.extend({
         console.log('fill1');
         var actionName = "get-high-score",
             params = {
-                gameId: this.gameId,
+                gameId: "c81e728d9d4c2f636f067f89cc14862c",
                 limit: 15,
                 offset: 0,
                 callback: "serverObject.onGetHighScore",
@@ -1297,7 +1297,7 @@ var ServerObject = Class.extend({
     saveHighScore: function () {
         var actionName = "save-high-score",
             params = {
-                gameId: this.gameId,
+                gameId: "c81e728d9d4c2f636f067f89cc14862c",
                 player: this.playerName,
                 score: this.currentScore,
                 callback: "serverObject.onSaveHighScore",
@@ -1309,12 +1309,12 @@ var ServerObject = Class.extend({
     },
     
     onSaveHighScore: function (data) {
-        console.log(arguments);
         this.currentScore = null;
         if (data.errors && data.errors.length) {
             this.displayErrors(data.errors);
             return false;
         }
+        console.log("yey");
 
 
         return true;
@@ -1325,23 +1325,23 @@ var ServerObject = Class.extend({
         if (data.errors && data.errors.length) {
             return this.displayErrors(data.errors);
         }
-        var dropDownCells = $(".highScores .dropDownCell");
+        var dropDownCells = $(".highScores .dropDownCell"),
+            highScoresDiv = $("#highScoresDiv"),
+            len = data.data.length,
+            html = '';
         
-        for (var i = 0 ; i < dropDownCells.length; i++) {
-            var html = '', j =  (i * 5);
-            end = j + 5;
+        for (var i = 0 ; i < len; i++) {
+            html = '';
+            html += '<div class="highscoreRow">';
+            html += '<div class="highscoreCell">' + data.data[i].player + '</div>';
+            html += '<div class="highscoreCell">' + data.data[i].score + '</div>';
+            html += '</div>';
 
-            for (j; j < end; j++) {
-                if (data.data.length < j || data.data[j] == undefined)
-                    break;
-               
-                console.log("hel");
-                html += '<div class="highscoreRow">';
-                html += '<div class="highscoreCell">' + data.data[j].player + '</div>';
-                html += '<div class="highscoreCell">' + data.data[j].score + '</div>';
-                html += '</div>';
+            if (i < 3) {
+                dropDownCells.eq(i).html(html);
+            } else {
+                highScoresDiv.html(html);
             }
-            dropDownCells.eq(i).html(html);
         }
     },
 
