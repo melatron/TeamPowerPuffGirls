@@ -415,7 +415,7 @@ var SquareGame = Game.extend({
         this._super(obj);
         //this.gameOver = false;
         this.stopEvents = false;
-        
+        this.rewardItem = null;
 
         var instructions = '●Move gems with the mouse.</br>●Get a green gem to the green exit.</br>●Finish in under 250 moves.';
 
@@ -460,10 +460,10 @@ var SquareGame = Game.extend({
                           [2, 2, 2, 2, 2, 1],
                           [2, 0, 0, 0, 0, 1]];
         if (this.movesCounter < 100) {
-            this.rewardItem = 'gem';
+            this.rewardItem = 'potion';
         } else {
             if (this.movesCounter < (this.objectives.moves - this.gameBonuses.moves)) {
-                this.rewardItem = 'potion';
+                this.rewardItem = 'gem';
             }
         };
 
