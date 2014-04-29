@@ -23,7 +23,6 @@ function Story() {
         gamesFinished = 0,
         gamesAmount = 6,
         buttons = [],
-        finishGame = null,
         finishGameSprite = null;
     
 
