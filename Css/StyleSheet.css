@@ -458,7 +458,6 @@ div{
             margin-right: 90px;
         }
         .highscore.row {
-            clear:both;
             margin: 0px;
             height: 20px;
             top: -2px;
@@ -473,7 +472,7 @@ div{
             padding: 0px;
             height: 100px;
         }
-        /*.highscoreRow{
+        .highscoreRow{
             clear:both;
             margin: 0px;
             height: 20px;
@@ -483,7 +482,7 @@ div{
             float: left;
             height: 20px;
             font-size: 18px;
-        }*/
+        }
 
         #bossFightCanvas {
 			display: none;
