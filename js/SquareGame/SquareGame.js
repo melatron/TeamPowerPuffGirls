@@ -459,10 +459,13 @@ var SquareGame = Game.extend({
                           [0, 0, 1, 0, 2, 0],
                           [2, 2, 2, 2, 2, 1],
                           [2, 0, 0, 0, 0, 1]];
-
-        if (this.movesCounter < (this.objectives.moves - this.gameBonuses.moves)) {
-            this.rewardItem = 'potion';
-        }
+        if (this.movesCounter < 100) {
+            this.rewardItem = 'gem';
+        } else {
+            if (this.movesCounter < (this.objectives.moves - this.gameBonuses.moves)) {
+                this.rewardItem = 'potion';
+            }
+        };
 
         this.movesCounter = 0;
     }

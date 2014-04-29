@@ -705,6 +705,16 @@ Item = Class.extend({
 
         };
 
+        if (this.type === "gem") {
+            this.name = "Magical Gem";
+            this.moves = 60;
+            this.speed = 0;
+            this.time = 0;
+            this.checkpoints = 1;
+            this.lives = 20;           
+
+        };
+
         this.addDraggable();
     },
 
