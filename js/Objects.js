@@ -715,7 +715,7 @@ Item = Class.extend({
 
         };
 
-        this.addDraggable();
+        //this.addDraggable();
     },
 
     showAttributes: function (e) {
