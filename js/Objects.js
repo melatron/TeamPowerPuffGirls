@@ -1335,7 +1335,7 @@ var ServerObject = Class.extend({
             html = '';
             html += '<div class="highscoreRow">';
             html += '<div class="highscoreCell">' + (i+1) + '. ' + data.data[i].player + '</div>';
-            html += '<div class="highscoreCell">' + data.data[i].score + '</div>';
+            html += '<div class="highscoreCell">' + '&nbsp;- ' + data.data[i].score + '</div>';
             html += '</div>';
 
             if (i < 3) {

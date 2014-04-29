@@ -300,6 +300,7 @@ div{
             display: none;
             font-family: Morpheus;
             color: rgba(255, 255, 153, 1);
+            padding: 10px;
 		}
 		#bigScroll{
 			position: relative;
@@ -467,11 +468,13 @@ div{
             float: left;
             height: 20px;
             font-size: 18px;
+            margin-left: 10px;
         }
         .highScores .dropDownCell{
-            padding: 0px;
+            padding: 10px;
             height: 100px;
         }
+
         .highscoreRow{
             clear:both;
             margin: 0px;
