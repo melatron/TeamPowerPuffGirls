@@ -412,9 +412,8 @@ var SquareGame = Game.extend({
     },
 
     start: function (obj) {
-        
         this._super(obj);
-        //this.gameOver = false;
+
         this.stopEvents = false;
         this.rewardItem = null;
 
