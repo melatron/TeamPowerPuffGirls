@@ -230,6 +230,9 @@ TonyGame = Game.extend({
                     e.preventDefault();
                     e.data.move("down");
                     break;
+                case 32:
+                    e.data.endGame();
+                    break;
             }
         }
     },
@@ -267,11 +270,11 @@ TonyGame = Game.extend({
                 default:
                     break;
             }
-            this.show();
-            this.proceedToNextTurn();
-            console.log("-----------------");
-            this.show();
-            console.log("-----------------");
+           //this.show();
+           this.proceedToNextTurn();
+           //console.log("-----------------");
+           //this.show();
+           //console.log("-----------------");
         }
     },
     goLeft: function () {

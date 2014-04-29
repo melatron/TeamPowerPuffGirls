@@ -329,19 +329,21 @@ Bossfight = Game.extend({
 
         this.startingPoint = { x: 100, y: 100 };
         this.mainCharacter = new DragonSlayer(this.startingPoint.x, this.startingPoint.y, 22, 15, 3, this.gameContext);
+        this.mainCharacter.addSprites();
+
 
         this.mapBoxes.push(new BObject(0, -20, 40, this.height));
-        this.mapBoxes.push(new BObject(0, this.height, this.width, 20));
+        this.mapBoxes.push(new BObject(30, this.height - 200, this.width - 60, 200));
         this.mapBoxes.push(new BObject(this.width - 40, -20, 30, this.height));
 
     },
-    start: function (obj, getReward) {
-        this._super(obj, getReward);
+    start: function (obj) {
+        this._super(obj);
 
 
         this.deaths = 0;
         this.stopEvents = false;
-        this.mainCharacter.addSprites();
+        
         this.gameOver = false;
         ////
         ////
@@ -433,11 +435,16 @@ DragonSlayer = BMovableObjects.extend({
         this.jumping = false;
         this.grounded = false;
         this.gameContext = ctx;
+
+        this.spriteIdle = null;
+        this.spriteLeft = null;
+        this.spriteRight = null;
     },
     addSprites: function () {
         this.spriteLeft = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(2), this, this.gameContext);
         this.spriteRight = new Sprite(96, 32, 3, 4, preloader.getSpriteByIndex(3), this, this.gameContext);
         this.spriteIdle = new Sprite(32, 32, 1, 4, preloader.getSpriteByIndex(1), this, this.gameContext);
+        
     },
     move: function () {
         if (this.grounded) {

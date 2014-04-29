@@ -1014,8 +1014,7 @@ function Menu() {
             //game.start();
             //elfGame = new RadoGame();
             //elfGame.start();
-            //yolo = new PathFinder();
-            //yolo.startGame();
+            
             serverObject.playerName = $("#nameInput").val();
         }
     };
@@ -1308,9 +1307,9 @@ var ServerObject = Class.extend({
                     break;
                
                 console.log("hel");
-                html += '<div class="highscore row">';
-                html += '<div class="highscore cell">' + data.data[j].player + '</div>';
-                html += '<div class="highscore cell">' + data.data[j].score + '</div>';
+                html += '<div class="highscoreRow">';
+                html += '<div class="highscoreCell">' + data.data[j].player + '</div>';
+                html += '<div class="highscoreCell">' + data.data[j].score + '</div>';
                 html += '</div>';
             }
             dropDownCells.eq(i).html(html);

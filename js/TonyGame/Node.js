@@ -15,7 +15,7 @@ Node.prototype.removeFromCell = function() {
     $(".row").eq(this.row).find(".cell").eq(this.col).find(".node").remove();
 };
 Node.prototype.addToCell = function () {
-    var self = this;
+    var self = this;  
     if (this.animateNew) {
         var styles = {
             left: "0px",
@@ -27,9 +27,9 @@ Node.prototype.addToCell = function () {
             height: "0px",
            // backgroundImage: 'url(source/TonyGame/' + self.value + '.png);'
             //backgroundImage: 'url"(a.png) no-repeat;"'
-        },
-            self = this;
-        console.log('url(../source/TonyGame/' + self.value + '.png);');
+        };
+        //console.log('url(../source/TonyGame/' + self.value + '.png);');
+        console.log($(".row"));
         this.node.css(styles);
         this.node.css('background-image', 'url(source/TonyGame/'+ self.value +'.png)');
         //this.node.style.backgroundImage = 'url("../../source/TonyGame/' + this.value + '.png) no-repeat;"';
@@ -190,7 +190,7 @@ Node.prototype.proceed = function () {
             self.row = self.movedTo.row;
             self.movedTo = null;
             self.mergedTo = null;
-            console.log('ANIMACIQ');
+            //console.log('ANIMACIQ');
         });
     }
     else if (this.mergedTo != null) {
@@ -220,7 +220,7 @@ Node.prototype.proceed = function () {
             self.row = self.mergedTo.row;
             self.movedTo = null;
             self.mergedTo = null;
-            console.log('ANIMACIQ');
+            //console.log('ANIMACIQ');
         });
     }
     this.unitedOnTurn = false;
