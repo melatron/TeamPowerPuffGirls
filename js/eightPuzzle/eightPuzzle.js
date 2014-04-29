@@ -74,7 +74,6 @@ var EightPuzzle = Game.extend({
             if (_this.isGameOver() && _this.animationEnded) {
                 setTimeout(_this.endGame, 1000);
                 cancelAnimationFrame(_this.animation);
-                console.log("a");
             }
             else {
                 _this.animation = requestAnimationFrame(_this.update);
