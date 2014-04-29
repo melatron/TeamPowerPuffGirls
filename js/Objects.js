@@ -1241,23 +1241,24 @@ var ServerObject = Class.extend({
     },
     //servrerObject.callmethod('is-high-score', {'callback': 'serverObject.onIsHighScore', 'score' : 100})
     callMethod: function (methodName, params) {
-        var $scriptTag = $('#api-script');
         var src = this.baseUrl + methodName + '&jsonp=1';
 
+        
         for (var i in params) {
             src += '&' + i + '=' + encodeURIComponent(params[i]);
         }
 
         src += '&_=' + Date.now();
         console.log('callingMethod:' + methodName);
-        if (!$scriptTag.length) {
-            $('<script>').attr({
-                'id': 'api-script',
-                'src': src
-            }).appendTo($('head'));
-        } else {
-            $scriptTag.attr('src', src);
-        }
+        
+            
+        $('.api-script').remove();
+
+        $('<script>').attr({
+            'class': 'api-script',
+            'src': src
+        }).appendTo($('head'));
+        
         
     },
 
