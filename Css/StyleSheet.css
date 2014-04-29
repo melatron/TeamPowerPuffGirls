@@ -298,6 +298,8 @@ div{
 			border-radius: 10px;
             border: 2px solid rgba(255, 255, 255, 0.5);
             display: none;
+            font-family: Morpheus;
+            color: rgba(255, 255, 153, 1);
 		}
 		#bigScroll{
 			position: relative;
@@ -471,8 +473,17 @@ div{
             padding: 0px;
             height: 100px;
         }
-
-
+        /*.highscoreRow{
+            clear:both;
+            margin: 0px;
+            height: 20px;
+            top: -2px;
+        }
+        .highscoreCell{
+            float: left;
+            height: 20px;
+            font-size: 18px;
+        }*/
 
         #bossFightCanvas {
 			display: none;
