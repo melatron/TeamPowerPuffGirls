@@ -85,7 +85,7 @@ SwapPuzzle = Game.extend({
             reversesDone: 0
         }
 
-        var instructions = 'Click on the gems to move them.Your goal is to swap their places.If you are stuck use the reverse button in top left corner.';
+        var instructions = 'Click on the gems to move them.Your goal is to swap their places.Press "Z" to reverse your moves.';
         this.writeOnScroll(instructions, {
             fontSize: '12px'
         });
@@ -104,6 +104,7 @@ SwapPuzzle = Game.extend({
     },
     addEventListeners: function () {
         $("#swapPuzzleCanvas").on('click', this, this.checkIfClicked);
+        $(document).on('keydown', this, this.listenKeyEvents);
     },
     endGame: function () {
         this.gameOver = true;
@@ -139,6 +140,16 @@ SwapPuzzle = Game.extend({
             else if (i > 4) {
                 this.moveableBoxes[i] = new MoveableLeftBox(i, x, y, w, h);
                 x += 70;
+            }
+        }
+    },
+    listenKeyEvents: function (ev) {
+        if (!ev.data.stopEvents) {
+            if (ev.keyCode == "90") {
+                ev.data.reverseSwap();
+            }
+            else if (ev.keyCode == "89") {
+                ev.data.endGame();
             }
         }
     },
@@ -184,7 +195,6 @@ SwapPuzzle = Game.extend({
                         if (ev.data.moveableBoxes[i] instanceof MoveableRightBox) {
                             console.log(ev.data.moveableBoxes[i]);
                         }
-                        console.log(i);
                     }
                 }
             }
@@ -194,11 +204,12 @@ SwapPuzzle = Game.extend({
         var n = this.reverseParameters.reversesDone,
             i = this.reverseParameters.position[0],
             j = this.reverseParameters.lastPosition[0];
-
-        this.moveableBoxes[i].swapBox(i, j,this);
-        this.reverseParameters.reversesDone += 1;
-        this.reverseParameters.position.splice(0, 1);
-        this.reverseParameters.lastPosition.splice(0, 1);
+        if (this.moveableBoxes[i] != undefined) {
+            this.moveableBoxes[i].swapBox(i, j, this);
+            this.reverseParameters.reversesDone += 1;
+            this.reverseParameters.position.splice(0, 1);
+            this.reverseParameters.lastPosition.splice(0, 1);
+        }
     },
     preloadImages: function (left, right,background,reverseButton) {
         for (var i = 0; i < this.moveableBoxes.length; i++) {
@@ -218,7 +229,7 @@ SwapPuzzle = Game.extend({
     drawBoxes: function () {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         //this.context.drawImage(this.background, 0, 0, this.canvas.width, this.canvas.height);
-        this.context.drawImage(this.reverseButton, 0, 0,20,20);
+        //this.context.drawImage(this.reverseButton, 0, 0,20,20);
 
         for (var i = 0; i < this.moveableBoxes.length; i++) {
             this.moveableBoxes[i].drawBox(this.context);

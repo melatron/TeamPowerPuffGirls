@@ -1292,16 +1292,12 @@ var ServerObject = Class.extend({
         if (data.errors && data.errors.length) {
             return this.displayErrors(data.errors);
         }
-        console.log(data);
         var dropDownCells = $(".highScores .dropDownCell");
         
         for (var i = 0 ; i < dropDownCells.length; i++) {
             var html = '', j =  (i * 5);
             end = j + 5;
-            console.log((data.data.length));
-            console.log(i);
-            console.log(j);
-            console.log(end);
+
             for (j; j < end; j++) {
                 if (data.data.length < j || data.data[j] == undefined)
                     break;
@@ -1320,10 +1316,8 @@ var ServerObject = Class.extend({
         if (data.errors && data.errors.length) {
             return this.displayErrors(data.errors);
         }
-        console.log("out");
         if (data.data.isHighScore === true) {
             this.saveHighScore();
-            console.log("in");
         } else {
             this.currentScore = null;
         }
