@@ -170,6 +170,9 @@ var EightPuzzle = Game.extend({
     },
     swapFunction: function (a, b, c, d) {
         var swap;
+
+        this.animationEnded = false;
+
         swap = this.tableArray[a][b];
         this.tableArray[a][b] = this.tableArray[c][d];
         this.tableArray[c][d] = swap;
@@ -181,7 +184,6 @@ var EightPuzzle = Game.extend({
         this.emptySlotPosition[0] = c;
         this.emptySlotPosition[1] = d;
         this.movesDone++;
-        this.animationEnded = false;
     },
     swapTop: function () {
         var i = this.emptySlotPosition[0],
@@ -237,6 +239,9 @@ var EightPuzzle = Game.extend({
                     e.preventDefault();
                     e.data.swapTop();
                     break;
+                case 89:
+                    e.preventDefault();
+                    e.data.endGame();
             }
         }
     }
