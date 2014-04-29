@@ -424,11 +424,11 @@ div{
         }
         .dropDownCell{
         	background-image: url(../source/menu/menuCellBackground.png);
-        	width: 200px;
+        	width: 190px;
             padding-top: 20px;
             padding-right: 5px;
-            padding-left: 5px;
-        	height: 80px;
+            padding-left: 15px;
+        	height: 60px;
             font-size: 20px;
         	position: absolute;
         	top: 0px;
@@ -471,7 +471,8 @@ div{
             margin-left: 10px;
         }
         .highScores .dropDownCell{
-            height: 100px;
+            height: 80px;
+
         }
 
         .highscoreRow{
