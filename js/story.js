@@ -249,14 +249,14 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
                                                                y: 345
                                                            }, null,
             {                  // HERO SPEECH
-                before: [[""]],
-                after: [[""]],
-                done: [[""]]
+                before: [["Cut to the chase!", "Let's get this over with .."], ["..."], ["I'm broke, sorry", "I'll be back"]],
+                after: [["lala"]],
+                done: [["lala"]]
             },
            {                  //QUEST SPEECH
-               before: [[""]],
-               after: [[""]],
-               done: [[""]]
+               before: [["WHO GOES THERE!?"],["HA-HA-HA!", "You are not prepared for", "this fight, mere mortal!", "Only those who posess the", "full version of this awesome", "game are worthy of ", "taking me on!"], ["99.99$ It's an offer you", "can't refuse!"]],
+               after: [["lala"]],
+               done: [["lala"]]
            },
            {
                x: 772,
@@ -605,6 +605,10 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
                     bonuses = calculateBonuses();
                     hero.speakingTo.startGame(bonuses, getReward);
                 }
+                else {
+                    stopEvents = false;
+                    inGame = false;
+                }
             }
             else if (hero.speakingTo.progress.after) {
                 if (gamesFinished == gamesAmount) {
@@ -627,6 +631,10 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
                     stopEvents = true;
                     bonuses = calculateBonuses();
                     hero.speakingTo.startGame(bonuses , getReward);
+                }
+                else {
+                    stopEvents = false;
+                    inGame = false;
                 }
             }
         }
