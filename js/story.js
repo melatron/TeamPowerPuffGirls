@@ -440,6 +440,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         stopEvents = true;
         menu.isGameStarted = false;
+        inventory.clearInventory();
         $('#main').fadeOut(2000, function () {
             menu.initializeMenu();
             console.log(menu);

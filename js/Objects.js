@@ -809,6 +809,12 @@ Inventory = Class.extend({
         };
     },
 
+    clearInventory: function () {
+        for (var index in this.slots) {
+            this.slots[index] = 0;
+        };
+        $('.inventory-slot').html('');
+    }
 
 });
 

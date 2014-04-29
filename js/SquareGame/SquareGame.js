@@ -142,10 +142,8 @@ var SquareGame = Game.extend({
 
     cheatEvent: function (e) {
         if (!e.data.stopEvents) {
-
             if (e.keyCode == 89) {
                 e.data.endGame();
-                console.log('a');
             };
         };
     },
