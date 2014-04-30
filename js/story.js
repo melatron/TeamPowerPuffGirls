@@ -251,12 +251,12 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
             {                  // HERO SPEECH
                 before: [["Cut to the chase!", "Let's get this over with .."], ["..."], ["I'm broke, sorry", "I'll be back"]],
                 after: [["lala"]],
-                done: [["lala"]]
+                done: [["Not interested ..."]]
             },
            {                  //QUEST SPEECH
                before: [["WHO GOES THERE!?"],["HA-HA-HA!", "You are not prepared for", "this fight, mere mortal!", "Only those who posess the", "full version of this awesome", "game are worthy of ", "taking me on!"], ["99.99$ It's an offer you", "can't refuse!"]],
                after: [["lala"]],
-               done: [["lala"]]
+               done: [["It's still 99.99$ :)"]]
            },
            {
                x: 772,
@@ -561,9 +561,7 @@ King: Why you insolent wench!!GUARDS!! Take this arrogant sard to the dungeons, 
                 getReward(hero.speakingTo.game.rewardItem);
                 /*Here we will add the points from the finished game into the click point in which the game is.*/
                 if (hero.speakingTo.score == 0) {
-                    gamesFinished++;
-
-                    
+                    gamesFinished++; 
                 }
                 if (hero.speakingTo.score < hero.speakingTo.game.score) {
                     hero.speakingTo.score = hero.speakingTo.game.score;

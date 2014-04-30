@@ -29,19 +29,19 @@ var Jewel = EmptySlot.extend({
         var game = game;
         if (this.newCoordinates.x < this.coordinates.x) {
             this.newCoordinates.x += 5;
-            game.animationEnded = false;
+            //game.animationEnded = false;
         }
         else if (this.newCoordinates.x > this.coordinates.x){
             this.newCoordinates.x -= 5;
-            game.animationEnded = false;
+            //game.animationEnded = false;
         }
         if (this.newCoordinates.y < this.coordinates.y) {
             this.newCoordinates.y += 5;
-            game.animationEnded = false;
+            //game.animationEnded = false;
         }
         else if (this.newCoordinates.y > this.coordinates.y) {
             this.newCoordinates.y -= 5;
-            game.animationEnded = false;
+            //game.animationEnded = false;
         }
         else if (this.newCoordinates.x == this.coordinates.x && this.newCoordinates.y == this.coordinates.y) {
             game.animationEnded = true;

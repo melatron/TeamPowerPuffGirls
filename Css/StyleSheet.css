@@ -425,10 +425,11 @@ div{
         .dropDownCell{
         	background-image: url(../source/menu/menuCellBackground.png);
         	width: 190px;
-            padding-top: 20px;
+            padding-top: 10px;
             padding-right: 5px;
             padding-left: 15px;
-        	height: 60px;
+            padding-bottom: 10px;
+        	height: 80px;
             font-size: 20px;
         	position: absolute;
         	top: 0px;
@@ -490,3 +491,6 @@ div{
         #bossFightCanvas {
 			display: none;
 		}
+        .howTo .dropDownCells {
+            height: 100px;
+        }

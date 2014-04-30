@@ -1023,7 +1023,7 @@ function Menu() {
             thunderSound.pause();
 			
             hideMenu();
-            $('#epilogue').fadeOut(1000);
+            $('#epilogue').fadeOut(2000);
 			
             setTimeout(function(){
                 $('#main').fadeIn(2000);
@@ -1033,10 +1033,6 @@ function Menu() {
             var story = new Story();
 			
             story.preloadEverything();
-            //game = new TonyGame();
-            //game.start();
-            //elfGame = new RadoGame();
-            //elfGame.start();
             
             serverObject.playerName = $("#nameInput").val();
         }
@@ -1134,13 +1130,13 @@ function Menu() {
             mousePos.y = e.pageY;
             if($('.tutorial.first').css('display') != 'none'){
                 $('.tutorial.first').css({
-                    'left': mousePos.x - 330,
+                    'left': mousePos.x - 430,
                     'top': mousePos.y - 110
                 });
             }
             if($('.tutorial.second').css('display') != 'none'){
                 $('.tutorial.second').css({
-                    'left': mousePos.x - 330,
+                    'left': mousePos.x - 430,
                     'top': mousePos.y - 110
                 });
             }
